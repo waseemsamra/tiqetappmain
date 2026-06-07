@@ -1,0 +1,52 @@
+
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { Star } from 'lucide-react';
+import type { Excursion } from '@/types';
+import { WishlistButton } from './wishlist-button';
+
+type User = { id: string; email?: string } | null;
+
+const StarRating = ({ rating }: { rating: number }) => (
+    <div className="flex items-center gap-1">
+        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+        <span className="text-sm font-bold text-gray-800">{rating.toFixed(1)}</span>
+    </div>
+);
+
+
+export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: { excursion: Excursion, user: User | null, isInitialWishlisted?: boolean }) => (
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col group h-full">
+        <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-xl">
+                <Image 
+                    src={excursion.images?.[0] || 'https://placehold.co/400x300.png'} 
+                    alt={excursion.name} 
+                    fill 
+                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+                    data-ai-hint="attraction"
+                />
+                {excursion.discount && (
+                    <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                        UP TO -{excursion.discount}%
+                    </div>
+                )}
+            </div>
+            <div className="p-4 flex flex-col flex-grow">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
+                <h3 className="text-lg font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name}</h3>
+                <p className="mt-1 text-sm text-gray-600 flex-grow line-clamp-2">{excursion.description}</p>
+                
+                <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                    <StarRating rating={excursion.rating} />
+                    <div className="text-right">
+                        <span className="text-xs text-gray-500">From</span>
+                        <p className="font-bold text-lg text-gray-900">${excursion.price.toFixed(2)}</p>
+                    </div>
+                </div>
+            </div>
+        </Link>
+    </div>
+);

@@ -1,0 +1,5 @@
+-- This migration is intentionally empty.
+-- Supabase auth.users table metadata is flexible (JSONB).
+-- We do not need a schema migration to add a new key to the user_metadata field.
+-- This file is created to mark the point in time where we decided to use
+-- the `referred_by` key in the user_metadata.
