@@ -80,11 +80,13 @@ export async function ajaxSearchExcursions(query: string): Promise<{countries: C
   const matchedCountries = countries.filter(c => c.name.toLowerCase().includes(searchPattern)).slice(0, 5);
   const matchedCities = cities.filter(c => c.name && c.name.toLowerCase().includes(searchPattern)).slice(0, 5);
 
-  return {
+  const result = {
     countries: matchedCountries,
     cities: matchedCities.map(c => ({ id: c.id, name: c.name, country_code: c.country_code || '' })),
     activities: filteredExcursions.slice(0, 5),
   };
+  console.log('[ajaxSearch]', JSON.stringify({query, counts: {countries: result.countries.length, cities: result.cities.length, activities: result.activities.length}}));
+  return result;
 }
 
 

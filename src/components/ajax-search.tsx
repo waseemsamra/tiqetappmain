@@ -48,11 +48,13 @@ export function AjaxSearch() {
     }
     
     try {
-      const data = await ajaxSearchExcursions(currentQuery);
-      setResults(data || { countries: [], cities: [], activities: [] });
+      const res = await fetch(`/api/search?query=${encodeURIComponent(currentQuery)}`);
+      const data = await res.json();
+      const activities = Array.isArray(data) ? data : [];
+      setResults({ countries: [], cities: [], activities: activities.slice(0, 5) });
       setIsDropdownOpen(true);
     } catch (error) {
-      console.error(error);
+      console.error('Search error:', error);
       setResults({ countries: [], cities: [], activities: [] });
     } finally {
       setIsLoading(false);
@@ -222,17 +224,17 @@ export function AjaxSearch() {
                         {results.cities.length > 0 && (
                              <>
                                 <li className="px-3 py-2 text-xs font-semibold text-muted-foreground bg-muted/50">Cities</li>
-                                {results.cities.map((city: any) => (
-                                    <li key={`city-${city.id}`}>
-                                        <Link href={`/city/${encodeURIComponent(city.name)}`} className="flex items-center gap-4 p-3 hover:bg-muted">
-                                            <Building className="h-5 w-5 text-muted-foreground" />
-                                            <div>
-                                              <p className="font-semibold">{city.name}</p>
-                                              <p className="text-sm text-muted-foreground">{city.country.name}</p>
-                                            </div>
-                                        </Link>
-                                    </li>
-                                ))}
+                                 {results.cities.map((city: any) => (
+                                     <li key={`city-${city.id}`}>
+                                         <Link href={`/city/${encodeURIComponent(city.name)}`} className="flex items-center gap-4 p-3 hover:bg-muted">
+                                             <Building className="h-5 w-5 text-muted-foreground" />
+                                             <div>
+                                               <p className="font-semibold">{city.name}</p>
+                                               <p className="text-sm text-muted-foreground">{city.country_code || ''}</p>
+                                             </div>
+                                         </Link>
+                                     </li>
+                                 ))}
                              </>
                         )}
                         {results.activities.length > 0 && (
