@@ -40,7 +40,7 @@ export function AjaxSearch() {
   };
   
   const debouncedSearch = useDebouncedCallback(async (currentQuery: string) => {
-    if (currentQuery.length < 2) {
+    if (currentQuery.length < 1) {
       setResults({ countries: [], cities: [], activities: [] });
       setIsLoading(false);
       setIsDropdownOpen(false);
@@ -253,7 +253,7 @@ export function AjaxSearch() {
                         )}
                     </ul>
                 )}
-                {!isLoading && query.length > 1 && results.countries.length === 0 && results.cities.length === 0 && results.activities.length === 0 && (
+                {!isLoading && query.length >= 1 && results.countries.length === 0 && results.cities.length === 0 && results.activities.length === 0 && (
                      <div className="p-4 text-center text-muted-foreground">No results found for "{query}".</div>
                 )}
             </div>
