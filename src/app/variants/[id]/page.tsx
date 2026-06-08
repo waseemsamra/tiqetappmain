@@ -132,25 +132,18 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
               <span className="text-sm text-gray-500">Price</span>
               <p className="font-bold text-2xl">${Number(variant.price || 0).toFixed(2)}</p>
             </div>
-            {variant.experience_url ? (
-              <a
-                href={variant.experience_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-              >
-                Book Now
-              </a>
-            ) : (
-              <a
-                href={`https://www.tiqets.com/en/search?q=${encodeURIComponent(variant.name)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-              >
-                Book Now
-              </a>
-            )}
+          <div
+            data-tiqets-widget="booking"
+            data-product-id={variant.id}
+            data-trigger-selector="#cta_button_variant"
+          />
+          <button
+            id="cta_button_variant"
+            type="button"
+            className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+          >
+            Book Now
+          </button>
           </div>
         </div>
       </div>
