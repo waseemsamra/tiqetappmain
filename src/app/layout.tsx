@@ -33,11 +33,12 @@ export default async function RootLayout({
              {children}
          </main>
          <Footer />
-         <Toaster />
-         <script
-           src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
-           defer
-         />
+      <Toaster />
+      <script
+        data-tiqets-widget="booking"
+        src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
+        defer
+      />
       </body>
     </html>
   );
