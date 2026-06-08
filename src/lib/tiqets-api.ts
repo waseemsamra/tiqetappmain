@@ -355,7 +355,7 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
    } else {
     // Fetch from multiple cities to get variety for homepage - use Promise.all for speed
     // Prioritize UAE cities to ensure they appear in the first 50 results
-    const cityPromises = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].map(async (city) => {
+    const cityPromises = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'London', 'Amsterdam', 'Madrid', 'Lisbon', 'Berlin', 'Vienna', 'Prague', 'Budapest', 'Athens', 'Copenhagen', 'Stockholm', 'Oslo', 'Helsinki', 'Dublin', 'Edinburgh', 'Munich', 'Frankfurt', 'Hamburg', 'Milan', 'Venice', 'Florence', 'Naples', 'Porto', 'Valencia', 'Seville', 'Nice', 'Lyon', 'Salzburg', 'Krakow', 'Warsaw', 'Thessaloniki', 'Tallinn', 'Riga', 'Vilnius', 'Manchester', 'Liverpool', 'Brussels', 'Antwerp', 'Rotterdam', 'Zurich', 'Geneva', 'Bern', 'Cologne'].map(async (city) => {
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
       if (!cityId) {
         return [];

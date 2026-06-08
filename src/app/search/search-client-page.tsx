@@ -75,7 +75,8 @@ export default function SearchClientPage({
                 const response = await fetch(`/api/search?${params.toString()}`);
                 if (!response.ok) throw new Error('Search failed');
                 const data = await response.json();
-                setAllExcursions(data);
+                const activities = Array.isArray(data.activities) ? data.activities : [];
+                setAllExcursions(activities);
             } catch (error) {
                 console.error(error);
                 setAllExcursions([]);

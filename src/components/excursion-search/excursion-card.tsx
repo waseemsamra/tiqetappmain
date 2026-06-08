@@ -44,7 +44,6 @@ export const ExcursionCard = ({ excursion, wishlistButton }: { excursion: Excurs
                     />
                 </div>
                 <CardContent className="p-4 flex-grow flex flex-col">
-                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{typeName}</p>
                     <h3 className="font-bold text-base leading-snug group-hover:text-primary transition-colors mt-1 line-clamp-2">{excursion.name}</h3>
                     <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
                     <MapPin className="w-4 h-4" /> {cityName}, {countryName}
