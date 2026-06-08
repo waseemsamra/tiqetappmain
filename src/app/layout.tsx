@@ -5,6 +5,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { TiqetsBookingLoader } from '@/components/tiqets-booking-loader';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,13 +33,9 @@ export default async function RootLayout({
          <main className="flex-grow pt-20">
              {children}
          </main>
-         <Footer />
-      <Toaster />
-      <script
-        data-tiqets-widget="booking"
-        src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
-        defer
-      />
+        <Footer />
+        <Toaster />
+        <TiqetsBookingLoader />
       </body>
     </html>
   );
