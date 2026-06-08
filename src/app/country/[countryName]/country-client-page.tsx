@@ -3,8 +3,14 @@
 import type { Excursion, ExcursionType, Country, City } from '@/types';
 import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
-import { AllExperiences } from '@/components/country/all-experiences';
 import { CitiesSection } from '@/components/country/cities-section';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import { useState, useEffect, useMemo } from 'react';
 import { FilterDialog } from '@/components/excursion-search/filter-sheet';
 import { useAuth } from '@/app/auth-provider';
@@ -93,7 +99,16 @@ export default function CountryClientPage({
         );
     }, [initialExcursions, selectedExcursionTypes]);
 
+    const topExcursions = useMemo(() => {
+        return filteredExcursions.slice(0, 10);
+    }, [filteredExcursions]);
+
     const heroImage = countryDetails.heroImage || 'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
+
+    const renderWishlistButton = (excursion: Excursion) => {
+        if (!user) return null;
+        return <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} />;
+    };
 
     return (
         <>
@@ -110,7 +125,7 @@ export default function CountryClientPage({
                     <div className="absolute bottom-0 left-0 p-6 text-white">
                         <h1 className="text-2xl md:text-3xl font-bold">Things to Do in {countryName}</h1>
                         <p className="text-sm md:text-base mt-1 opacity-90">
-                            Explore {initialExcursions.length} top attractions and experiences
+                            Explore {initialExcursions.length} top attractions
                         </p>
                     </div>
                 </header>
@@ -121,18 +136,40 @@ export default function CountryClientPage({
                     cities={citiesWithCounts}
                 />
 
-                {/* All Experiences */}
+                {/* Top 10 Experiences - Carousel */}
+                {topExcursions.length > 0 && (
+                    <section>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-6">Top 10 Experiences in {countryName}</h2>
+                        <Carousel opts={{ align: "start" }} className="w-full">
+                            <CarouselContent className="-ml-4">
+                                {topExcursions.map(excursion => (
+                                    <CarouselItem key={excursion.id} className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/5">
+                                        <AttractionCard 
+                                            excursion={excursion} 
+                                            wishlistButton={renderWishlistButton(excursion)}
+                                        />
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                            <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                            <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                        </Carousel>
+                    </section>
+                )}
+
+                {/* All Experiences - Grid Layout */}
                 <section>
-                    <div className="mb-8">
-                        <h2 className="text-2xl md:text-3xl font-bold">All Experiences in {countryName}</h2>
-                        <p className="text-gray-500 mt-2">{initialExcursions.length} options</p>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-6">All Experiences in {countryName}</h2>
+                    <p className="text-gray-500 mb-4">{filteredExcursions.length} options</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredExcursions.map(excursion => (
+                            <AttractionCard 
+                                key={excursion.id} 
+                                excursion={excursion} 
+                                wishlistButton={renderWishlistButton(excursion)}
+                            />
+                        ))}
                     </div>
-                    <AllExperiences
-                        excursions={filteredExcursions}
-                        onShowFilters={() => setIsFilterDialogOpen(true)}
-                        selectedExcursionTypes={selectedExcursionTypes}
-                        countryName={countryName}
-                    />
                 </section>
             </div>
             

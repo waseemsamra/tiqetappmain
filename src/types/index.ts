@@ -64,21 +64,57 @@ export type Review = {
 };
 
 export type Booking = {
-  id: string;
-  user_id: string;
-  excursion_id: string;
-  booking_reference: string;
-  date: string;
-  status: string;
-  total_price: number;
-};
-
-export type User = {
-  id: string;
-  email?: string;
+   id: string;
+   user_id: string;
+   excursion_id: string;
+   booking_reference: string;
+   date: string;
+   status: string;
+   total_price: number;
+   activity?: Excursion;
+   quantity?: number;
+   guest_name?: string;
+   guest_email?: string;
+   booking_date?: string;
 };
 
 export type FormState = {
-  success: boolean;
-  message: string;
+   success: boolean;
+   message: string;
+   errors?: Record<string, string[] | undefined>;
+};
+
+export type HeroContent = {
+   headline: string;
+   subheading: string;
+   backgroundImage: string;
+};
+
+export type ConciergeInput = {
+   query: string;
+};
+
+export type ConciergeOutput = {
+   response: string;
+};
+
+export type Referral = {
+   id: string;
+   agent_id: string;
+   referred_id: string;
+   status: string;
+   created_at: string;
+};
+
+export type Payout = {
+   id: string;
+   agent_id: string;
+   amount: number;
+   status: string;
+   created_at: string;
+};
+
+export type User = {
+   id: string;
+   email?: string;
 };

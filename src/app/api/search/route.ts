@@ -30,10 +30,18 @@ export async function GET(request: Request) {
         
         const { query, city, country, types } = validatedParams.data;
         
-        const allExcursions = await TiqetsApi.fetchTiqetsProducts();
+        // Build API params - use city_name for direct city lookup (more reliable)
+        const apiParams: Record<string, string> = {};
+        if (city) {
+            apiParams.city_name = city;
+        } else if (country) {
+            apiParams.country_name = country;
+        }
+        
+        let allExcursions = await TiqetsApi.fetchTiqetsProducts(apiParams);
         
         let filtered = allExcursions;
-        
+
         if (query) {
             filtered = filtered.filter(ex => ex.name.toLowerCase().includes(query.toLowerCase()));
         }

@@ -82,22 +82,28 @@ function transformTiqetsCity(city: any): City {
   };
 }
 
-// Use city ID from API - need to fetch actual IDs from cities endpoint
-// For now, use known working city IDs for filtering
+// Use city ID from API - known working city IDs for filtering
 const KNOWN_CITY_IDS: Record<string, string> = {
-  'barcelona': '66342',
-  'rome': '71631',
-  'paris': '66746',
-  'milan': '71749',
-  'florence': '71854',
-  'venice': '71510',
-  'antwerp': '60863',
-  'sintra': '76496',
-  'amsterdam': '75061',
-  'new york': '260932',
-  'dubai': '60005',
-  'abu dhabi': '60013',
-  'sharjah': '60007'
+    'barcelona': '66342',
+    'rome': '71631',
+    'paris': '66746',
+    'milan': '71749',
+    'florence': '71854',
+    'venice': '71510',
+    'antwerp': '60863',
+    'sintra': '76496',
+    'amsterdam': '75061',
+    'new york': '260932',
+    'dubai': '60005',
+    'abu dhabi': '60013',
+    'sharjah': '60007',
+    'lima': '75306',
+    'cusco': '75323',
+    'puno': '75296',
+    'arequipa': '75334',
+    'aguas calientes': '261863',
+    'london': '67458',
+    'mexico city': '67461',
 };
 
 // Get all available cities from API
@@ -152,51 +158,57 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
   const allExcursions: Excursion[] = [];
 
   // If city filter is specified, fetch by city_id
-  if (params.city_name && KNOWN_CITY_IDS[params.city_name.toLowerCase()]) {
-    const cityId = KNOWN_CITY_IDS[params.city_name.toLowerCase()];
+  if (params.city_name) {
+    const cityNameLower = params.city_name.toLowerCase();
     
-    // Try experiences endpoint first
-    try {
-      const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const products = data.experiences || data.products || data.items || [];
-        if (products.length > 0) {
-          return products.map(transformTiqetsProduct);
+    // Check if we have a known city ID
+    if (KNOWN_CITY_IDS[cityNameLower]) {
+      const cityId = KNOWN_CITY_IDS[cityNameLower];
+      
+      // Try experiences endpoint first
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.experiences || data.products || data.items || [];
+          if (products.length > 0) {
+            return products.map(transformTiqetsProduct);
+          }
         }
+      } catch (e) {
+        // Continue to fallback
       }
-    } catch (e) {
-      // Continue to fallback
-    }
-    
-    // Try products endpoint (for cities like New York that only have products)
-    try {
-      const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const products = data.products || data.experiences || data.items || [];
-        if (products.length > 0) {
-          return products.map(transformTiqetsProduct);
+      
+      // Try products endpoint (for cities like New York that only have products)
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.products || data.experiences || data.items || [];
+          if (products.length > 0) {
+            return products.map(transformTiqetsProduct);
+          }
         }
+      } catch (e) {
+        // Continue to fallback
       }
-    } catch (e) {
-      // Continue to fallback
     }
-  } else if (params.country_name) {
-    // Try to fetch by country filter
-    try {
-      const response = await fetch(`${TIQETS_API_BASE}/experiences?country_name=${encodeURIComponent(params.country_name)}&page_size=10`, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const products = data.experiences || data.products || data.items || [];
-        if (products.length > 0) {
-          return products.map(transformTiqetsProduct);
-        }
-      }
-    } catch (e) {
-      // Continue to fallback
-    }
-  } else {
+} else if (params.country_id || params.country_name) {
+     // Try to fetch by country filter - use country_id first for better reliability
+     const countryFilter = params.country_id || params.country_name;
+     try {
+       const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryFilter}&page_size=100`, { method: 'GET', headers });
+       if (response.ok) {
+         const data = await response.json();
+         const products = data.experiences || data.products || data.items || [];
+         if (products.length > 0) {
+           return products.map(transformTiqetsProduct);
+         }
+       }
+     } catch (e) {
+       // Continue to fallback
+     }
+   } else {
     // Fetch from multiple cities to get variety for homepage - use Promise.all for speed
     // Prioritize UAE cities to ensure they appear in the first 50 results
     const cityPromises = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].map(async (city) => {
