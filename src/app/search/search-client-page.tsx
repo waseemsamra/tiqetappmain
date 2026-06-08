@@ -20,29 +20,16 @@ interface SearchClientPageProps {
     allExcursionTypes: ExcursionType[];
 }
 
-const EXCURSIONS_PER_PAGE = 20;
+const INITIAL_VISIBLE_COUNT = 20;
+const LOAD_MORE_COUNT = 20;
 
-const PaginationControls = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (page: number) => void; }) => {
-    if (totalPages <= 1) return null;
+const LoadMoreButton = ({ visibleCount, totalCount, onLoadMore }: { visibleCount: number; totalCount: number; onLoadMore: () => void }) => {
+    if (visibleCount >= totalCount) return null;
     return (
-        <div className="flex items-center justify-between mt-8">
-          <Button
-            variant="outline"
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            Page {currentPage} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages || totalPages === 0}
-          >
-            Next
-          </Button>
+        <div className="text-center mt-12">
+            <Button onClick={onLoadMore} size="lg">
+                Load More ({totalCount - visibleCount} remaining)
+            </Button>
         </div>
     );
 };
@@ -64,7 +51,7 @@ export default function SearchClientPage({
     const [allExcursions, setAllExcursions] = useState<Excursion[]>([]);
     const [selectedExcursionTypes, setSelectedExcursionTypes] = useState<string[]>([]);
     const [wishlistIds, setWishlistIds] = useState(new Set<string>());
-    const [currentPage, setCurrentPage] = useState(1);
+    const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
     
     // Loading and transition state
     const [isSearching, startSearchTransition] = useTransition();
@@ -93,7 +80,7 @@ export default function SearchClientPage({
         const typesToSelect = typeParam ? [typeParam] : [];
         setSelectedExcursionTypes(typesToSelect);
         
-        setCurrentPage(1);
+        setVisibleCount(INITIAL_VISIBLE_COUNT);
 
     }, [searchParams]);
 
@@ -119,16 +106,18 @@ export default function SearchClientPage({
         newTypesArray.forEach(t => currentParams.append('types', t));
 
         fetchExcursions(currentParams);
-        setCurrentPage(1);
+        setVisibleCount(INITIAL_VISIBLE_COUNT);
     };
 
-    const totalPages = Math.ceil(allExcursions.length / EXCURSIONS_PER_PAGE);
-    
-    const paginatedExcursions = useMemo(() => {
-        const start = (currentPage - 1) * EXCURSIONS_PER_PAGE;
-        const end = start + EXCURSIONS_PER_PAGE;
-        return allExcursions.slice(start, end);
-    }, [allExcursions, currentPage]);
+    const visibleExcursions = useMemo(() => {
+        return allExcursions.slice(0, visibleCount);
+    }, [allExcursions, visibleCount]);
+
+    const hasMore = visibleCount < allExcursions.length;
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => Math.min(prev + LOAD_MORE_COUNT, allExcursions.length));
+    };
 
     return (
         <>
