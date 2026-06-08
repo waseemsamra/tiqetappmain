@@ -4,13 +4,6 @@ import { useState } from 'react';
 import type { Excursion } from '@/types';
 import { Button } from '@/components/ui/button';
 import { AttractionCard } from '@/components/attraction-card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 
 const INITIAL_VISIBLE_COUNT = 20;
 const LOAD_MORE_COUNT = 20;
@@ -34,19 +27,11 @@ export function AllExperiences({ excursions, onShowFilters, selectedExcursionTyp
                 </div>
             </div>
 
-            <Carousel opts={{ align: "start" }} className="w-full">
-                <CarouselContent className="-ml-4">
-                    {excursionsToShow.map(ex => (
-                        <CarouselItem key={ex.id} className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
-                            <div className="h-full py-4">
-                                <AttractionCard excursion={ex} />
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-                <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-            </Carousel>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {excursionsToShow.map(ex => (
+                    <AttractionCard key={ex.id} excursion={ex} />
+                ))}
+            </div>
 
             {canLoadMore && (
                 <div className="text-center mt-12">

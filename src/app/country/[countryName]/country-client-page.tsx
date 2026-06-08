@@ -17,6 +17,7 @@ import { useAuth } from '@/app/auth-provider';
 import { getWishlistIdsAction } from '@/app/actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { AttractionCard } from '@/components/attraction-card';
+import { AllExperiences } from '@/components/country/all-experiences';
 
 type User = { id: string; email?: string } | null;
 
@@ -157,20 +158,12 @@ export default function CountryClientPage({
                     </section>
                 )}
 
-                {/* All Experiences - Grid Layout */}
-                <section>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-6">All Experiences in {countryName}</h2>
-                    <p className="text-gray-500 mb-4">{filteredExcursions.length} options</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filteredExcursions.map(excursion => (
-                            <AttractionCard 
-                                key={excursion.id} 
-                                excursion={excursion} 
-                                wishlistButton={renderWishlistButton(excursion)}
-                            />
-                        ))}
-                    </div>
-                </section>
+                <AllExperiences
+                    excursions={filteredExcursions}
+                    onShowFilters={() => setIsFilterDialogOpen(true)}
+                    selectedExcursionTypes={selectedExcursionTypes}
+                    countryName={countryName}
+                />
             </div>
             
             <FilterDialog
