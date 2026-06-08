@@ -8,7 +8,6 @@ import Link from 'next/link';
 import { Search, MapPin, Mic, Sparkles, Building, Globe } from 'lucide-react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Excursion, Country, City } from '@/types';
-import { ajaxSearchExcursions } from '@/app/actions';
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import VoiceVisualizer from './voice-visualizer';
@@ -18,6 +17,29 @@ interface SearchResults {
     countries: Country[];
     cities: City[];
     activities: Excursion[];
+}
+
+type CacheEntry = {
+    data: SearchResults;
+    timestamp: number;
+};
+
+const SEARCH_CACHE_TTL = 5 * 60 * 1000;
+const SEARCH_CACHE = new Map<string, CacheEntry>();
+
+function getCachedSearch(key: string): SearchResults | null {
+    const entry = SEARCH_CACHE.get(key);
+    if (!entry) return null;
+    const isStale = Date.now() - entry.timestamp > SEARCH_CACHE_TTL;
+    if (isStale) {
+        SEARCH_CACHE.delete(key);
+        return null;
+    }
+    return entry.data;
+}
+
+function setCachedSearch(key: string, value: SearchResults) {
+    SEARCH_CACHE.set(key, { data: value, timestamp: Date.now() });
 }
 
 export function AjaxSearch() {
@@ -46,12 +68,25 @@ export function AjaxSearch() {
       setIsDropdownOpen(false);
       return;
     }
-    
+
+    const cacheKey = currentQuery.trim().toLowerCase();
+    const cached = getCachedSearch(cacheKey);
+    if (cached) {
+      setResults(cached);
+      setIsDropdownOpen(true);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`/api/search?query=${encodeURIComponent(currentQuery)}`);
       const data = await res.json();
-      const activities = Array.isArray(data) ? data : [];
-      setResults({ countries: [], cities: [], activities: activities.slice(0, 5) });
+      const activities = Array.isArray(data.activities) ? data.activities : [];
+      const countries = Array.isArray(data.countries) ? data.countries : [];
+      const cities = Array.isArray(data.cities) ? data.cities : [];
+      const result = { countries, cities, activities: activities.slice(0, 5) };
+      setCachedSearch(cacheKey, result);
+      setResults(result);
       setIsDropdownOpen(true);
     } catch (error) {
       console.error('Search error:', error);

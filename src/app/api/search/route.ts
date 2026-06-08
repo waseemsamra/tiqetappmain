@@ -119,14 +119,33 @@ export async function GET(request: Request) {
       // Unknown city: fall through to general text search below
     }
 
-    // 3. General text search - check if query matches a country/city first
+    // 3. General text search - auto-detect country/city from query first
+    const KNOWN_CITY_IDS: Record<string, string> = {
+      'barcelona': '66342', 'rome': '71631', 'paris': '66746', 'milan': '71749',
+      'florence': '71854', 'venice': '71510', 'antwerp': '60863', 'sintra': '76496',
+      'amsterdam': '75061', 'new york': '260932', 'dubai': '60005', 'abu dhabi': '60013',
+      'sharjah': '60007', 'lima': '75306', 'cusco': '75323', 'puno': '75296',
+      'arequipa': '75334', 'aguas calientes': '261863', 'london': '67458',
+      'mexico city': '67461', 'buenos aires': '60189', 'ushuaia': '60210',
+      'salta': '60240', 'bariloche': '60331', 'palm beach': '263317', 'nassau': '62236',
+      'rio de janeiro': '61535', 'vancouver': '62496', 'toronto': '62492',
+      'niagara falls': '62419', 'montreal': '25', 'calgary': '62338', 'ottawa': '62431',
+      'victoria': '62501', 'quebec': '62516', 'vaughan': '62499', 'banff': '87579',
+      'jasper': '322', 'beaupre': '137139', 'saint-constant': '62458',
+      'britannia beach': '263089', 'saint-joseph-de-la-rive': '270495',
+      'richmond': '62452', 'mississauga': '62408', 'fort macleod': '136629',
+      'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
+      'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
+      'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
+      'gatineau': '62372', 'squamish': '301', 'madrid': '60400', 'barcelona': '66342',
+    };
     const [allCountries, allCities] = await Promise.all([
       TiqetsApi.fetchTiqetsCountries(),
       TiqetsApi.fetchTiqetsCities().catch(() => []),
     ]);
-
     const matchedCountry = allCountries.find(c => c.name.toLowerCase() === lower);
-    const matchedCity = allCities.find(c => c.name && c.name.toLowerCase() === lower);
+    const matchedCityId = KNOWN_CITY_IDS[lower];
+    const matchedCityRecord = allCities.find(c => c.name && c.name.toLowerCase() === lower);
 
     if (matchedCountry) {
       let allActivities: any[] = [];
@@ -146,10 +165,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ activities: paged, countries: [], cities: [], total: transformed.length, page, totalPages: Math.ceil(transformed.length / PAGE_SIZE) });
     }
 
-    if (matchedCity) {
+    if (matchedCityId || matchedCityRecord) {
+      const cityId = matchedCityId || matchedCityRecord.id;
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${matchedCity.id}&page_size=${PAGE_SIZE}&page=${p}`, {
+        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
