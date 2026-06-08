@@ -73,7 +73,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ activities: paged, countries: [], cities: [], total: filtered.length, page, totalPages: Math.ceil(filtered.length / PAGE_SIZE) });
     }
 
-    // 2. City search - fetch directly by city_id
+    // 2. City search - fetch directly by city_id or known city name
     if (city) {
       const KNOWN_CITY_IDS: Record<string, string> = {
         'barcelona': '66342', 'rome': '71631', 'paris': '66746', 'milan': '71749',
@@ -115,30 +115,8 @@ export async function GET(request: Request) {
         const start = (page - 1) * PAGE_SIZE;
         const paged = filtered.slice(start, start + PAGE_SIZE);
         return NextResponse.json({ activities: paged, countries: [], cities: [], total: filtered.length, page, totalPages: Math.ceil(filtered.length / PAGE_SIZE) });
-      } else {
-        // Unknown city: fallback to country search or broad text search
-        const countries = await TiqetsApi.fetchTiqetsCountries();
-        const allCities = await TiqetsApi.fetchTiqetsCities();
-        const matchedCityRecord = allCities.find(c => c.name && c.name.toLowerCase() === city.toLowerCase());
-        if (matchedCityRecord) {
-          const cityId = matchedCityRecord.id;
-          let allActivities: any[] = [];
-          for (let p = 1; p <= MAX_PAGES; p++) {
-            const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-              headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
-            });
-            if (!resp.ok) break;
-            const data = await resp.json();
-            const batch = (data.experiences || data.products || data.items || []);
-            allActivities.push(...batch);
-            if (batch.length < PAGE_SIZE) break;
-          }
-          const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
-          const start = (page - 1) * PAGE_SIZE;
-          const paged = transformed.slice(start, start + PAGE_SIZE);
-          return NextResponse.json({ activities: paged, countries: [], cities: [], total: transformed.length, page, totalPages: Math.ceil(transformed.length / PAGE_SIZE) });
-        }
       }
+      // Unknown city: fall through to general text search below
     }
 
     // 3. General text search - check if query matches a country/city first
