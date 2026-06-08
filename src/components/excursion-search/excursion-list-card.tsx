@@ -50,9 +50,6 @@ export const ExcursionListCard = ({ excursion, wishlistButton }: { excursion: Ex
                         <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
                             <MapPin className="w-4 h-4" /> {cityName}, {countryName}
                         </p>
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2 flex-grow">
-                            {excursion.description}
-                        </p>
                     </Link>
                     <div className="mt-auto pt-4 flex items-end justify-between">
                         <StarRating rating={excursion.rating} />
