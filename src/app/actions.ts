@@ -68,17 +68,22 @@ export async function searchExcursionsAction(
 export async function ajaxSearchExcursions(query: string): Promise<{countries: Country[], cities: City[], activities: Excursion[]}> {
   const searchPattern = query.toLowerCase();
   const excursions = await TiqetsApi.fetchTiqetsProducts();
+  const countries = await TiqetsApi.fetchTiqetsCountries();
+  const cities = await TiqetsApi.fetchTiqetsCities();
   
-  const filtered = excursions.filter(ex => 
+  const filteredExcursions = excursions.filter(ex => 
     ex.name.toLowerCase().includes(searchPattern) ||
     ex.country.toLowerCase().includes(searchPattern) ||
     ex.city.toLowerCase().includes(searchPattern)
   );
 
+  const matchedCountries = countries.filter(c => c.name.toLowerCase().includes(searchPattern)).slice(0, 5);
+  const matchedCities = cities.filter(c => c.name && c.name.toLowerCase().includes(searchPattern)).slice(0, 5);
+
   return {
-    countries: [],
-    cities: [],
-    activities: filtered.slice(0, 5),
+    countries: matchedCountries,
+    cities: matchedCities.map(c => ({ id: c.id, name: c.name, country_code: c.country_code || '' })),
+    activities: filteredExcursions.slice(0, 5),
   };
 }
 
