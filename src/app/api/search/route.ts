@@ -122,7 +122,7 @@ export async function GET(request: Request) {
     // 3. General text search - check if query matches a country/city first
     const [allCountries, allCities] = await Promise.all([
       TiqetsApi.fetchTiqetsCountries(),
-      TiqetsApi.fetchTiqetsCities(),
+      TiqetsApi.fetchTiqetsCities().catch(() => []),
     ]);
 
     const matchedCountry = allCountries.find(c => c.name.toLowerCase() === lower);
@@ -147,10 +147,9 @@ export async function GET(request: Request) {
     }
 
     if (matchedCity) {
-      const cityId = TiqetsApi.KNOWN_CITY_IDS[matchedCity.name.toLowerCase()] || matchedCity.id;
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
+        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${matchedCity.id}&page_size=${PAGE_SIZE}&page=${p}`, {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
