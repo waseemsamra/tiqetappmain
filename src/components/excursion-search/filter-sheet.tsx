@@ -2,7 +2,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { Excursion, ExcursionType } from '@/types';
+import type { Excursion, TiqetsTag } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -15,18 +15,17 @@ import { ScrollArea } from '../ui/scroll-area';
 import Image from 'next/image';
 import { CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useRouter } from 'next/navigation';
 
-interface FilterDialogProps {
+interface TagCategoryDialogProps {
     isOpen: boolean;
     onOpenChange: (isOpen: boolean) => void;
-    excursionTypes: ExcursionType[];
+    tags: TiqetsTag[];
     allExcursions: Excursion[];
-    selectedExcursionTypes: string[];
-    onExcursionTypeChange: (typeId: string) => void;
+    selectedTags: string[];
+    onTagChange: (tagId: string) => void;
 }
 
-const CategoryItem = ({ type, imageSrc, isSelected, onSelect }: { type: ExcursionType; imageSrc: string; isSelected: boolean; onSelect: () => void }) => (
+const CategoryItem = ({ type, imageSrc, isSelected, onSelect }: { type: TiqetsTag; imageSrc: string; isSelected: boolean; onSelect: () => void }) => (
     <div
         className={cn(
             "relative flex items-center gap-4 p-3 rounded-lg cursor-pointer border-2 transition-all",
@@ -43,8 +42,9 @@ const CategoryItem = ({ type, imageSrc, isSelected, onSelect }: { type: Excursio
                 data-ai-hint="attraction"
             />
         </div>
-        <div className="flex-grow">
-            <p className="font-semibold">{type.name}</p>
+        <div className="flex-grow min-w-0">
+            <p className="font-semibold truncate">{type.name}</p>
+            <p className="text-xs text-muted-foreground truncate">{type.type_name}</p>
         </div>
         {isSelected && (
             <div className="absolute top-2 right-2 text-primary">
@@ -55,47 +55,43 @@ const CategoryItem = ({ type, imageSrc, isSelected, onSelect }: { type: Excursio
 );
 
 
-export function FilterDialog({ isOpen, onOpenChange, excursionTypes, allExcursions, selectedExcursionTypes, onExcursionTypeChange }: FilterDialogProps) {
-    const router = useRouter();
-
-    const typeImages = useMemo(() => {
+export function FilterDialog({ isOpen, onOpenChange, tags = [], allExcursions, selectedTags = [], onTagChange }: TagCategoryDialogProps) {
+    const tagImages = useMemo(() => {
         const imageMap = new Map<string, string>();
-        excursionTypes.forEach(type => {
-            const firstExcursionOfType = allExcursions.find(ex => ex.activitytypeid === type.id);
-            const imageUrl = firstExcursionOfType?.images?.[0] || 'https://picsum.photos/128/128';
-            imageMap.set(type.id, imageUrl);
+        (tags || []).forEach(tag => {
+            const firstExcursionOfTag = allExcursions.find(ex => (ex as any).tag_ids?.includes(tag.id));
+            const imageUrl = firstExcursionOfTag?.images?.[0] || 'https://picsum.photos/128/128';
+            imageMap.set(tag.id, imageUrl);
         });
         return imageMap;
-    }, [excursionTypes, allExcursions]);
+    }, [tags, allExcursions]);
     
     const handleApplyFilters = () => {
         onOpenChange(false);
-        // The parent page will now be responsible for handling the filtered results.
-        // No navigation happens here anymore.
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-2xl w-[90vw] h-[80vh] flex flex-col p-0">
                 <DialogHeader className="p-6 pb-4 border-b">
-                    <DialogTitle className="text-xl">Filter by Category</DialogTitle>
+                    <DialogTitle className="text-xl">Browse Categories</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="flex-grow p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {excursionTypes.map(type => (
+                        {tags.map(tag => (
                              <CategoryItem 
-                                key={type.id}
-                                type={type}
-                                imageSrc={typeImages.get(type.id)!}
-                                isSelected={selectedExcursionTypes.includes(type.id)}
-                                onSelect={() => onExcursionTypeChange(type.id)}
+                                key={tag.id}
+                                type={tag}
+                                imageSrc={tagImages.get(tag.id) || 'https://picsum.photos/128/128'}
+                                isSelected={selectedTags.includes(tag.id)}
+                                onSelect={() => onTagChange(tag.id)}
                              />
                         ))}
                     </div>
                 </ScrollArea>
                  <DialogFooter className="p-6 border-t bg-background">
-                     <Button className="w-full" onClick={handleApplyFilters}>Apply Filters</Button>
-                </DialogFooter>
+                     <Button className="w-full" onClick={handleApplyFilters}>Close</Button>
+                 </DialogFooter>
             </DialogContent>
         </Dialog>
     )

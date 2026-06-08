@@ -28,12 +28,16 @@ export default async function RootLayout({
        <head>
        </head>
       <body className={`${inter.variable} font-sans flex flex-col h-full antialiased bg-background`}>
-        <Header />
-        <main className="flex-grow pt-20">
-            {children}
-        </main>
-        <Footer />
-        <Toaster />
+         <Header />
+         <main className="flex-grow pt-20">
+             {children}
+         </main>
+         <Footer />
+         <Toaster />
+         <script
+           src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
+           defer
+         />
       </body>
     </html>
   );

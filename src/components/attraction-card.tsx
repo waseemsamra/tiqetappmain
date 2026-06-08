@@ -18,8 +18,8 @@ export const AttractionCard = ({ excursion, wishlistButton, rank }: { excursion:
          {rank && (
               <div className="absolute top-3 left-3 bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold z-10 text-sm">
                  #{rank}
-            </div>
-        )}
+             </div>
+         )}
         <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
             <div className="relative w-full h-48 overflow-hidden">
                 <Image 

@@ -104,7 +104,7 @@ export default function CountryClientPage({
         return filteredExcursions.slice(0, 10);
     }, [filteredExcursions]);
 
-    const heroImage = countryDetails.heroImage || 'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
+    const heroImage = countryDetails.heroImage || initialExcursions.find(ex => ex.images && ex.images.length > 0)?.images?.[0] || 'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
 
     const renderWishlistButton = (excursion: Excursion) => {
         if (!user) return null;
@@ -120,6 +120,7 @@ export default function CountryClientPage({
                         src={heroImage}
                         alt={`Explore ${countryName}`} 
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                         className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

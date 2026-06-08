@@ -12,12 +12,21 @@ export type ExcursionType = {
   name: string;
 };
 
+export type TiqetsTag = {
+  id: string;
+  name: string;
+  type_name: string;
+  type_id: string;
+  type_group_name?: string | null;
+};
+
 export type Country = {
   id: number;
   name: string;
   code: string;
   currency: string;
   currency_symbol: string;
+  heroImage?: string;
 };
 
 export type City = {
@@ -52,6 +61,8 @@ export type Excursion = {
   reviewsTotal?: number;
   product_ids?: string[];
   variants?: ExcursionVariant[];
+  tag_ids?: string[];
+  experience_url?: string;
 };
 
 export type Review = {

@@ -7,7 +7,7 @@ const headers = {
   'Authorization': `Token ${TIQETS_API_KEY}`
 };
 
-import type { Excursion, Country, City, ExcursionType } from '@/types';
+import type { Excursion, Country, City, ExcursionType, TiqetsTag } from '@/types';
 
 function transformTiqetsProduct(product: any): Excursion {
   const ratingValue = product.ratings?.average;
@@ -60,7 +60,9 @@ function transformTiqetsProduct(product: any): Excursion {
     partner_id: null,
     reviews: [],
     product_ids: product.product_ids || [],
-    reviewsTotal: ratingsTotal
+    reviewsTotal: ratingsTotal,
+    tag_ids: Array.isArray(product.tag_ids) ? product.tag_ids.map(String) : [],
+    experience_url: product.experience_url || '',
   };
 }
 
@@ -104,6 +106,68 @@ const KNOWN_CITY_IDS: Record<string, string> = {
     'aguas calientes': '261863',
     'london': '67458',
     'mexico city': '67461',
+    'buenos aires': '60189',
+    'ushuaia': '60210',
+    'salta': '60240',
+    'bariloche': '60331',
+    'san carlos de bariloche': '272595',
+    'palm beach': '263317',
+    'nassau': '62236',
+    'rio de janeiro': '61535',
+    'vancouver': '62496',
+    'toronto': '62492',
+    'niagara falls': '62419',
+    'montreal': '25',
+    'calgary': '62338',
+    'ottawa': '62431',
+    'victoria': '62501',
+    'quebec': '62516',
+    'vaughan': '62499',
+    'banff': '87579',
+    'jasper': '322',
+    'beaupre': '137139',
+    'saint-constant': '62458',
+    'britannia beach': '263089',
+    'saint-joseph-de-la-rive': '270495',
+    'richmond': '62452',
+    'mississauga': '62408',
+    'fort macleod': '136629',
+    'brentwood bay': '263090',
+    'whistler': '87924',
+    'kamloops': '62382',
+    'niagara falls': '81337',
+    'gananoque': '269628',
+    'edmonton': '62366',
+    'scott': '271125',
+    'cochrane': '62349',
+    'lake louise': '137177',
+    'golden': '136649',
+    'gatineau': '62372',
+    'squamish': '301',
+    'niagara-on-the-lake': '982',
+    'sao paulo': '61533',
+    'salvador': '61537',
+    'manaus': '61539',
+    'belem': '61541',
+    'maceio': '61543',
+    'curitiba': '61545',
+    'porto alegre': '61547',
+    'recife': '61549',
+    'fortaleza': '61551',
+    'sao luis': '61553',
+    'florianopolis': '61555',
+    'rio branco': '61557',
+    'palmas': '61559',
+    'campo grande': '61561',
+    'goiania': '61563',
+    'macapa': '61565',
+    'teresina': '61567',
+    'cuiaba': '61569',
+    'porto velho': '61571',
+    'joao pessoa': '61573',
+    'aracaju': '61575',
+    'natal': '61577',
+    'cabo frio': '61579',
 };
 
 // Get all available cities from API
@@ -122,6 +186,25 @@ export async function getAvailableCities(): Promise<any[]> {
     console.error('Failed to fetch cities:', e);
   }
   return [];
+}
+
+export async function fetchTiqetsTags(): Promise<TiqetsTag[]> {
+  try {
+    const response = await fetch(`${TIQETS_API_BASE}/tags?page_size=200`, { method: 'GET', headers });
+    if (!response.ok) return [];
+    const data = await response.json();
+    const tags = (data.tags || data || []) as any[];
+    return tags.map(tag => ({
+      id: String(tag.id ?? ''),
+      name: tag.name || '',
+      type_name: tag.type_name || '',
+      type_id: String(tag.type_id ?? ''),
+      type_group_name: tag.type_group_name ?? null,
+    }));
+  } catch (e) {
+    console.error('Failed to fetch tags:', e);
+    return [];
+  }
 }
 
 export async function fetchTiqetsCountries(): Promise<Country[]> {
@@ -165,15 +248,22 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     if (KNOWN_CITY_IDS[cityNameLower]) {
       const cityId = KNOWN_CITY_IDS[cityNameLower];
       
-      // Try experiences endpoint first
+      // Try experiences endpoint first with pagination
       try {
-        const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-        if (response.ok) {
-          const data = await response.json();
-          const products = data.experiences || data.products || data.items || [];
-          if (products.length > 0) {
-            return products.map(transformTiqetsProduct);
+        const experiences: any[] = [];
+        for (let page = 1; page <= 5; page++) {
+          const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const products = data.experiences || data.products || data.items || [];
+            experiences.push(...products);
+            if (products.length < 100) break;
+          } else {
+            break;
           }
+        }
+        if (experiences.length > 0) {
+          return experiences.map(transformTiqetsProduct);
         }
       } catch (e) {
         // Continue to fallback
@@ -181,19 +271,73 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
       
       // Try products endpoint (for cities like New York that only have products)
       try {
-        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-        if (response.ok) {
-          const data = await response.json();
-          const products = data.products || data.experiences || data.items || [];
-          if (products.length > 0) {
-            return products.map(transformTiqetsProduct);
+        const products: any[] = [];
+        for (let page = 1; page <= 5; page++) {
+          const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const items = data.products || data.experiences || data.items || [];
+            products.push(...items);
+            if (items.length < 100) break;
+          } else {
+            break;
           }
+        }
+        if (products.length > 0) {
+          return products.map(transformTiqetsProduct);
         }
       } catch (e) {
         // Continue to fallback
       }
     }
-} else if (params.country_id || params.country_name) {
+    const cities = await getAvailableCities();
+    let match = cities.find(c => c.name && c.name.toLowerCase() === cityNameLower);
+    if (!match) {
+      const countryCodes: Record<string, string> = {
+        'argentina': '50009', 'canada': '50037', 'brazil': '50030',
+        'peru': '50174', 'colombia': '50048', 'mexico': '50157',
+        'united states': '50233', 'spain': '50067', 'france': '50074',
+        'italy': '50109', 'united kingdom': '50076', 'germany': '50056',
+        'netherlands': '50166', 'australia': '50012', 'japan': '50113',
+        'singapore': '50199', 'south korea': '50121', 'india': '50104',
+        'indonesia': '50100', 'thailand': '50218', 'china': '50047',
+        'vietnam': '50241', 'malaysia': '50158', 'cambodia': '50116',
+        'taiwan': '50228', 'new zealand': '50014', 'united arab emirates': '50001',
+        'egypt': '50064', 'turkey': '50225', 'morocco': '50137',
+        'south africa': '50247', 'qatar': '50187', 'jordan': '50112',
+        'kenya': '50114', 'tanzania': '50229', 'austria': '50011',
+        'belgium': '50019', 'croatia': '50097', 'czech republic': '50055',
+        'denmark': '50058', 'estonia': '50063', 'finland': '50069',
+        'greece': '50088', 'hungary': '50099', 'ireland': '50101',
+        'iceland': '50108', 'latvia': '50135', 'lithuania': '50133',
+        'luxembourg': '50134', 'malta': '50153', 'monaco': '50138',
+        'norway': '50167', 'poland': '50179', 'portugal': '50184',
+        'romania': '50189', 'serbia': '50190', 'slovakia': '50203',
+        'slovenia': '50201', 'sweden': '50198', 'switzerland': '50042',
+        'bahamas': '50031', 'dominican republic': '50060', 'jamaica': '50111',
+        'puerto rico': '50182', 'aruba': '50013', 'costa rica': '50049',
+        'ecuador': '50062', 'belize': '50036', 'guatemala': '50090',
+        'bosnia and herzegovina': '50016', 'israel': '50102', 'bulgaria': '50021',
+        'russia': '50191', 'andorra': '50004',
+      };
+      for (const [countryName, countryId] of Object.entries(countryCodes)) {
+        try {
+          const resp = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100`, { method: 'GET', headers });
+          if (resp.ok) {
+            const data = await resp.json();
+            const products = data.experiences || data.products || data.items || [];
+            const filtered = products.filter((e: any) => {
+              const city = (e.address?.city_name || e.city_name || '').toLowerCase();
+              return city === cityNameLower;
+            });
+            if (filtered.length > 0) {
+              return filtered.map(transformTiqetsProduct);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+  } else if (params.country_id || params.country_name) {
      // Try to fetch by country filter - use country_id first for better reliability
      const countryFilter = params.country_id || params.country_name;
      try {

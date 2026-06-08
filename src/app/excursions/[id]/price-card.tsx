@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Excursion } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ShieldCheck } from 'lucide-react';
+import { BookingModal } from '@/components/booking-modal';
 
 interface PriceCardProps {
   excursion: Excursion;

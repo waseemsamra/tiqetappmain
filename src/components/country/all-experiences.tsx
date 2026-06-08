@@ -8,8 +8,9 @@ import { AttractionCard } from '@/components/attraction-card';
 const INITIAL_VISIBLE_COUNT = 20;
 const LOAD_MORE_COUNT = 20;
 
-export function AllExperiences({ excursions, onShowFilters, selectedExcursionTypes, countryName }: { excursions: Excursion[], onShowFilters: () => void, selectedExcursionTypes: string[], countryName: string }) {
+export function AllExperiences({ excursions, onShowFilters, selectedTagIds, countryName }: { excursions: Excursion[]; onShowFilters: () => void; selectedTagIds?: string[]; countryName: string }) {
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+    const selectedTagIdsSafe = selectedTagIds || [];
 
     const excursionsToShow = excursions.slice(0, visibleCount);
     const canLoadMore = visibleCount < excursions.length;
@@ -25,6 +26,11 @@ export function AllExperiences({ excursions, onShowFilters, selectedExcursionTyp
                     <h2 className="text-2xl md:text-3xl font-bold">All Experiences in {countryName}</h2>
                     <p className="text-gray-500 mt-1">{excursions.length} options</p>
                 </div>
+                {selectedTagIdsSafe.length > 0 && (
+                    <Button variant="outline" onClick={onShowFilters}>
+                        Clear filters
+                    </Button>
+                )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
