@@ -154,11 +154,11 @@ export default function SearchClientPage({
                                 </div>
                             ))}
                         </div>
-                    ) : paginatedExcursions.length > 0 ? (
+                    ) : visibleExcursions.length > 0 ? (
                         <>
                             {layout === 'grid' ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                                    {paginatedExcursions.map(excursion => (
+                                    {visibleExcursions.map(excursion => (
                                         <ExcursionCard
                                             key={excursion.id}
                                             excursion={excursion}
@@ -168,7 +168,7 @@ export default function SearchClientPage({
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    {paginatedExcursions.map(excursion => (
+                                    {visibleExcursions.map(excursion => (
                                         <ExcursionListCard
                                             key={excursion.id}
                                             excursion={excursion}
@@ -177,7 +177,11 @@ export default function SearchClientPage({
                                     ))}
                                 </div>
                             )}
-                            <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                            <LoadMoreButton
+                                visibleCount={visibleCount}
+                                totalCount={allExcursions.length}
+                                onLoadMore={handleLoadMore}
+                            />
                         </>
                     ) : (
                         <div className="text-center py-16">
