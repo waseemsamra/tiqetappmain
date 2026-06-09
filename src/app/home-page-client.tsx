@@ -50,12 +50,12 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
 
     const worldwideExcursions = useMemo(() => {
         const filtered = allExcursions.filter(ex => TARGET_CITIES.map(c => c.toLowerCase()).includes(ex.city.toLowerCase()));
-        return filtered.slice(0, 50);
+        return filtered.slice(0, 10);
     }, [allExcursions]);
 
     const uaeExcursions = useMemo(() => {
         const filtered = allExcursions.filter(ex => UAE_CITIES.map(c => c.toLowerCase()).includes(ex.city.toLowerCase()));
-        return filtered.slice(0, 50);
+        return filtered.slice(0, 10);
     }, [allExcursions]);
     
     const barcelonaExcursions = useMemo(() => {

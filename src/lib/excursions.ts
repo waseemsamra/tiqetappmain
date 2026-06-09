@@ -39,7 +39,7 @@ export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> 
       
       try {
         // Try experiences endpoint first (has images)
-        let response = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=100`, {
+        let response = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=20`, {
           method: 'GET',
           headers: apiHeaders
         });
@@ -59,7 +59,7 @@ export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> 
       if (!cityId) continue;
       
       try {
-        let response = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=100`, {
+        let response = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=20`, {
           method: 'GET',
           headers: apiHeaders
         });
