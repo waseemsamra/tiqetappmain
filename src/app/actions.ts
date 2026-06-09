@@ -39,10 +39,8 @@ export async function getTopRatedExcursions(): Promise<Excursion[]> {
         .sort((a, b) => (b.rating || 0) - (a.rating || 0))
         .slice(0, 20);
     } catch (e) {
-      console.error('getTopRatedExcursions API failed, using static fallback:', e);
-      // Use static data as fallback, sorted by rating
-      const staticData = require('@/data/excursions.json') as Excursion[];
-      return staticData.sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 20);
+      console.error('getTopRatedExcursions API failed:', e);
+      return [];
     }
   }
 

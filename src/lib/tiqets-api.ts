@@ -87,7 +87,6 @@ function transformTiqetsCity(city: any): City {
 // Use city ID from API - known working city IDs for filtering
 export const KNOWN_CITY_IDS: Record<string, string> = {
     'barcelona': '66342',
-    'barcelona': '66342',
     'rome': '71631',
     'paris': '66746',
     'milan': '71749',
@@ -248,46 +247,63 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     if (KNOWN_CITY_IDS[cityNameLower]) {
       const cityId = KNOWN_CITY_IDS[cityNameLower];
       
-      // Try experiences endpoint first with pagination
+      // Fetch both experiences and products
+      const allActivities: any[] = [];
+      
+      // Try experiences endpoint with pagination
       try {
-        const experiences: any[] = [];
         for (let page = 1; page <= 5; page++) {
           const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
           if (response.ok) {
             const data = await response.json();
             const products = data.experiences || data.products || data.items || [];
-            experiences.push(...products);
+            allActivities.push(...products);
             if (products.length < 100) break;
           } else {
             break;
           }
         }
-        if (experiences.length > 0) {
-          return experiences.map(transformTiqetsProduct);
-        }
       } catch (e) {
-        // Continue to fallback
+        // Continue
       }
       
-      // Try products endpoint (for cities like New York that only have products)
+      // Also fetch standalone products for this city
       try {
-        const products: any[] = [];
         for (let page = 1; page <= 5; page++) {
           const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
           if (response.ok) {
             const data = await response.json();
             const items = data.products || data.experiences || data.items || [];
-            products.push(...items);
+            allActivities.push(...items);
             if (items.length < 100) break;
           } else {
             break;
           }
         }
-        if (products.length > 0) {
-          return products.map(transformTiqetsProduct);
-        }
       } catch (e) {
-        // Continue to fallback
+        // Continue
+      }
+      
+      if (allActivities.length > 0) {
+        // Fetch venue images for products without images
+        const transformedWithImages = await Promise.all(
+          allActivities.map(async (p: any) => {
+            let images: string[] = [];
+            if ((!Array.isArray(p.images) || p.images.length === 0) && p.venue?.id) {
+              try {
+                const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
+                if (venueResp.ok) {
+                  const venueData = await venueResp.json();
+                  images = (venueData.experience?.images || venueData.images || [])
+                    .map((img: any) => img?.medium || img?.large || img?.small || '')
+                    .filter(Boolean);
+                }
+              } catch (e) {}
+            }
+            return { ...transformTiqetsProduct(p), images };
+          })
+        );
+        return transformedWithImages;
       }
     }
     const cities = await getAvailableCities();

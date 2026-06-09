@@ -48,19 +48,36 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
             .slice(0, 8);
     }, [allExcursions]);
 
-    const worldwideExcursions = useMemo(() => {
-        const filtered = allExcursions.filter(ex => TARGET_CITIES.map(c => c.toLowerCase()).includes(ex.city.toLowerCase()));
-        return filtered.slice(0, 10);
+    // Group excursions by city, ensuring we have at least some for each target city
+    const cityExcursions = useMemo(() => {
+        const grouped: Record<string, Excursion[]> = {};
+        TARGET_CITIES.forEach(city => {
+            grouped[city] = allExcursions.filter(ex => ex.city.toLowerCase() === city.toLowerCase()).slice(0, 10);
+        });
+        return grouped;
     }, [allExcursions]);
 
-    const uaeExcursions = useMemo(() => {
-        const filtered = allExcursions.filter(ex => UAE_CITIES.map(c => c.toLowerCase()).includes(ex.city.toLowerCase()));
-        return filtered.slice(0, 10);
+    const uaeCityExcursions = useMemo(() => {
+        const grouped: Record<string, Excursion[]> = {};
+        UAE_CITIES.forEach(city => {
+            grouped[city] = allExcursions.filter(ex => ex.city.toLowerCase() === city.toLowerCase()).slice(0, 10);
+        });
+        return grouped;
     }, [allExcursions]);
     
     const barcelonaExcursions = useMemo(() => {
         return allExcursions.filter(ex => ex.city.toLowerCase() === 'barcelona').slice(0, 10);
     }, [allExcursions]);
+    
+    // Combine all target city excursions for worldwide section
+    const worldwideExcursions = useMemo(() => {
+        return TARGET_CITIES.flatMap(city => cityExcursions[city] || []).slice(0, 50);
+    }, [cityExcursions]);
+
+    // Combine all UAE city excursions
+    const uaeExcursions = useMemo(() => {
+        return UAE_CITIES.flatMap(city => uaeCityExcursions[city] || []).slice(0, 50);
+    }, [uaeCityExcursions]);
     
     return (
         <>
