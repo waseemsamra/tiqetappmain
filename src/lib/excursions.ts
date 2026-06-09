@@ -1,8 +1,14 @@
 import type { Excursion } from '@/types';
 import * as TiqetsApi from '@/lib/tiqets-api';
+import staticExcursions from '@/data/excursions.json';
 
 export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> {
-  return TiqetsApi.fetchTiqetsProducts({ status: 'active' });
+  try {
+    return await TiqetsApi.fetchTiqetsProducts({ status: 'active' });
+  } catch (e) {
+    console.error('getExcursions API failed, using static fallback:', e);
+    return staticExcursions as Excursion[];
+  }
 }
 
 export async function getExcursionsForAdmin({ page = 1, perPage = 50, search }: { page?: number, perPage?: number, search?: string } = {}): Promise<{ excursions: Excursion[], totalCount: number }> {
