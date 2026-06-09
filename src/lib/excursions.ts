@@ -6,59 +6,82 @@ const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah'];
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const ALL_HOMEPAGE_CITIES = [...UAE_CITIES, ...TARGET_CITIES];
 
+// Fetch images from venue for products that don't have images
+async function fetchVenueImages(product: any, headers: Record<string, string>): Promise<string[]> {
+  if (!product.venue?.id) return [];
+  try {
+    const response = await fetch(`https://api.tiqets.com/v2/experiences/${product.venue.id}`, {
+      method: 'GET',
+      headers
+    });
+    if (response.ok) {
+      const data = await response.json();
+      const venueImages = data.experience?.images || [];
+      return venueImages.map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '').filter(Boolean);
+    }
+  } catch (e) {}
+  return [];
+}
+
 export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> {
   try {
-    // Fetch specifically for homepage cities to ensure we have data for both sections
     const allExcursions: Excursion[] = [];
+    const TIQETS_API_KEY = process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W';
+    const apiHeaders = {
+      'Accept': 'application/json',
+      'User-Agent': 'my user agent',
+      'Authorization': `Token ${TIQETS_API_KEY}`
+    };
     
     for (const city of ALL_HOMEPAGE_CITIES) {
       const cityId = TiqetsApi.KNOWN_CITY_IDS[city.toLowerCase()];
       if (!cityId) continue;
       
       try {
-        // Try experiences first
-        let response = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=50`, {
+        // Try experiences endpoint first (has images)
+        let response = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=100`, {
           method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'my user agent',
-            'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`
-          }
+          headers: apiHeaders
         });
         
         if (response.ok) {
           const data = await response.json();
-          const products = data.experiences || data.products || data.items || [];
-          const transformed = products.map((p: any) => TiqetsApi.transformTiqetsProduct(p));
+          const experiences = data.experiences || data.products || data.items || [];
+          const transformed = experiences.map((p: any) => TiqetsApi.transformTiqetsProduct(p));
           allExcursions.push(...transformed);
         }
-      } catch (e) {
-        // Try products endpoint as fallback
-        try {
-          const response = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=50`, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-              'User-Agent': 'my user agent',
-              'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`
-            }
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            const products = data.products || data.experiences || data.items || [];
-            const transformed = products.map((p: any) => TiqetsApi.transformTiqetsProduct(p));
-            allExcursions.push(...transformed);
-          }
-        } catch (e2) {}
-      }
+      } catch (e) {}
     }
     
-    // Also fetch general data for variety
-    try {
-      const general = await TiqetsApi.fetchTiqetsProducts();
-      allExcursions.push(...general);
-    } catch (e) {}
+    // Also fetch from products endpoint for cities like New York that mainly have products
+    for (const city of ALL_HOMEPAGE_CITIES) {
+      const cityId = TiqetsApi.KNOWN_CITY_IDS[city.toLowerCase()];
+      if (!cityId) continue;
+      
+      try {
+        let response = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=100`, {
+          method: 'GET',
+          headers: apiHeaders
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.products || data.experiences || data.items || [];
+          
+          // Transform and fetch images for products that don't have them
+          for (const product of products) {
+            let images = product.images || [];
+            if (images.length === 0 && product.venue?.id) {
+              images = await fetchVenueImages(product, apiHeaders);
+            }
+            allExcursions.push({
+              ...TiqetsApi.transformTiqetsProduct(product),
+              images
+            });
+          }
+        }
+      } catch (e) {}
+    }
     
     // Remove duplicates by ID
     const seen = new Set<string>();
