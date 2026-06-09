@@ -13,7 +13,7 @@ import { getWishlistIdsAction } from '../actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { FilterDialog } from '@/components/excursion-search/filter-sheet';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AjaxSearch } from '@/components/ajax-search';
+import { UniversalSearch } from '@/components/universal-search';
 
 
 interface SearchClientPageProps {
@@ -122,7 +122,7 @@ export default function SearchClientPage({
     return (
         <>
             <div className="flex justify-center mb-8">
-                 <AjaxSearch />
+                 <UniversalSearch />
             </div>
 
             <main>

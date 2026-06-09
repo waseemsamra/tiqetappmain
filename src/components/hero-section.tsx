@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import type { HeroContent } from '@/types';
-import { AjaxSearch } from '@/components/ajax-search';
+import { UniversalSearch } from '@/components/universal-search';
 
 export default function HeroSection({ content }: { content: HeroContent | null }) {
 
@@ -38,7 +38,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
             {content.subheading}
           </p>
 
-          <AjaxSearch />
+          <UniversalSearch />
           
         </div>
       </div>
