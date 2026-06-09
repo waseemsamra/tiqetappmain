@@ -9,7 +9,7 @@ const headers = {
 
 import type { Excursion, Country, City, ExcursionType, TiqetsTag } from '@/types';
 
-function transformTiqetsProduct(product: any): Excursion {
+export function transformTiqetsProduct(product: any): Excursion {
   const ratingValue = product.ratings?.average;
   const ratingsTotal = product.ratings?.total || product.ratings?.count || 0;
   const safeRating = typeof ratingValue === 'number' ? ratingValue : 
