@@ -135,6 +135,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                id="tiqets-booking-container-variant"
                data-tiqets-widget="booking"
                data-product-id={variant.id}
+               data-trigger-selector="#tiqets-booking-container-variant button"
              >
                <button
                  type="button"
