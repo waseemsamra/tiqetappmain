@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import Script from 'next/script';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
@@ -26,14 +27,6 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-       <head>
-        <script
-          id="tiqets-booking-engine-script"
-          src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
-          async
-          defer
-        />
-       </head>
       <body className={`${inter.variable} font-sans flex flex-col h-full antialiased bg-background`}>
          <Header />
          <main className="flex-grow pt-20">
@@ -42,6 +35,11 @@ export default async function RootLayout({
         <Footer />
         <Toaster />
         <TiqetsInit />
+        <Script
+          id="tiqets-booking-engine-script"
+          src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
