@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { fetchTiqetsProductById } from '@/lib/tiqets-api';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { VariantBookingClient } from './variant-booking-client';
 
 const DEFAULT_IMAGES = [
   'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg?auto=format%2Ccompress&fit=crop&h=600&q=80&w=800',
@@ -131,19 +132,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                <span className="text-sm text-gray-500">Price</span>
                <p className="font-bold text-2xl">${Number(variant.price || 0).toFixed(2)}</p>
              </div>
-             <div
-               id="tiqets-booking-container-variant"
-               data-tiqets-widget="booking"
-               data-product-id={variant.id}
-               data-trigger-selector="#cta_button_variant"
-             />
-             <button
-               id="cta_button_variant"
-               type="button"
-               className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-             >
-               Book Now
-             </button>
+             <VariantBookingClient productId={variant.id} />
            </div>
          </div>
       </div>
