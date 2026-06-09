@@ -28,6 +28,10 @@ export type CachedProduct = {
   reviews_total?: number;
   image_url?: string;
   experience_url?: string;
+  product_ids?: string[];
+  whatsincluded?: string;
+  whatsnotincluded?: string;
+  cancellationpolicy?: string;
 };
 
 export type CachedVariant = {
@@ -114,7 +118,7 @@ export async function syncTiqetsProducts() {
   };
 }
 
-async function fetchProductsForCity(cityId: string, cityName: string, variantsArray: CachedVariant[]): Promise<CachedProduct[]> {
+async function fetchProductsForCity(cityId: string, cityName: string, variantsArray: CachedVariant[], experiencesArray: any[]): Promise<CachedProduct[]> {
   const products: CachedProduct[] = [];
   const pageSize = 100;
 
@@ -132,7 +136,26 @@ async function fetchProductsForCity(cityId: string, cityName: string, variantsAr
       const batch = (data.experiences || data.products || data.items || []);
       
       for (const exp of batch) {
-        // Add the main experience
+        // Store full experience data
+        experiencesArray.push({
+          id: exp.id?.toString(),
+          title: exp.title,
+          description: exp.description,
+          tagline: exp.tagline,
+          city_id: exp.city_id?.toString(),
+          city_name: exp.city_name,
+          country_name: exp.country_name,
+          price: exp.from_price || exp.price,
+          currency: exp.currency,
+          duration: exp.duration,
+          rating: exp.ratings?.average,
+          reviews_total: exp.ratings?.total,
+          image_url: extractFirstImageUrl(exp.images),
+          experience_url: exp.experience_url,
+          product_ids: exp.product_ids || []
+        });
+
+        // Add the main experience to products
         const product: CachedProduct = {
           tiqets_product_id: `exp-${exp.id?.toString() || ''}`,
           title: exp.title || '',
@@ -147,7 +170,8 @@ async function fetchProductsForCity(cityId: string, cityName: string, variantsAr
           rating: exp.ratings?.average,
           reviews_total: exp.ratings?.total,
           image_url: extractFirstImageUrl(exp.images),
-          experience_url: exp.experience_url
+          experience_url: exp.experience_url,
+          product_ids: exp.product_ids || [] as any
         };
         if (product.tiqets_product_id) {
           products.push(product);
@@ -306,11 +330,41 @@ export async function getVariantsForExperience(experienceId: string): Promise<an
     .map(v => ({
       id: v.product_id,
       name: v.title,
-      price: v.price,
-      duration: v.duration,
-      description: v.description,
+      price: v.price || 0,
+      duration: v.duration || '',
+      description: v.description || '',
       images: v.image_url ? [v.image_url] : []
     }));
+}
+
+// Get experience from cache by ID
+export async function getExperienceByIdFromCache(id: string): Promise<any | null> {
+  const experiences = await loadCache<any>(EXPERIENCES_CACHE_FILE);
+  const exp = experiences.find((e: any) => e.id === id);
+  
+  if (!exp) return null;
+  
+  // Transform cached experience to Excursion type
+  return {
+    id: exp.id,
+    name: exp.title,
+    city: exp.city_name || '',
+    country: exp.country_name || '',
+    description: exp.description || '',
+    price: exp.price || 0,
+    duration: exp.duration || 'Not specified',
+    activitytypeid: exp.id,
+    excursionType: { id: exp.id, name: exp.tagline || 'Activity' },
+    rating: exp.rating || 0,
+    images: exp.image_url ? [exp.image_url] : [],
+    whatsincluded: exp.whatsincluded || '',
+    whatsnotincluded: exp.whatsnotincluded || '',
+    cancellationpolicy: exp.cancellationpolicy || '',
+    product_ids: exp.product_ids || [],
+    reviews: [],
+    reviewsTotal: exp.reviews_total || 0,
+    experience_url: exp.experience_url || ''
+  };
 }
 
 // Search functions
