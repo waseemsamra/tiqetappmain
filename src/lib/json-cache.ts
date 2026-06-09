@@ -4,6 +4,8 @@ import { join } from 'path';
 const CACHE_DIR = join(process.cwd(), 'cache');
 const PRODUCTS_CACHE_FILE = join(CACHE_DIR, 'products.json');
 const HELICOPTER_CACHE_FILE = join(CACHE_DIR, 'helicopter-tours.json');
+const VARIANTS_CACHE_FILE = join(CACHE_DIR, 'variants.json');
+const EXPERIENCES_CACHE_FILE = join(CACHE_DIR, 'experiences.json');
 
 const HELICOPTER_KEYWORDS = [
   'helicopter', 'chopper', 'air tour', 'flightseeing',
@@ -26,6 +28,16 @@ export type CachedProduct = {
   reviews_total?: number;
   image_url?: string;
   experience_url?: string;
+};
+
+export type CachedVariant = {
+  product_id: string;
+  experience_id: string;
+  title: string;
+  price?: number;
+  duration?: string;
+  description?: string;
+  image_url?: string;
 };
 
 const TARGET_CITIES = [
@@ -65,10 +77,12 @@ export async function syncTiqetsProducts() {
   
   const allProducts: CachedProduct[] = [];
   const helicopterProducts: CachedProduct[] = [];
+  const allVariants: CachedVariant[] = [];
+  const allExperiences: any[] = [];
 
   for (const city of TARGET_CITIES) {
     console.log(`Syncing ${city.name}...`);
-    const cityProducts = await fetchProductsForCity(city.id, city.name);
+    const cityProducts = await fetchProductsForCity(city.id, city.name, allVariants, allExperiences);
     
     for (const product of cityProducts) {
       if (!allProducts.find(p => p.tiqets_product_id === product.tiqets_product_id)) {
@@ -86,17 +100,21 @@ export async function syncTiqetsProducts() {
 
   await saveCache(PRODUCTS_CACHE_FILE, allProducts);
   await saveCache(HELICOPTER_CACHE_FILE, helicopterProducts);
+  await saveCache(VARIANTS_CACHE_FILE, allVariants);
+  await saveCache(EXPERIENCES_CACHE_FILE, allExperiences);
   
-  console.log(`Sync complete: ${allProducts.length} products, ${helicopterProducts.length} helicopter tours`);
+  console.log(`Sync complete: ${allProducts.length} products, ${helicopterProducts.length} helicopter tours, ${allVariants.length} variants, ${allExperiences.length} experiences`);
   
   return {
     totalProducts: allProducts.length,
     helicopterTours: helicopterProducts.length,
-    cities: TARGET_CITIES.length
+    cities: TARGET_CITIES.length,
+    variants: allVariants.length,
+    experiences: allExperiences.length
   };
 }
 
-async function fetchProductsForCity(cityId: string, cityName: string): Promise<CachedProduct[]> {
+async function fetchProductsForCity(cityId: string, cityName: string, variantsArray: CachedVariant[]): Promise<CachedProduct[]> {
   const products: CachedProduct[] = [];
   const pageSize = 100;
 
@@ -114,8 +132,9 @@ async function fetchProductsForCity(cityId: string, cityName: string): Promise<C
       const batch = (data.experiences || data.products || data.items || []);
       
       for (const exp of batch) {
+        // Add the main experience
         const product: CachedProduct = {
-          tiqets_product_id: exp.id?.toString() || '',
+          tiqets_product_id: `exp-${exp.id?.toString() || ''}`,
           title: exp.title || '',
           description: exp.description || exp.tagline || '',
           tagline: exp.tagline,
@@ -132,6 +151,52 @@ async function fetchProductsForCity(cityId: string, cityName: string): Promise<C
         };
         if (product.tiqets_product_id) {
           products.push(product);
+        }
+        
+        // Fetch variants/products linked to this experience
+        const productIds = exp.product_ids || [];
+        const experienceId = exp.id?.toString() || '';
+        
+        for (let j = 0; j < productIds.length; j++) {
+          const productId = productIds[j];
+          const variant = await fetchProductById(productId);
+          if (variant) {
+            // Add to products cache
+            const variantProduct: CachedProduct = {
+              tiqets_product_id: variant.id?.toString() || productId,
+              title: variant.title || exp.title || '',
+              description: variant.description || exp.description || exp.tagline || '',
+              tagline: variant.tagline || exp.tagline,
+              city_id: exp.city_id?.toString() || cityId,
+              city_name: exp.city_name || cityName,
+              country_name: exp.country_name,
+              price: variant.price || exp.from_price || exp.price,
+              currency: variant.currency || exp.currency,
+              duration: variant.duration || exp.duration,
+              rating: exp.ratings?.average,
+              reviews_total: exp.ratings?.total,
+              image_url: variant.image_urls?.[0] || extractFirstImageUrl(exp.images),
+              experience_url: exp.experience_url
+            };
+            if (variantProduct.tiqets_product_id) {
+              products.push(variantProduct);
+            }
+            
+            // Also add to variants array with experience_id link
+            variantsArray.push({
+              product_id: variant.id?.toString() || productId,
+              experience_id: experienceId,
+              title: variant.title || exp.title || '',
+              price: variant.price || exp.from_price,
+              duration: variant.duration || exp.duration,
+              description: variant.description || exp.tagline || '',
+              image_url: variant.image_urls?.[0] || extractFirstImageUrl(exp.images)
+            });
+          }
+          // Rate limit: 150ms between variant requests
+          if (j < productIds.length - 1) {
+            await sleep(150);
+          }
         }
       }
       
@@ -190,6 +255,33 @@ async function fetchProductsForCity(cityId: string, cityName: string): Promise<C
   return products;
 }
 
+async function fetchProductById(productId: string): Promise<any | null> {
+  try {
+    const resp = await fetch(
+      `https://api.tiqets.com/v2/products/${productId}`,
+      { method: 'GET', headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' } }
+    );
+    
+    if (!resp.ok) return null;
+    
+    const data = await resp.json();
+    const product = data.product || data;
+    
+    return {
+      id: product.id,
+      title: product.title || '',
+      description: product.tagline || product.description || '',
+      price: product.price || product.from_price,
+      currency: product.currency,
+      duration: product.duration,
+      image_urls: product.images ? product.images.map((img: any) => img?.medium || img?.large || img?.small).filter(Boolean) : []
+    };
+  } catch (e) {
+    console.error(`Error fetching product ${productId}:`, e);
+    return null;
+  }
+}
+
 function isHelicopterTour(product: CachedProduct): boolean {
   const searchText = `${product.title} ${product.description || ''} ${product.tagline || ''}`.toLowerCase();
   return HELICOPTER_KEYWORDS.some(kw => searchText.includes(kw.toLowerCase()));
@@ -202,6 +294,23 @@ function extractFirstImageUrl(images: any[]): string | undefined {
 
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Get variants for specific experience from cache
+export async function getVariantsForExperience(experienceId: string): Promise<any[]> {
+  const variants = await loadCache<CachedVariant>(VARIANTS_CACHE_FILE);
+  
+  // Find all variants for this experience
+  return variants
+    .filter(v => v.experience_id === experienceId)
+    .map(v => ({
+      id: v.product_id,
+      name: v.title,
+      price: v.price,
+      duration: v.duration,
+      description: v.description,
+      images: v.image_url ? [v.image_url] : []
+    }));
 }
 
 // Search functions

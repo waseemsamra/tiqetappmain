@@ -405,7 +405,11 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {
   if (!productIds || productIds.length === 0) return [];
   
-  const variantPromises = productIds.map(async (id) => {
+  // Process variants with rate limiting to avoid WAF blocks
+  const results: any[] = [];
+  
+  for (let i = 0; i < productIds.length; i++) {
+    const id = productIds[i];
     try {
       const response = await fetch(`${TIQETS_API_BASE}/products/${id}`, { method: 'GET', headers });
       if (response.ok) {
@@ -430,23 +434,27 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
             } catch (e) {}
           }
           
-          return {
+          results.push({
             id: product.id?.toString() || '',
             name: product.title || product.name || '',
             price: product.price || product.from_price || 0,
             duration: product.duration || '',
             description: product.tagline || product.description || '',
             images: imageUrls,
-          };
+          });
         }
       }
     } catch (e) {
+      console.error(`Error fetching variant ${id}:`, e);
     }
-    return null;
-  });
+    
+    // Rate limit: wait 200ms between requests to avoid WAF blocks
+    if (i < productIds.length - 1) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
+  }
   
-  const results = await Promise.all(variantPromises);
-  return results.filter(v => v !== null);
+  return results;
 }
 
 export async function fetchTiqetsProductById(id: string): Promise<Excursion | null> {
