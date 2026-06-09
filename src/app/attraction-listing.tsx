@@ -30,6 +30,16 @@ const CityTab = ({ city, image, isActive, onClick }: { city: string, image: stri
     </button>
 );
 
+const CountryTab = ({ country, isActive, onClick }: { country: string, isActive: boolean, onClick: () => void }) => (
+    <button 
+        onClick={onClick} 
+        className="flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-muted relative shrink-0"
+    >
+        <span className={cn("font-medium", isActive ? 'text-primary' : 'text-foreground')}>{country}</span>
+        {isActive && <div className="absolute bottom-[-17px] left-0 w-full h-0.5 bg-primary rounded-full" />}
+    </button>
+);
+
 
 interface AttractionListingSectionProps {
     title: string;
@@ -41,10 +51,17 @@ interface AttractionListingSectionProps {
     showTabs?: boolean;
     tabType?: 'country' | 'city' | undefined;
     maxTabs?: number;
+    tabs?: string[]; // Explicit tab names (cities or countries)
 }
 
-export default function AttractionListingSection({ title, excursions, showViewAllButton = true, layout = 'carousel', user = null, wishlistIds = new Set(), showTabs = true, tabType, maxTabs }: AttractionListingSectionProps) {
+export default function AttractionListingSection({ title, excursions, showViewAllButton = true, layout = 'carousel', user = null, wishlistIds = new Set(), showTabs = true, tabType, maxTabs, tabs }: AttractionListingSectionProps) {
     const cities = useMemo(() => {
+        if (tabs && tabType === 'city') {
+            return tabs.map(name => ({
+                name,
+                image: excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] || 'https://placehold.co/40x40.png'
+            }));
+        }
         const cityMap = new Map<string, { name: string, image: string }>();
         excursions.forEach(ex => {
             if (!cityMap.has(ex.city)) {
@@ -54,16 +71,41 @@ export default function AttractionListingSection({ title, excursions, showViewAl
         const allCities = Array.from(cityMap.values());
         // If maxTabs is set, limit to first N cities
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
-    }, [excursions, maxTabs]);
+    }, [excursions, maxTabs, tabs, tabType]);
 
-    const [activeCity, setActiveCity] = useState<string | null>(cities.length > 0 ? cities[0].name : null);
+    const countries = useMemo(() => {
+        if (tabs && tabType === 'country') {
+            return tabs.map(name => ({
+                name,
+                image: excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] || 'https://placehold.co/40x40.png'
+            }));
+        }
+        const countryMap = new Map<string, { name: string, image: string }>();
+        excursions.forEach(ex => {
+            if (!countryMap.has(ex.country)) {
+                countryMap.set(ex.country, { name: ex.country, image: ex.images?.[0] || 'https://placehold.co/40x40.png' });
+            }
+        });
+        const allCountries = Array.from(countryMap.values());
+        // If maxTabs is set, limit to first N countries
+        return maxTabs ? allCountries.slice(0, maxTabs) : allCountries;
+    }, [excursions, maxTabs, tabs, tabType]);
+
+    const [activeTab, setActiveTab] = useState<string | null>(
+        tabType === 'country' 
+            ? (countries.length > 0 ? countries[0].name : null)
+            : (cities.length > 0 ? cities[0].name : null)
+    );
     
     const filteredExcursions = useMemo(() => {
-        if (showTabs && activeCity && layout === 'carousel') {
-             return excursions.filter(ex => ex.city === activeCity);
+        if (showTabs && activeTab && layout === 'carousel') {
+            if (tabType === 'country') {
+                return excursions.filter(ex => ex.country.toLowerCase() === activeTab.toLowerCase());
+            }
+            return excursions.filter(ex => ex.city.toLowerCase() === activeTab.toLowerCase());
         }
         return excursions;
-    }, [activeCity, excursions, layout, showTabs]);
+    }, [activeTab, excursions, layout, showTabs, tabType]);
 
     const renderGrid = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -78,21 +120,34 @@ export default function AttractionListingSection({ title, excursions, showViewAl
        </div>
     );
 
-    const renderCarousel = () => (
+const renderCarousel = () => (
       <div className="relative">
         <Carousel 
             opts={{ align: "start", loop: false }}
             className="w-full"
         >
-            {showTabs && cities.length > 1 && (
+            {showTabs && cities.length > 1 && tabType === 'city' && (
                 <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
                     {cities.map(city => (
                         <CityTab 
                             key={city.name} 
                             city={city.name} 
                             image={city.image}
-                            isActive={activeCity === city.name}
-                            onClick={() => setActiveCity(city.name)}
+                            isActive={activeTab === city.name}
+                            onClick={() => setActiveTab(city.name as string)}
+                        />
+                    ))}
+                </div>
+            )}
+            
+            {showTabs && countries.length > 1 && tabType === 'country' && (
+                <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
+                    {countries.map(country => (
+                        <CountryTab 
+                            key={country.name}
+                            country={country.name}
+                            isActive={activeTab === country.name}
+                            onClick={() => setActiveTab(country.name as string)}
                         />
                     ))}
                 </div>
@@ -120,6 +175,13 @@ export default function AttractionListingSection({ title, excursions, showViewAl
         return null; // Don't render the section if there are no excursions
     }
 
+    const getExploreUrl = () => {
+        if (tabType === 'country') {
+            return `/country/${encodeURIComponent(activeTab || '')}`;
+        }
+        return `/city/${encodeURIComponent(activeTab || '')}`;
+    };
+
     return (
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
@@ -132,9 +194,9 @@ export default function AttractionListingSection({ title, excursions, showViewAl
 
             {showViewAllButton && layout === 'carousel' && (
                 <div className="mt-8 text-left">
-                    <Link href={`/city/${encodeURIComponent(activeCity || '')}`}>
+                    <Link href={getExploreUrl()}>
                         <Button variant="outline">
-                            Explore {activeCity || 'All'} <ArrowRight className="ml-2 h-4 w-4" />
+                            Explore {activeTab || 'All'} <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
                 </div>

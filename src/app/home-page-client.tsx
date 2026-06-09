@@ -34,8 +34,27 @@ const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah'];
 // Additional cities for tabs (stub data since API doesn't have them)
 const ADDITIONAL_TAB_CITIES: string[] = [];
 
-// Stub data for cities without Tiqets data
-const STUB_EXCURSIONS: Record<string, Excursion[]> = {};
+// Stub data for cities without Tiqets data - ensures these cities always show on homepage
+ const STUB_EXCURSIONS: Record<string, Excursion[]> = {
+    'Barcelona': [
+      { id: 'exp-sagrada-familia', name: 'Sagrada Familia Guided Tour', city: 'Barcelona', country: 'Spain', description: 'Gaudí\'s architectural masterpiece', price: 32, duration: '1.5 hours', activitytypeid: '1', excursionType: { id: '1', name: 'Activity' }, rating: 4.7, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 1200 },
+      { id: 'exp-casa-batllo', name: 'Casa Batlló Skip-the-Line', city: 'Barcelona', country: 'Spain', description: 'Gaudí\'s modernist house museum', price: 35, duration: '1 hour', activitytypeid: '2', excursionType: { id: '2', name: 'Activity' }, rating: 4.7, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 1000 },
+      { id: 'exp-park-guell', name: 'Park Güell Guided Tour', city: 'Barcelona', country: 'Spain', description: 'Gaudí\'s colorful public park', price: 28, duration: '1.5 hours', activitytypeid: '3', excursionType: { id: '3', name: 'Activity' }, rating: 4.6, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 900 },
+      { id: 'exp-barcelona-hop-on-hop-off', name: 'Barcelona Hop-on Hop-off Bus Tour', city: 'Barcelona', country: 'Spain', description: 'Explore Barcelona at your own pace', price: 40, duration: '1 day', activitytypeid: '4', excursionType: { id: '4', name: 'Activity' }, rating: 4.5, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 750 },
+    ],
+    'Paris': [
+      { id: 'exp-eiffel-tower', name: 'Eiffel Tower Summit Access', city: 'Paris', country: 'France', description: 'Panoramic views of Paris from the top', price: 30, duration: '1.5 hours', activitytypeid: '5', excursionType: { id: '5', name: 'Activity' }, rating: 4.6, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 1800 },
+    ],
+    'Rome': [
+      { id: 'exp-colosseum', name: 'Colosseum & Roman Forum Tour', city: 'Rome', country: 'Italy', description: 'Explore ancient Rome\'s most iconic monuments', price: 28, duration: '2 hours', activitytypeid: '6', excursionType: { id: '6', name: 'Activity' }, rating: 4.8, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 1500 },
+    ],
+    'New York': [
+      { id: 'exp-statue-liberty', name: 'Statue of Liberty & Ellis Island', city: 'New York', country: 'United States', description: 'Iconic NYC landmark tour', price: 35, duration: '3 hours', activitytypeid: '7', excursionType: { id: '7', name: 'Activity' }, rating: 4.9, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 1600 },
+    ],
+    'Amsterdam': [
+      { id: 'exp-amsterdam-canal', name: 'Amsterdam Canal Cruise', city: 'Amsterdam', country: 'Netherlands', description: 'Explore Amsterdam\'s historic canals', price: 25, duration: '1 hour', activitytypeid: '8', excursionType: { id: '8', name: 'Activity' }, rating: 4.6, images: [], status: 'active', partner_id: null, reviews: [], reviewsTotal: 850 },
+    ],
+  };
 
 // Get city-specific excursions for homepage sections
 const getCityExcursions = (allExcursions: Excursion[], cityName: string) => {
@@ -100,6 +119,7 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
         showTabs={true}
         maxTabs={5}
         tabType="city"
+        tabs={UAE_CITIES}
       />
       <AttractionListingSection
         title="Best places to visit worldwide"
@@ -107,6 +127,7 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
         showTabs={true}
         maxTabs={5}
         tabType="city"
+        tabs={TARGET_CITIES}
       />
       <AttractionListingSection
         title="Top 10 things to do in Barcelona"
