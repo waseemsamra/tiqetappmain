@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
+  const scriptLoadedRef = useRef(false);
+
   useEffect(() => {
-    // Ensure script is loaded
-    if (!document.getElementById('tiqets-booking-engine-script')) {
+    // Load script on first mount
+    if (!scriptLoadedRef.current) {
+      scriptLoadedRef.current = true;
       const script = document.createElement('script');
       script.id = 'tiqets-booking-engine-script';
       script.src = 'https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js';
@@ -15,29 +18,33 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     }
   }, []);
 
+  // On navigation, remove and re-add script to force rebind
+  useEffect(() => {
+    const script = document.getElementById('tiqets-booking-engine-script');
+    if (script && scriptLoadedRef.current) {
+      // Remove and re-add script to force Tiqets to rescan
+      const newScript = document.createElement('script');
+      newScript.id = 'tiqets-booking-engine-script';
+      newScript.src = 'https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js';
+      newScript.async = true;
+      newScript.defer = true;
+      script.parentNode?.replaceChild(newScript, script);
+    }
+  }, [productId]);
+
+  const buttonId = `tiqets-trigger-${productId}`;
+
   return (
     <>
       <div
         data-tiqets-widget="booking"
         data-product-id={productId}
-        data-trigger-selector={`#tiqets-trigger-${productId}`}
+        data-trigger-selector={`#${buttonId}`}
       />
-      {/* Hidden trigger for Tiqets script */}
       <button
-        id={`tiqets-trigger-${productId}`}
-        type="button"
-        className="hidden"
-        aria-hidden="true"
-        tabIndex={-1}
-      />
-      {/* Visible button that triggers the hidden one */}
-      <button
+        id={buttonId}
         type="button"
         className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-        onClick={() => {
-          const hiddenTrigger = document.getElementById(`tiqets-trigger-${productId}`);
-          hiddenTrigger?.click();
-        }}
       >
         Book Now
       </button>
