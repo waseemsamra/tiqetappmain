@@ -135,7 +135,7 @@ const KNOWN_CITY_IDS: Record<string, string> = {
     'brentwood bay': '263090',
     'whistler': '87924',
     'kamloops': '62382',
-    'niagara falls': '81337',
+    'niagara-on-the-lake': '982',
     'gananoque': '269628',
     'edmonton': '62366',
     'scott': '271125',
@@ -144,7 +144,6 @@ const KNOWN_CITY_IDS: Record<string, string> = {
     'golden': '136649',
     'gatineau': '62372',
     'squamish': '301',
-    'niagara-on-the-lake': '982',
     'sao paulo': '61533',
     'salvador': '61537',
     'manaus': '61539',
@@ -361,29 +360,31 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
         return [];
       }
       
-      // Try experiences first
-      try {
-        const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-        if (response.ok) {
-          const data = await response.json();
-          const products = data.experiences || data.products || data.items || [];
-          return products.map(transformTiqetsProduct);
-        }
-      } catch (e) {
-        // Continue
-      }
-      
-      // Try products for cities like New York
-      try {
-        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
-        if (response.ok) {
-          const data = await response.json();
-          const products = data.products || data.experiences || data.items || [];
-          return products.map(transformTiqetsProduct);
-        }
-      } catch (e) {
-        return [];
-      }
+// Try experiences first
+       try {
+         const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100`, { method: 'GET', headers });
+         if (response.ok) {
+           const data = await response.json();
+           const products = data.experiences || data.products || data.items || [];
+           if (products.length > 0) {
+             return products.map(transformTiqetsProduct);
+           }
+         }
+       } catch (e) {
+         // Continue
+       }
+       
+       // Try products for cities like New York and standalone products like helicopter tours
+       try {
+         const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100`, { method: 'GET', headers });
+         if (response.ok) {
+           const data = await response.json();
+           const products = data.products || data.experiences || data.items || [];
+           return products.map(transformTiqetsProduct);
+         }
+       } catch (e) {
+         return [];
+       }
       
       return [];
     });

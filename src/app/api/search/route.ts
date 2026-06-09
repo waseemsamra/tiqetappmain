@@ -97,6 +97,7 @@ export async function GET(request: Request) {
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
       if (cityId) {
         let allActivities: any[] = [];
+        // Try experiences endpoint first
         for (let p = 1; p <= MAX_PAGES; p++) {
           const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
             headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
@@ -104,6 +105,17 @@ export async function GET(request: Request) {
           if (!resp.ok) break;
           const data = await resp.json();
           const batch = (data.experiences || data.products || data.items || []);
+          allActivities.push(...batch);
+          if (batch.length < PAGE_SIZE) break;
+        }
+        // Also fetch standalone products for this city (e.g., helicopter tours)
+        for (let p = 1; p <= MAX_PAGES; p++) {
+          const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
+            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          });
+          if (!resp.ok) break;
+          const data = await resp.json();
+          const batch = (data.products || data.experiences || data.items || []);
           allActivities.push(...batch);
           if (batch.length < PAGE_SIZE) break;
         }
@@ -137,9 +149,9 @@ export async function GET(request: Request) {
       'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
       'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
       'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
-      'gatineau': '62372', 'squamish': '301', 'madrid': '60400', 'barcelona': '66342',
-    };
-    const [allCountries, allCities] = await Promise.all([
+'gatineau': '62372', 'squamish': '301', 'madrid': '60400'
+      };
+     const [allCountries, allCities] = await Promise.all([
       TiqetsApi.fetchTiqetsCountries(),
       TiqetsApi.fetchTiqetsCities().catch(() => []),
     ]);
@@ -166,8 +178,9 @@ export async function GET(request: Request) {
     }
 
     if (matchedCityId || matchedCityRecord) {
-      const cityId = matchedCityId || matchedCityRecord.id;
+      const cityId = matchedCityId || matchedCityRecord?.id || '';
       let allActivities: any[] = [];
+      // Try experiences endpoint
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
@@ -175,6 +188,17 @@ export async function GET(request: Request) {
         if (!resp.ok) break;
         const data = await resp.json();
         const batch = (data.experiences || data.products || data.items || []);
+        allActivities.push(...batch);
+        if (batch.length < PAGE_SIZE) break;
+      }
+      // Also fetch standalone products for this city
+      for (let p = 1; p <= MAX_PAGES; p++) {
+        const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+        });
+        if (!resp.ok) break;
+        const data = await resp.json();
+        const batch = (data.products || data.experiences || data.items || []);
         allActivities.push(...batch);
         if (batch.length < PAGE_SIZE) break;
       }
