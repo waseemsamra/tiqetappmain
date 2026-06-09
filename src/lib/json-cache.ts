@@ -636,6 +636,38 @@ function getSeedProducts(): CachedProduct[] {
       experience_url: ''
     },
     {
+      tiqets_product_id: 'exp-casa-batllo',
+      title: 'Casa Batlló Skip-the-Line',
+      description: 'Gaudí\'s modernist house museum',
+      tagline: 'Barcelona landmark',
+      city_id: '66342',
+      city_name: 'Barcelona',
+      country_name: 'Spain',
+      price: 35,
+      currency: 'EUR',
+      duration: '1 hour',
+      rating: 4.7,
+      reviews_total: 1000,
+      image_url: 'https://placehold.co/600x400.png',
+      experience_url: ''
+    },
+    {
+      tiqets_product_id: 'exp-park-guell',
+      title: 'Park Güell Guided Tour',
+      description: 'Gaudí\'s colorful public park',
+      tagline: 'Barcelona landmark',
+      city_id: '66342',
+      city_name: 'Barcelona',
+      country_name: 'Spain',
+      price: 28,
+      currency: 'EUR',
+      duration: '1.5 hours',
+      rating: 4.6,
+      reviews_total: 900,
+      image_url: 'https://placehold.co/600x400.png',
+      experience_url: ''
+    },
+    {
       tiqets_product_id: 'exp-statue-liberty',
       title: 'Statue of Liberty & Ellis Island',
       description: 'Iconic NYC landmark tour',
@@ -666,11 +698,32 @@ function getSeedProducts(): CachedProduct[] {
       reviews_total: 2100,
       image_url: 'https://placehold.co/600x400.png',
       experience_url: ''
+    },
+    {
+      tiqets_product_id: 'exp-helicopter-dubai',
+      title: 'Dubai Helicopter Tour',
+      description: 'Scenic flight over Dubai\'s landmarks including Burj Khalifa and Palm Jumeirah',
+      tagline: 'Helicopter tour',
+      city_id: '60005',
+      city_name: 'Dubai',
+      country_name: 'UAE',
+      price: 180,
+      currency: 'USD',
+      duration: '15 minutes',
+      rating: 4.8,
+      reviews_total: 450,
+      image_url: 'https://placehold.co/600x400.png',
+      experience_url: ''
     }
   ];
 }
 
 export async function getHelicopterTours() {
   const tours = await loadCache<CachedProduct>(HELICOPTER_CACHE_FILE);
+  // If cache is empty, use seed data filtered for helicopter tours
+  if (tours.length === 0) {
+    const seedData = getSeedProducts().filter(p => isHelicopterTour(p));
+    return seedData.sort((a, b) => (a.price || 0) - (b.price || 0));
+  }
   return tours.sort((a, b) => (a.price || 0) - (b.price || 0));
 }

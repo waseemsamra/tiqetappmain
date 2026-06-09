@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import * as TiqetsApi from '@/lib/tiqets-api';
+import { searchProducts } from '@/lib/json-cache';
 import { z } from 'zod';
 
 export async function GET(request: Request) {
@@ -12,7 +13,13 @@ export async function GET(request: Request) {
         const city = searchParams.get('city');
         const queryParam = searchParams.get('query');
 
-        const allExcursions = await TiqetsApi.fetchTiqetsProducts();
+        let allExcursions;
+        try {
+          allExcursions = await TiqetsApi.fetchTiqetsProducts();
+        } catch (apiError) {
+          console.error('Tiqets API failed, using fallback:', apiError);
+          allExcursions = await searchProducts('');
+        }
         
         let filtered = allExcursions;
         

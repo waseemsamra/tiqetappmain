@@ -33,11 +33,18 @@ export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> 
 }
 
 export async function getTopRatedExcursions(): Promise<Excursion[]> {
-    const excursions = await TiqetsApi.fetchTiqetsProducts();
-    return excursions
-      .sort((a, b) => (b.rating || 0) - (a.rating || 0))
-      .slice(0, 20);
-}
+    try {
+      const excursions = await TiqetsApi.fetchTiqetsProducts();
+      return excursions
+        .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        .slice(0, 20);
+    } catch (e) {
+      console.error('getTopRatedExcursions API failed, using static fallback:', e);
+      // Use static data as fallback, sorted by rating
+      const staticData = require('@/data/excursions.json') as Excursion[];
+      return staticData.sort((a, b) => (b.rating || 0) - (a.rating || 0)).slice(0, 20);
+    }
+  }
 
 
 export async function searchExcursionsAction(
@@ -298,17 +305,18 @@ export async function toggleWishlistAction(activityId: string): Promise<{success
 }
 
 export async function processBookingAction(activityId: string, bookingDate: Date, quantity: number, email: string): Promise<{ success: boolean; redirectUrl?: string; error?: string }> {
-   const activity = await getExcursionById(activityId);
-   if (!activity) return { success: false, error: "The selected excursion could not be found." };
-   
-   const totalPrice = activity.price * quantity;
-   const bookingReference = `RR-${Math.random().toString(36).substring(2, 8)}${Math.random().toString(36).substring(2, 8)}`.toUpperCase();
-   
-   return { 
+    const activity = await getExcursionById(activityId);
+    if (!activity) return { success: false, error: "The selected excursion could not be found." };
+    
+    const price = typeof activity.price === 'number' ? activity.price : Number(activity.price) || 0;
+    const totalPrice = price * quantity;
+    const bookingReference = `RR-${Math.random().toString(36).substring(2, 8)}${Math.random().toString(36).substring(2, 8)}`.toUpperCase();
+    
+    return { 
        success: true, 
        redirectUrl: `/booking/voucher?ref=${bookingReference}&email=${encodeURIComponent(email)}&new=true` 
-   };
-}
+    };
+  }
 
 
 export async function createReviewAction(formData: FormData): Promise<FormState> {

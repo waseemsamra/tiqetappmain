@@ -31,13 +31,13 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q') || '';
-  const type = (searchParams.get('type') || 'all') as 'all' | 'helicopter' | 'city';
+  const type = searchParams.get('type') || 'all';
 
   if (!query) {
     return NextResponse.json({ products: [] });
   }
 
-  const results = searchProducts(query, type);
+  const results = await searchProducts(query, type as 'all' | 'helicopter');
   
   return NextResponse.json({
     products: results,
