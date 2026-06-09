@@ -38,7 +38,7 @@ export default async function RootLayout({
         <Script
           id="tiqets-booking-engine-script"
           src="https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </body>
     </html>

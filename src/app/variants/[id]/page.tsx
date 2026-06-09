@@ -135,15 +135,15 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                id="tiqets-booking-container-variant"
                data-tiqets-widget="booking"
                data-product-id={variant.id}
-               data-trigger-selector="#tiqets-booking-container-variant button"
+               data-trigger-selector="#cta_button_variant"
+             />
+             <button
+               id="cta_button_variant"
+               type="button"
+               className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
              >
-               <button
-                 type="button"
-                 className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-               >
-                 Book Now
-               </button>
-             </div>
+               Book Now
+             </button>
            </div>
          </div>
       </div>

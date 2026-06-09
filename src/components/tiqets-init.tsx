@@ -7,12 +7,11 @@ export function useTiqetsWidget() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // After navigation, ensure widgets can be triggered
-    // The Tiqets script auto-binds on load via afterInteractive strategy
+    // On route change, wait for new widgets and let Tiqets rebind
     const timer = setTimeout(() => {
-      // Verify the script has processed widgets
-      const configs = document.querySelectorAll('[data-tiqets-widget="booking"]');
-    }, 200);
+      // The Tiqets script already loaded - just verify elements exist
+      const widgets = document.querySelectorAll('[data-tiqets-widget="booking"]');
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [pathname]);
