@@ -1,7 +1,9 @@
 import { promises as fs } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const CACHE_DIR = join(process.cwd(), 'cache');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const CACHE_DIR = join(__dirname, '..', '..', '..', '..', 'cache');
 const PRODUCTS_CACHE_FILE = join(CACHE_DIR, 'products.json');
 const HELICOPTER_CACHE_FILE = join(CACHE_DIR, 'helicopter-tours.json');
 const VARIANTS_CACHE_FILE = join(CACHE_DIR, 'variants.json');

@@ -29,8 +29,8 @@ import { Input } from "@/components/ui/input";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  rowSelection: RowSelectionState;
-  setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
+  rowSelection?: RowSelectionState;
+  setRowSelection?: React.Dispatch<React.SetStateAction<RowSelectionState>>;
   filterColumn: string;
   filterPlaceholder: string;
 }
@@ -44,9 +44,7 @@ export function DataTable<TData, TValue>({
   filterPlaceholder,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -58,15 +56,16 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
+    enableRowSelection: !!setRowSelection,
     initialState: {
-        pagination: {
-            pageSize: 50,
-        },
+      pagination: {
+        pageSize: 50,
+      },
     },
     state: {
       sorting,
       columnFilters,
-      rowSelection,
+      ...(setRowSelection ? { rowSelection } : {}),
     },
   });
 
@@ -126,8 +125,14 @@ export function DataTable<TData, TValue>({
       </Table>
        <div className="flex items-center justify-between space-x-2 p-4">
         <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {(() => {
+              try {
+                const selected = table.getFilteredSelectedRowModel();
+                return `${selected.rows.length} of ${table.getFilteredRowModel().rows.length} row(s) selected.`;
+              } catch {
+                return `${table.getFilteredRowModel().rows.length} row(s).`;
+              }
+            })()}
         </div>
         <div className="flex items-center space-x-2">
             <Button

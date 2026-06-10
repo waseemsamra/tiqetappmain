@@ -28,36 +28,11 @@ function isRateLimited(error: unknown) {
 }
 
 export async function getCountries(supabaseClient?: any): Promise<Country[]> {
-  let cached: CachedCountry[] = [];
   try {
-    cached = await loadCache<CachedCountry>(LOCATIONS_CACHE_FILE);
-  } catch {}
-
-  if (cached.length) {
+    const cached = await loadCache<CachedCountry>(LOCATIONS_CACHE_FILE);
     return cached.map(toCountry);
-  }
-
-  try {
-    const countries = await TiqetsApi.fetchTiqetsCountries();
-    const mapped: CachedCountry[] = countries.map((c) => ({
-      id: String(c.id || c.code || ''),
-      name: c.name || '',
-      code: c.code || '',
-      currency: c.currency,
-      currency_symbol: c.currency_symbol
-    }));
-
-    try {
-      await saveCache(LOCATIONS_CACHE_FILE, mapped);
-    } catch {}
-
-    return countries;
-  } catch (error) {
-    if (isRateLimited(error)) {
-      console.warn('[Locations] Rate limited while fetching countries; returning empty list until cache is populated.');
-      return [];
-    }
-    throw error;
+  } catch {
+    return [];
   }
 }
 
@@ -190,38 +165,10 @@ export async function syncLocations() {
 }
 
 export async function getCities(supabaseClient?: any): Promise<City[]> {
-  let cached: CachedCity[] = [];
   try {
-    cached = await loadCache<CachedCity>(LOCATIONS_CACHE_FILE);
-  } catch {}
-
-  if (!cached.length) {
-    const countries = await TiqetsApi.fetchTiqetsCountries();
-    const mappedCountries: CachedCountry[] = countries.map((c) => ({
-      id: String(c.id || c.code || ''),
-      name: c.name || '',
-      code: c.code || '',
-      currency: c.currency,
-      currency_symbol: c.currency_symbol
-    }));
-
-    for (const country of mappedCountries) {
-      try {
-        const cities = await TiqetsApi.fetchTiqetsCities(country.code.toUpperCase());
-        const mapped: CachedCity[] = cities.map((c) => ({
-          id: String(c.id || ''),
-          name: c.name || '',
-          country_code: c.country_code || country.code,
-          country_name: c.country_name || country.name
-        }));
-        cached = [...cached, ...mapped];
-      } catch {}
-    }
-
-    try {
-      await saveCache(LOCATIONS_CACHE_FILE, cached);
-    } catch {}
+    const cached = await loadCache<CachedCity>(LOCATIONS_CACHE_FILE);
+    return cached.map(toCity);
+  } catch {
+    return [];
   }
-
-  return cached.map(toCity);
 }
