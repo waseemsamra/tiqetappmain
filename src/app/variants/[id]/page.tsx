@@ -27,6 +27,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
 
   const allImages =
     (variant.images?.length || 0) > 0 ? variant.images : ['https://placehold.co/800x600.png'];
+  const thumbs = allImages.slice(1, 5);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -60,18 +61,11 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         </div>
 
         <div className="w-1/2 grid grid-cols-2 gap-1.5">
-          <div className="relative h-[246px] rounded-xl overflow-hidden">
-            <Image src={allImages[1]} alt={`${variant.name} 2`} fill className="object-cover" />
-          </div>
-          <div className="relative h-[246px] rounded-xl overflow-hidden">
-            <Image src={allImages[2]} alt={`${variant.name} 3`} fill className="object-cover" />
-          </div>
-          <div className="relative h-[246px] rounded-xl overflow-hidden">
-            <Image src={allImages[3]} alt={`${variant.name} 4`} fill className="object-cover" />
-          </div>
-          <div className="relative h-[246px] rounded-xl overflow-hidden">
-            <Image src={allImages[4]} alt={`${variant.name} 5`} fill className="object-cover" />
-          </div>
+          {thumbs.map((src, idx) => (
+            <div key={idx} className="relative h-[246px] rounded-xl overflow-hidden">
+              <Image src={src} alt={`${variant.name} ${idx + 2}`} fill className="object-cover" />
+            </div>
+          ))}
         </div>
       </div>
 
