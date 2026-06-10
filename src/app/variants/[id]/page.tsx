@@ -133,7 +133,15 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
             <AccordionItem value="included">
               <AccordionTrigger>What&apos;s included</AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{variant.whatsincluded || 'Not specified'}</p>
+                {variant.whatsincluded ? (
+                  <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                    {variant.whatsincluded.split(',').map((item, idx) => (
+                      <li key={idx}>{item.trim()}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600">Not specified</p>
+                )}
               </AccordionContent>
             </AccordionItem>
 
