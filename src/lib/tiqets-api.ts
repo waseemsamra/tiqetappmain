@@ -425,162 +425,74 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
 }
 
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {
-  if (!productIds || productIds.length === 0) return [];
-  
-  // Process variants with rate limiting to avoid WAF blocks
+  if (!productIds?.length) return [];
+
   const results: any[] = [];
-  
-  for (let i = 0; i < productIds.length; i++) {
-    const id = productIds[i];
+
+  for (const id of productIds) {
     try {
       const response = await fetch(`${TIQETS_API_BASE}/products/${id}`, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const product = data.product || data;
-        if (product) {
-          let imageUrls = Array.isArray(product.images) 
-            ? product.images.map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '').filter(Boolean)
-            : [];
-          
-          // Fetch images from venue experience if product has no images
-          if (imageUrls.length === 0 && product.venue?.id) {
-            try {
-              const venueResponse = await fetch(`${TIQETS_API_BASE}/experiences/${product.venue.id}`, { method: 'GET', headers });
-              if (venueResponse.ok) {
-                const venueData = await venueResponse.json();
-                const venueImages = venueData.experience?.images || [];
-                if (venueImages.length > 0) {
-                  imageUrls = venueImages.map((img: any) => img?.medium || img?.large || img?.small || '').filter(Boolean);
-                }
-              }
-            } catch (e) {}
-          }
-          
-          results.push({
-            id: product.id?.toString() || '',
-            name: product.title || product.name || '',
-            price: product.price || product.from_price || 0,
-            duration: product.duration || '',
-            description: product.tagline || product.description || '',
-            images: imageUrls,
-          });
-        }
-      }
+      if (!response.ok) continue;
+      const data = await response.json();
+      const product = data.product || data;
+      if (!product) continue;
+
+      const imageUrls = Array.isArray(product.images)
+        ? product.images.map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '').filter(Boolean)
+        : [];
+
+      results.push({
+        id: String(product.id),
+        product_id: id,
+        name: product.title || product.name || '',
+        label: product.title || product.name || '',
+        variant_type: 'product',
+        variant_type_raw: 'product',
+        price: product.price || product.from_price || 0,
+        description: product.tagline || product.description || '',
+        images: imageUrls,
+        status: product.sale_status || product.status || 'available',
+        duration: product.duration || '',
+        whatsincluded: product.whats_included || product.whatsincluded || '',
+        age_range: null,
+        requires_visitors_details: [],
+        cancellation: product.cancellation || null,
+        groups: [],
+      });
     } catch (e) {
-      console.error(`Error fetching variant ${id}:`, e);
-    }
-    
-    // Rate limit: wait 200ms between requests to avoid WAF blocks
-    if (i < productIds.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, 200));
+      console.error(`Error fetching product ${id}:`, e);
     }
   }
-  
+
   return results;
 }
 
-export async function fetchTiqetsProductById(id: string): Promise<Excursion | null> {
+export const fetchTiqetsProductById = async (id: string): Promise<Excursion | null> => {
   const endpoints = [`${TIQETS_API_BASE}/experiences/${id}`, `${TIQETS_API_BASE}/products/${id}`];
-  
+
+  let response: Response | null = null;
   for (const endpoint of endpoints) {
+    response = null;
     try {
-      const response = await fetch(endpoint, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const product = data.experience || data.product || data;
-        if (product) {
-          // For products without images, search for parent experience
-          let imageUrls = Array.isArray(product.images) 
-            ? product.images.map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '').filter(Boolean)
-            : [];
-          
-          // Also fetch additional data from venue experience for products
-          let venueData = null;
-          const venueId = product.venue?.id;
-          if (venueId) {
-            try {
-              const venueResponse = await fetch(`${TIQETS_API_BASE}/experiences/${venueId}`, { method: 'GET', headers });
-              if (venueResponse.ok) {
-                const venueResult = await venueResponse.json();
-                venueData = venueResult.experience || venueResult;
-              }
-            } catch (e) {}
-          }
-          
-          // For products without images, search for parent experience that contains this product
-          if (imageUrls.length === 0) {
-            // Get city from product to find matching experience
-            const productCityId = product.city_id;
-            
-            // Try venue/experience first
-            if (venueId) {
-              try {
-                const venueResponse = await fetch(`${TIQETS_API_BASE}/experiences/${venueId}`, { method: 'GET', headers });
-                if (venueResponse.ok) {
-                  const venueData2 = await venueResponse.json();
-                  const venueImages = venueData2.experience?.images || [];
-                  if (venueImages.length > 0) {
-                    imageUrls = venueImages.map((img: any) => img?.medium || img?.large || img?.small || '').filter(Boolean);
-                  }
-                }
-              } catch (e) {}
-            }
-            
-            // Fallback: search for experiences in the same city that contain this product
-            if (imageUrls.length === 0 && productCityId) {
-              try {
-                const expSearchResponse = await fetch(`${TIQETS_API_BASE}/experiences?product_id=${id}&city_id=${productCityId}`, { method: 'GET', headers });
-                if (expSearchResponse.ok) {
-                  const searchData = await expSearchResponse.json();
-                  const experiences = searchData.experiences || [];
-                  if (experiences.length > 0) {
-                    const expImages = experiences[0].images || [];
-                    imageUrls = expImages.map((img: any) => img?.medium || img?.large || img?.small || '').filter(Boolean);
-                  }
-                }
-              } catch (e) {}
-            }
-            
-            // Fallback: search all experiences with this product
-            if (imageUrls.length === 0) {
-              try {
-                const expSearchResponse = await fetch(`${TIQETS_API_BASE}/experiences?product_id=${id}`, { method: 'GET', headers });
-                if (expSearchResponse.ok) {
-                  const searchData = await expSearchResponse.json();
-                  const experiences = searchData.experiences || [];
-                  for (const exp of experiences) {
-                    if (Array.isArray(exp.images) && exp.images.length > 0) {
-                      imageUrls = exp.images.map((img: any) => img?.medium || img?.large || img?.small || '').filter(Boolean);
-                      break;
-                    }
-                  }
-                }
-              } catch (e) {}
-            }
-          }
-          
-          const transformed = transformTiqetsProduct(product);
-          
-          // Merge venue data for opening hours and cancellation if product doesn't have it
-          const openingHours = transformed.operatinghours || venueData?.opening_times?.map((ot: any) => `${ot.from_time} - ${ot.to_time}`).join('\n') || '';
-          const cancellation = transformed.cancellationpolicy || venueData?.variants?.[0]?.cancellation || '';
-          
-          return {
-            ...transformed,
-            images: imageUrls,
-            operatinghours: openingHours,
-            cancellationpolicy: cancellation,
-          };
-        }
-      }
+      response = await fetch(endpoint, { method: 'GET', headers });
       if (response.status === 404) continue;
+      if (!response.ok) {
+        throw new Error(`Tiqets API error: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      const product = data.experience || data.product || data;
+      if (!product) continue;
+
+      const transformed = transformTiqetsProduct(product);
+      if (transformed) return transformed;
     } catch (e) {
-      continue;
+      if (response?.status === 404) continue;
+      console.error(`Error fetching product/experience ${id}:`, e);
     }
   }
-  
+
   return null;
-}
+};
 
 export async function fetchTiqetsCities(countryId?: string): Promise<City[]> {
   let url = `${TIQETS_API_BASE}/cities`;

@@ -5,6 +5,7 @@ export type ExcursionVariant = {
   duration?: string;
   description?: string;
   images?: string[];
+  status?: string;
 };
 
 export type ExcursionType = {

@@ -62,7 +62,12 @@ export async function getAllExcursionImageUrls(): Promise<string[]> {
 }
 
 export async function getExcursionById(id: string): Promise<Excursion | null> {
-  return TiqetsApi.fetchTiqetsProductById(id);
+  try {
+    const result = await TiqetsApi.fetchTiqetsProductById(id);
+    return result;
+  } catch (e) {
+    return null;
+  }
 }
 
 export async function createExcursion(excursionData: any): Promise<Excursion> {
