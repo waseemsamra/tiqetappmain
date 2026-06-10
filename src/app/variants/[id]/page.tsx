@@ -44,7 +44,19 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         {variant.country} &gt; {variant.city} &gt; {variant.name}
       </div>
 
-      <div className="flex gap-3 mb-8">
+      <div className="mb-8 md:hidden">
+        <div className="relative h-[260px] rounded-xl overflow-hidden">
+          <Image
+            src={allImages[0]}
+            alt={`${variant.name} main`}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      </div>
+
+      <div className="hidden md:flex gap-3 mb-8">
         <div className="w-1/2">
           <div className="relative h-[500px] rounded-xl overflow-hidden">
             <Image
