@@ -103,6 +103,28 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
             Provider: Tiqets International B.V.
           </div>
 
+          <div className="mb-6">
+            <h3 className="text-base font-bold text-gray-900 mb-2">Before you go</h3>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li className="flex items-start gap-2">
+                <span className="mt-1">•</span>
+                <span>Instant ticket delivery</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1">•</span>
+                <span>Duration: {variant.duration || 'Not specified'}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1">•</span>
+                <span>Live guide: English, German, Spanish</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1">•</span>
+                <span>Smartphone tickets accepted</span>
+              </li>
+            </ul>
+          </div>
+
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="included">
               <AccordionTrigger>What&apos;s included</AccordionTrigger>
