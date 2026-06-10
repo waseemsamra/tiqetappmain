@@ -5,7 +5,7 @@ import type { RowSelectionState } from "@tanstack/react-table";
 import { columns } from "./countries-columns";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { PlusCircle, Trash2, MapPin } from "lucide-react";
+import { PlusCircle, Trash2, MapPin, RefreshCw, Loader2 } from "lucide-react";
 import type { Country, City } from "@/types";
 import { deleteSelectedCountriesAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -30,10 +30,26 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
   const router = useRouter();
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDeleting, startDeleteTransition] = useTransition();
+  const [syncing, setSyncing] = useState(false);
 
   const selectedIds = Object.keys(rowSelection)
     .filter(key => rowSelection[key])
     .map(key => initialCountries[parseInt(key)].code);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await fetch('/api/admin/sync-locations', { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Sync failed');
+      toast({ title: 'Synced', description: `Loaded ${data.countries} countries and ${data.cities} cities.` });
+      router.refresh();
+    } catch (err) {
+      toast({ variant: 'destructive', title: 'Sync failed', description: err instanceof Error ? err.message : 'Unknown error' });
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) return;
@@ -54,17 +70,23 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <div>
             <h1 className="text-3xl font-bold tracking-tight">Countries</h1>
             <p className="text-muted-foreground">Manage all countries and their cities here.</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/locations/countries/create">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add New Country
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={handleSync} disabled={syncing}>
+            {syncing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+            {syncing ? 'Syncing...' : 'Sync Now'}
+          </Button>
+          <Button asChild>
+            <Link href="/admin/locations/countries/create">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add New Country
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {selectedIds.length > 0 && (

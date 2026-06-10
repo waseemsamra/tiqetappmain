@@ -1,7 +1,7 @@
 
 
 import Link from "next/link";
-import { List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal } from "lucide-react";
+import { List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 

@@ -23,6 +23,10 @@ function toCity(c: CachedCity): City {
   };
 }
 
+function isRateLimited(error: unknown) {
+  return typeof error === 'object' && error !== null && 'message' in error && String((error as { message?: string }).message).includes('429');
+}
+
 export async function getCountries(supabaseClient?: any): Promise<Country[]> {
   let cached: CachedCountry[] = [];
   try {
@@ -33,20 +37,28 @@ export async function getCountries(supabaseClient?: any): Promise<Country[]> {
     return cached.map(toCountry);
   }
 
-  const countries = await TiqetsApi.fetchTiqetsCountries();
-  const mapped: CachedCountry[] = countries.map((c) => ({
-    id: String(c.id || c.code || ''),
-    name: c.name || '',
-    code: c.code || '',
-    currency: c.currency,
-    currency_symbol: c.currency_symbol
-  }));
-
   try {
-    await saveCache(LOCATIONS_CACHE_FILE, mapped);
-  } catch {}
+    const countries = await TiqetsApi.fetchTiqetsCountries();
+    const mapped: CachedCountry[] = countries.map((c) => ({
+      id: String(c.id || c.code || ''),
+      name: c.name || '',
+      code: c.code || '',
+      currency: c.currency,
+      currency_symbol: c.currency_symbol
+    }));
 
-  return countries;
+    try {
+      await saveCache(LOCATIONS_CACHE_FILE, mapped);
+    } catch {}
+
+    return countries;
+  } catch (error) {
+    if (isRateLimited(error)) {
+      console.warn('[Locations] Rate limited while fetching countries; returning empty list until cache is populated.');
+      return [];
+    }
+    throw error;
+  }
 }
 
 export async function getCountryByCode(code: string, supabaseClient?: any): Promise<Country | null> {
@@ -119,7 +131,17 @@ export async function getCityById(cityId: string, supabaseClient?: any): Promise
 }
 
 export async function syncLocations() {
-  const countries = await TiqetsApi.fetchTiqetsCountries();
+  let countries: Awaited<ReturnType<typeof TiqetsApi.fetchTiqetsCountries>> = [];
+  try {
+    countries = await TiqetsApi.fetchTiqetsCountries();
+  } catch (error) {
+    if (isRateLimited(error)) {
+      console.warn('[Locations] Rate limited during sync; aborting this sync run.');
+      return { countries: 0, cities: 0, rateLimited: true };
+    }
+    throw error;
+  }
+
   const mappedCountries: CachedCountry[] = countries.map((c) => ({
     id: String(c.id || c.code || ''),
     name: c.name || '',
