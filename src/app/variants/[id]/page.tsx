@@ -10,14 +10,6 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion';
 
-const DEFAULT_IMAGES = [
-  'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg?auto=format%2Ccompress&fit=crop&h=600&q=80&w=800',
-  'https://aws-tiqets-cdn.imgix.net/images/content/6c8e12edaac6478c8a516e426aeba0e9.jpg?auto=format%2Ccompress&fit=crop&h=300&q=70&w=400',
-  'https://aws-tiqets-cdn.imgix.net/images/content/d24a345a9f1d4d2c84f62135273ca6a8.jpg?auto=format%2Ccompress&fit=crop&h=300&q=70&w=400',
-  'https://aws-tiqets-cdn.imgix.net/images/content/f0e72dabc8a84d8da75bbfc233e8955a.jpg?auto=format%2Ccompress&fit=crop&h=300&q=70&w=400',
-  'https://aws-tiqets-cdn.imgix.net/images/content/0705416b76ea47a0bc402954454c7f26.jpg?auto=format%2Ccompress&fit=crop&h=300&q=70&w=400',
-];
-
 export const dynamic = 'force-dynamic';
 
 export default async function VariantDetailPage({ params }: { params: { id: string } }) {
@@ -34,9 +26,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
   }
 
   const allImages =
-    (variant.images?.length || 0) > 0
-      ? [...variant.images, ...DEFAULT_IMAGES].slice(0, 5)
-      : DEFAULT_IMAGES;
+    (variant.images?.length || 0) > 0 ? variant.images : ['https://placehold.co/800x600.png'];
 
   return (
     <div className="container mx-auto px-4 py-8">
