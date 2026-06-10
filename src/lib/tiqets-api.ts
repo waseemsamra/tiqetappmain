@@ -468,31 +468,26 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
 }
 
 export const fetchTiqetsProductById = async (id: string): Promise<Excursion | null> => {
-  const endpoints = [`${TIQETS_API_BASE}/experiences/${id}`, `${TIQETS_API_BASE}/products/${id}`];
-
-  for (const endpoint of endpoints) {
-    let response: Response | null = null;
-    try {
-      response = await fetch(endpoint, { method: 'GET', headers });
-      if (response.status === 404) {
-        continue;
-      }
-      if (!response.ok) {
-        continue;
-      }
-      const data = await response.json();
-      const product = data.experience || data.product || data;
-      if (!product) continue;
-
-      const transformed = transformTiqetsProduct(product);
-      if (transformed) return transformed;
-    } catch (e) {
-      if (response?.status === 404) continue;
-      console.error(`Error fetching product/experience ${id}:`, e);
+  const productEndpoint = `${TIQETS_API_BASE}/products/${id}`;
+  try {
+    const response = await fetch(productEndpoint, { method: 'GET', headers });
+    if (response.status === 404) {
+      return null;
     }
-  }
+    if (!response.ok) {
+      return null;
+    }
+    const body = await response.json();
+    const product = body.product || body;
+    if (!product || product.id === undefined || product.id === null) {
+      return null;
+    }
 
-  return null;
+    return transformTiqetsProduct(product);
+  } catch (e) {
+    console.error(`Error fetching product/experience ${id}:`, e);
+    return null;
+  }
 };
 
 export async function fetchTiqetsCities(countryId?: string): Promise<City[]> {
