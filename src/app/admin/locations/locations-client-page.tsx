@@ -110,6 +110,7 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
+                <th className="p-3 text-left">ID</th>
                 <th className="p-3 text-left">Name</th>
                 <th className="p-3 text-left">Code</th>
                 <th className="p-3 text-left">Currency</th>
@@ -117,10 +118,11 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
             </thead>
             <tbody>
               {countries.length === 0 ? (
-                <tr><td colSpan={3} className="p-4 text-center text-muted-foreground">No countries found</td></tr>
+                <tr><td colSpan={4} className="p-4 text-center text-muted-foreground">No countries found</td></tr>
               ) : (
                 countries.map((c: any, idx: number) => (
                   <tr key={c.id || c.code || idx} className="border-b last:border-0">
+                    <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
                     <td className="p-3 font-medium">{c.name || '-'}</td>
                     <td className="p-3">{c.code || '-'}</td>
                     <td className="p-3">{c.currency_symbol || c.currency || '-'}</td>
@@ -141,6 +143,7 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
+                <th className="p-3 text-left">ID</th>
                 <th className="p-3 text-left">City</th>
                 <th className="p-3 text-left">Country</th>
                 <th className="p-3 text-left">Country Code</th>
@@ -148,10 +151,11 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
             </thead>
             <tbody>
               {cities.length === 0 ? (
-                <tr><td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td></tr>
+                <tr><td colSpan={4} className="p-4 text-center text-muted-foreground">No cities found</td></tr>
               ) : (
                 cities.map((c: any, idx: number) => (
                   <tr key={c.id || idx} className="border-b last:border-0">
+                    <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
                     <td className="p-3 font-medium">{c.name || '-'}</td>
                     <td className="p-3">{c.country_name || '-'}</td>
                     <td className="p-3">{c.country_code || '-'}</td>
