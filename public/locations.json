@@ -1,0 +1,218 @@
+{
+  "countries": [
+    {
+      "id": "1",
+      "name": "United Arab Emirates",
+      "code": "AE",
+      "currency": "AED",
+      "currency_symbol": "د.إ"
+    },
+    {
+      "id": "2",
+      "name": "United States",
+      "code": "US",
+      "currency": "USD",
+      "currency_symbol": "$"
+    },
+    {
+      "id": "3",
+      "name": "United Kingdom",
+      "code": "GB",
+      "currency": "GBP",
+      "currency_symbol": "£"
+    },
+    {
+      "id": "4",
+      "name": "France",
+      "code": "FR",
+      "currency": "EUR",
+      "currency_symbol": "€"
+    },
+    {
+      "id": "5",
+      "name": "Germany",
+      "code": "DE",
+      "currency": "EUR",
+      "currency_symbol": "€"
+    },
+    {
+      "id": "6",
+      "name": "Netherlands",
+      "code": "NL",
+      "currency": "EUR",
+      "currency_symbol": "€"
+    },
+    {
+      "id": "7",
+      "name": "Italy",
+      "code": "IT",
+      "currency": "EUR",
+      "currency_symbol": "€"
+    },
+    {
+      "id": "8",
+      "name": "Spain",
+      "code": "ES",
+      "currency": "EUR",
+      "currency_symbol": "€"
+    },
+    {
+      "id": "9",
+      "name": "Canada",
+      "code": "CA",
+      "currency": "CAD",
+      "currency_symbol": "C$"
+    },
+    {
+      "id": "10",
+      "name": "Brazil",
+      "code": "BR",
+      "currency": "BRL",
+      "currency_symbol": "R$"
+    },
+    {
+      "id": "11",
+      "name": "Argentina",
+      "code": "AR",
+      "currency": "ARS",
+      "currency_symbol": "ARS"
+    },
+    {
+      "id": "12",
+      "name": "Peru",
+      "code": "PE",
+      "currency": "PEN",
+      "currency_symbol": "S/."
+    },
+    {
+      "id": "13",
+      "name": "Mexico",
+      "code": "MX",
+      "currency": "MXN",
+      "currency_symbol": "MX$"
+    },
+    {
+      "id": "14",
+      "name": "Bahamas",
+      "code": "BS",
+      "currency": "BSD",
+      "currency_symbol": "B$"
+    }
+  ],
+  "cities": [
+    {
+      "id": "60005",
+      "name": "Dubai",
+      "country_code": "ae",
+      "country_name": "United Arab Emirates"
+    },
+    {
+      "id": "60006",
+      "name": "Abu Dhabi",
+      "country_code": "ae",
+      "country_name": "United Arab Emirates"
+    },
+    {
+      "id": "60013",
+      "name": "Sharjah",
+      "country_code": "ae",
+      "country_name": "United Arab Emirates"
+    },
+    {
+      "id": "260932",
+      "name": "New York",
+      "country_code": "us",
+      "country_name": "United States"
+    },
+    {
+      "id": "260933",
+      "name": "Los Angeles",
+      "country_code": "us",
+      "country_name": "United States"
+    },
+    {
+      "id": "67458",
+      "name": "London",
+      "country_code": "gb",
+      "country_name": "United Kingdom"
+    },
+    {
+      "id": "66746",
+      "name": "Paris",
+      "country_code": "fr",
+      "country_name": "France"
+    },
+    {
+      "id": "75061",
+      "name": "Amsterdam",
+      "country_code": "nl",
+      "country_name": "Netherlands"
+    },
+    {
+      "id": "71631",
+      "name": "Rome",
+      "country_code": "it",
+      "country_name": "Italy"
+    },
+    {
+      "id": "71749",
+      "name": "Milan",
+      "country_code": "it",
+      "country_name": "Italy"
+    },
+    {
+      "id": "66342",
+      "name": "Barcelona",
+      "country_code": "es",
+      "country_name": "Spain"
+    },
+    {
+      "id": "62492",
+      "name": "Toronto",
+      "country_code": "ca",
+      "country_name": "Canada"
+    },
+    {
+      "id": "62496",
+      "name": "Vancouver",
+      "country_code": "ca",
+      "country_name": "Canada"
+    },
+    {
+      "id": "61535",
+      "name": "Rio de Janeiro",
+      "country_code": "br",
+      "country_name": "Brazil"
+    },
+    {
+      "id": "61533",
+      "name": "Sao Paulo",
+      "country_code": "br",
+      "country_name": "Brazil"
+    },
+    {
+      "id": "60189",
+      "name": "Buenos Aires",
+      "country_code": "ar",
+      "country_name": "Argentina"
+    },
+    {
+      "id": "75306",
+      "name": "Lima",
+      "country_code": "pe",
+      "country_name": "Peru"
+    },
+    {
+      "id": "67461",
+      "name": "Mexico City",
+      "country_code": "mx",
+      "country_name": "Mexico"
+    },
+    {
+      "id": "62236",
+      "name": "Nassau",
+      "country_code": "bs",
+      "country_name": "Bahamas"
+    }
+  ]
+}

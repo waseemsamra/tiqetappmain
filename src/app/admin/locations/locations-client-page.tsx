@@ -106,14 +106,30 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
       )}
 
       <section>
-        <DataTable 
-          columns={columns} 
-          data={countries} 
-          rowSelection={rowSelection}
-          setRowSelection={setRowSelection}
-          filterColumn="name"
-          filterPlaceholder="Filter countries..."
-        />
+        <div className="rounded-md border bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b">
+                <th className="p-3 text-left">Name</th>
+                <th className="p-3 text-left">Code</th>
+                <th className="p-3 text-left">Currency</th>
+              </tr>
+            </thead>
+            <tbody>
+              {countries.length === 0 ? (
+                <tr><td colSpan={3} className="p-4 text-center text-muted-foreground">No countries found</td></tr>
+              ) : (
+                countries.map((c: any, idx: number) => (
+                  <tr key={c.id || c.code || idx} className="border-b last:border-0">
+                    <td className="p-3 font-medium">{c.name || '-'}</td>
+                    <td className="p-3">{c.code || '-'}</td>
+                    <td className="p-3">{c.currency_symbol || c.currency || '-'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section className="space-y-4">
@@ -121,12 +137,30 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
           <MapPin className="h-5 w-5 text-muted-foreground" />
           <h2 className="text-2xl font-bold tracking-tight">Cities</h2>
         </div>
-        <DataTable 
-          columns={citiesColumns} 
-          data={cities} 
-          filterColumn="name"
-          filterPlaceholder="Filter cities..."
-        />
+        <div className="rounded-md border bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b">
+                <th className="p-3 text-left">City</th>
+                <th className="p-3 text-left">Country</th>
+                <th className="p-3 text-left">Country Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cities.length === 0 ? (
+                <tr><td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td></tr>
+              ) : (
+                cities.map((c: any, idx: number) => (
+                  <tr key={c.id || idx} className="border-b last:border-0">
+                    <td className="p-3 font-medium">{c.name || '-'}</td>
+                    <td className="p-3">{c.country_name || '-'}</td>
+                    <td className="p-3">{c.country_code || '-'}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
