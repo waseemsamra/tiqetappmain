@@ -166,3 +166,40 @@ export async function syncLocations() {
     cities: allCachedCities.length
   };
 }
+
+export async function getCities(supabaseClient?: any): Promise<City[]> {
+  let cached: CachedCity[] = [];
+  try {
+    cached = await loadCache<CachedCity>(LOCATIONS_CACHE_FILE);
+  } catch {}
+
+  if (!cached.length) {
+    const countries = await TiqetsApi.fetchTiqetsCountries();
+    const mappedCountries: CachedCountry[] = countries.map((c) => ({
+      id: String(c.id || c.code || ''),
+      name: c.name || '',
+      code: c.code || '',
+      currency: c.currency,
+      currency_symbol: c.currency_symbol
+    }));
+
+    for (const country of mappedCountries) {
+      try {
+        const cities = await TiqetsApi.fetchTiqetsCities(country.code.toUpperCase());
+        const mapped: CachedCity[] = cities.map((c) => ({
+          id: String(c.id || ''),
+          name: c.name || '',
+          country_code: c.country_code || country.code,
+          country_name: c.country_name || country.name
+        }));
+        cached = [...cached, ...mapped];
+      } catch {}
+    }
+
+    try {
+      await saveCache(LOCATIONS_CACHE_FILE, cached);
+    } catch {}
+  }
+
+  return cached.map(toCity);
+}
