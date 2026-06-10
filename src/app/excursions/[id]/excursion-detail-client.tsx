@@ -50,7 +50,7 @@ export default function ExcursionDetailClient({
           {activeVariants.length > 0 && (
             <section>
               <h2 className="text-xl font-bold mb-4">Available ticket options</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {activeVariants.map((variant) => (
                   <VariantCard 
                     key={variant.id} 

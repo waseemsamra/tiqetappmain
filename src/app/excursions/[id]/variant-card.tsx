@@ -108,10 +108,16 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
 
           <div className="flex items-center justify-between mt-auto pt-4">
             <StarRating rating={excursion.rating} />
-            <div className="text-right">
-              <span className="text-xs text-gray-500">From</span>
-              <p className="font-bold text-lg text-gray-900">${price.toFixed(2)}</p>
-            </div>
+              <div className="text-right">
+                {price > 0 ? (
+                  <>
+                    <span className="text-xs text-gray-500">From</span>
+                    <p className="font-bold text-lg text-gray-900">${price.toFixed(2)}</p>
+                  </>
+                ) : (
+                  <p className="font-bold text-lg text-red-600">Unavailable</p>
+                )}
+              </div>
           </div>
         </div>
       </Link>
