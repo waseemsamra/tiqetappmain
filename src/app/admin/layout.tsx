@@ -3,40 +3,13 @@
 import Link from "next/link";
 import { Home, List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, LogOut, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { logout } from "@/app/auth/actions";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
-  const {
-    data: { user },
-    error
-  } = await supabase.auth.getUser();
-
-  if (error) {
-    console.error('[AdminLayout] Error getting user:', error);
-    return redirect('/login?message=You must be logged in to view this page.');
-  }
-
-  if (!user) {
-    return redirect('/login?message=You must be logged in to view this page.');
-  }
-
-  const userRole = user.user_metadata?.role;
-  // Only log in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('[AdminLayout] User role:', userRole, 'User ID:', user.id);
-  }
-
-  if (userRole !== 'admin') {
-    return redirect('/login?message=You must be an administrator to view this page.');
-  }
 
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -186,12 +159,10 @@ export default async function AdminLayout({
             </nav>
           </div>
           <div className="mt-auto p-4 border-t">
-              <form action={logout}>
-                  <Button variant="ghost" className="w-full justify-start" type="submit">
-                      <LogOut className="mr-3 h-4 w-4" />
-                      Logout
-                  </Button>
-              </form>
+            <Button variant="ghost" className="w-full justify-start" type="button">
+              <LogOut className="mr-3 h-4 w-4" />
+              Logout
+            </Button>
           </div>
         </div>
       </div>
