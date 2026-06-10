@@ -27,7 +27,8 @@ const StarRating = ({ rating }: { rating: number | undefined }) => (
 );
 
 export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
-  const fallbackImage = (excursion.images && excursion.images[0]) || 'https://placehold.co/400x300.png';
+  const rawImage = (variant as any).images || excursion.images;
+  const fallbackImage = (Array.isArray(rawImage) && rawImage[0]) || 'https://placehold.co/400x300.png';
   const title =
     (typeof variant.name === 'string' && variant.name.trim()) ||
     (typeof (variant as any).label === 'string' && (variant as any).label.trim()) ||
