@@ -6,6 +6,7 @@ const PRODUCTS_CACHE_FILE = join(CACHE_DIR, 'products.json');
 const HELICOPTER_CACHE_FILE = join(CACHE_DIR, 'helicopter-tours.json');
 const VARIANTS_CACHE_FILE = join(CACHE_DIR, 'variants.json');
 const EXPERIENCES_CACHE_FILE = join(CACHE_DIR, 'experiences.json');
+const LOCATIONS_CACHE_FILE = join(CACHE_DIR, 'locations.json');
 
 // Ensure cache directory exists on module load
 initCache().catch(() => {});
@@ -35,6 +36,21 @@ export type CachedProduct = {
   whatsincluded?: string;
   whatsnotincluded?: string;
   cancellationpolicy?: string;
+};
+
+export type CachedCountry = {
+  id: string;
+  name: string;
+  code: string;
+  currency?: string;
+  currency_symbol?: string;
+};
+
+export type CachedCity = {
+  id: string;
+  name: string;
+  country_code: string;
+  country_name?: string;
 };
 
 export type CachedVariant = {

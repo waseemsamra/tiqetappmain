@@ -1,7 +1,7 @@
 
 
 import Link from "next/link";
-import { Home, List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, LogOut, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal } from "lucide-react";
+import { List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -28,8 +28,8 @@ export default async function AdminLayout({
                 href="/admin"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
-                <Home className="h-4 w-4" />
-                Admin Dashboard
+                 <LayoutGrid className="h-4 w-4" />
+                 Admin Dashboard
               </Link>
                {/* Excursions & Types Group */}
                <div className="my-2">
@@ -160,8 +160,7 @@ export default async function AdminLayout({
           </div>
           <div className="mt-auto p-4 border-t">
             <Button variant="ghost" className="w-full justify-start" type="button">
-              <LogOut className="mr-3 h-4 w-4" />
-              Logout
+              Exit Admin
             </Button>
           </div>
         </div>
