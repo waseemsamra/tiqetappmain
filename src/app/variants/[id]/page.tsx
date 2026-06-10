@@ -73,8 +73,8 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-8">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-2">
           <div className="flex items-start mb-6">
             <div>
               {variant.rating !== undefined && (
@@ -185,8 +185,8 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
           </Accordion>
         </div>
 
-        <div className="col-span-1">
-          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 sticky top-8">
+        <div className="md:col-span-1">
+          <div className="md:sticky md:top-8 bg-white rounded-xl p-6 shadow-md border border-gray-200">
             <h3 className="text-lg font-bold mb-4">Booking Summary</h3>
             <div className="mb-4">
               <span className="text-sm text-gray-500">Price</span>
