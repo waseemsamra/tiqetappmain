@@ -1,21 +1,53 @@
+'use client';
+
+import { useState } from 'react';
 import LocationsClientPage from "./locations-client-page";
-import { readFileSync } from "fs";
-import { join } from "path";
 
-export const revalidate = 0;
+export default function AdminLocationsPage() {
+  const [error, setError] = useState<string | null>(null);
 
-export default async function LocationsPage() {
-  const filePath = join(process.cwd(), "cache", "locations.json");
-  let initialCountries: any[] = [];
-  let initialCities: any[] = [];
-  try {
-    const raw = readFileSync(filePath, "utf-8");
-    const parsed = JSON.parse(raw);
-    initialCountries = Array.isArray(parsed.countries) ? parsed.countries : [];
-    initialCities = Array.isArray(parsed.cities) ? parsed.cities : [];
-  } catch (err) {
-    // keep empty arrays if file missing
+  const COUNTRIES = [
+    { id: "2760", name: "United Arab Emirates", code: "AE", currency: "AED", currency_symbol: "د.إ" },
+    { id: "25536", name: "United States", code: "US", currency: "USD", currency_symbol: "$" },
+    { id: "177", name: "United Kingdom", code: "GB", currency: "GBP", currency_symbol: "£" },
+    { id: "78", name: "France", code: "FR", currency: "EUR", currency_symbol: "€" },
+    { id: "82", name: "Germany", code: "DE", currency: "EUR", currency_symbol: "€" },
+    { id: "156", name: "Netherlands", code: "NL", currency: "EUR", currency_symbol: "€" },
+    { id: "106", name: "Italy", code: "IT", currency: "EUR", currency_symbol: "€" },
+    { id: "172", name: "Spain", code: "ES", currency: "EUR", currency_symbol: "€" },
+    { id: "39", name: "Canada", code: "CA", currency: "CAD", currency_symbol: "C$" },
+    { id: "30", name: "Brazil", code: "BR", currency: "BRL", currency_symbol: "R$" },
+    { id: "11", name: "Argentina", code: "AR", currency: "ARS", currency_symbol: "ARS" },
+    { id: "168", name: "Peru", code: "PE", currency: "PEN", currency_symbol: "S/." },
+    { id: "152", name: "Mexico", code: "MX", currency: "MXN", currency_symbol: "MX$" },
+    { id: "12", name: "Bahamas", code: "BS", currency: "BSD", currency_symbol: "B$" },
+  ];
+
+  const CITIES = [
+    { id: "60005", name: "Dubai", country_code: "ae", country_name: "United Arab Emirates" },
+    { id: "60006", name: "Abu Dhabi", country_code: "ae", country_name: "United Arab Emirates" },
+    { id: "60013", name: "Sharjah", country_code: "ae", country_name: "United Arab Emirates" },
+    { id: "260932", name: "New York", country_code: "us", country_name: "United States" },
+    { id: "260933", name: "Los Angeles", country_code: "us", country_name: "United States" },
+    { id: "67458", name: "London", country_code: "gb", country_name: "United Kingdom" },
+    { id: "66746", name: "Paris", country_code: "fr", country_name: "France" },
+    { id: "75061", name: "Amsterdam", country_code: "nl", country_name: "Netherlands" },
+    { id: "71631", name: "Rome", country_code: "it", country_name: "Italy" },
+    { id: "71749", name: "Milan", country_code: "it", country_name: "Italy" },
+    { id: "66342", name: "Barcelona", country_code: "es", country_name: "Spain" },
+    { id: "62492", name: "Toronto", country_code: "ca", country_name: "Canada" },
+    { id: "62496", name: "Vancouver", country_code: "ca", country_name: "Canada" },
+    { id: "61535", name: "Rio de Janeiro", country_code: "br", country_name: "Brazil" },
+    { id: "61533", name: "Sao Paulo", country_code: "br", country_name: "Brazil" },
+    { id: "60189", name: "Buenos Aires", country_code: "ar", country_name: "Argentina" },
+    { id: "75306", name: "Lima", country_code: "pe", country_name: "Peru" },
+    { id: "67461", name: "Mexico City", country_code: "mx", country_name: "Mexico" },
+    { id: "62236", name: "Nassau", country_code: "bs", country_name: "Bahamas" },
+  ];
+
+  if (error) {
+    return <div className="p-6 text-red-500">Error: {error}</div>;
   }
 
-  return <LocationsClientPage initialCountries={initialCountries} initialCities={initialCities} />;
+  return <LocationsClientPage initialCountries={COUNTRIES} initialCities={CITIES} />;
 }
