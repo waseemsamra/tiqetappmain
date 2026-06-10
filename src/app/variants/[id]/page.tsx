@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { fetchTiqetsProductById } from '@/lib/tiqets-api';
-import Image from 'next/image';
 import { Star } from 'lucide-react';
 import { VariantBookingClient } from './variant-booking-client';
 import {
@@ -25,8 +24,9 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
     );
   }
 
-  const allImages =
-    (variant.images?.length || 0) > 0 ? variant.images : ['https://placehold.co/800x600.png'];
+  const allImages = Array.isArray(variant.images)
+    ? variant.images
+    : ['https://placehold.co/800x600.png'];
   const thumbs = allImages.slice(1, 5);
 
   return (
@@ -35,27 +35,33 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         {variant.country} &gt; {variant.city} &gt; {variant.name}
       </div>
 
-      <div className="mb-8 md:hidden">
-        <div className="relative h-[260px] rounded-xl overflow-hidden">
-          <Image
-            src={allImages[0]}
-            alt={`${variant.name} main`}
-            fill
-            className="object-cover"
-            priority
-          />
+      <div className="mb-8 md:hidden overflow-x-auto hide-scrollbar snap-x snap-mandatory relative">
+        <div className="flex">
+          {allImages.map((src, idx) => (
+            <div key={idx} className="shrink-0 snap-start w-full">
+              <picture>
+                <source media="(min-width: 600px)" srcSet={`${src}?auto=format%2Ccompress&dpr=1&fit=crop&h=420&q=40&w=630 1x, ${src}?auto=format%2Ccompress&dpr=2&fit=crop&h=420&q=30&w=630 2x`} />
+                <img
+                  src={src}
+                  alt={`${variant.name} ${idx + 1}`}
+                  className="w-full h-auto bg-grey-200"
+                />
+              </picture>
+            </div>
+          ))}
+        </div>
+        <div className="absolute bottom-0 right-0 mb-4 mr-4 rounded px-2 py-1 text-white font-medium text-xs z-10" style={{ backgroundColor: 'rgba(0, 0, 0, .6)' }}>
+          {allImages.length > 0 ? `1 / ${allImages.length}` : ''}
         </div>
       </div>
 
       <div className="hidden md:flex gap-3 mb-8">
         <div className="w-1/2">
           <div className="relative h-[500px] rounded-xl overflow-hidden">
-            <Image
+            <img
               src={allImages[0]}
               alt={`${variant.name} main`}
-              fill
-              className="object-cover"
-              priority
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
@@ -63,7 +69,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         <div className="w-1/2 grid grid-cols-2 gap-1.5">
           {thumbs.map((src, idx) => (
             <div key={idx} className="relative h-[246px] rounded-xl overflow-hidden">
-              <Image src={src} alt={`${variant.name} ${idx + 2}`} fill className="object-cover" />
+              <img src={src} alt={`${variant.name} ${idx + 2}`} className="w-full h-full object-cover" />
             </div>
           ))}
         </div>

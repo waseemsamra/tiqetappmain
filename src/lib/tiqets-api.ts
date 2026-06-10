@@ -512,7 +512,20 @@ export const fetchTiqetsProductById = async (id: string): Promise<Excursion | nu
   }
 
   if (!best) return null;
-  return transformTiqetsProduct(best.product);
+  const result = transformTiqetsProduct(best.product);
+  if ((!result.images || result.images.length === 0) && best.product.venue?.id) {
+    try {
+      const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${best.product.venue.id}`, { method: 'GET', headers });
+      if (venueResp.ok) {
+        const venueData = await venueResp.json();
+        const venueImages = (venueData.experience?.images || venueData.images || [])
+          .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
+          .filter(Boolean);
+        if (venueImages.length) result.images = venueImages;
+      }
+    } catch (e) {}
+  }
+  return result;
 };
 
 export async function fetchTiqetsCities(countryId?: string): Promise<City[]> {
