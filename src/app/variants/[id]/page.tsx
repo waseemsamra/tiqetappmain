@@ -1,9 +1,14 @@
 import { notFound } from 'next/navigation';
+import { fetchTiqetsProductById } from '@/lib/tiqets-api';
 import Image from 'next/image';
 import { Star } from 'lucide-react';
-import { fetchTiqetsProductById } from '@/lib/tiqets-api';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { VariantBookingClient } from './variant-booking-client';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion';
 
 const DEFAULT_IMAGES = [
   'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg?auto=format%2Ccompress&fit=crop&h=600&q=80&w=800',
@@ -17,19 +22,28 @@ export const dynamic = 'force-dynamic';
 
 export default async function VariantDetailPage({ params }: { params: { id: string } }) {
   const variant = await fetchTiqetsProductById(params.id);
-  
+
   if (!variant) {
-    notFound();
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-sm text-muted-foreground mb-2">Booking</div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">This option is currently unavailable</h1>
+        <p className="text-gray-600">Please go back and choose another ticket option.</p>
+      </div>
+    );
   }
 
-  const allImages = (variant.images?.length || 0) > 0 ? [...variant.images, ...DEFAULT_IMAGES].slice(0, 5) : DEFAULT_IMAGES;
+  const allImages =
+    (variant.images?.length || 0) > 0
+      ? [...variant.images, ...DEFAULT_IMAGES].slice(0, 5)
+      : DEFAULT_IMAGES;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-sm text-muted-foreground mb-2">
         {variant.country} &gt; {variant.city} &gt; {variant.name}
       </div>
-      
+
       <div className="flex gap-3 mb-8">
         <div className="w-1/2">
           <div className="relative h-[500px] rounded-xl overflow-hidden">
@@ -42,7 +56,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
             />
           </div>
         </div>
-        
+
         <div className="w-1/2 grid grid-cols-2 gap-1.5">
           <div className="relative h-[246px] rounded-xl overflow-hidden">
             <Image src={allImages[1]} alt={`${variant.name} 2`} fill className="object-cover" />
@@ -67,14 +81,16 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                 <div className="flex items-center gap-2 mb-4">
                   <Star className="h-5 w-5 text-yellow-400 fill-current" />
                   <span className="font-bold text-lg">{variant.rating.toFixed(1)}</span>
-                  <span className="text-muted-foreground">({variant.reviewsTotal?.toLocaleString() || 0} reviews)</span>
+                  <span className="text-muted-foreground">
+                    ({variant.reviewsTotal?.toLocaleString() || 0} reviews)
+                  </span>
                 </div>
               )}
-              
+
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                 {variant.name}
               </h1>
-              
+
               {variant.excursionType?.name && (
                 <p className="text-lg text-gray-600 max-w-3xl mb-4">
                   {variant.excursionType.name}
@@ -89,7 +105,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
 
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="included">
-              <AccordionTrigger>What's included</AccordionTrigger>
+              <AccordionTrigger>What&apos;s included</AccordionTrigger>
               <AccordionContent>
                 <p className="text-gray-600">{variant.whatsincluded || 'Not specified'}</p>
               </AccordionContent>
@@ -98,21 +114,27 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
             <AccordionItem value="description">
               <AccordionTrigger>Description</AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{variant.description || variant.excursionType?.name || 'No description available.'}</p>
+                <p className="text-gray-600">
+                  {variant.description || variant.excursionType?.name || 'No description available.'}
+                </p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="hours">
               <AccordionTrigger>Opening hours</AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{variant.operatinghours || 'See supplier website for opening hours'}</p>
+                <p className="text-gray-600">
+                  {variant.operatinghours || 'See supplier website for opening hours'}
+                </p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="cancellation">
               <AccordionTrigger>Reschedule and cancellation policy</AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{variant.cancellationpolicy || 'See supplier website for cancellation policy'}</p>
+                <p className="text-gray-600">
+                  {variant.cancellationpolicy || 'See supplier website for cancellation policy'}
+                </p>
               </AccordionContent>
             </AccordionItem>
 
@@ -124,17 +146,17 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
             </AccordionItem>
           </Accordion>
         </div>
-        
-<div className="col-span-1">
-           <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 sticky top-8">
-             <h3 className="text-lg font-bold mb-4">Booking Summary</h3>
-             <div className="mb-4">
-               <span className="text-sm text-gray-500">Price</span>
-               <p className="font-bold text-2xl">${Number(variant.price || 0).toFixed(2)}</p>
-             </div>
-             <VariantBookingClient productId={variant.id} />
-           </div>
-         </div>
+
+        <div className="col-span-1">
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 sticky top-8">
+            <h3 className="text-lg font-bold mb-4">Booking Summary</h3>
+            <div className="mb-4">
+              <span className="text-sm text-gray-500">Price</span>
+              <p className="font-bold text-2xl">${Number(variant.price || 0).toFixed(2)}</p>
+            </div>
+            <VariantBookingClient productId={variant.id} />
+          </div>
+        </div>
       </div>
     </div>
   );

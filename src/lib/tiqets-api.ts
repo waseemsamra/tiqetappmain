@@ -476,26 +476,42 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
 }
 
 export const fetchTiqetsProductById = async (id: string): Promise<Excursion | null> => {
-  const productEndpoint = `${TIQETS_API_BASE}/products/${id}`;
-  try {
-    const response = await fetch(productEndpoint, { method: 'GET', headers });
-    if (response.status === 404) {
-      return null;
-    }
-    if (!response.ok) {
-      return null;
-    }
-    const body = await response.json();
-    const product = body.product || body;
-    if (!product || product.id === undefined || product.id === null) {
-      return null;
-    }
+  const endpoints = [
+    { url: `${TIQETS_API_BASE}/experiences/${id}`, prefer: true },
+    { url: `${TIQETS_API_BASE}/products/${id}`, prefer: false },
+  ];
 
-    return transformTiqetsProduct(product);
-  } catch (e) {
-    console.error(`Error fetching product/experience ${id}:`, e);
-    return null;
+  let best: { product: any; score: number } | null = null;
+
+  for (const endpoint of endpoints) {
+    let response: Response | null = null;
+    try {
+      response = await fetch(endpoint.url, { method: 'GET', headers });
+      if (response.status === 404) continue;
+      if (!response.ok) continue;
+      const data = await response.json();
+      const product = data.experience || data.product || data;
+      if (!product || product.id === undefined || product.id === null) continue;
+
+      const score = [
+        (Array.isArray(product.images) ? product.images.length : 0) * 2,
+        (Array.isArray(product.product_ids) ? product.product_ids.length : 0),
+        product.title ? 1 : 0,
+        product.description ? 1 : 0,
+        endpoint.prefer ? 3 : 0,
+      ].reduce((a, b) => a + b, 0);
+
+      if (!best || score > best.score) {
+        best = { product, score };
+      }
+    } catch (e) {
+      if (response?.status === 404) continue;
+      console.error(`Error fetching product/experience ${id}:`, e);
+    }
   }
+
+  if (!best) return null;
+  return transformTiqetsProduct(best.product);
 };
 
 export async function fetchTiqetsCities(countryId?: string): Promise<City[]> {

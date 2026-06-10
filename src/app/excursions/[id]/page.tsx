@@ -22,7 +22,28 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
   }
 
   if (!excursion) {
-    notFound();
+    // Render a friendly unavailable page instead of raw Next.js 404
+    excursion = {
+      id: params.id,
+      name: 'Experience Unavailable',
+      city: '',
+      country: '',
+      description: 'This experience is no longer available or has been removed.',
+      price: 0,
+      duration: '',
+      images: [],
+      rating: 0,
+      activitytypeid: params.id,
+      excursionType: { id: params.id, name: 'Unavailable' },
+      status: 'inactive',
+      partner_id: null,
+      reviews: [],
+      product_ids: [],
+      reviewsTotal: 0,
+      tag_ids: [],
+      experience_url: '',
+      variants: [],
+    } as any;
   }
 
   // Try to get variants from cache, fall back to API
