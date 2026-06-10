@@ -135,9 +135,13 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
               <AccordionContent>
                 {variant.whatsincluded ? (
                   <ul className="list-disc pl-5 space-y-1 text-gray-700">
-                    {variant.whatsincluded.split(',').map((item, idx) => (
-                      <li key={idx}>{item.trim()}</li>
-                    ))}
+                    {variant.whatsincluded
+                      .split(/\r?\n|,\s*/)
+                      .map((item) => item.trim())
+                      .filter(Boolean)
+                      .map((item, idx) => (
+                        <li key={idx}>{item.replace(/^\*\s*/, '')}</li>
+                      ))}
                   </ul>
                 ) : (
                   <p className="text-gray-600">Not specified</p>
