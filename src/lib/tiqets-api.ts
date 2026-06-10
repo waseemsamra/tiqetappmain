@@ -1,5 +1,5 @@
 const TIQETS_API_BASE = 'https://api.tiqets.com/v2';
-const TIQETS_API_KEY = process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ';
+const TIQETS_API_KEY = process.env.TIQETS_API_KEY;
 
 const headers = {
   'Accept': 'application/json',

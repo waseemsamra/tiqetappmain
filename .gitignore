@@ -3,6 +3,7 @@
 # Local Environment Variables
 # Exclude the file containing secret keys from version control
 .env.local
+.env
 
 # Dependencies
 /node_modules
