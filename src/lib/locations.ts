@@ -133,18 +133,28 @@ export async function syncLocations() {
     allCachedCities = await loadCache<CachedCity>(LOCATIONS_CACHE_FILE);
   } catch {}
 
-  for (const country of mappedCountries) {
-    try {
-      const cities = await TiqetsApi.fetchTiqetsCities(country.code.toUpperCase());
-      const mapped: CachedCity[] = cities.map((c) => ({
-        id: String(c.id || ''),
-        name: c.name || '',
-        country_code: c.country_code || country.code,
-        country_name: c.country_name || country.name
-      }));
-      const others = allCachedCities.filter(c => c.country_code.toLowerCase() !== country.code.toLowerCase());
-      allCachedCities = [...others, ...mapped];
-    } catch {}
+  const BATCH_SIZE = 10;
+  const DELAY_MS = 1000;
+
+  for (let i = 0; i < mappedCountries.length; i += BATCH_SIZE) {
+    const batch = mappedCountries.slice(i, i + BATCH_SIZE);
+    for (const country of batch) {
+      try {
+        const cities = await TiqetsApi.fetchTiqetsCities(country.code.toUpperCase());
+        const mapped: CachedCity[] = cities.map((c) => ({
+          id: String(c.id || ''),
+          name: c.name || '',
+          country_code: c.country_code || country.code,
+          country_name: c.country_name || country.name
+        }));
+        const others = allCachedCities.filter(c => c.country_code.toLowerCase() !== country.code.toLowerCase());
+        allCachedCities = [...others, ...mapped];
+      } catch {}
+    }
+
+    if (i + BATCH_SIZE < mappedCountries.length) {
+      await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+    }
   }
 
   try {
