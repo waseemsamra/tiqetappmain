@@ -28,8 +28,20 @@ export default function ExcursionDetailClient({
       if (typeof v.status === 'string') return !['inactive', 'sold_out', 'unavailable', 'cancelled', 'closed', 'expired'].includes(v.status);
       return true;
     };
-    return (excursion.variants || []).filter(isActive);
-  }, [excursion.variants]);
+    const fetched = (excursion.variants || []).filter(isActive);
+    if (fetched.length > 0) return fetched;
+    return [
+      {
+        id: `${excursion.id}-default`,
+        name: 'Standard Ticket',
+        price: (excursion as any).price || 0,
+        duration: excursion.duration,
+        description: excursion.description || 'Entry ticket with standard access',
+        images: excursion.images,
+        status: 'available',
+      } as any,
+    ];
+  }, [excursion]);
 
   return (
     <>

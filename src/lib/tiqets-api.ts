@@ -1,13 +1,17 @@
 const TIQETS_API_BASE = 'https://api.tiqets.com/v2';
 const TIQETS_API_KEY = process.env.TIQETS_API_KEY;
 
+if (!TIQETS_API_KEY) {
+  console.warn('[Tiqets] Missing TIQETS_API_KEY; running in offline/local-survey mode.');
+}
+
 const headers = {
   'Accept': 'application/json',
   'User-Agent': 'my user agent',
-  'Authorization': `Token ${TIQETS_API_KEY}`
+  ...(TIQETS_API_KEY ? { 'Authorization': `Token ${TIQETS_API_KEY}` } : {}),
 };
 
-import type { Excursion, Country, City, ExcursionType, TiqetsTag } from '@/types';
+const isTiqetsAvailable = !!TIQETS_API_KEY;
 
 export function transformTiqetsProduct(product: any): Excursion {
   const ratingValue = product.ratings?.average;
@@ -237,6 +241,10 @@ export async function fetchTiqetsCountries(): Promise<Country[]> {
 }
 
 export async function fetchTiqetsProducts(params: Record<string, string> = {}): Promise<Excursion[]> {
+  if (!isTiqetsAvailable) {
+    return [];
+  }
+
   const allExcursions: Excursion[] = [];
 
   // If city filter is specified, fetch by city_id
