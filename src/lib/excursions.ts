@@ -28,7 +28,7 @@ export async function getExcursions(supabaseClient?: any): Promise<Excursion[]> 
       return true;
     });
     
-    return unique.slice(0, 200);
+    return unique.slice(0, 500);
   } catch (e) {
     console.error('getExcursions API failed:', e);
     return [];

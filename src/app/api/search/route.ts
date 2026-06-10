@@ -23,7 +23,7 @@ export async function GET(request: Request) {
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${city_id}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
         const data = await resp.json();
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
         const data = await resp.json();
@@ -100,7 +100,7 @@ export async function GET(request: Request) {
         // Try experiences endpoint first
         for (let p = 1; p <= MAX_PAGES; p++) {
           const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
           });
           if (!resp.ok) break;
           const data = await resp.json();
@@ -111,7 +111,7 @@ export async function GET(request: Request) {
         // Also fetch standalone products for this city (e.g., helicopter tours)
         for (let p = 1; p <= MAX_PAGES; p++) {
           const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
           });
           if (!resp.ok) break;
           const data = await resp.json();
@@ -163,7 +163,7 @@ export async function GET(request: Request) {
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
         const data = await resp.json();
@@ -183,7 +183,7 @@ export async function GET(request: Request) {
       // Try experiences endpoint
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
         const data = await resp.json();
@@ -194,7 +194,7 @@ export async function GET(request: Request) {
       // Also fetch standalone products for this city
       for (let p = 1; p <= MAX_PAGES; p++) {
         const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W'}`, 'User-Agent': 'my user agent' },
+          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ'}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
         const data = await resp.json();

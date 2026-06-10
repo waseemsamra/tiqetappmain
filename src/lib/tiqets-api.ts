@@ -1,5 +1,5 @@
 const TIQETS_API_BASE = 'https://api.tiqets.com/v2';
-const TIQETS_API_KEY = process.env.TIQETS_API_KEY || 'tqat-KNZfj2r3RZ36Clpavn7zVxabeLVdCq2W';
+const TIQETS_API_KEY = process.env.TIQETS_API_KEY || 'tqat-hbKaegD5KMrhtBIRGavWqMFk7khvowyQ';
 
 const headers = {
   'Accept': 'application/json',
@@ -289,7 +289,12 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
         const transformedWithImages = await Promise.all(
           allActivities.map(async (p: any) => {
             let images: string[] = [];
-            if ((!Array.isArray(p.images) || p.images.length === 0) && p.venue?.id) {
+            if (Array.isArray(p.images)) {
+              images = p.images
+                .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
+                .filter(Boolean);
+            }
+            if (images.length === 0 && p.venue?.id) {
               try {
                 const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
                 if (venueResp.ok) {
