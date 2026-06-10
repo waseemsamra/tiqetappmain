@@ -114,7 +114,7 @@ function AISearchResults() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <h1 className="text-3xl font-bold tracking-tight mb-2">{title}</h1>
                 <p className="text-muted-foreground mb-8">Our AI is finding the best matches for you...</p>
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {[...Array(6)].map((_, i) => (
                         <div key={i} className="space-y-4">
                            <Skeleton className="h-48 w-full" />
@@ -141,7 +141,7 @@ function AISearchResults() {
              <h1 className="text-3xl font-bold tracking-tight mb-8">{title}</h1>
               {allExcursions.length > 0 ? (
                 <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {paginatedExcursions.map(excursion => (
                             <ExcursionCard
                                 key={excursion.id}

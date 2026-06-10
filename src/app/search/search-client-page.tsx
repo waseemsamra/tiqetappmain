@@ -145,7 +145,7 @@ export default function SearchClientPage({
                         </div>
                     </div>
                     {isSearching ? (
-                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                             {[...Array(6)].map((_, i) => (
                                 <div key={i} className="space-y-4">
                                    <Skeleton className="h-48 w-full" />
@@ -157,7 +157,7 @@ export default function SearchClientPage({
                     ) : visibleExcursions.length > 0 ? (
                         <>
                             {layout === 'grid' ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                                     {visibleExcursions.map(excursion => (
                                         <ExcursionCard
                                             key={excursion.id}
