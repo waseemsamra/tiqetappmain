@@ -6,13 +6,12 @@ import { columns } from "./countries-columns";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusCircle, Trash2, MapPin, RefreshCw, Loader2 } from "lucide-react";
-import type { Country, City } from "@/types";
 import { deleteSelectedCountriesAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { DataTable } from '@/app/admin/data-table';
 import { ColumnDef } from "@tanstack/react-table";
-
+import type { Country, City } from "@/types";
 
 const citiesColumns: ColumnDef<City>[] = [
   {
@@ -25,7 +24,7 @@ const citiesColumns: ColumnDef<City>[] = [
   }
 ];
 
-export default function LocationsClientPage({ initialCountries, initialCities }: { initialCountries: Country[]; initialCities: City[] }) {
+export default function LocationsClientPage({ countries, cities }: { countries: Country[]; cities: City[] }) {
   const { toast } = useToast();
   const router = useRouter();
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -33,8 +32,8 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
   const [syncing, setSyncing] = useState(false);
 
   const selectedIds = Object.keys(rowSelection)
-    .filter(key => rowSelection[key])
-    .map(key => initialCountries[parseInt(key)].code);
+    .filter((key) => rowSelection[key])
+    .map((key) => countries[parseInt(key)].code);
 
   const handleSync = async () => {
     setSyncing(true);
@@ -107,7 +106,7 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
       <section>
         <DataTable 
           columns={columns} 
-          data={initialCountries} 
+          data={countries} 
           rowSelection={rowSelection}
           setRowSelection={setRowSelection}
           filterColumn="name"
@@ -122,7 +121,7 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
         </div>
         <DataTable 
           columns={citiesColumns} 
-          data={initialCities} 
+          data={cities} 
           filterColumn="name"
           filterPlaceholder="Filter cities..."
         />
