@@ -24,7 +24,9 @@ const citiesColumns: ColumnDef<City>[] = [
   }
 ];
 
-export default function LocationsClientPage({ countries, cities }: { countries: Country[]; cities: City[] }) {
+export default function LocationsClientPage({ initialCountries, initialCities }: { initialCountries: Country[]; initialCities: City[] }) {
+  const countries = Array.isArray(initialCountries) ? initialCountries : [];
+  const cities = Array.isArray(initialCities) ? initialCities : [];
   const { toast } = useToast();
   const router = useRouter();
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
