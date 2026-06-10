@@ -1,7 +1,7 @@
 
 
 import Link from "next/link";
-import { Home, List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, LogOut, CreditCard, Settings, TrendingUp, WalletCards } from "lucide-react";
+import { Home, List, Plane, Tag, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, LogOut, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
@@ -58,27 +58,38 @@ export default async function AdminLayout({
                 <Home className="h-4 w-4" />
                 Admin Dashboard
               </Link>
-               <Link
-                href="/admin/excursions"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <List className="h-4 w-4" />
-                Excursions
-              </Link>
-               <Link
-                href="/admin/excursion-types"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Tag className="h-4 w-4" />
-                Excursion Types
-              </Link>
-               <Link
-                href="/admin/locations"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Map className="h-4 w-4" />
-                Locations
-              </Link>
+               {/* Excursions & Types Group */}
+               <div className="my-2">
+                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Content</p>
+                 <Link
+                   href="/admin/excursions"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <List className="h-4 w-4" />
+                   Excursions
+                 </Link>
+                 <Link
+                   href="/admin/excursion-types"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Tag className="h-4 w-4" />
+                   Excursion Types
+                 </Link>
+                 <Link
+                   href="/admin/excursion-types/options"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <SlidersHorizontal className="h-4 w-4" />
+                   Options
+                 </Link>
+                 <Link
+                   href="/admin/locations"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Map className="h-4 w-4" />
+                   Locations
+                 </Link>
+               </div>
               
               {/* User Management Group */}
               <div className="my-2">
@@ -126,29 +137,43 @@ export default async function AdminLayout({
               </div>
 
                {/* CMS Group */}
-              <div className="my-2">
-                <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
-                <Link
-                  href="/admin/hero"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <Presentation className="h-4 w-4" />
-                  Hero Content
-                </Link>
-              </div>
+               <div className="my-2">
+                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
+                 <Link
+                   href="/admin/cms"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Presentation className="h-4 w-4" />
+                   CMS Home
+                 </Link>
+                 <Link
+                   href="/admin/hero"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Presentation className="h-4 w-4" />
+                   Hero Content
+                 </Link>
+               </div>
 
 
-              {/* Settings Group */}
-              <div className="my-2">
-                <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
-                <Link
-                  href="/admin/settings/google"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <TrendingUp className="h-4 w-4" />
-                  Google Settings
-                </Link>
-              </div>
+               {/* Settings Group */}
+               <div className="my-2">
+                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
+                   <Link
+                    href="/admin/settings/variants"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Variants
+                  </Link>
+                   <Link
+                    href="/admin/settings/google"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  >
+                    <TrendingUp className="h-4 w-4" />
+                    Google Settings
+                  </Link>
+               </div>
 
 
               <Link
