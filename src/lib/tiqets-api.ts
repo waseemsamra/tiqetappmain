@@ -470,14 +470,15 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
 export const fetchTiqetsProductById = async (id: string): Promise<Excursion | null> => {
   const endpoints = [`${TIQETS_API_BASE}/experiences/${id}`, `${TIQETS_API_BASE}/products/${id}`];
 
-  let response: Response | null = null;
   for (const endpoint of endpoints) {
-    response = null;
+    let response: Response | null = null;
     try {
       response = await fetch(endpoint, { method: 'GET', headers });
-      if (response.status === 404) continue;
+      if (response.status === 404) {
+        continue;
+      }
       if (!response.ok) {
-        throw new Error(`Tiqets API error: ${response.status} ${response.statusText}`);
+        continue;
       }
       const data = await response.json();
       const product = data.experience || data.product || data;
