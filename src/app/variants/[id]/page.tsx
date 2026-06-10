@@ -116,6 +116,10 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
               </li>
               <li className="flex items-start gap-2">
                 <span className="mt-1">•</span>
+                <span>Age: All ages</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="mt-1">•</span>
                 <span>Live guide: English, German, Spanish</span>
               </li>
               <li className="flex items-start gap-2">
