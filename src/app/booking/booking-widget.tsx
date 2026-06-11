@@ -47,9 +47,9 @@ const DayWithPrice = ({
             )}
         >
             <div className="text-sm">{format(date, 'd')}</div>
-            <div className={cn("text-xs mt-1", isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
-                ${excursion.price.toFixed(2)}
-            </div>
+             <div className={cn("text-xs mt-1", isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                 ${Number(excursion.price || 0).toFixed(2)}
+             </div>
         </div>
     );
 }
@@ -93,9 +93,9 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
         });
     };
 
-    const totalPrice = useMemo(() => {
-        return excursion.price * quantity;
-    }, [excursion.price, quantity]);
+     const totalPrice = useMemo(() => {
+         return Number((excursion.price || 0) * quantity);
+     }, [excursion.price, quantity]);
     
     const DayWithPriceComponent = (props: { date: Date }) => (
         <DayWithPrice {...props} excursion={excursion} onSelect={setSelectedDate} selected={selectedDate} />
@@ -174,7 +174,7 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                            <div>
                                 <p className="font-semibold">Entry ticket</p>
                                 <p className="text-sm text-muted-foreground">Age: 4-99</p>
-                                <p className="font-bold mt-1">US${excursion.price.toFixed(2)}</p>
+                                 <p className="font-bold mt-1">US${Number(excursion.price || 0).toFixed(2)}</p>
                            </div>
                             <div className="flex items-center gap-2">
                                 <Button

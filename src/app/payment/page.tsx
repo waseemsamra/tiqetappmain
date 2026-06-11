@@ -162,7 +162,7 @@ function PaymentPageContent() {
 
     const bookingDate = new Date(dateStr);
     const quantity = parseInt(quantityStr, 10);
-    const totalPrice = (excursion.price * quantity);
+    const totalPrice = Number((excursion.price || 0) * quantity);
 
 
     return (

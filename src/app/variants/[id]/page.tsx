@@ -80,13 +80,13 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
           <div className="flex items-start mb-6">
             <div>
               {variant.rating !== undefined && (
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current" />
-                  <span className="font-bold text-lg">{variant.rating.toFixed(1)}</span>
-                  <span className="text-muted-foreground">
-                    ({variant.reviewsTotal?.toLocaleString() || 0} reviews)
-                  </span>
-                </div>
+             <div className="flex items-center gap-2 mb-4">
+                   <Star className="h-5 w-5 text-yellow-400 fill-current" />
+                   <span className="font-bold text-lg">{Number(variant.rating || 0).toFixed(1)}</span>
+                   <span className="text-muted-foreground">
+                     ({variant.reviewsTotal?.toLocaleString() || 0} reviews)
+                   </span>
+                 </div>
               )}
 
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
