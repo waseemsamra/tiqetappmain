@@ -36,9 +36,9 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
             </div>
             <div className="p-4 flex flex-col flex-grow">
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
-                <h3 className="text-lg font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name}</h3>
+                <h3 className="text-lg font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
                 <p className="mt-1 text-sm text-gray-600 flex-grow line-clamp-2">{excursion.description}</p>
-                
+                 
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
