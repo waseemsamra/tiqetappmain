@@ -32,13 +32,10 @@ const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah'];
 
 export default function HomePageClient({ allExcursions, topRatedExcursions, heroContent, uaeExcursions, worldwideExcursions, barcelonaExcursions }: HomePageClientProps) {
-  const homePageData = useMemo(() => {
-      const shuffledExcursions = [...allExcursions].sort((a, b) => simpleHash(a.id) - simpleHash(b.id));
-      return {
-          mostPopular: shuffledExcursions.slice(0, 8),
-          handPicked: shuffledExcursions.slice(8, 18),
-      }
-  }, [allExcursions]);
+   const homePageData = useMemo(() => {
+       const shuffledExcursions = [...allExcursions].sort((a, b) => simpleHash(a.id) - simpleHash(b.id));
+       return shuffledExcursions.slice(0, 10);
+   }, [allExcursions]);
 
   const popularCountries = useMemo(() => {
       const countryCounts = allExcursions.reduce((acc, ex) => {
@@ -78,14 +75,14 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
             showViewAllButton={false}
             showTabs={false}
           />
-           <AttractionListingSection
-            title="Most popular things to do"
-            excursions={homePageData.mostPopular}
-            layout="grid"
-            showViewAllButton={false}
-            showTabs={false}
-            tabType="city"
-          />
+            <AttractionListingSection
+             title="Most popular things to do"
+             excursions={homePageData}
+             layout="carousel"
+             showViewAllButton={false}
+             showTabs={false}
+             tabType="city"
+           />
           <PopularPlacesSection countries={popularCountries} />
           <HelpCenterSection />
         </>
