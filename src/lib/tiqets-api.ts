@@ -531,7 +531,7 @@ export const fetchTiqetsProductById = async (id: string): Promise<Excursion | nu
 export async function fetchTiqetsCities(countryId?: string): Promise<City[]> {
   let url = `${TIQETS_API_BASE}/cities`;
   if (countryId) {
-    url = `${url}?country=${countryId}`;
+    url = `${url}?country_id=${countryId}`;
   }
   const response = await fetch(url, {
     method: 'GET',
