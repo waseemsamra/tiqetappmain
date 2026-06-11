@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import type { RowSelectionState } from "@tanstack/react-table";
 import { columns } from "./countries-columns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { PlusCircle, Trash2, MapPin, RefreshCw, Loader2 } from "lucide-react";
+import { PlusCircle, Trash2, MapPin, RefreshCw, Loader2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { deleteSelectedCountriesAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
@@ -21,12 +21,25 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDeleting, startDeleteTransition] = useTransition();
   const [syncing, setSyncing] = useState(false);
+  const [citiesSearch, setCitiesSearch] = useState("");
   const [citiesPage, setCitiesPage] = useState(1);
+
+  const filteredCities = citiesSearch.trim()
+    ? allCities.filter((c) =>
+        (c.name || "").toLowerCase().includes(citiesSearch.trim().toLowerCase()) ||
+        (c.country_name || "").toLowerCase().includes(citiesSearch.trim().toLowerCase())
+      )
+    : allCities;
+
+  useEffect(() => {
+    setCitiesPage(1);
+  }, [citiesSearch]);
+
   const citiesPageSize = 50;
-  const totalCitiesPages = Math.max(1, Math.ceil(allCities.length / citiesPageSize));
+  const totalCitiesPages = Math.max(1, Math.ceil(filteredCities.length / citiesPageSize));
   const safeCitiesPage = Math.min(citiesPage, totalCitiesPages);
   const citiesStart = (safeCitiesPage - 1) * citiesPageSize;
-  const cities = allCities.slice(citiesStart, citiesStart + citiesPageSize);
+  const pagedCities = filteredCities.slice(citiesStart, citiesStart + citiesPageSize);
 
   const selectedIds = Object.keys(rowSelection)
     .filter((key) => rowSelection[key])
@@ -68,7 +81,7 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Countries & Cities</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Countries &amp; Cities</h1>
           <p className="text-muted-foreground">Manage locations manually when Tiqets sync is unavailable.</p>
         </div>
         <div className="flex gap-2">
@@ -115,9 +128,20 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
 
       {showCities && (
         <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-2xl font-bold tracking-tight">Cities</h2>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-muted-foreground" />
+              <h2 className="text-2xl font-bold tracking-tight">Cities</h2>
+            </div>
+            <div className="relative w-64">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search cities..."
+                value={citiesSearch}
+                onChange={(e) => setCitiesSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
           </div>
           <div className="rounded-md border bg-card">
             <table className="w-full text-sm">
@@ -129,12 +153,12 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
                 </tr>
               </thead>
               <tbody>
-                {cities.length === 0 ? (
+                {pagedCities.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td>
                   </tr>
                 ) : (
-                  cities.map((c: any, idx: number) => (
+                  pagedCities.map((c: any, idx: number) => (
                     <tr key={c.id || idx} className="border-b last:border-0">
                       <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
                       <td className="p-3 font-medium">{c.name || '-'}</td>
