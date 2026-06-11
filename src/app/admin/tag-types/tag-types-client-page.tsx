@@ -31,26 +31,19 @@ export default function TagTypesClientPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_TIQETS_API_KEY;
-    if (!apiKey) {
-      setError('Missing NEXT_PUBLIC_TIQETS_API_KEY');
-      setLoading(false);
-      return;
-    }
-
     fetch('/api/admin/tag-types', {
-      headers: {
-        'Authorization': `Token ${apiKey}`,
-        'Accept': 'application/json'
-      }
+      headers: { 'Accept': 'application/json' }
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch tag types');
+        return res.json();
+      })
       .then(data => {
         setTagTypes(data.tag_types || []);
         setLoading(false);
       })
       .catch(err => {
-        setError('Failed to fetch tag types');
+        setError(err instanceof Error ? err.message : 'Failed to fetch tag types');
         setLoading(false);
       });
   }, []);

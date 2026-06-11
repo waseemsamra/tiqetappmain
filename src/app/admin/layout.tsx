@@ -41,13 +41,13 @@ export default async function AdminLayout({
                    <List className="h-4 w-4" />
                    Excursions
                  </Link>
-                 <Link
-                   href="/admin/excursion-types"
-                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                 >
-                   <Tag className="h-4 w-4" />
-                   Excursion Types
-                 </Link>
+                  <Link
+                    href="/admin/excursion-types"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  >
+                    <TagIcon className="h-4 w-4" />
+                    Excursion Types
+                  </Link>
                   <Link
                     href="/admin/excursion-types/options"
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
