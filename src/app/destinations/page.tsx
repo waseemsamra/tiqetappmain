@@ -1,36 +1,23 @@
-import { getCountries } from "@/app/actions";
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import Link from 'next/link';
 import { Globe, MapPin } from 'lucide-react';
 
-const countriesByRegion: Record<string, string[]> = {
-    "North and South America": [
-        'Argentina', 'Aruba', 'Bahamas', 'Brazil', 'Canada', 'Colombia', 
-        'Costa Rica', 'Dominican Republic', 'Jamaica', 'Mexico', 'Peru', 
-        'Puerto Rico', 'United States',
-    ],
-    "Europe, the Middle East and Africa": [
-        'Austria', 'Belgium', 'Croatia', 'Czech Republic', 'Denmark', 'Egypt',
-        'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Iceland',
-        'Ireland', 'Italy', 'Jordan', 'Kenya', 'Latvia', 'Lithuania', 'Luxembourg',
-        'Malta', 'Monaco', 'Morocco', 'Norway', 'Poland', 'Portugal', 'Qatar',
-        'Romania', 'Serbia', 'Slovakia', 'Slovenia', 'South Africa', 'Spain', 'Sweden',
-        'Switzerland', 'Tanzania', 'The Netherlands', 'Turkey', 'United Kingdom',
-        'United Arab Emirates',
-    ],
-    "Asia-Pacific": [
-        'Australia', 'Cambodia', 'China', 'India', 'Indonesia', 'Japan', 'Malaysia',
-        'Singapore', 'South Korea', 'Taiwan', 'Thailand', 'Vietnam',
-    ],
-};
+export const revalidate = 0;
 
 export default async function DestinationsPage() {
-    const allCountries = await getCountries();
-    const countrySet = new Set(allCountries.map(c => c.name));
+    let regions: { name: string; countries: string[] }[] = [];
+    try {
+        const configPath = join(process.cwd(), 'public', 'destinations-config.json');
+        const configRaw = readFileSync(configPath, 'utf-8');
+        const configParsed = JSON.parse(configRaw);
+        regions = Array.isArray(configParsed.regions) ? configParsed.regions : [];
+    } catch {}
 
-    const regionsWithCountries = Object.entries(countriesByRegion)
-        .map(([region, countries]) => ({
-            region,
-            countries: countries.filter(name => countrySet.has(name)),
+    const regionsWithCountries = regions
+        .map(({ name, countries }) => ({
+            region: name,
+            countries: (countries || []).filter(Boolean),
         }))
         .filter(region => region.countries.length > 0);
 

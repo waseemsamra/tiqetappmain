@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Presentation, Globe2, MapPinned } from "lucide-react";
+import { Presentation, Globe2, MapPinned, Navigation } from "lucide-react";
 
 export default function CmsPage() {
   return (
@@ -9,7 +9,7 @@ export default function CmsPage() {
         <p className="text-muted-foreground">Manage site content and destination sections.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/admin/hero"
           className="flex items-center gap-4 rounded-lg border p-4 hover:bg-muted transition-colors"
@@ -29,6 +29,17 @@ export default function CmsPage() {
           <div>
             <p className="font-semibold">UAE Section</p>
             <p className="text-sm text-muted-foreground">UAE destination content</p>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/cms/destinations"
+          className="flex items-center gap-4 rounded-lg border p-4 hover:bg-muted transition-colors"
+        >
+          <Navigation className="h-8 w-8 text-primary" />
+          <div>
+            <p className="font-semibold">Worldwide Destinations</p>
+            <p className="text-sm text-muted-foreground">Global destination regions and countries</p>
           </div>
         </Link>
 
