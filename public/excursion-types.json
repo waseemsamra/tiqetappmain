@@ -1,0 +1,100 @@
+{
+  "types": [
+    {
+      "id": "239",
+      "name": "Adventure"
+    },
+    {
+      "id": "139",
+      "name": "Attractions"
+    },
+    {
+      "id": "307",
+      "name": "Best time to visit"
+    },
+    {
+      "id": "2",
+      "name": "best_time_of_day"
+    },
+    {
+      "id": "344",
+      "name": "Cable cars"
+    },
+    {
+      "id": "346",
+      "name": "City Cards & Passes"
+    },
+    {
+      "id": "353",
+      "name": "City Tours"
+    },
+    {
+      "id": "504",
+      "name": "Concerts & Live Music"
+    },
+    {
+      "id": "541",
+      "name": "Culture & Heritage"
+    },
+    {
+      "id": "238",
+      "name": "Destination services"
+    },
+    {
+      "id": "348",
+      "name": "Food & Drinks"
+    },
+    {
+      "id": "351",
+      "name": "Games & Entertainment"
+    },
+    {
+      "id": "4",
+      "name": "main_category"
+    },
+    {
+      "id": "137",
+      "name": "Museums"
+    },
+    {
+      "id": "540",
+      "name": "Nature & Wildlife"
+    },
+    {
+      "id": "405",
+      "name": "POIs"
+    },
+    {
+      "id": "365",
+      "name": "Public transport"
+    },
+    {
+      "id": "366",
+      "name": "Rentals"
+    },
+    {
+      "id": "404",
+      "name": "Seasonal"
+    },
+    {
+      "id": "361",
+      "name": "Shows & Theatres"
+    },
+    {
+      "id": "340",
+      "name": "Standard venues"
+    },
+    {
+      "id": "505",
+      "name": "Travel Services"
+    },
+    {
+      "id": "355",
+      "name": "Trips & Excursions"
+    },
+    {
+      "id": "349",
+      "name": "Water Activities"
+    }
+  ]
+}
