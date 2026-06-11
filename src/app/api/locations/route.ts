@@ -18,7 +18,7 @@ export async function GET() {
     const batch = mapped.slice(0, 10);
     for (const country of batch) {
       try {
-        const list = await fetchTiqetsCities(country.code);
+        const list = await fetchTiqetsCities(country.id);
         for (const city of list) {
           cities.push({
             id: String(city.id || ''),
