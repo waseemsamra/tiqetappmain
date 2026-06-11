@@ -14,44 +14,31 @@ export async function GET() {
       currency_symbol: c.currency_symbol || '',
     }));
 
-    const countryById = new Map(mapped.map((c: any) => [c.id, { code: c.code, name: c.name }]));
-    const countryByCode = new Map(mapped.map((c: any) => [c.code.toLowerCase(), { id: c.id, name: c.name }]));
+    const allCities: any[] = [];
+    const BATCH_SIZE = 10;
+    const DELAY_MS = 1000;
 
-    const cities: any[] = [];
-    const batch = mapped.slice(0, 10);
-    for (const country of batch) {
-      try {
-        const list = await fetchTiqetsCities(country.id);
-        for (const city of list) {
-          let countryCode = (country.code || '').toLowerCase();
-          let countryName = country.name || '';
-
-          const rawCountryCode = city.country_code || '';
-          if (rawCountryCode) {
-            const byId = countryById.get(String(rawCountryCode));
-            if (byId) {
-              countryCode = byId.code.toLowerCase();
-              countryName = byId.name;
-            } else {
-              const byCode = countryByCode.get(String(rawCountryCode).toLowerCase());
-              if (byCode) {
-                countryCode = String(byCode.id);
-                countryName = byCode.name;
-              }
-            }
+    for (let i = 0; i < mapped.length; i += BATCH_SIZE) {
+      const batch = mapped.slice(i, i + BATCH_SIZE);
+      for (const country of batch) {
+        try {
+          const list = await fetchTiqetsCities(country.id);
+          for (const city of list) {
+            allCities.push({
+              id: String(city.id || ''),
+              name: city.name || '',
+              country_code: country.code || '',
+              country_name: country.name || '',
+            });
           }
-
-          cities.push({
-            id: String(city.id || ''),
-            name: city.name || '',
-            country_code: countryCode,
-            country_name: countryName,
-          });
-        }
-      } catch {}
+        } catch {}
+      }
+      if (i + BATCH_SIZE < mapped.length) {
+        await new Promise((resolve) => setTimeout(resolve, DELAY_MS));
+      }
     }
 
-    return NextResponse.json({ countries: mapped, cities });
+    return NextResponse.json({ countries: mapped, cities: allCities });
   } catch (error) {
     console.error('Failed to load locations:', error);
     return NextResponse.json({ countries: [], cities: [] });

@@ -14,12 +14,18 @@ import type { Country, City } from "@/types";
 
 export default function LocationsClientPage({ initialCountries, initialCities, showCountries = true, showCities = true }: { initialCountries: Country[]; initialCities: City[]; showCountries?: boolean; showCities?: boolean }) {
   const countries = Array.isArray(initialCountries) ? initialCountries : [];
-  const cities = Array.isArray(initialCities) ? initialCities : [];
+  const allCities = Array.isArray(initialCities) ? initialCities : [];
   const { toast } = useToast();
   const router = useRouter();
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDeleting, startDeleteTransition] = useTransition();
   const [syncing, setSyncing] = useState(false);
+  const [citiesPage, setCitiesPage] = useState(1);
+  const citiesPageSize = 50;
+  const totalCitiesPages = Math.max(1, Math.ceil(allCities.length / citiesPageSize));
+  const safeCitiesPage = Math.min(citiesPage, totalCitiesPages);
+  const citiesStart = (safeCitiesPage - 1) * citiesPageSize;
+  const cities = allCities.slice(citiesStart, citiesStart + citiesPageSize);
 
   const selectedIds = Object.keys(rowSelection)
     .filter((key) => rowSelection[key])
