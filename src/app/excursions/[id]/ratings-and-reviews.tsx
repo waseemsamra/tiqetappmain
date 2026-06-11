@@ -82,15 +82,15 @@ export const RatingsAndReviews = ({ excursion }: { excursion: Excursion }) => {
             <Card>
                 <CardHeader>
                     <div className="flex items-center gap-4">
-                        <div className="text-center">
-                            <p className="text-5xl font-bold">{excursion.rating.toFixed(1)}</p>
-                            <div className="flex justify-center">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} className={`h-5 w-5 ${i < Math.round(excursion.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
-                                ))}
-                            </div>
-                            <p className="text-sm text-muted-foreground mt-1">{totalReviews} reviews</p>
-                        </div>
+                         <div className="text-center">
+                             <p className="text-5xl font-bold">{Number(excursion.rating || 0).toFixed(1)}</p>
+                             <div className="flex justify-center">
+                                 {[...Array(5)].map((_, i) => (
+                                     <Star key={i} className={`h-5 w-5 ${i < Math.round(excursion.rating || 0) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
+                                 ))}
+                             </div>
+                             <p className="text-sm text-muted-foreground mt-1">{totalReviews} reviews</p>
+                         </div>
                         <div className="flex-1">
                            {ratingDistribution.map(item => (
                                 <div key={item.star} className="flex items-center gap-2">

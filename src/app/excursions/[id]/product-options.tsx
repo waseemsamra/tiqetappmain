@@ -136,12 +136,12 @@ export const ProductOptions = ({ excursion, onVariantChange }: ProductOptionsPro
                       )}
                     </div>
                     {showPrice && (
-                      <div className="text-right shrink-0">
-                        <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-primary">
-                          {variant.price > 0 ? `$${variant.price.toFixed(2)}` : 'Select'}
-                        </p>
-                      </div>
+                         <div className="text-right shrink-0">
+                           <span className="text-xs text-gray-500">From</span>
+                           <p className="font-bold text-lg text-primary">
+                             {Number(variant.price || 0) > 0 ? `$${Number(variant.price || 0).toFixed(2)}` : 'Select'}
+                           </p>
+                         </div>
                     )}
                     {!showPrice && (
                       <span className="text-xs text-gray-400 mt-1">Free</span>
@@ -155,9 +155,9 @@ export const ProductOptions = ({ excursion, onVariantChange }: ProductOptionsPro
 
         {selectedVariant && (
           <div className="pt-4 border-t">
-            <Button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 text-base">
-              {selectedVariant.price > 0 ? `Reserve - $${selectedVariant.price.toFixed(2)}` : 'Reserve'}
-            </Button>
+           <Button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 text-base">
+             {Number(selectedVariant.price || 0) > 0 ? `Reserve - $${Number(selectedVariant.price || 0).toFixed(2)}` : 'Reserve'}
+           </Button>
           </div>
         )}
       </CardContent>

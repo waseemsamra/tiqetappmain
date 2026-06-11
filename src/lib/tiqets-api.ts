@@ -43,7 +43,7 @@ export function transformTiqetsProduct(product: any): Excursion {
     city: city,
     country: country,
     description: description,
-    price: product.from_price || product.price || 0,
+    price: Number(product.from_price || product.price || 0),
     duration: product.duration || 'Not specified',
     activitytypeid: product.id?.toString() || 'default',
     excursionType: {
@@ -456,7 +456,7 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
         label: product.title || product.name || '',
         variant_type: 'product',
         variant_type_raw: 'product',
-        price: product.price || product.from_price || 0,
+        price: Number(product.price || product.from_price || 0),
         description: product.tagline || product.description || '',
         images: imageUrls,
         status: product.sale_status || product.status || 'available',

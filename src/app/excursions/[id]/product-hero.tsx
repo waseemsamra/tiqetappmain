@@ -26,12 +26,12 @@ export const ProductHero = ({ images, title, description, rating, reviews }: Pro
       
       <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
         <div>
-          {rating !== undefined && (
-            <div className="flex items-center gap-2 text-sm text-white mb-1">
-              <Star className="h-4 w-4 text-yellow-400 fill-current" />
-              <span className="font-bold">{rating.toFixed(1)}({reviews || 0} reviews)</span>
-            </div>
-          )}
+           {rating !== undefined && (
+             <div className="flex items-center gap-2 text-sm text-white mb-1">
+               <Star className="h-4 w-4 text-yellow-400 fill-current" />
+               <span className="font-bold">{Number(rating || 0).toFixed(1)}({reviews || 0} reviews)</span>
+             </div>
+           )}
           <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">
             {title} Tickets
           </h1>

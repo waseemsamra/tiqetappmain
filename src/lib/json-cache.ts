@@ -97,6 +97,8 @@ async function saveCache<T>(file: string, data: T[]) {
   await fs.writeFile(file, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+export { loadCache, saveCache, LOCATIONS_CACHE_FILE };
+
 export async function syncTiqetsProducts() {
   await initCache();
   
@@ -356,7 +358,7 @@ export async function getVariantsForExperience(experienceId: string): Promise<an
     .map(v => ({
       id: v.product_id,
       name: v.title,
-      price: v.price || 0,
+      price: Number(v.price || 0),
       duration: v.duration || '',
       description: v.description || '',
       images: v.image_url ? [v.image_url] : []

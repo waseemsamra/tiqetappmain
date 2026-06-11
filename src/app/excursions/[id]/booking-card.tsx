@@ -22,7 +22,7 @@ export const BookingCard = ({ excursion, selectedVariant }: BookingCardProps) =>
         <CardTitle className="text-2xl">
           <span className='text-sm font-normal text-muted-foreground'>From</span>
           <br />
-          <span className="font-bold text-3xl">${displayPrice.toFixed(2)}</span>
+          <span className="font-bold text-3xl">${Number(displayPrice || 0).toFixed(2)}</span>
           {displayDuration && displayDuration !== 'Not specified' && (
             <p className="text-sm font-normal text-muted-foreground mt-1">{displayDuration}</p>
           )}
