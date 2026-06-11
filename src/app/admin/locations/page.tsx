@@ -1,20 +1,19 @@
 import LocationsClientPage from './locations-client-page';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const revalidate = 0;
 
 export default async function AdminLocationsPage() {
+  const filePath = join(process.cwd(), 'public', 'locations.json');
   let countries: any[] = [];
   let cities: any[] = [];
-
   try {
-    const base = 'http://localhost:9002';
-    const res = await fetch(`${base}/api/locations`, { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      countries = Array.isArray(data.countries) ? data.countries : [];
-      cities = Array.isArray(data.cities) ? data.cities : [];
-    }
+    const raw = readFileSync(filePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    countries = Array.isArray(parsed.countries) ? parsed.countries : [];
+    cities = Array.isArray(parsed.cities) ? parsed.cities : [];
   } catch {}
 
-  return <LocationsClientPage initialCountries={countries} initialCities={cities} />;
+  return <LocationsClientPage initialCountries={countries} initialCities={cities} showCities={false} />;
 }
