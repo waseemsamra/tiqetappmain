@@ -147,6 +147,7 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
+                  <th className="p-3 text-left">#</th>
                   <th className="p-3 text-left">ID</th>
                   <th className="p-3 text-left">City</th>
                   <th className="p-3 text-left">Country</th>
@@ -155,11 +156,12 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
               <tbody>
                 {pagedCities.length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td>
+                    <td colSpan={4} className="p-4 text-center text-muted-foreground">No cities found</td>
                   </tr>
                 ) : (
                   pagedCities.map((c: any, idx: number) => (
                     <tr key={c.id || idx} className="border-b last:border-0">
+                      <td className="p-3 text-muted-foreground">{citiesStart + idx + 1}</td>
                       <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
                       <td className="p-3 font-medium">{c.name || '-'}</td>
                       <td className="p-3">{c.country_name || '-'}</td>
