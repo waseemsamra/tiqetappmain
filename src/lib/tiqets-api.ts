@@ -37,37 +37,38 @@ export function transformTiqetsProduct(product: any): Excursion {
   const description = product.description || product.summary || '';
   const tagline = product.tagline || '';
 
-  return {
-    id: product.id?.toString() || '',
-    name: product.title || '',
-    city: city,
-    country: country,
-    description: description,
-    price: Number(product.from_price || product.price || 0),
-    duration: product.duration || 'Not specified',
-    activitytypeid: product.id?.toString() || 'default',
-    excursionType: {
-      id: product.id?.toString() || 'default',
-      name: tagline || 'Activity'
-    },
-    rating: safeRating,
-    images: imageUrls,
-    discount: product.promo_label ? 0 : undefined,
-    operatinghours: undefined,
-    whatsincluded: product.whats_included || '',
-    whatsnotincluded: product.whats_excluded || '',
-    instructions: product.checkout_information?.usage || product.how_to_use || '',
-    howtogetthere: product.venue?.address || product.address?.street || '',
-    additionalinfo: product.checkout_information?.good_to_know || '',
-    cancellationpolicy: product.variants?.[0]?.cancellation || '',
-    status: 'active' as const,
-    partner_id: null,
-    reviews: [],
-    product_ids: product.product_ids || [],
-    reviewsTotal: ratingsTotal,
-    tag_ids: Array.isArray(product.tag_ids) ? product.tag_ids.map(String) : [],
-    experience_url: product.experience_url || '',
-  };
+   return {
+     id: product.id?.toString() || '',
+     name: product.title || '',
+     city: city,
+     country: country,
+     description: description,
+     price: Number(product.from_price || product.price || 0),
+     duration: product.duration || 'Not specified',
+     activitytypeid: product.id?.toString() || 'default',
+     excursionType: {
+       id: product.id?.toString() || 'default',
+       name: tagline || 'Activity'
+     },
+     rating: safeRating,
+     images: imageUrls,
+     discount: product.promo_label ? 0 : undefined,
+     operatinghours: undefined,
+     whatsincluded: product.whats_included || '',
+     whatsnotincluded: product.whats_excluded || '',
+     instructions: product.checkout_information?.usage || product.how_to_use || '',
+     howtogetthere: product.venue?.address || product.address?.street || '',
+     additionalinfo: product.checkout_information?.good_to_know || '',
+     cancellationpolicy: product.variants?.[0]?.cancellation || '',
+     status: 'active' as const,
+     partner_id: null,
+     reviews: [],
+     product_ids: product.product_ids || [],
+     reviewsTotal: ratingsTotal,
+     tag_ids: Array.isArray(product.tag_ids) ? product.tag_ids.map(String) : [],
+     experience_url: product.experience_url || '',
+     product_groups: Array.isArray(product.product_groups) ? product.product_groups : []
+   };
 }
 
 function transformTiqetsCountry(country: any): Country {

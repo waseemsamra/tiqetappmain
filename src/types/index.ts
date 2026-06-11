@@ -64,6 +64,7 @@ export type Excursion = {
   variants?: ExcursionVariant[];
   tag_ids?: string[];
   experience_url?: string;
+  product_groups?: any[];
 };
 
 export type Review = {
