@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isEngineLoaded, setIsEngineLoaded] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -11,7 +12,8 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     let mounted = true;
     const scriptId = 'tiqets-booking-engine-script';
 
-    const existing = document.getElementById(scriptId);
+    // Only add script if not already present
+    const existing = document.getElementById(SCRIPT_ID);
     if (!existing) {
       const script = document.createElement('script');
       script.id = scriptId;
@@ -21,18 +23,28 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       document.body.appendChild(script);
     }
 
-    const timer = setTimeout(() => {
+    // Check periodically if the engine has loaded
+    const checkInterval = setInterval(() => {
       if (!mounted || !containerRef.current) return;
-      const widget = containerRef.current.querySelector('[data-tiqets-widget="booking"]') as HTMLElement | null;
-      const btn = containerRef.current.querySelector('button');
-      if (widget && btn && typeof window !== 'undefined' && !(window as any).tiqetsBookingEngine) {
-        btn.textContent = 'Open booking';
+      
+      // Check if Tiqets engine is available on window
+      if (typeof window !== 'undefined' && (window as any).tiqetsBookingEngine) {
+        setIsEngineLoaded(true);
+        clearInterval(checkInterval);
       }
-    }, 1500);
+    }, 500);
+
+    // Fallback: after 8 seconds, assume it's loaded or failed
+    const timeout = setTimeout(() => {
+      if (!mounted) return;
+      setIsEngineLoaded(true); // Assume loaded to avoid blocking UI
+      clearInterval(checkInterval);
+    }, 8000);
 
     return () => {
       mounted = false;
-      clearTimeout(timer);
+      clearInterval(checkInterval);
+      clearTimeout(timeout);
     };
   }, [productId]);
 
@@ -46,7 +58,9 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       <button
         id="tiqets-trigger"
         type="button"
-        className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+        className={`block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors ${
+          isEngineLoaded ? '' : 'opacity-50 cursor-not-allowed'
+        }`}
       >
         Book Now
       </button>
