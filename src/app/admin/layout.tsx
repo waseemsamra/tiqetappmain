@@ -34,41 +34,14 @@ export default async function AdminLayout({
                {/* Excursions & Types Group */}
                <div className="my-2">
                  <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Content</p>
-                 <Link
-                   href="/admin/excursions"
-                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                 >
-                   <List className="h-4 w-4" />
-                   Excursions
-                 </Link>
                   <Link
-                    href="/admin/excursions/options"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                    href="/admin/excursion-types"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   >
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Options
+                    <TagIcon className="h-4 w-4" />
+                    Excursion Types
                   </Link>
-                   <Link
-                     href="/admin/tags"
-                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                   >
-                     <TagIcon className="h-4 w-4" />
-                     Tags
-                   </Link>
-                   <Link
-                     href="/admin/tag-types"
-                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                   >
-                     <TagIcon className="h-4 w-4" />
-                     Tag Types
-                   </Link>
-                    <Link
-                      href="/admin/locations"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                    >
-                      <Map className="h-4 w-4" />
-                      Locations
-                    </Link>
+                  </div>
               
               {/* User Management Group */}
               <div className="my-2">
