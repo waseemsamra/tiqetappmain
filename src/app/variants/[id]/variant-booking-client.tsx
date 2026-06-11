@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+const SCRIPT_ID = 'tiqets-booking-engine-script';
+
 export function VariantBookingClient({ productId }: { productId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isEngineLoaded, setIsEngineLoaded] = useState(false);
