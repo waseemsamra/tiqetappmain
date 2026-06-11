@@ -98,14 +98,14 @@ export default function AttractionListingSection({ title, excursions, showViewAl
     );
     
     const filteredExcursions = useMemo(() => {
-        if (showTabs && activeTab && layout === 'carousel') {
+        if (showTabs && activeTab) {
             if (tabType === 'country') {
                 return excursions.filter(ex => ex.country.toLowerCase() === activeTab.toLowerCase());
             }
             return excursions.filter(ex => ex.city.toLowerCase() === activeTab.toLowerCase());
         }
         return excursions;
-    }, [activeTab, excursions, layout, showTabs, tabType]);
+    }, [activeTab, excursions, showTabs, tabType]);
 
     const renderGrid = () => (
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
