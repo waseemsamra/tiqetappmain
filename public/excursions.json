@@ -7,7 +7,7 @@
       "city": "Dubai",
       "country": "United Arab Emirates",
       "description": "The Burj Khalifa is indisputably the tallest building in the world. It contains high-end homes, global companies, and of course, the swanky Armani Hotel. \nAt a dizzying 828 meters high, it's truly a testament to human ingenuity. Only the 124th, 125th, and 148th floors are open to the public where you get exclusive views of the Dubai skyline, sandy beaches, and azure waters of the Arabian Gulf. \nAs you can imagine, the views from this shining beacon of progress in a desert by the ocean come straight from your wildest dreams.",
-      "price": 44.52,
+      "price": 37.5,
       "rating": 4.4,
       "status": "active",
       "images": [
@@ -47,7 +47,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 15243,
-      "experience_url": "https://www.tiqets.com/en/burj-khalifa-tickets-l145628/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/burj-khalifa-tickets-l145628/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "147259",
@@ -83,7 +84,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2232,
-      "experience_url": "https://www.tiqets.com/en/dubai-frame-tickets-l147259/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/dubai-frame-tickets-l147259/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "190273",
@@ -119,7 +121,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1257,
-      "experience_url": "https://www.tiqets.com/en/museum-of-the-future-tickets-l190273/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/museum-of-the-future-tickets-l190273/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "205265",
@@ -189,7 +192,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2707,
-      "experience_url": "https://www.tiqets.com/en/dubai-desert-safari-l205265/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/dubai-desert-safari-l205265/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "147173",
@@ -230,7 +234,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 830,
-      "experience_url": "https://www.tiqets.com/en/aquaventure-world-tickets-l147173/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/aquaventure-world-tickets-l147173/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "202222",
@@ -304,7 +309,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1461,
-      "experience_url": "https://www.tiqets.com/en/dubai-cruises-tickets-l202222/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/dubai-cruises-tickets-l202222/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "187952",
@@ -343,7 +349,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 626,
-      "experience_url": "https://www.tiqets.com/en/the-address-sky-view-tower-1-tickets-l187952/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/the-address-sky-view-tower-1-tickets-l187952/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145872",
@@ -376,7 +383,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1073,
-      "experience_url": "https://www.tiqets.com/en/the-dubai-fountain-tickets-l145872/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/the-dubai-fountain-tickets-l145872/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "183463",
@@ -411,7 +419,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 882,
-      "experience_url": "https://www.tiqets.com/en/view-at-the-palm-tickets-l183463/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/view-at-the-palm-tickets-l183463/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "187655",
@@ -445,7 +454,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 79,
-      "experience_url": "https://www.tiqets.com/en/dubai-dolphinarium-tickets-l187655/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/dubai-dolphinarium-tickets-l187655/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146967",
@@ -488,7 +498,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 243,
-      "experience_url": "https://www.tiqets.com/en/sheikh-zayed-grand-mosque-tickets-l146967/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sheikh-zayed-grand-mosque-tickets-l146967/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146406",
@@ -528,7 +539,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1078,
-      "experience_url": "https://www.tiqets.com/en/louvre-abu-dhabi-tickets-l146406/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/louvre-abu-dhabi-tickets-l146406/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146985",
@@ -571,7 +583,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 714,
-      "experience_url": "https://www.tiqets.com/en/yas-island-tickets-l146985/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/yas-island-tickets-l146985/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "268875",
@@ -603,7 +616,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 5,
-      "experience_url": "https://www.tiqets.com/en/natural-history-museum-abu-dhabi-mthf-ltrykh-ltby-y-bw-zby-tickets-l268875/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/natural-history-museum-abu-dhabi-mthf-ltrykh-ltby-y-bw-zby-tickets-l268875/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145647",
@@ -644,7 +658,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 432,
-      "experience_url": "https://www.tiqets.com/en/ferrari-world-tickets-l145647/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/ferrari-world-tickets-l145647/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "190415",
@@ -682,7 +697,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 309,
-      "experience_url": "https://www.tiqets.com/en/warner-bros-world-tm-abu-dhabi-tickets-l190415/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/warner-bros-world-tm-abu-dhabi-tickets-l190415/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "152146",
@@ -722,7 +738,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1070,
-      "experience_url": "https://www.tiqets.com/en/qasr-al-watan-palace-tickets-l152146/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/qasr-al-watan-palace-tickets-l152146/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "222476",
@@ -758,7 +775,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 313,
-      "experience_url": "https://www.tiqets.com/en/seaworld-abu-dhabi-tickets-l222476/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/seaworld-abu-dhabi-tickets-l222476/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146966",
@@ -793,7 +811,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 429,
-      "experience_url": "https://www.tiqets.com/en/etihad-towers-tickets-l146966/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/etihad-towers-tickets-l146966/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "228610",
@@ -825,7 +844,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 34,
-      "experience_url": "https://www.tiqets.com/en/mamsha-beach-saadiyat-tickets-l228610/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/mamsha-beach-saadiyat-tickets-l228610/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "252948",
@@ -858,7 +878,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 5,
-      "experience_url": "https://www.tiqets.com/en/al-noor-island-bridge-tickets-l252948/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/al-noor-island-bridge-tickets-l252948/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "252632",
@@ -890,7 +911,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 3,
-      "experience_url": "https://www.tiqets.com/en/pearls-kingdom-water-park-sharjah-tickets-l252632/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/pearls-kingdom-water-park-sharjah-tickets-l252632/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146807",
@@ -922,7 +944,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 0,
-      "experience_url": "https://www.tiqets.com/en/central-souq-tickets-l146807/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/central-souq-tickets-l146807/?partner=aafares",
+      "currency": "USD"
     },
     {
       "id": "147727",
@@ -954,7 +977,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2,
-      "experience_url": "https://www.tiqets.com/en/sharjah-fort-tickets-l147727/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sharjah-fort-tickets-l147727/?partner=aafares",
+      "currency": "USD"
     },
     {
       "id": "215343",
@@ -988,7 +1012,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1,
-      "experience_url": "https://www.tiqets.com/en/day-trips-from-sharjah-tickets-l215343/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/day-trips-from-sharjah-tickets-l215343/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "247894",
@@ -1022,7 +1047,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1,
-      "experience_url": "https://www.tiqets.com/en/sharjah-desert-safari-tickets-l247894/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sharjah-desert-safari-tickets-l247894/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "252179",
@@ -1054,7 +1080,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 0,
-      "experience_url": "https://www.tiqets.com/en/sharjah-hop-on-hop-off-tours-tickets-l252179/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sharjah-hop-on-hop-off-tours-tickets-l252179/?partner=aafares",
+      "currency": "USD"
     },
     {
       "id": "252878",
@@ -1087,7 +1114,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 0,
-      "experience_url": "https://www.tiqets.com/en/sharjah-boat-tours-tickets-l252878/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sharjah-boat-tours-tickets-l252878/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "252947",
@@ -1119,7 +1147,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 0,
-      "experience_url": "https://www.tiqets.com/en/island-of-legends-tickets-l252947/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/island-of-legends-tickets-l252947/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "254346",
@@ -1151,7 +1180,42 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 0,
-      "experience_url": "https://www.tiqets.com/en/outdoor-activities-in-sharjah-tickets-l254346/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/outdoor-activities-in-sharjah-tickets-l254346/?partner=aafares",
+      "currency": "EUR"
+    },
+    {
+      "id": "182839",
+      "name": "Jebel Jais",
+      "type": "venue",
+      "city": "Ras al-Khaimah",
+      "country": "United Arab Emirates",
+      "description": "Jebel Jais is a mountain that crosses the borders of Oman and the United Arab Emirates. The mountain's peak of 1,934 meters is on the Oman side, with the UAE high-point reaching 1,892 meters.\nThe mountain is home to the epic Jebel Jais zipline, the longest zipline in the world (as accredited by Guinness World Records). This high-flying adventure is one of the main draws of Jebel Jais, which is located roughly two hours from Dubai.",
+      "price": 0,
+      "rating": 0,
+      "status": "active",
+      "images": [
+        "https://aws-tiqets-cdn.imgix.net/images/content/03c1be61d79549e8b66ba555363677f2.png?auto=format%2Ccompress&fit=crop&h=500&q=70&w=500"
+      ],
+      "product_ids": [
+        1126226,
+        1126261
+      ],
+      "duration": "Not specified",
+      "activitytypeid": "182839",
+      "excursionType": {
+        "id": "182839",
+        "name": "Fly down the world's largest zipline"
+      },
+      "whatsincluded": "",
+      "whatsnotincluded": "",
+      "instructions": "",
+      "howtogetthere": "",
+      "additionalinfo": "",
+      "cancellationpolicy": "",
+      "reviews": [],
+      "reviewsTotal": 0,
+      "experience_url": "https://www.tiqets.com/en/jebel-jais-tickets-l182839/?partner=aafares",
+      "currency": "USD"
     },
     {
       "id": "133161",
@@ -1160,7 +1224,7 @@
       "city": "Barcelona",
       "country": "Spain",
       "description": "The Sagrada Familia is the magnum opus of the famous Catalan architect Antoni Gaudí. The cathedral was the finale of his incredible Modernist career and has been under continuous construction since 1882. \nOver time, the so-called 'architect of God' dropped all his other work so that he could focus exclusively on this project, which he did until his untimely death in 1926.\nThe Sagrada Familia is due to be finished in 2026, on the 100th anniversary of Gaudí's death. By that time, the construction of the Sagrada Familia will have taken 144 years.",
-      "price": 59.8,
+      "price": 33.8,
       "rating": 4.7,
       "status": "active",
       "images": [
@@ -1237,7 +1301,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 87773,
-      "experience_url": "https://www.tiqets.com/en/sagrada-familia-tickets-l133161/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sagrada-familia-tickets-l133161/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "141902",
@@ -1288,7 +1353,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 49609,
-      "experience_url": "https://www.tiqets.com/en/park-guell-tickets-l141902/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/park-guell-tickets-l141902/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "141895",
@@ -1344,7 +1410,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 18779,
-      "experience_url": "https://www.tiqets.com/en/casa-batllo-tickets-l141895/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/casa-batllo-tickets-l141895/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145507",
@@ -1378,7 +1445,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8035,
-      "experience_url": "https://www.tiqets.com/en/teleferic-de-montjuic-tickets-l145507/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/teleferic-de-montjuic-tickets-l145507/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "211947",
@@ -1424,7 +1492,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 18433,
-      "experience_url": "https://www.tiqets.com/en/barcelona-hop-on-hop-off-tours-tickets-l211947/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/barcelona-hop-on-hop-off-tours-tickets-l211947/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "133166",
@@ -1459,7 +1528,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 7599,
-      "experience_url": "https://www.tiqets.com/en/barcelona-aquarium-tickets-l133166/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/barcelona-aquarium-tickets-l133166/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145464",
@@ -1502,7 +1572,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 11357,
-      "experience_url": "https://www.tiqets.com/en/casa-mila-la-pedrera-tickets-l145464/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/casa-mila-la-pedrera-tickets-l145464/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "219133",
@@ -1551,7 +1622,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 14670,
-      "experience_url": "https://www.tiqets.com/en/self-guided-tours-barcelona-tickets-l219133/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/self-guided-tours-barcelona-tickets-l219133/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "224102",
@@ -1590,7 +1662,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8907,
-      "experience_url": "https://www.tiqets.com/en/fc-barcelona-museum-tickets-l224102/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/fc-barcelona-museum-tickets-l224102/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "199956",
@@ -1626,7 +1699,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 27870,
-      "experience_url": "https://www.tiqets.com/en/barcelona-public-transport-l199956/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/barcelona-public-transport-l199956/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145158",
@@ -1712,7 +1786,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 76250,
-      "experience_url": "https://www.tiqets.com/en/vatican-museums-tickets-l145158/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/vatican-museums-tickets-l145158/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145769",
@@ -1746,7 +1821,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 47941,
-      "experience_url": "https://www.tiqets.com/en/colosseum-tickets-l145769/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/colosseum-tickets-l145769/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "141949",
@@ -1793,7 +1869,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 19441,
-      "experience_url": "https://www.tiqets.com/en/castel-santangelo-tickets-l141949/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/castel-santangelo-tickets-l141949/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "142007",
@@ -1843,7 +1920,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 15141,
-      "experience_url": "https://www.tiqets.com/en/rome-pantheon-tickets-l142007/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/rome-pantheon-tickets-l142007/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "144143",
@@ -1930,7 +2008,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 27963,
-      "experience_url": "https://www.tiqets.com/en/st-peters-basilica-tickets-l144143/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/st-peters-basilica-tickets-l144143/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "219336",
@@ -1965,7 +2044,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 5246,
-      "experience_url": "https://www.tiqets.com/en/self-guided-tours-rome-l219336/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/self-guided-tours-rome-l219336/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "205422",
@@ -2004,7 +2084,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 3824,
-      "experience_url": "https://www.tiqets.com/en/rome-hop-on-hop-off-tours-tickets-l205422/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/rome-hop-on-hop-off-tours-tickets-l205422/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "205409",
@@ -2052,7 +2133,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 18772,
-      "experience_url": "https://www.tiqets.com/en/airport-transfer-rome-tickets-l205409/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/airport-transfer-rome-tickets-l205409/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "144780",
@@ -2061,7 +2143,7 @@
       "city": "Rome",
       "country": "Italy",
       "description": "Architect Flaminio Ponzio designed Villa Borghese for the cardinal and art collector Scipione Borghese, who wanted a party villa on the edge of town where he could house his enormous collection of priceless art. In 1901, the collection (and the gallery, and the park that surrounds it) was acquired by the Italian government, and opened to the public.\nAs a museum, Galleria Borghese punches well above its weight with an impressive hit rate of masterpieces. Sculptures by Bernini and Canova, paintings, by Caravaggio, Raphael and Titian... the list goes on.\nThe Borghese Gallery offers a unique museum visit with its strict capacity limit. You have only a 2-hour slot to explore, making each moment count. Borghese Galleria tickets are in high demand and sell out months ahead. It's crucial to pre-book your entry to ensure you don't miss out. Plan early and secure your spot to appreciate this exclusive opportunity.",
-      "price": 58,
+      "price": 44,
       "rating": 4.5,
       "status": "active",
       "images": [
@@ -2120,7 +2202,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 12784,
-      "experience_url": "https://www.tiqets.com/en/borghese-gallery-tickets-l144780/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/borghese-gallery-tickets-l144780/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "200626",
@@ -2159,7 +2242,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 704,
-      "experience_url": "https://www.tiqets.com/en/basilica-of-santa-maria-maggiore-tickets-l200626/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/basilica-of-santa-maria-maggiore-tickets-l200626/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "202155",
@@ -2218,7 +2302,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 26447,
-      "experience_url": "https://www.tiqets.com/en/seine-river-cruises-tickets-l202155/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/seine-river-cruises-tickets-l202155/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146888",
@@ -2251,7 +2336,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 944,
-      "experience_url": "https://www.tiqets.com/en/musee-dart-moderne-de-paris-tickets-l146888/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/musee-dart-moderne-de-paris-tickets-l146888/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "141867",
@@ -2292,7 +2378,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 24407,
-      "experience_url": "https://www.tiqets.com/en/musee-dorsay-tickets-l141867/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/musee-dorsay-tickets-l141867/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146166",
@@ -2324,7 +2411,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 15064,
-      "experience_url": "https://www.tiqets.com/en/fondation-louis-vuitton-tickets-l146166/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/fondation-louis-vuitton-tickets-l146166/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145802",
@@ -2361,7 +2449,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8461,
-      "experience_url": "https://www.tiqets.com/en/sainte-chapelle-tickets-l145802/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/sainte-chapelle-tickets-l145802/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145823",
@@ -2398,7 +2487,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 4200,
-      "experience_url": "https://www.tiqets.com/en/musee-de-larmee-tickets-l145823/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/musee-de-larmee-tickets-l145823/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "175907",
@@ -2430,7 +2520,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 6342,
-      "experience_url": "https://www.tiqets.com/en/musee-marmottan-monet-tickets-l175907/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/musee-marmottan-monet-tickets-l175907/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "141732",
@@ -2463,7 +2554,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8162,
-      "experience_url": "https://www.tiqets.com/en/arc-de-triomphe-tickets-l141732/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/arc-de-triomphe-tickets-l141732/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145810",
@@ -2498,7 +2590,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 3743,
-      "experience_url": "https://www.tiqets.com/en/aquarium-de-paris-tickets-l145810/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/aquarium-de-paris-tickets-l145810/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "188281",
@@ -2531,7 +2624,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2074,
-      "experience_url": "https://www.tiqets.com/en/la-cinematheque-francaise-tickets-l188281/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/la-cinematheque-francaise-tickets-l188281/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "188454",
@@ -2540,7 +2634,7 @@
       "city": "New York",
       "country": "United States",
       "description": "SUMMIT One Vanderbilt is New York City’s most innovative observation space. Set 1,000 feet above Midtown, this experience will change the way you see the city, the environment, and yourself through a collection of immersive, multi-sensory experiences. \nSpread across 65,000 ft2 (6,000 m2) and three levels, enjoy unbeatable views of New York and interactive artistic installations that will stay with you long after you've left.\nAs you plan your visit, decide between daytime, sunset, or nighttime entry. Each option promises a unique perspective, creating a distinct atmosphere for exploration. Whether you're drawn to the clarity of daylight, the transition of colors at sunset, or the captivating city lights at night, SUMMIT invites you to choose your own adventure.",
-      "price": 41.5,
+      "price": 47.15,
       "rating": 4.7,
       "status": "active",
       "images": [
@@ -2569,7 +2663,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 6080,
-      "experience_url": "https://www.tiqets.com/en/summit-one-vanderbilt-tickets-l188454/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/summit-one-vanderbilt-tickets-l188454/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145518",
@@ -2606,7 +2701,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 4527,
-      "experience_url": "https://www.tiqets.com/en/the-museum-of-modern-art-moma-tickets-l145518/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/the-museum-of-modern-art-moma-tickets-l145518/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "162673",
@@ -2649,7 +2745,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2335,
-      "experience_url": "https://www.tiqets.com/en/edge-at-hudson-yards-tickets-l162673/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/edge-at-hudson-yards-tickets-l162673/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145554",
@@ -2694,7 +2791,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2233,
-      "experience_url": "https://www.tiqets.com/en/30-rockefeller-plaza-tickets-l145554/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/30-rockefeller-plaza-tickets-l145554/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146581",
@@ -2728,7 +2826,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 910,
-      "experience_url": "https://www.tiqets.com/en/bronx-zoo-tickets-l146581/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/bronx-zoo-tickets-l146581/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145532",
@@ -2766,7 +2865,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2455,
-      "experience_url": "https://www.tiqets.com/en/american-museum-of-natural-history-amnh-tickets-l145532/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/american-museum-of-natural-history-amnh-tickets-l145532/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146582",
@@ -2798,7 +2898,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 689,
-      "experience_url": "https://www.tiqets.com/en/new-york-aquarium-tickets-l146582/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/new-york-aquarium-tickets-l146582/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145521",
@@ -2846,7 +2947,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 3721,
-      "experience_url": "https://www.tiqets.com/en/statue-of-liberty-tickets-l145521/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/statue-of-liberty-tickets-l145521/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146044",
@@ -2880,7 +2982,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 420,
-      "experience_url": "https://www.tiqets.com/en/new-york-botanical-garden-tickets-l146044/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/new-york-botanical-garden-tickets-l146044/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "146592",
@@ -2914,7 +3017,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 652,
-      "experience_url": "https://www.tiqets.com/en/central-park-zoo-tickets-l146592/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/central-park-zoo-tickets-l146592/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "206222",
@@ -2968,7 +3072,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8669,
-      "experience_url": "https://www.tiqets.com/en/amsterdam-public-transport-tickets-l206222/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/amsterdam-public-transport-tickets-l206222/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "259314",
@@ -3000,7 +3105,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 139,
-      "experience_url": "https://www.tiqets.com/en/embassy-of-the-free-mind-tickets-l259314/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/embassy-of-the-free-mind-tickets-l259314/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "200073",
@@ -3089,7 +3195,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 9666,
-      "experience_url": "https://www.tiqets.com/en/amsterdam-canal-cruises-tickets-l200073/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/amsterdam-canal-cruises-tickets-l200073/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "206208",
@@ -3135,7 +3242,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 8956,
-      "experience_url": "https://www.tiqets.com/en/airport-transfers-amsterdam-l206208/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/airport-transfers-amsterdam-l206208/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "144593",
@@ -3175,7 +3283,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 12130,
-      "experience_url": "https://www.tiqets.com/en/van-gogh-museum-tickets-l144593/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/van-gogh-museum-tickets-l144593/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "145764",
@@ -3211,7 +3320,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2851,
-      "experience_url": "https://www.tiqets.com/en/moco-museum-tickets-l145764/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/moco-museum-tickets-l145764/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "206211",
@@ -3268,7 +3378,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 4172,
-      "experience_url": "https://www.tiqets.com/en/amsterdam-city-tours-tickets-l206211/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/amsterdam-city-tours-tickets-l206211/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "125689",
@@ -3306,7 +3417,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 1517,
-      "experience_url": "https://www.tiqets.com/en/madame-tussauds-amsterdam-tickets-l125689/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/madame-tussauds-amsterdam-tickets-l125689/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "126535",
@@ -3341,7 +3453,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 2139,
-      "experience_url": "https://www.tiqets.com/en/artis-amsterdam-royal-zoo-tickets-l126535/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/artis-amsterdam-royal-zoo-tickets-l126535/?partner=aafares",
+      "currency": "EUR"
     },
     {
       "id": "197482",
@@ -3381,7 +3494,8 @@
       "cancellationpolicy": "",
       "reviews": [],
       "reviewsTotal": 3871,
-      "experience_url": "https://www.tiqets.com/en/fabrique-des-lumieres-tickets-l197482/?partner=aafares"
+      "experience_url": "https://www.tiqets.com/en/fabrique-des-lumieres-tickets-l197482/?partner=aafares",
+      "currency": "EUR"
     }
   ]
 }

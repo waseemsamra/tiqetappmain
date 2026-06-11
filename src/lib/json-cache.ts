@@ -70,6 +70,7 @@ const TARGET_CITIES = [
   { name: 'Abu Dhabi', id: '60013' },
   { name: 'Sharjah', id: '60007' },
   { name: 'Ras al-Khaimah', id: '60003' },
+  { name: 'Fujairah', id: '60009' },
   { name: 'Barcelona', id: '66342' },
   { name: 'Rome', id: '71631' },
   { name: 'Paris', id: '66746' },

@@ -29,7 +29,7 @@ const simpleHash = (str: string) => {
 };
 
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
-const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah"];
+const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
 export default function HomePageClient({ allExcursions, topRatedExcursions, heroContent, uaeExcursions, worldwideExcursions, barcelonaExcursions }: HomePageClientProps) {
    const homePageData = useMemo(() => {
