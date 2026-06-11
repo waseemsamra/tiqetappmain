@@ -1,16 +1,38 @@
 import { NextResponse } from 'next/server';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { fetchTiqetsCountries, fetchTiqetsCities } from '@/lib/tiqets-api';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const filePath = join(process.cwd(), 'cache', 'locations.json');
-    const raw = readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return NextResponse.json({ countries: parsed.countries ?? [], cities: parsed.cities ?? [] });
+    const countries = await fetchTiqetsCountries();
+    const mapped = countries.map((c: any) => ({
+      id: String(c.id || c.code || ''),
+      name: c.name || '',
+      code: c.code || '',
+      currency: c.currency || '',
+      currency_symbol: c.currency_symbol || '',
+    }));
+
+    const cities: any[] = [];
+    const batch = mapped.slice(0, 10);
+    for (const country of batch) {
+      try {
+        const list = await fetchTiqetsCities(country.code);
+        for (const city of list) {
+          cities.push({
+            id: String(city.id || ''),
+            name: city.name || '',
+            country_code: (city.country_code || country.code).toLowerCase(),
+            country_name: country.name || '',
+          });
+        }
+      } catch {}
+    }
+
+    return NextResponse.json({ countries: mapped, cities });
   } catch (error) {
-    return NextResponse.json({ countries: [], cities: [], error: 'Failed to load locations' }, { status: 500 });
+    console.error('Failed to load locations:', error);
+    return NextResponse.json({ countries: [], cities: [] });
   }
 }
