@@ -88,20 +88,34 @@ export default async function AdminLayout({
                 </Link>
               </div>
 
+                    <div className="my-2">
+                     <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
+                     <Link
+                       href="/admin/cms"
+                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                     >
+                       <Presentation className="h-4 w-4" />
+                       CMS Home
+                     </Link>
+                     
+                   </div>
+
+                   {/* Locations Group */}
                    <div className="my-2">
-                    <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
-                    <Link
-                      href="/admin/cms"
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                    >
-                      <Presentation className="h-4 w-4" />
-                      CMS Home
-                    </Link>
-                    
-                  </div>
+                     <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Locations</p>
+                     <Link
+                       href="/admin/locations"
+                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                     >
+                       <Map className="h-4 w-4" />
+                       Countries & Cities
+                     </Link>
+                   </div>
+
+                   
 
 
-               {/* Settings Group */}
+                   {/* Settings Group */}
                <div className="my-2">
                  <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
                    <Link

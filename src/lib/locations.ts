@@ -156,6 +156,15 @@ export async function syncLocations() {
 
   try {
     await saveCache(LOCATIONS_CACHE_FILE, allCachedCities);
+    // Also save to public/locations.json for direct consumption by pages
+    const { writeFileSync } = require('fs');
+    const { join } = require('path');
+    const publicLocationsPath = join(process.cwd(), 'public', 'locations.json');
+    const payload = {
+      countries: mappedCountries.map(c => ({ id: c.id, name: c.name })),
+      cities: allCachedCities.map(c => ({ id: c.id, name: c.name, country_code: c.country_code, country_name: c.country_name }))
+    };
+    writeFileSync(publicLocationsPath, JSON.stringify(payload, null, 2));
   } catch {}
 
   return {
