@@ -31,6 +31,7 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T02:38:00+04:00 - Fix currency display to show proper symbols (â¬ for EUR, $ for USD, £ for GBP)
   // Last updated: 2026-06-12T02:31:38+04:00 - Triggering Vercel deployment
 export default function HomePageClient({ allExcursions, topRatedExcursions, heroContent, uaeExcursions, worldwideExcursions, barcelonaExcursions }: HomePageClientProps) {
    const homePageData = useMemo(() => {

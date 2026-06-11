@@ -43,7 +43,7 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
                         <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-gray-900">`${excursion.currency === "EUR" ? "€" : excursion.currency === "USD" ? "$" : excursion.currency === "GBP" ? "£" : excursion.currency}`${excursion.price.toFixed(2)}</p>
+                        <p className="font-bold text-lg text-gray-900">{excursion.currency === "EUR" ? "â¬" : excursion.currency === "USD" ? "\$" : excursion.currency === "GBP" ? "£" : excursion.currency}${excursion.price.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
