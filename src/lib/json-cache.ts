@@ -67,11 +67,13 @@ export type CachedVariant = {
 
 const TARGET_CITIES = [
   { name: 'Dubai', id: '60005' },
-  { name: 'New York', id: '260932' },
-  { name: 'London', id: '67458' },
-  { name: 'Amsterdam', id: '75061' },
+  { name: 'Abu Dhabi', id: '60013' },
+  { name: 'Sharjah', id: '60007' },
+  { name: 'Barcelona', id: '66342' },
+  { name: 'Rome', id: '71631' },
   { name: 'Paris', id: '66746' },
-  { name: 'Barcelona', id: '66342' }
+  { name: 'New York', id: '260932' },
+  { name: 'Amsterdam', id: '75061' }
 ];
 
 // Ensure cache directory exists
