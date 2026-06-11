@@ -6,8 +6,6 @@ import * as ExcursionService from '@/lib/excursions';
 import * as LocationService from '@/lib/locations';
 import * as TiqetsApi from '@/lib/tiqets-api';
 import {createExcursionSchema, updateExcursionSchema, reviewSchema, userUpdateSchema, inviteUserSchema, partnerProfileSchema, agentProfileSchema, userProfileUpdateSchema} from '@/lib/schemas';
-import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -459,25 +457,11 @@ export async function getAgentPayouts(agentId: string): Promise<Payout[]> {
 }
 
 export async function getDestinationsConfig(): Promise<{ name: string; countries: string[] }[]> {
-  try {
-    const filePath = join(process.cwd(), 'public', 'destinations-config.json');
-    const raw = readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed.regions) ? parsed.regions : [];
-  } catch {
-    return [];
-  }
+  const { getDestinationsConfigSync } = await import('@/lib/destinations-config');
+  return getDestinationsConfigSync();
 }
 
 export async function updateDestinationsConfigAction(regions: { name: string; countries: string[] }[]): Promise<FormState> {
-  try {
-    const filePath = join(process.cwd(), 'public', 'destinations-config.json');
-    const payload = { regions: regions.filter(r => r.name && r.countries) };
-    writeFileSync(filePath, JSON.stringify(payload, null, 2));
-    revalidatePath('/destinations');
-    return { success: true, message: 'Destinations configuration updated.' };
-  } catch (error) {
-    console.error('updateDestinationsConfigAction error:', error);
-    return { success: false, message: error instanceof Error ? error.message : 'Failed to update destinations config.' };
-  }
+  const { updateDestinationsConfigSync } = await import('@/lib/destinations-config');
+  return updateDestinationsConfigSync(regions);
 }
