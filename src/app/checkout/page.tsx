@@ -99,7 +99,7 @@ function CheckoutPageContent() {
                          <CardFooter className="flex-col items-stretch space-y-4">
                             <div className="w-full text-lg flex justify-between items-center">
                                 <span className="font-bold">Total:</span>
-                                <span className="font-extrabold">${(excursion.price * quantity).toFixed(2)}</span>
+                                <span className="font-extrabold">${Number((excursion.price || 0) * quantity).toFixed(2)}</span>
                             </div>
                             <Button size="lg" className="w-full" onClick={handleConfirmAndPay}>
                                 <CreditCard className="mr-2 h-4 w-4" />

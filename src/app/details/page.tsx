@@ -168,7 +168,7 @@ function DetailsPageContent() {
 
     const bookingDate = new Date(dateStr);
     const quantity = parseInt(quantityStr, 10);
-    const totalPrice = (excursion.price * quantity).toFixed(2);
+    const totalPrice = Number((excursion.price || 0) * quantity).toFixed(2);
     
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 space-y-8">

@@ -229,7 +229,7 @@ const AgentDashboardView = async ({ user, userName }: { user: any, userName: str
                                         <div className="text-sm text-muted-foreground">Booking: {referral.booking.booking_reference}</div>
                                     </TableCell>
                                     <TableCell>{new Date(referral.created_at).toLocaleDateString()}</TableCell>
-                                    <TableCell className="text-right text-green-600 font-medium">+${referral.commission_amount.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right text-green-600 font-medium">+${Number(referral.commission_amount || 0).toFixed(2)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

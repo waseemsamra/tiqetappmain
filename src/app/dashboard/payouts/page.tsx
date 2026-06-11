@@ -44,7 +44,7 @@ export default async function PayoutsPage() {
                         <CardDescription>The total commission you've received so far.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-4xl font-bold">${stats.totalPaid.toFixed(2)}</p>
+                        <p className="text-4xl font-bold">${Number(stats.totalPaid || 0).toFixed(2)}</p>
                     </CardContent>
                 </Card>
                  <Card>
@@ -53,7 +53,7 @@ export default async function PayoutsPage() {
                         <CardDescription>The amount that will be included in your next payout.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-4xl font-bold">${stats.pendingPayout.toFixed(2)}</p>
+                        <p className="text-4xl font-bold">${Number(stats.pendingPayout || 0).toFixed(2)}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -89,7 +89,7 @@ export default async function PayoutsPage() {
                                             {payout.status}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-right font-medium">${payout.amount.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right font-medium">${Number(payout.amount || 0).toFixed(2)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

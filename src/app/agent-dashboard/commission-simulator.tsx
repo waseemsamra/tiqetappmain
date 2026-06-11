@@ -66,7 +66,7 @@ export function CommissionSimulator() {
                     <div className="text-center pt-4">
                         <p className="text-sm text-muted-foreground">Projected Earnings</p>
                         <p className="text-3xl font-bold text-primary flex items-center justify-center gap-2">
-                           <DollarSign className="h-7 w-7" /> {projectedEarnings.toFixed(2)}
+                           <DollarSign className="h-7 w-7" /> {Number(projectedEarnings || 0).toFixed(2)}
                         </p>
                     </div>
                 )}
