@@ -22,6 +22,12 @@ export default async function HomePage() {
     heroContent = await getHeroContent();
   } catch {}
 
+  const byCity = (city: string, limit = 10) =>
+    allExcursions.filter(ex => (ex.city || '').toLowerCase() === city.toLowerCase()).slice(0, limit);
+
+  const uaeExcursions = ['Dubai', 'Abu Dhabi', 'Sharjah'].flatMap(city => byCity(city, 10)).slice(0, 50);
+  const worldwideExcursions = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].flatMap(city => byCity(city, 10)).slice(0, 50);
+  const barcelonaExcursions = byCity('Barcelona', 10);
   const topRatedExcursions = [...allExcursions]
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
     .slice(0, 20);
@@ -31,6 +37,9 @@ export default async function HomePage() {
       allExcursions={allExcursions}
       topRatedExcursions={topRatedExcursions}
       heroContent={heroContent || { headline: '', subheading: '' }}
+      uaeExcursions={uaeExcursions}
+      worldwideExcursions={worldwideExcursions}
+      barcelonaExcursions={barcelonaExcursions}
     />
   );
 };
