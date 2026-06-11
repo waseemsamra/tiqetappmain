@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import type { RowSelectionState } from "@tanstack/react-table";
 import { columns } from "./countries-columns";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusCircle, Trash2, MapPin, RefreshCw, Loader2 } from "lucide-react";
@@ -143,6 +144,29 @@ export default function LocationsClientPage({ initialCountries, initialCities, s
                 )}
               </tbody>
             </table>
+            <div className="flex items-center justify-between border-t p-3">
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safeCitiesPage <= 1}
+                onClick={() => setCitiesPage((p) => Math.max(1, p - 1))}
+              >
+                <ChevronLeft className="mr-1 h-4 w-4" />
+                Previous
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Page {safeCitiesPage} of {totalCitiesPages}
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safeCitiesPage >= totalCitiesPages}
+                onClick={() => setCitiesPage((p) => Math.min(totalCitiesPages, p + 1))}
+              >
+                Next
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </section>
       )}
