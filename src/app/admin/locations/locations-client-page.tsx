@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect } from 'react';
+import { useState, useTransition } from 'react';
 import type { RowSelectionState } from "@tanstack/react-table";
 import { columns } from "./countries-columns";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { DataTable } from '@/app/admin/data-table';
 import type { Country, City } from "@/types";
 
-export default function LocationsClientPage({ initialCountries, initialCities }: { initialCountries: Country[]; initialCities: City[] }) {
+export default function LocationsClientPage({ initialCountries, initialCities, showCountries = true, showCities = true }: { initialCountries: Country[]; initialCities: City[]; showCountries?: boolean; showCities?: boolean }) {
   const countries = Array.isArray(initialCountries) ? initialCountries : [];
   const cities = Array.isArray(initialCities) ? initialCities : [];
   const { toast } = useToast();
@@ -93,49 +93,53 @@ export default function LocationsClientPage({ initialCountries, initialCities }:
         </div>
       )}
 
-      <section className="space-y-4">
-        <DataTable
-          columns={columns}
-          data={countries}
-          rowSelection={rowSelection}
-          setRowSelection={setRowSelection}
-          filterColumn="name"
-          filterPlaceholder="Filter countries..."
-        />
-      </section>
+      {showCountries && (
+        <section className="space-y-4">
+          <DataTable
+            columns={columns}
+            data={countries}
+            rowSelection={rowSelection}
+            setRowSelection={setRowSelection}
+            filterColumn="name"
+            filterPlaceholder="Filter countries..."
+          />
+        </section>
+      )}
 
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-2xl font-bold tracking-tight">Cities</h2>
-        </div>
-        <div className="rounded-md border bg-card">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="p-3 text-left">ID</th>
-                <th className="p-3 text-left">City</th>
-                <th className="p-3 text-left">Country</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cities.length === 0 ? (
-                <tr>
-                  <td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td>
+      {showCities && (
+        <section className="space-y-4">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-2xl font-bold tracking-tight">Cities</h2>
+          </div>
+          <div className="rounded-md border bg-card">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="p-3 text-left">ID</th>
+                  <th className="p-3 text-left">City</th>
+                  <th className="p-3 text-left">Country</th>
                 </tr>
-              ) : (
-                cities.map((c: any, idx: number) => (
-                  <tr key={c.id || idx} className="border-b last:border-0">
-                    <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
-                    <td className="p-3 font-medium">{c.name || '-'}</td>
-                    <td className="p-3">{c.country_name || '-'}</td>
+              </thead>
+              <tbody>
+                {cities.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="p-4 text-center text-muted-foreground">No cities found</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </section>
+                ) : (
+                  cities.map((c: any, idx: number) => (
+                    <tr key={c.id || idx} className="border-b last:border-0">
+                      <td className="p-3 font-mono text-xs">{c.id || '-'}</td>
+                      <td className="p-3 font-medium">{c.name || '-'}</td>
+                      <td className="p-3">{c.country_name || '-'}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

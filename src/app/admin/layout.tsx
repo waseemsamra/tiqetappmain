@@ -55,13 +55,27 @@ export default async function AdminLayout({
                    <SlidersHorizontal className="h-4 w-4" />
                    Options
                  </Link>
-                 <Link
-                   href="/admin/locations"
-                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                 >
-                   <Map className="h-4 w-4" />
-                   Locations
-                 </Link>
+                  <Link
+                    href="/admin/locations"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  >
+                    <Map className="h-4 w-4" />
+                    Locations
+                  </Link>
+                  <Link
+                    href="/admin/locations/countries"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                  >
+                    <Map className="h-4 w-4" />
+                    Countries
+                  </Link>
+                  <Link
+                    href="/admin/locations/cities"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                  >
+                    <Map className="h-4 w-4" />
+                    Cities
+                  </Link>
                </div>
               
               {/* User Management Group */}
