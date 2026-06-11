@@ -207,6 +207,10 @@ export const columns: ColumnDef<Excursion>[] = [
     },
   },
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <StatusBadge status={row.original.status} />,

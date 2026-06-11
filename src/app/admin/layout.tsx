@@ -1,7 +1,7 @@
 
 
 import Link from "next/link";
-import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid } from "lucide-react";
+import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -42,55 +42,33 @@ export default async function AdminLayout({
                    Excursions
                  </Link>
                   <Link
-                    href="/admin/excursion-types"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <TagIcon className="h-4 w-4" />
-                    Excursion Types
-                  </Link>
-                  <Link
-                    href="/admin/excursion-types/options"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                    href="/admin/excursions/options"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
                   >
                     <SlidersHorizontal className="h-4 w-4" />
                     Options
                   </Link>
-                  <Link
-                    href="/admin/tags"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                  >
-                    <TagIcon className="h-4 w-4" />
-                    Tags
-                  </Link>
-                  <Link
-                    href="/admin/tag-types"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                  >
-                    <TagIcon className="h-4 w-4" />
-                    Tag Types
-                  </Link>
-                  <Link
-                    href="/admin/locations"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <Map className="h-4 w-4" />
-                    Locations
-                  </Link>
-                  <Link
-                    href="/admin/locations/countries"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                  >
-                    <Map className="h-4 w-4" />
-                    Countries
-                  </Link>
-                  <Link
-                    href="/admin/locations/cities"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
-                  >
-                    <Map className="h-4 w-4" />
-                    Cities
-                  </Link>
-               </div>
+                   <Link
+                     href="/admin/tags"
+                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                   >
+                     <TagIcon className="h-4 w-4" />
+                     Tags
+                   </Link>
+                   <Link
+                     href="/admin/tag-types"
+                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                   >
+                     <TagIcon className="h-4 w-4" />
+                     Tag Types
+                   </Link>
+                    <Link
+                      href="/admin/locations"
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pl-10"
+                    >
+                      <Map className="h-4 w-4" />
+                      Locations
+                    </Link>
               
               {/* User Management Group */}
               <div className="my-2">
