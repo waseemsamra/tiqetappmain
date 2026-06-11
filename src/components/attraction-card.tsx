@@ -20,7 +20,7 @@ export const AttractionCard = ({ excursion, wishlistButton, rank }: { excursion:
                  #{rank}
              </div>
          )}
-        <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
+         <Link href={`/variants/${excursion.id}`} className="block h-full flex flex-col">
             <div className="relative w-full h-48 overflow-hidden">
                 <Image 
                     src={excursion.images?.[0] || 'https://placehold.co/400x300.png'} 
