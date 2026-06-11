@@ -1,0 +1,1404 @@
+{
+  "tags": [
+    {
+      "id": "1276",
+      "name": "Afternoon",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1275",
+      "name": "Early afternoon",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1273",
+      "name": "Early morning",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1279",
+      "name": "Evening",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1277",
+      "name": "Late afternoon",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1274",
+      "name": "Morning",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "1278",
+      "name": "Sunset",
+      "type_name": "Best time to visit",
+      "type_id": "307",
+      "type_group_name": "Experience characteristics"
+    },
+    {
+      "id": "30",
+      "name": "Afternoon",
+      "type_name": "best_time_of_day",
+      "type_id": "2",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "401",
+      "name": "Evening",
+      "type_name": "best_time_of_day",
+      "type_id": "2",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "29",
+      "name": "Morning",
+      "type_name": "best_time_of_day",
+      "type_id": "2",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "31",
+      "name": "Night",
+      "type_name": "best_time_of_day",
+      "type_id": "2",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "600",
+      "name": "Amenities",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "434",
+      "name": "Amusement Parks",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "435",
+      "name": "Attractions & Activities",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "436",
+      "name": "Castles & Palaces",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "437",
+      "name": "City Cards",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "601",
+      "name": "Culinary Experiences",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "438",
+      "name": "Entertainment",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "599",
+      "name": "Family Experiences",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "468",
+      "name": "Flights",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "439",
+      "name": "Gardens & Parks",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "440",
+      "name": "Historical Buildings",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "442",
+      "name": "Museums & Galleries",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "443",
+      "name": "Observation Decks",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "444",
+      "name": "Places of Worship",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "445",
+      "name": "Sightseeing Cruises",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "446",
+      "name": "Spas",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "447",
+      "name": "Stadiums & Arenas",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "448",
+      "name": "Tours & Sightseeing",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "500",
+      "name": "Transport",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "449",
+      "name": "Zoos & Aquariums",
+      "type_name": "main_category",
+      "type_id": "4",
+      "type_group_name": null
+    },
+    {
+      "id": "1384",
+      "name": "One-way",
+      "type_name": "Cable cars",
+      "type_id": "344",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1385",
+      "name": "Roundtrip",
+      "type_name": "Cable cars",
+      "type_id": "344",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1439",
+      "name": "Day Trips",
+      "type_name": "Trips & Excursions",
+      "type_id": "355",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2780",
+      "name": "Trips & Excursions",
+      "type_name": "Trips & Excursions",
+      "type_id": "355",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1440",
+      "name": "Multi-Day Trips",
+      "type_name": "Trips & Excursions",
+      "type_id": "355",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "700",
+      "name": "Art Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "702",
+      "name": "History Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2854",
+      "name": "Immersive Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "701",
+      "name": "Interactive Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "704",
+      "name": "Music Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2852",
+      "name": "Natural History Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2855",
+      "name": "Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "703",
+      "name": "Science & Technology Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2853",
+      "name": "Wax Museums",
+      "type_name": "Museums",
+      "type_id": "137",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1786",
+      "name": "Bays",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1787",
+      "name": "Beaches",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1788",
+      "name": "Bridges",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1789",
+      "name": "Gardens & Parks",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1790",
+      "name": "Harbours",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1791",
+      "name": "Islands",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1792",
+      "name": "Landmarks",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1793",
+      "name": "Markets",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1794",
+      "name": "Natural Wonders",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1795",
+      "name": "Neighborhoods",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1797",
+      "name": "Peaks",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1798",
+      "name": "Piers",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1799",
+      "name": "Shopping Center",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1796",
+      "name": "Streets & Squares",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1909",
+      "name": "UNESCO Sites",
+      "type_name": "POIs",
+      "type_id": "405",
+      "type_group_name": "POI categories"
+    },
+    {
+      "id": "1048",
+      "name": "Public Transport",
+      "type_name": "Destination services",
+      "type_id": "238",
+      "type_group_name": "Service categories"
+    },
+    {
+      "id": "1049",
+      "name": "Rentals",
+      "type_name": "Destination services",
+      "type_id": "238",
+      "type_group_name": "Service categories"
+    },
+    {
+      "id": "1840",
+      "name": "Transfers",
+      "type_name": "Destination services",
+      "type_id": "238",
+      "type_group_name": "Service categories"
+    },
+    {
+      "id": "2597",
+      "name": "Travel Services",
+      "type_name": "Destination services",
+      "type_id": "238",
+      "type_group_name": "Service categories"
+    },
+    {
+      "id": "2710",
+      "name": "Cultural Experiences",
+      "type_name": "Culture & Heritage",
+      "type_id": "541",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2711",
+      "name": "Culture & Heritage",
+      "type_name": "Culture & Heritage",
+      "type_id": "541",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2580",
+      "name": "Church Concerts",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2579",
+      "name": "Classical Concerts",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2578",
+      "name": "Concerts",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2261",
+      "name": "Fado Shows",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2577",
+      "name": "Opera Shows",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2933",
+      "name": "Concerts & Live Music",
+      "type_name": "Concerts & Live Music",
+      "type_id": "504",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2747",
+      "name": "Adventure Activities",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1037",
+      "name": "Aviation Activities",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1038",
+      "name": "Games & Entertainment",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "2746",
+      "name": "Motorsports & Driving",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "2745",
+      "name": "Nature & Wildlife",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "2857",
+      "name": "Adventure Activities",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1036",
+      "name": "Water Activities",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1985",
+      "name": "Wellness",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1033",
+      "name": "Workshops & Classes",
+      "type_name": "Adventure",
+      "type_id": "239",
+      "type_group_name": "Activity categories"
+    },
+    {
+      "id": "1472",
+      "name": "Airport Lounges",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1470",
+      "name": "Luggage Storage",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2929",
+      "name": "Travel Services",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1471",
+      "name": "Parking",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1468",
+      "name": "SIM Cards",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1469",
+      "name": "WiFi Services",
+      "type_name": "Travel Services",
+      "type_id": "505",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "722",
+      "name": "Adventure Parks",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "724",
+      "name": "Aquariums",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "725",
+      "name": "Botanical Gardens",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "717",
+      "name": "Breweries",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "962",
+      "name": "Cable Cars",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "718",
+      "name": "Distilleries",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1086",
+      "name": "Ferris Wheels",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "716",
+      "name": "Observation Decks",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2851",
+      "name": "Attractions",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "711",
+      "name": "Stadiums & Arenas",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "712",
+      "name": "Theme Parks",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "713",
+      "name": "Water Parks",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "720",
+      "name": "Wineries",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "723",
+      "name": "Zoos & Safari Parks",
+      "type_name": "Attractions",
+      "type_id": "139",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1745",
+      "name": "Attraction Passes",
+      "type_name": "City Cards & Passes",
+      "type_id": "346",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1749",
+      "name": "Museum Passes",
+      "type_name": "City Cards & Passes",
+      "type_id": "346",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2587",
+      "name": "Adult Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2258",
+      "name": "Ballet Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2584",
+      "name": "Cabaret Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2253",
+      "name": "Circus Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2257",
+      "name": "Comedy Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2586",
+      "name": "Dance Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2117",
+      "name": "Dinner Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2260",
+      "name": "Flamenco Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2582",
+      "name": "Immersive Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2259",
+      "name": "Magic Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2254",
+      "name": "Musicals",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2632",
+      "name": "Nightlife & Parties",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2930",
+      "name": "Shows & Theatres",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2677",
+      "name": "Performance Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2585",
+      "name": "Theater Shows",
+      "type_name": "Shows & Theatres",
+      "type_id": "361",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2815",
+      "name": "Bars",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2154",
+      "name": "Beer Tasting & Tours",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1398",
+      "name": "Dining Experiences",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1399",
+      "name": "Food Tours",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2816",
+      "name": "Food & Drinks",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1403",
+      "name": "Pub Crawls",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2814",
+      "name": "Restaurants",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2675",
+      "name": "Spirits Tasting & Tours",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2589",
+      "name": "Street Food Tours",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1397",
+      "name": "Tasting Experiences",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1401",
+      "name": "Wine Tasting & Tours",
+      "type_name": "Food & Drinks",
+      "type_id": "348",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1947",
+      "name": "Autumn",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1802",
+      "name": "Black Friday",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1806",
+      "name": "Carnival",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1801",
+      "name": "Christmas",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1804",
+      "name": "Easter",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1948",
+      "name": "4th of July",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1803",
+      "name": "Halloween",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1800",
+      "name": "New Year's Eve",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1805",
+      "name": "Spring Break",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1946",
+      "name": "Summer",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1807",
+      "name": "Valentine's Day",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1945",
+      "name": "Winter",
+      "type_name": "Seasonal",
+      "type_id": "404",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1421",
+      "name": "Desert Safaris",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "728",
+      "name": "Geological Wonders",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2267",
+      "name": "Hiking",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "726",
+      "name": "National Parks",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2813",
+      "name": "Wildlife Parks & Sanctuaries",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2593",
+      "name": "Wildlife Safaris",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1506",
+      "name": "Wildlife Watching",
+      "type_name": "Nature & Wildlife",
+      "type_id": "540",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1460",
+      "name": "Bus Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1462",
+      "name": "Ferry Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1461",
+      "name": "Metro Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2926",
+      "name": "Public Transport",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1463",
+      "name": "Train Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2676",
+      "name": "Tram Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1753",
+      "name": "Transportation Passes",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2594",
+      "name": "Water Taxi Tickets",
+      "type_name": "Public transport",
+      "type_id": "365",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1368",
+      "name": "Audio guide",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1367",
+      "name": "Bundle",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1369",
+      "name": "City Pass",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1366",
+      "name": "Day Trip",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1363",
+      "name": "Entry ticket",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1364",
+      "name": "Guided Tour",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1365",
+      "name": "Transport",
+      "type_name": "Standard venues",
+      "type_id": "340",
+      "type_group_name": "Product characteristics"
+    },
+    {
+      "id": "1466",
+      "name": "Bike Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1467",
+      "name": "Boat Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1842",
+      "name": "Bus & Shuttle Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1841",
+      "name": "Car Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2927",
+      "name": "Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1465",
+      "name": "Scooter Rentals",
+      "type_name": "Rentals",
+      "type_id": "366",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1426",
+      "name": "Bike Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1432",
+      "name": "Bus Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2817",
+      "name": "Carriage Rides",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2636",
+      "name": "Car Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2051",
+      "name": "City Games",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2018",
+      "name": "Hop-on Hop-off Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2818",
+      "name": "City Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2635",
+      "name": "Pedicab Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1429",
+      "name": "Scooter Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1434",
+      "name": "Self-Guided Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1427",
+      "name": "Train Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2581",
+      "name": "Tuk Tuk Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1431",
+      "name": "Segway Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1425",
+      "name": "Walking Tours",
+      "type_name": "City Tours",
+      "type_id": "353",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1406",
+      "name": "Snorkeling",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2637",
+      "name": "Fishing",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1408",
+      "name": "Jet Skiing",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1409",
+      "name": "Kayaking",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2924",
+      "name": "Water Activities",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2671",
+      "name": "Paddleboarding",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1410",
+      "name": "Rafting",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2672",
+      "name": "Sailing",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2304",
+      "name": "Scuba Diving",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1407",
+      "name": "Surfing",
+      "type_name": "Water Activities",
+      "type_id": "349",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1875",
+      "name": "Bowling",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2255",
+      "name": "Cinema",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1508",
+      "name": "Escape Rooms",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2120",
+      "name": "Gaming Arcades",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "2591",
+      "name": "Games & Entertainment",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1645",
+      "name": "Karaoke",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    },
+    {
+      "id": "1509",
+      "name": "Minigolf",
+      "type_name": "Games & Entertainment",
+      "type_id": "351",
+      "type_group_name": "Product Sub-categories"
+    }
+  ]
+}

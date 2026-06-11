@@ -1,0 +1,194 @@
+{
+  "tag_types": [
+    {
+      "id": "307",
+      "name": "Best time to visit",
+      "group_name": "Experience characteristics"
+    },
+    {
+      "id": "2",
+      "name": "best_time_of_day",
+      "group_name": "Product characteristics"
+    },
+    {
+      "id": "4",
+      "name": "main_category",
+      "group_name": ""
+    },
+    {
+      "id": "344",
+      "name": "Cable cars",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "355",
+      "name": "Trips & Excursions",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "137",
+      "name": "Museums",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "405",
+      "name": "POIs",
+      "group_name": "POI categories"
+    },
+    {
+      "id": "238",
+      "name": "Destination services",
+      "group_name": "Service categories"
+    },
+    {
+      "id": "541",
+      "name": "Culture & Heritage",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "504",
+      "name": "Concerts & Live Music",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "239",
+      "name": "Adventure",
+      "group_name": "Activity categories"
+    },
+    {
+      "id": "505",
+      "name": "Travel Services",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "139",
+      "name": "Attractions",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "346",
+      "name": "City Cards & Passes",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "361",
+      "name": "Shows & Theatres",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "348",
+      "name": "Food & Drinks",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "404",
+      "name": "Seasonal",
+      "group_name": "Product characteristics"
+    },
+    {
+      "id": "540",
+      "name": "Nature & Wildlife",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "365",
+      "name": "Public transport",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "340",
+      "name": "Standard venues",
+      "group_name": "Product characteristics"
+    },
+    {
+      "id": "366",
+      "name": "Rentals",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "353",
+      "name": "City Tours",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "349",
+      "name": "Water Activities",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "351",
+      "name": "Games & Entertainment",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "273",
+      "name": "Traveler type",
+      "group_name": "Product characteristics"
+    },
+    {
+      "id": "350",
+      "name": "Aviation activities",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "235",
+      "name": "Sightseeing",
+      "group_name": "Activity categories"
+    },
+    {
+      "id": "539",
+      "name": "Motorsports & Driving",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "347",
+      "name": "Workshops & Classes",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "138",
+      "name": "History & Culture",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "342",
+      "name": "Wellness",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "574",
+      "name": "Site & Attractions",
+      "group_name": "Venue categories"
+    },
+    {
+      "id": "364",
+      "name": "Transfers",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "237",
+      "name": "Shows & Live Entertainment",
+      "group_name": "Activity categories"
+    },
+    {
+      "id": "306",
+      "name": "Time to spend",
+      "group_name": "Experience characteristics"
+    },
+    {
+      "id": "345",
+      "name": "Cruises & Boat Tours",
+      "group_name": "Product Sub-categories"
+    },
+    {
+      "id": "272",
+      "name": "Interests",
+      "group_name": "Product characteristics"
+    },
+    {
+      "id": "538",
+      "name": "Adventure Activities",
+      "group_name": "Product Sub-categories"
+    }
+  ]
+}

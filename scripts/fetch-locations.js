@@ -1,30 +1,25 @@
-import https from 'https';
-import fs from 'fs';
-import path from 'path';
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
-const API_KEY = process.env.TIQETS_API_KEY || '';
-const API_BASE = 'https://api.tiqets.com/v2';
-
-const cacheDir = path.join(process.cwd(), '..', 'cache');
-const outFile = path.join(cacheDir, 'locations.json');
-
-if (!API_KEY) {
-  console.error('Missing TIQETS_API_KEY');
+const key = process.env.TIQETS_API_KEY;
+if (!key) {
+  console.error('TIQETS_API_KEY missing');
   process.exit(1);
 }
 
-function req(path) {
+function req(p) {
   return new Promise((resolve, reject) => {
     https.get({
       hostname: 'api.tiqets.com',
-      path: `/v2${path}`,
-      headers: { Authorization: `Token ${API_KEY}`, Accept: 'application/json' }
+      path: '/v2' + p,
+      headers: { Authorization: 'Token ' + key, Accept: 'application/json' }
     }, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
+      const chunks = [];
+      res.on('data', c => chunks.push(c));
       res.on('end', () => {
-        try { resolve({ ok: res.statusCode === 200, status: res.statusCode, data: JSON.parse(data) }); }
-        catch (e) { reject(new Error('Invalid JSON')); }
+        try { resolve(JSON.parse(Buffer.concat(chunks).toString())); }
+        catch (e) { reject(new Error('Invalid JSON from ' + p)); }
       });
     }).on('error', reject);
   });
@@ -32,39 +27,49 @@ function req(path) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function main() {
-  fs.mkdirSync(cacheDir, { recursive: true });
-  const { data } = await req('/locations/countries');
-  const countries = (data?.countries || []).map((c) => ({
-    id: String(c.id || c.code || ''),
-    name: c.name || '',
-    code: c.code || '',
-    currency: c.currency,
-    currency_symbol: c.currency_symbol
-  }));
-
-  const cities = [];
-  for (let i = 0; i < countries.length; i += 10) {
-    const batch = countries.slice(i, i + 10);
-    for (const country of batch) {
-      try {
-        const r = await req(`/locations/cities?country_code=${encodeURIComponent(country.code.toUpperCase())}`);
-        for (const c of (r.data?.cities || [])) {
-          cities.push({
-            id: String(c.id || ''),
-            name: c.name || '',
-            country_code: (c.country_code || country.code).toLowerCase(),
-            country_name: c.country_name || country.name
-          });
-        }
-      } catch (e) {}
-    }
-    await sleep(1000);
+(async () => {
+  let countries = [];
+  let page = 1;
+  while (true) {
+    const data = await req('/countries?page=' + page + '&page_size=100');
+    const batch = data.countries || [];
+    countries = countries.concat(batch);
+    if (batch.length < 100 || countries.length >= (data.pagination && data.pagination.total)) break;
+    page++;
   }
 
-  const out = { countries, cities };
-  fs.writeFileSync(outFile, JSON.stringify(out, null, 2), 'utf-8');
-  console.log(`Wrote ${countries.length} countries and ${cities.length} cities to ${outFile}`);
-}
+  const mapped = countries.map((c) => ({
+    id: String(c.id || ''),
+    name: c.name || '',
+    code: c.code || '',
+    currency: '',
+    currency_symbol: ''
+  }));
 
-main().catch((e) => { console.error(e); process.exit(1); });
+  // Fetch cities for all countries in batches of 10 with 1s delay
+  const allCities = [];
+  for (let i = 0; i < mapped.length; i += 10) {
+    const batch = mapped.slice(i, i + 10);
+    for (const country of batch) {
+      try {
+        const cdata = await req('/cities?country_id=' + encodeURIComponent(country.id));
+        const list = cdata.cities || [];
+        for (const city of list) {
+          allCities.push({
+            id: String(city.id || ''),
+            name: city.name || '',
+            country_code: country.code || '',
+            country_name: country.name || ''
+          });
+        }
+      } catch {}
+    }
+    if (i + 10 < mapped.length) await sleep(1000);
+  }
+
+  const out = { countries: mapped, cities: allCities };
+  const outPath = path.join(process.cwd(), 'public', 'locations.json');
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, JSON.stringify(out, null, 2), 'utf-8');
+  console.log('Wrote', mapped.length, 'countries and', allCities.length, 'cities to', outPath);
+})().catch((e) => { console.error(e); process.exit(1); });

@@ -1,11 +1,9 @@
-
-
 'use client';
 
 import { useState, useTransition } from 'react';
 import type { RowSelectionState } from "@tanstack/react-table";
 import { columns } from "./columns";
-import { DataTable } from "./data-table"; // Use the new server-paginated data table
+import { DataTable } from "@/app/admin/data-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusCircle, Trash2 } from "lucide-react";
@@ -19,15 +17,9 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 
 export default function ExcursionsClientPage({ 
-    initialExcursions,
-    totalCount,
-    page,
-    perPage
+    initialExcursions
 }: { 
     initialExcursions: Excursion[];
-    totalCount: number;
-    page: number;
-    perPage: number;
 }) {
   const { toast } = useToast();
   const router = useRouter();
@@ -86,15 +78,15 @@ export default function ExcursionsClientPage({
                   {isDeleting ? 'Deleting...' : 'Delete Selected'}
               </Button>
           </div>
-        )}
+      )}
       <DataTable 
         columns={columns} 
         data={initialExcursions}
-        totalCount={totalCount}
-        page={page}
-        perPage={perPage}
         rowSelection={rowSelection}
         setRowSelection={setRowSelection}
+        filterColumn="name"
+        filterPlaceholder="Filter excursions..."
+        pageSize={200}
       />
     </div>
   );
