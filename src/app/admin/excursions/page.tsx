@@ -1,33 +1,17 @@
-
-import { getExcursionsForAdmin } from "@/lib/excursions";
-import ExcursionsClientPage from "./excursions-client-page";
-import { Suspense } from "react";
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import ExcursionsClientPage from './excursions-client-page';
 
 export const revalidate = 0;
 
-const EXCURSIONS_PER_PAGE = 50;
+export default async function ExcursionsPage() {
+  const filePath = join(process.cwd(), 'public', 'excursions.json');
+  let experiences: any[] = [];
+  try {
+    const raw = readFileSync(filePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    experiences = Array.isArray(parsed.experiences) ? parsed.experiences : [];
+  } catch {}
 
-async function ExcursionsContent({ searchParams }: { searchParams: { page?: string, search?: string }}) {
-    const page = Number(searchParams?.page) || 1;
-    const search = searchParams?.search || '';
-
-    const { excursions, totalCount } = await getExcursionsForAdmin({ page, perPage: EXCURSIONS_PER_PAGE, search });
-
-    return (
-        <ExcursionsClientPage 
-            initialExcursions={excursions}
-            totalCount={totalCount}
-            page={page}
-            perPage={EXCURSIONS_PER_PAGE}
-        />
-    );
-}
-
-
-export default async function ExcursionsPage({ searchParams }: { searchParams: { page?: string, search?: string }}) {
-  return (
-    <Suspense fallback={<div>Loading excursions...</div>}>
-      <ExcursionsContent searchParams={searchParams} />
-    </Suspense>
-  );
+  return <ExcursionsClientPage initialExcursions={experiences} />;
 }
