@@ -35,7 +35,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
        <div className="text-sm text-muted-foreground mb-2">
          {variant.country} &gt; {variant.city} &gt; {variant.name}
        </div>
-       <div className="mb-8 md:hidden overflow-x-auto hide-scrollbar snap-x snap-mandatory relative">
+        <div className="mb-8 overflow-x-auto hide-scrollbar snap-x snap-mandatory relative">
          <div className="flex">
             {allImages.map((src, idx) => (
               <div className="relative w-48 h-48 md:w-64 md:h-64 mb-2 overflow-hidden" key={idx}>
