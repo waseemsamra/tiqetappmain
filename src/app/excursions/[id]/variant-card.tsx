@@ -11,10 +11,10 @@ interface VariantCardProps {
 }
 
 const StarRating = ({ rating }: { rating?: number }) => (
-  <div className="flex items-center gap-1">
-    <Star className="h-4 w-4 text-yellow-400 fill-current" />
-    <span className="text-sm font-bold text-gray-800">{Number(rating || 0).toFixed(1)}</span>
-  </div>
+    <div className="flex items-center gap-1">
+        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+        <span className="text-sm font-bold text-gray-800">{Number(rating || 0).toFixed(1)}</span>
+    </div>
 );
 
 export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
@@ -44,9 +44,11 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
           <div className="text-right">
             <span className="text-xs text-gray-500">From</span>
             <p className="font-bold text-lg text-gray-900">
-              {variant.price ? `\${variant.currency === "EUR" ? "â¬" : variant.currency === "USD" ? "\$" : variant.currency === "GBP" ? "£" : variant.currency}\${Number(variant.price || 0).toFixed(2)}` : 'Unavailable'}
-) : 'Unavailable'}
-            </p>
+              {variant.price ? (
+                {variant.currency === "EUR" ? "â¬" : variant.currency === "USD" ? "$" : variant.currency === "GBP" ? "£" : variant.currency}
+                {Number(variant.price || 0).toFixed(2)}
+              ) : 'Unavailable'}
+            </div>
           </div>
         </div>
       </div>

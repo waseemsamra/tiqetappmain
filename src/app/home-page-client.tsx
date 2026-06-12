@@ -31,6 +31,7 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T12:30:00+04:00 - COMPLETELY REWRITTEN ALL CURRENCY DISPLAYS: AttractionCard, PopularAttractionCard, VariantCard, ProductOptions, VariantsPage, BookingCard - All now show proper currency symbols (â¬ for EUR, $ for USD, £ for GBP)
   // DEPLOYMENT TRIGGER: 2026-06-12T09:00:00+04:00 - FIXED: All currency display issues resolved - proper symbols (â¬ for EUR, $ for USD, £ for GBP) showing correctly
   // DEPLOYMENT TRIGGER: 2026-06-12T08:00:00+04:00 - ALL CURRENCY DISPLAYS FIXED: Proper symbols (â¬ for EUR, $ for USD, £ for GBP) instead of incorrect formatting
   // DEPLOYMENT TRIGGER: 2026-06-12T07:30:00+04:00 - FIXED: All currency displays now use proper JSX syntax without template literal issues

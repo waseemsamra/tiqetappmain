@@ -1,22 +1,3 @@
-
-'use client';
-
-import Image from 'next/image';
-import Link from 'next/link';
-import { Star } from 'lucide-react';
-import type { Excursion } from '@/types';
-import { WishlistButton } from './wishlist-button';
-
-type User = { id: string; email?: string } | null;
-
-const StarRating = ({ rating }: { rating: number }) => (
-    <div className="flex items-center gap-1">
-        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-        <span className="text-sm font-bold text-gray-800">{rating.toFixed(1)}</span>
-    </div>
-);
-
-
 export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: { excursion: Excursion, user: User | null, isInitialWishlisted?: boolean }) => (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col group h-full">
         <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
@@ -43,7 +24,7 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
                         <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-gray-900">{excursion.currency === "EUR" ? "€" : excursion.currency === "USD" ? "$" : excursion.currency === "GBP" ? "£" : excursion.currency}${excursion.price.toFixed(2)}</p>
+                        <p className="font-bold text-lg text-gray-900">{excursion.currency === "EUR" ? "â¬" : excursion.currency === "USD" ? "$" : excursion.currency === "GBP" ? "£" : excursion.currency}${excursion.price.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
