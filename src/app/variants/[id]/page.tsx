@@ -32,7 +32,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-sm text-muted-foreground mb-2">
-        {variant.country} &gt; {variant.city} &gt; {variant.name}
+        </div>
       </p>
       
       <div className="mb-8 md:hidden overflow-x-auto hide-scrollbar snap-x snap-mandatory relative">
