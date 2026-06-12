@@ -25,9 +25,9 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
      );
    }
 
-   const allImages = Array.isArray(variant.images)
-     ? variant.images
-     : ['https://placehold.co/800x600.png'];
+    const allImages: string[] = Array.isArray(variant.images)
+      ? variant.images
+      : ['https://placehold.co/800x600.png'];
    const thumbs = allImages.slice(1, 5);
 
    return (
