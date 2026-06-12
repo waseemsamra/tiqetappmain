@@ -36,30 +36,35 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
           {variant.country} &gt; {variant.city} &gt; {variant.name}
         </div>
         
-        {/* Hero Section: Large Image + Thumbnail Grid */}
-        <div className="grid grid-cols-1 gap-4 mb-6">
-          {/* Mobile: Large image on top, thumbnails below */}
-          {/* Desktop: Large image left, thumbnails right */}
-          <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden">
-            <Image
-              src={allImages[0]}
-              alt={variant.name}
-              fill
-              className="object-cover w-full h-full"
-            />
+        {/* Hero Section: Responsive Layout */}
+        <div className="flex w-full">
+          {/* Mobile: Show only large image (full width) */}
+          {/* Desktop: 50/50 split */}
+          <div className="w-full md:w-1/2">
+            <div className="relative h-[500px] w-full">
+              <Image
+                src={allImages[0]}
+                alt={variant.name}
+                fill
+                className="object-cover w-full h-full"
+              />
+            </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
-            {thumbs.map((src, idx) => (
-              <div key={idx} className="relative h-[200px] md:h-[240px] rounded-xl overflow-hidden">
-                <Image
-                  src={src}
-                  alt={`${variant.name} ${idx + 2}`}
-                  fill
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            ))}
+          {/* Desktop Only: 2x2 Thumbnail Grid (hidden on mobile) */}
+          <div className="hidden md:block w-0 md:w-1/2">
+            <div className="grid grid-cols-2 gap-3 h-[500px] w-full">
+              {thumbs.map((src, idx) => (
+                <div key={idx} className="relative h-full w-full">
+                  <Image
+                    src={src}
+                    alt={`${variant.name} ${idx + 2}`}
+                    fill
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -106,7 +111,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-1">•</span>
-                  <span>Age: All ages</span>
+                  <span>Age: All ages</span
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-1">•</span>
