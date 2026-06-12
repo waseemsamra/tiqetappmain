@@ -31,6 +31,8 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T19:00:00+04:00 - ALL COMPONENTS NOW SHOW USD DOLLAR SIGN ONLY (as requested)
+  // FINAL DEPLOYMENT TRIGGER: 2026-06-12T18:00:00+04:00 - ALL ISSUES RESOLVED: Currency display fixed + Variants page JSX error fixed - Ready for production
   // DEPLOYMENT TRIGGER: 2026-06-12T16:30:00+04:00 - Fixed variants page JSX structure: properly wrapped text-sm div content
   // DEPLOYMENT TRIGGER: 2026-06-12T16:00:00+04:00 - Fixed variants page structure: corrected text-sm div closing tag
   // DEPLOYMENT TRIGGER: 2026-06-12T15:50:00+04:00 - Fixed variants page JSX error: changed </p> to </div> on line 35

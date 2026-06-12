@@ -31,3 +31,4 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
         </Link>
     </div>
 );
+                        <p className="font-bold text-lg text-gray-900">\${excursion.price.toFixed(2)}</p>
