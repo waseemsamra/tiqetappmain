@@ -47,7 +47,7 @@ export default function ExcursionDetailClient({
     <>
       <div className="container mx-auto px-4 py-8">
         <div className="text-sm text-muted-foreground mb-2">
-          {excursion.country}{excursion.city && ` > ${excursion.city}`} > {excursion.name}
+          {`${excursion.country}${excursion.city ? ' > ' + excursion.city : ''} > ${excursion.name}`}
         </div>
           
         <ProductHero 
