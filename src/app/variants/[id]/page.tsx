@@ -22,10 +22,10 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
          <h1 className="text-2xl font-bold text-gray-900 mb-2">This option is currently unavailable</h1>
          <p className="text-gray-600">Please go back and choose another ticket option.</p>
        </div>
-     );
-   }
+      );
+    }
 
-     const allImages: string[] = Array.isArray(variant.images)
+    const allImages: string[] = Array.isArray(variant.images)
       ? variant.images
       : ['https://placehold.co/800x600.png'];
     const thumbs = allImages.slice(1, 5);
