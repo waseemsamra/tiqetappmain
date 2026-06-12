@@ -44,7 +44,7 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
           <div className="text-right">
             <span className="text-xs text-gray-500">From</span>
             <p className="font-bold text-lg text-gray-900">
-              {variant.price ? `$${Number(variant.price || 0).toFixed(2)}` : 'Unavailable'}
+              {variant.price ? `\${variant.currency === "EUR" ? "â¬" : variant.currency === "USD" ? "\$" : variant.currency === "GBP" ? "£" : variant.currency}\${Number(variant.price || 0).toFixed(2)}` : 'Unavailable'}
             </p>
           </div>
         </div>
