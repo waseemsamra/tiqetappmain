@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect, useTransition } from 'react';
@@ -56,14 +55,42 @@ export default function SearchClientPage({
     // Loading and transition state
     const [isSearching, startSearchTransition] = useTransition();
 
+    // Fetch ALL results for the current search parameters (not just one page)
     const fetchExcursions = async (params: URLSearchParams) => {
         startSearchTransition(async () => {
             try {
-                const response = await fetch(`/api/search?${params.toString()}`);
-                if (!response.ok) throw new Error('Search failed');
-                const data = await response.json();
-                const activities = Array.isArray(data.activities) ? data.activities : [];
-                setAllExcursions(activities);
+                // Remove page parameter to always start from page 1
+                const paramsWithoutPage = new URLSearchParams(params);
+                paramsWithoutPage.delete('page');
+                
+                // Fetch first page to get total count
+                const firstPageResponse = await fetch(`/api/search?${paramsWithoutPage.toString()}`);
+                if (!firstPageResponse.ok) throw new Error('Search failed');
+                const firstPageData = await firstPageResponse.json();
+                
+                const total = firstPageData.total ?? 0;
+                const totalPages = firstPageData.totalPages ?? 1;
+                let allActivities: any[] = [...(firstPageData.activities || [])];
+                
+                // Fetch remaining pages if any
+                if (totalPages > 1) {
+                    const pagePromises = [];
+                    for (let page = 2; page <= totalPages; page++) {
+                        const pageParams = new URLSearchParams(paramsWithoutPage);
+                        pageParams.set('page', String(page));
+                        pagePromises.push(fetch(`/api/search?${pageParams.toString()}`));
+                    }
+                    
+                    const pageResponses = await Promise.all(pagePromises);
+                    for (const response of pageResponses) {
+                        if (response.ok) {
+                            const data = await response.json();
+                            allActivities.push(...(data.activities || []));
+                        }
+                    }
+                }
+                
+                setAllExcursions(allActivities);
             } catch (error) {
                 console.error(error);
                 setAllExcursions([]);
@@ -81,9 +108,8 @@ export default function SearchClientPage({
         setSelectedExcursionTypes(typesToSelect);
         
         setVisibleCount(INITIAL_VISIBLE_COUNT);
-
+        
     }, [searchParams]);
-
 
     useEffect(() => {
         if (user) {
@@ -100,11 +126,11 @@ export default function SearchClientPage({
         }
         const newTypesArray = Array.from(newSelection);
         setSelectedExcursionTypes(newTypesArray);
-
+        
         const currentParams = new URLSearchParams(searchParams.toString());
         currentParams.delete('types');
         newTypesArray.forEach(t => currentParams.append('types', t));
-
+        
         fetchExcursions(currentParams);
         setVisibleCount(INITIAL_VISIBLE_COUNT);
     };
@@ -122,83 +148,83 @@ export default function SearchClientPage({
     return (
         <>
             <div className="flex justify-center mb-8">
-                 <UniversalSearch />
+                  <UniversalSearch />
             </div>
 
             <main>
-                 <div>
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-                        <p className="text-muted-foreground">
-                            {isSearching ? 'Searching...' : `${allExcursions.length} results found.`}
-                        </p>
-                        <div className="flex items-center gap-2 self-end">
-                             <Button variant="outline" className="w-full md:w-auto" onClick={() => setIsFilterDialogOpen(true)}>
-                                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                                Filters
-                            </Button>
-                            <Button variant={layout === 'grid' ? 'secondary' : 'ghost'} size="icon" onClick={() => setLayout('grid')}>
-                                <LayoutGrid className="h-5 w-5" />
-                            </Button>
-                            <Button variant={layout === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setLayout('list')}>
-                                <List className="h-5 w-5" />
-                            </Button>
-                        </div>
-                    </div>
-                    {isSearching ? (
+                  <div>
+                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                         <p className="text-muted-foreground">
+                             {isSearching ? 'Searching...' : `${allExcursions.length} results found.`}
+                         </p>
+                         <div className="flex items-center gap-2 self-end">
+                              <Button variant="outline" className="w-full md:w-auto" onClick={() => setIsFilterDialogOpen(true)}>
+                                 <SlidersHorizontal className="mr-2 h-4 w-4" />
+                                 Filters
+                             </Button>
+                             <Button variant={layout === 'grid' ? 'secondary' : 'ghost'} size="icon" onClick={() => setLayout('grid')}>
+                                 <LayoutGrid className="h-5 w-5" />
+                             </Button>
+                             <Button variant={layout === 'list' ? 'secondary' : 'ghost'} size="icon" onClick={() => setLayout('list')}>
+                                 <List className="h-5 w-5" />
+                             </Button>
+                         </div>
+                     </div>
+                     {isSearching ? (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                             {[...Array(6)].map((_, i) => (
+                                 <div key={i} className="space-y-4">
+                                    <Skeleton className="h-48 w-full" />
+                                    <Skeleton className="h-4 w-3/4" />
+                                    <Skeleton className="h-4 w-1/2" />
+                                 </div>
+                             ))}
+                         </div>
+                     ) : visibleExcursions.length > 0 ? (
+                         <>
+                             {layout === 'grid' ? (
                                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className="space-y-4">
-                                   <Skeleton className="h-48 w-full" />
-                                   <Skeleton className="h-4 w-3/4" />
-                                   <Skeleton className="h-4 w-1/2" />
-                                </div>
-                            ))}
-                        </div>
-                    ) : visibleExcursions.length > 0 ? (
-                        <>
-                            {layout === 'grid' ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                                    {visibleExcursions.map(excursion => (
-                                        <ExcursionCard
-                                            key={excursion.id}
-                                            excursion={excursion}
-                                            wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : null}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    {visibleExcursions.map(excursion => (
-                                        <ExcursionListCard
-                                            key={excursion.id}
-                                            excursion={excursion}
-                                            wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : null}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                            <LoadMoreButton
-                                visibleCount={visibleCount}
-                                totalCount={allExcursions.length}
-                                onLoadMore={handleLoadMore}
-                            />
-                        </>
-                    ) : (
-                        <div className="text-center py-16">
-                            <h2 className="text-2xl font-semibold">No Excursions Found</h2>
-                            <p className="text-muted-foreground mt-2">Try adjusting your filters or search terms to find what you're looking for.</p>
-                        </div>
-                    )}
-                </div>
-            </main>
-            <FilterDialog
-                isOpen={isFilterDialogOpen}
-                onOpenChange={setIsFilterDialogOpen}
-                excursionTypes={allExcursionTypes}
-                allExcursions={allExcursions}
-                selectedExcursionTypes={selectedExcursionTypes}
-                onExcursionTypeChange={handleFilterChange}
-            />
-        </>
-    );
+                                     {visibleExcursions.map(excursion => (
+                                         <ExcursionCard
+                                             key={excursion.id}
+                                             excursion={excursion}
+                                             wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : null}
+                                         />
+                                     ))}
+                                 </div>
+                             ) : (
+                                 <div className="space-y-4">
+                                     {visibleExcursions.map(excursion => (
+                                         <ExcursionListCard
+                                             key={excursion.id}
+                                             excursion={excursion}
+                                             wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : null}
+                                         />
+                                     ))}
+                                 </div>
+                             )}
+                             <LoadMoreButton
+                                 visibleCount={visibleCount}
+                                 totalCount={allExcursions.length}
+                                 onLoadMore={handleLoadMore}
+                             />
+                         </>
+                     ) : (
+                         <div className="text-center py-16">
+                             <h2 className="text-2xl font-semibold">No Excursions Found</h2>
+                             <p className="text-muted-foreground mt-2">Try adjusting your filters or search terms to find what you're looking for.</p>
+                         </div>
+                     )}
+                 </div>
+             </main>
+             <FilterDialog
+                 isOpen={isFilterDialogOpen}
+                 onOpenChange={setIsFilterDialogOpen}
+                 excursionTypes={allExcursionTypes}
+                 allExcursions={allExcursions}
+                 selectedExcursionTypes={selectedExcursionTypes}
+                 onExcursionTypeChange={handleFilterChange}
+             />
+         </>
+     );
 }

@@ -41,22 +41,29 @@ export function VariantBookingClient({ productId }: { productId: string }) {
           const checkEngine = setInterval(() => {
             if (!mounted || !containerRef.current) return;
             
-            // Check if Tiqets engine is available on window
-            if (typeof window !== 'undefined' && (window as any).tiqetsBookingEngine) {
-              setIsEngineLoaded(true);
-              setIsLoading(false);
-              clearInterval(checkEngine);
+            // Check if Tiqets engine is available on window (try multiple possible names)
+            if (typeof window !== 'undefined') {
+              const tiqetsEngine = 
+                (window as any).tiqetsBookingEngine ||
+                (window as any).TiqetsBookingEngine ||
+                (window as any).tiqets_booking_engine;
+                
+              if (tiqetsEngine) {
+                setIsEngineLoaded(true);
+                setIsLoading(false);
+                clearInterval(checkEngine);
+              }
             }
           }, 300); // Check more frequently
           
-          // Fallback: after 10 seconds, assume it's loaded or failed
+          // Fallback: after 15 seconds, assume it's loaded or failed
           const timeout = setTimeout(() => {
             if (!mounted) return;
             setIsLoading(false);
             // Assume loaded to avoid blocking UI completely
             setIsEngineLoaded(true);
             clearInterval(checkEngine);
-          }, 10000);
+          }, 15000);
         }
       };
       
@@ -66,11 +73,18 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       const checkEngine = setInterval(() => {
         if (!mounted || !containerRef.current) return;
         
-        // Check if Tiqets engine is available on window
-        if (typeof window !== 'undefined' && (window as any).tiqetsBookingEngine) {
-          setIsEngineLoaded(true);
-          setIsLoading(false);
-          clearInterval(checkEngine);
+        // Check if Tiqets engine is available on window (try multiple possible names)
+        if (typeof window !== 'undefined') {
+          const tiqetsEngine = 
+            (window as any).tiqetsBookingEngine ||
+            (window as any).TiqetsBookingEngine ||
+            (window as any).tiqets_booking_engine;
+            
+          if (tiqetsEngine) {
+            setIsEngineLoaded(true);
+            setIsLoading(false);
+            clearInterval(checkEngine);
+          }
         }
       }, 300);
       
