@@ -47,6 +47,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                 alt={variant.name}
                 fill
                 className="object-cover w-full h-full"
+                unoptimized
               />
             </div>
           </div>
@@ -61,6 +62,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                     alt={`${variant.name} ${idx + 2}`}
                     fill
                     className="object-cover w-full h-full"
+                    unoptimized
                   />
                 </div>
               ))}
