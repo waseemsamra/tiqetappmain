@@ -37,19 +37,19 @@ export function transformTiqetsProduct(product: any): Excursion {
   const description = product.description || product.summary || '';
   const tagline = product.tagline || '';
 
-   return {
-     id: product.id?.toString() || '',
-     name: product.title || '',
-     city: city,
-     country: country,
-     description: description,
-     price: Number(product.from_price || product.price || 0),
-     duration: product.duration || 'Not specified',
-     activitytypeid: product.id?.toString() || 'default',
-     excursionType: {
-       id: product.id?.toString() || 'default',
-       name: tagline || 'Activity'
-     },
+    return {
+      id: product.id?.toString() || Math.random().toString(36).substring(2, 9),
+      name: product.title || '',
+      city: city,
+      country: country,
+      description: description,
+      price: Number(product.from_price || product.price || 0),
+      duration: product.duration || 'Not specified',
+      activitytypeid: product.id?.toString() || 'default',
+      excursionType: {
+        id: product.id?.toString() || 'default',
+        name: tagline || 'Activity'
+      },
      rating: safeRating,
      images: imageUrls,
      discount: product.promo_label ? 0 : undefined,
