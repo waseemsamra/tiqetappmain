@@ -33,9 +33,10 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
           fill
           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
           data-ai-hint="attraction"
+          unoptimized
         />
       </div>
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-4 flex-col flex-grow">
         <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
         <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{title}</h3>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">{variant.description || excursion.description}</p>
