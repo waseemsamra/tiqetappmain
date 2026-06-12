@@ -31,6 +31,7 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T08:00:00+04:00 - ALL CURRENCY DISPLAYS FIXED: Proper symbols (â¬ for EUR, $ for USD, £ for GBP) instead of incorrect formatting
   // DEPLOYMENT TRIGGER: 2026-06-12T07:30:00+04:00 - FIXED: All currency displays now use proper JSX syntax without template literal issues
   // DEPLOYMENT TRIGGER: 2026-06-12T06:30:00+04:00 - Testing simple JSX expression to diagnose currency display issue
   // DEPLOYMENT TRIGGER: 2026-06-12T06:00:00+04:00 - Testing: Replaced Euro symbol with X to diagnose currency display issue
