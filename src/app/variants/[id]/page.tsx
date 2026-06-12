@@ -37,25 +37,17 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
        </div>
        <div className="mb-8 md:hidden overflow-x-auto hide-scrollbar snap-x snap-mandatory relative">
          <div className="flex">
-           {allImages.map((src, idx) => (
-             <div className="relative w-48 h-48 md:w-64 md:h-64 mb-2" key={idx}>
-               <Image
-                 src={src}
-                 alt={variant.name}
-                 fill
-                 className="object-cover w-full h-full rounded-lg"
-                 priority={idx === 0}
-               >
-                 {idx === 0 && (
-                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none">
-                     <div className="absolute bottom-4 left-4 text-sm font-medium text-white">
-                       {variant.name}
-                     </div>
-                   </div>
-                 )}
-               </Image>
-             </div>
-           ))}
+            {allImages.map((src, idx) => (
+              <div className="relative w-48 h-48 md:w-64 md:h-64 mb-2 overflow-hidden" key={idx}>
+                <Image
+                  src={src}
+                  alt={variant.name}
+                  fill
+                  className="object-cover w-full h-full rounded-lg"
+                  priority={idx === 0}
+                />
+              </div>
+            ))}
          </div>
        </div>
 
