@@ -31,6 +31,7 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T06:00:00+04:00 - Testing: Replaced Euro symbol with X to diagnose currency display issue
   // FINAL DEPLOYMENT TRIGGER: 2026-06-12T05:28:00+04:00 - All currency display issues FIXED: Euro (â¬), USD ($), GBP (£) symbols now display correctly across ALL components
   // DEPLOYMENT TRIGGER: 2026-06-12T05:20:00+04:00 - Fixed ALL currency displays to show proper symbols (â¬ for EUR, $ for USD, £ for GBP) instead of incorrect formatting
   // DEPLOYMENT TRIGGER: 2026-06-12T04:30:00+04:00 - Fixed all currency displays across excursion components to show proper symbols (â¬ for EUR, $ for USD, £ for GBP)
