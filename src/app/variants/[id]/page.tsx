@@ -75,3 +75,4 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
   );
 };
               <p className="font-bold text-2xl">\$${Number(variant.price || 0).toFixed(2)}</p>
+              <p className="font-bold text-2xl">\$${Number(variant.price || 0).toFixed(2)}</p>

@@ -14,7 +14,7 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                         UP TO -{excursion.discount}%
                     </div>
                 )}
-            </div>
+            </div
             <div className="p-4 flex flex-col flex-grow">
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
                 <h3 className="text-lg font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
@@ -24,12 +24,10 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
                         <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-gray-900">{excursion.currency === "EUR" ? "â¬" : excursion.currency === "USD" ? "$" : excursion.currency === "GBP" ? "£" : excursion.currency}${excursion.price.toFixed(2)}</p>
+                        <p className="font-bold text-lg text-gray-900">\${excursion.price.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
         </Link>
     </div>
 );
-                        <p className="font-bold text-lg text-gray-900">\${excursion.price.toFixed(2)}</p>
-                        <p className="font-bold text-lg text-gray-900">\${excursion.price.toFixed(2)}</p>
