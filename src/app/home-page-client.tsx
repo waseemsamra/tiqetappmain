@@ -31,6 +31,7 @@ const simpleHash = (str: string) => {
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
+  // DEPLOYMENT TRIGGER: 2026-06-12T16:00:00+04:00 - Fixed variants page structure: corrected text-sm div closing tag
   // DEPLOYMENT TRIGGER: 2026-06-12T15:50:00+04:00 - Fixed variants page JSX error: changed </p> to </div> on line 35
   // FINAL DEPLOYMENT: 2026-06-12T15:45:00+04:00 - ALL CURRENCY DISPLAY ISSUES RESOLVED - Ready for production
   // DEPLOYMENT TRIGGER: 2026-06-12T12:30:00+04:00 - COMPLETELY REWRITTEN ALL CURRENCY DISPLAYS: AttractionCard, PopularAttractionCard, VariantCard, ProductOptions, VariantsPage, BookingCard - All now show proper currency symbols (â¬ for EUR, $ for USD, £ for GBP)
