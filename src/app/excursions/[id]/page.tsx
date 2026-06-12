@@ -52,26 +52,29 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
    
    if (cachedVariants.length > 0) {
      variants = cachedVariants;
-   } else if (excursion.product_groups && Array.isArray(excursion.product_groups) && excursion.product_groups.length > 0) {
-     // Extract variants from product_groups data
-     variants = excursion.product_groups
-       .flatMap(group => Array.isArray(group.products) ? group.products : [])
-       .map(product => {
-         // Use product data from product_groups, with fallbacks to main excursion data for missing fields
-         const price = Number(product.from_price || product.price || 0);
-         
-         return {
-           id: product.id?.toString() || '',
-           name: product.title || '',
-           price: isNaN(price) ? 0 : price,
-           duration: excursion.duration || 'Not specified',
-           description: product.description || product.summary || excursion.description || '',
-           images: excursion.images && excursion.images.length > 0 ? excursion.images : ['https://via.placeholder.com/600x400?text=No+Image'],
-           status: 'available',
-           whatsincluded: product.whats_included || '',
-           whatsnotincluded: product.whats_excluded || '',
-         } as ExcursionVariant;
-       });
+    } else if (excursion.product_groups && Array.isArray(excursion.product_groups) && excursion.product_groups.length > 0) {
+      // Extract variants from product_groups data
+      const productList = excursion.product_groups
+        .flatMap(group => Array.isArray(group.products) ? group.products : []);
+      
+      variants = productList
+        .filter(product => product.id !== null && product.id !== undefined && product.id !== '')
+        .map(product => {
+          // Use product data from product_groups, with fallbacks to main excursion data for missing fields
+          const price = Number(product.from_price || product.price || 0);
+          
+          return {
+            id: product.id!.toString(),
+            name: product.title || '',
+            price: isNaN(price) ? 0 : price,
+            duration: excursion.duration || 'Not specified',
+            description: product.description || product.summary || excursion.description || '',
+            images: excursion.images && excursion.images.length > 0 ? excursion.images : ['https://via.placeholder.com/600x400?text=No+Image'],
+            status: 'available',
+            whatsincluded: product.whats_included || '',
+            whatsnotincluded: product.whats_excluded || '',
+          } as ExcursionVariant;
+        });
    } else if (excursion.product_ids && excursion.product_ids.length > 0) {
      const fetchedVariants = await TiqetsApi.fetchTiqetsProductVariants(excursion.product_ids);
      variants = fetchedVariants;
