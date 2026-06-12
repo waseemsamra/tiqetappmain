@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { fetchTiqetsProductById } from '@/lib/tiqets-api';
 import { Star } from 'lucide-react';
 import { VariantBookingClient } from './variant-booking-client';
+import Image from 'next/image';
 import {
   Accordion,
   AccordionItem,
