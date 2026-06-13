@@ -30,7 +30,7 @@ export default function FaqSection({ items }: FaqSectionProps) {
                 alt={item.question}                                   
                 width={60}                                   
                 height={60}                                   
-                className="rounded-lg object-cover"                                   
+                className="rounded-lg object-cover unoptimized"                                    
                 data-ai-hint="attraction"                                 
               />
               <span className="text-left">"{item.question}"</span>
