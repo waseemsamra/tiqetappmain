@@ -60,7 +60,7 @@ export function FilterDialog({ isOpen, onOpenChange, tags = [], allExcursions, s
         const imageMap = new Map<string, string>();
         (tags || []).forEach(tag => {
             const firstExcursionOfTag = allExcursions.find(ex => {
-                const tagIds = Array.isArray(excursion.tag_ids) ? excursion.tag_ids : [];
+                const tagIds = Array.isArray(ex.tag_ids) ? ex.tag_ids : [];
                 return tagIds.includes(tag.id);
             });
             const imageUrl = firstExcursionOfTag?.images?.[0] || 'https://picsum.photos/128/128';
