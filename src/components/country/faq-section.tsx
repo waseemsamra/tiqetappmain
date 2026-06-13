@@ -33,7 +33,7 @@ export default function FaqSection({ items }: FaqSectionProps) {
                 className="rounded-lg object-cover unoptimized"                                    
                 data-ai-hint="attraction"                                 
               />
-              <span className="text-left">"{item.question}"</span>
+              <span className="text-left">{item.question}</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="text-muted-foreground text-base pl-20">
