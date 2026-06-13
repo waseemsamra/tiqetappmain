@@ -53,17 +53,17 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                 <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{excursion.description}</p>
                 
+                {/* Fixed alignment - items-center to keep rating and price on same level */}
                 <div className="flex items-center justify-between mt-auto pt-4">
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
                         <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-gray-900">${Number(excursion.price || 0).toFixed(2)}</p>
+                        <p className="font-bold text-gray-900">${Number(excursion.price || 0).toFixed(2)}</p>
                     </div>
                 </div>
             </div>
         </Link>
         
-        {/* Wrapping wishlist button to stop event propagation */}
         {wishlistButton && (
             <div 
                 className="absolute top-2 right-2 z-20"
