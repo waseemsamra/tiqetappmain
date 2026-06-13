@@ -104,16 +104,16 @@ export default function AttractionListingSection({ title, excursions, showViewAl
         return excursions;
     }, [activeTab, excursions, showTabs, tabType]);
 
-    const renderGrid = () => (
+        }
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {excursions.map((excursion) => (
                 <div key={excursion.id} className="h-full">
                     <AttractionCard
                       excursion={excursion}
-                      wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                      wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> ,
                     />
                 </div>
-            ))}
+            }})
         </div>
 
     const renderCarousel = () => (
