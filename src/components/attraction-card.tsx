@@ -1,48 +1,93 @@
-'use client';
+"use client";
 
+import { Excursion } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, MapPin } from 'lucide-react';
-import type { Excursion } from '@/types';
+import { cn } from '@/lib/utils';
 
-const StarRating = ({ rating }: { rating: number | undefined }) => (
-    <div className="flex items-center gap-1">
-        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-        <span className="text-sm font-bold text-gray-800">{Number(rating || 0).toFixed(1)}</span>
+interface AttractionCardProps {
+    excursion: Excursion;
+    wishlistButton?: React.ReactNode;
+    rank?: number;
+    layout?: 'horizontal' | 'vertical';
+}
+
+export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vertical' }: AttractionCardProps) => (
+    <div className={cn(
+        "rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group h-full bg-white relative border border-gray-200/80",
+        layout === 'horizontal' ? 'flex flex-row' : 'flex flex-col'
+    )}>
+        {rank && (
+            <div className="absolute top-3 left-3 bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold z-10 text-sm">
+                #{rank}
+            </div>
+        )}
+        
+        {/* Image section - changes based on layout */}
+        <div className={cn(
+            "relative overflow-hidden bg-gray-100",
+            layout === 'horizontal' 
+                ? 'w-2/5 min-w-[120px] aspect-square' // Image on left for horizontal
+                : 'w-full aspect-video' // Full width for vertical
+        )}>
+            {excursion.images?.[0] && (
+                <Image
+                    src={excursion.images[0]}
+                    alt={excursion.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+            )}
+        </div>
+        
+        {/* Content section */}
+        <div className={cn(
+            "flex-1",
+            layout === 'horizontal' ? 'p-3' : 'p-4'
+        )}>
+            <div className="flex items-start justify-between gap-2">
+                <div className="flex-1">
+                    <h3 className={cn(
+                        "font-semibold line-clamp-2",
+                        layout === 'horizontal' ? 'text-sm mb-1' : 'text-lg mb-2'
+                    )}>
+                        {excursion.name}
+                    </h3>
+                    {layout === 'horizontal' ? (
+                        <>
+                            <p className="text-gray-600 text-xs line-clamp-2 mb-2">
+                                {excursion.description}
+                            </p>
+                            <div className="flex items-center justify-between">
+                                <div className="text-primary font-bold text-sm">
+                                    ${excursion.price}
+                                </div>
+                                {wishlistButton && (
+                                    <div className="ml-2">
+                                        {wishlistButton}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                                {excursion.description}
+                            </p>
+                            <div className="flex items-center justify-between">
+                                <div className="text-primary font-bold">
+                                    ${excursion.price}
+                                </div>
+                                {wishlistButton && (
+                                    <div className="ml-2">
+                                        {wishlistButton}
+                                    </div>
+                                )}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+        </div>
     </div>
 );
-
-
-export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vertical' }: { excursion: Excursion, wishlistButton?: React.ReactNode, rank?: number, layout?: 'horizontal' | 'vertical' }) => (
-    <div className={`rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden ${layout === 'horizontal' ? 'flex-row' : 'flex-col'} group h-full bg-white relative border border-gray-200/80`}>
-          {rank && (
-               <div className="absolute top-3 left-3 bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold z-10 text-sm">
-                  #{rank}
-              </div>
-          )}
-          <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
-              <div className="relative w-full h-48 overflow-hidden">
-                  <Image 
-                      src={excursion.images?.[0] || 'https://placehold.co/400x300.png'} 
-                      alt={excursion.name} 
-                      fill
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-                      data-ai-hint="attraction"
-                  />
-              </div>
-              <div className="p-4 flex flex-col flex-grow">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
-                  <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{excursion.description}</p>
-                  
-                  <div className="flex items-center justify-between mt-auto pt-4">
-                       <StarRating rating={excursion.rating} />
-                      <div className="text-right">
-                          <span className="text-xs text-gray-500">From</span>
-                          <p className="font-bold text-lg text-gray-900">\${Number(excursion.price || 0).toFixed(2)}</p>
-                      </div>
-                  </div>
-              </div>
-          </Link>
-      );
-  );
