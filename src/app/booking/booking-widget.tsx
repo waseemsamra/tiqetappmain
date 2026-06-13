@@ -110,7 +110,7 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                            <CardTitle>{excursion.name}</CardTitle>
                            <CardDescription>Show more info <Info className="inline h-3 w-3" /></CardDescription>
                        </div>
-                       <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" />
+                        <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/80x60.png'} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" />
                     </CardHeader>
                 </Card>
 
@@ -205,9 +205,9 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
             <div className="lg:col-span-1">
                  <Card className="sticky top-24">
                      <CardHeader className="p-0">
-                        <div className="relative aspect-video">
-                            <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" data-ai-hint="attraction" />
-                        </div>
+                         <div className="relative aspect-video">
+                             <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/400x300.png'} alt={excursion.name} fill className="object-cover rounded-t-lg" data-ai-hint="attraction" />
+                         </div>
                      </CardHeader>
                      <CardContent className="p-6 space-y-4">
                         <h3 className="font-bold text-lg">{excursion.name}</h3>

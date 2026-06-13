@@ -184,10 +184,10 @@ function DetailsPageContent() {
                             <CardTitle>Booking Summary</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                             <div className="flex items-start gap-4">
-                                <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" />
-                                <h3 className="font-bold flex-1">{excursion.name}</h3>
-                            </div>
+                              <div className="flex items-start gap-4">
+                                 <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/64x64.png'} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" />
+                                 <h3 className="font-bold flex-1">{excursion.name}</h3>
+                             </div>
                              <div className="border-t border-muted -mx-6 my-4" />
                             <div className="space-y-2 text-sm text-muted-foreground">
                                <div className="flex justify-between items-center"><Calendar className="h-4 w-4 mr-2 inline" /> <span>{format(bookingDate, 'MMMM d, yyyy')}</span></div>

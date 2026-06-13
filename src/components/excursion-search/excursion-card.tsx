@@ -35,13 +35,13 @@ export const ExcursionCard = ({ excursion, wishlistButton }: { excursion: Excurs
             )}
             <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
                 <div className="relative aspect-[4/3]">
-                    <Image
-                    src={excursion.images?.[0] || 'https://placehold.co/400x300.png'}
-                    alt={excursion.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    data-ai-hint="attraction"
-                    />
+                     <Image
+                     src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : 'https://placehold.co/400x300.png'}
+                     alt={excursion.name}
+                     fill
+                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+                     data-ai-hint="attraction"
+                     />
                 </div>
                 <CardContent className="p-4 flex-grow flex flex-col">
                     <h3 className="font-bold text-base leading-snug group-hover:text-primary transition-colors mt-1 line-clamp-2">{excursion.name}</h3>

@@ -104,7 +104,9 @@ export default function CountryClientPage({
         return filteredExcursions.slice(0, 10);
     }, [filteredExcursions]);
 
-    const heroImage = countryDetails.heroImage || initialExcursions.find(ex => ex.images && ex.images.length > 0)?.images?.[0] || 'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
+     const heroImage = countryDetails.heroImage || 
+                       (initialExcursions.find(ex => ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0)?.images?.[0]) || 
+                       'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
 
     const renderWishlistButton = (excursion: Excursion) => {
         if (!user) return null;

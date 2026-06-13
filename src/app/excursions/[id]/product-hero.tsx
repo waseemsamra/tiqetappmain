@@ -12,7 +12,7 @@ interface ProductHeroProps {
 }
 
 export const ProductHero = ({ images, title, description, rating, reviews }: ProductHeroProps) => {
-  const heroImage = images?.[0] || 'https://placehold.co/1200x600.png?text=Image+Not+Available';
+   const heroImage = (images && images[0] && images[0].length > 0 ? images[0] : null) || 'https://placehold.co/1200x600.png?text=Image+Not+Available';
   return (
     <div className="relative w-full h-[60vh] max-h-[500px] rounded-xl overflow-hidden">
       <Image

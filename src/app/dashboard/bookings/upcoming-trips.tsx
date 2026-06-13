@@ -28,7 +28,7 @@ export default function UpcomingTrips({bookings}: {bookings: Booking[]}) {
         <Card key={booking.id} className="overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3">
             <div className="relative h-48 md:h-full">
-              <Image src={booking.activity.images?.[0] || 'https://placehold.co/400x300.png'} alt={booking.activity.name} fill className="object-cover" />
+               <Image src={booking.activity.images?.[0] && booking.activity.images?.[0].length > 0 ? booking.activity.images?.[0] : 'https://placehold.co/400x300.png'} alt={booking.activity.name} fill className="object-cover" />
             </div>
             <div className="md:col-span-2">
               <CardHeader>

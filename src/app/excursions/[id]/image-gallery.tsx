@@ -8,11 +8,11 @@ import { GalleryHorizontal } from 'lucide-react';
 
 
 export const ImageGallery = ({ images }: { images: string[] }) => {
-    if (!images || images.length === 0) {
-        images = ['https://placehold.co/800x600.png?text=Image+Not+Available'];
-    }
+     if (!images || images.length === 0 || !images[0] || images[0].length === 0) {
+         images = ['https://placehold.co/800x600.png?text=Image+Not+Available'];
+     }
 
-    const mainImage = images[0];
+     const mainImage = images[0];
     const gridImages = images.slice(1, 5);
 
     return (

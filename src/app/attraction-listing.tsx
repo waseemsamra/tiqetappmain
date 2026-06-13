@@ -55,34 +55,46 @@ interface AttractionListingSectionProps {
 export default function AttractionListingSection({ title, excursions, showViewAllButton = true, layout = 'carousel', user = null, wishlistIds = new Set(), showTabs = true, tabType, maxTabs, tabs }: AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
-            return tabs.map(name => ({
-                name,
-                image: excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] || 'https://placehold.co/40x40.png'
-            }));
+             return tabs.map(name => ({
+                 name,
+                 image: (excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] && 
+                       excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 ?
+                       excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] :
+                       'https://placehold.co/40x40.png'
+             }));
         }
         const cityMap = new Map<string, { name: string, image: string }>();
-        excursions.forEach(ex => {
-            if (!cityMap.has(ex.city)) {
-                cityMap.set(ex.city, { name: ex.city, image: ex.images?.[0] || 'https://placehold.co/40x40.png' });
-            }
-        });
+         excursions.forEach(ex => {
+             if (!cityMap.has(ex.city)) {
+                 cityMap.set(ex.city, { 
+                   name: ex.city, 
+                   image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : 'https://placehold.co/40x40.png') 
+                 });
+             }
+         });
         const allCities = Array.from(cityMap.values());
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
     }, [excursions, maxTabs, tabs, tabType]);
 
     const countries = useMemo(() => {
         if (tabs && tabType === 'country') {
-            return tabs.map(name => ({
-                name,
-                image: excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] || 'https://placehold.co/40x40.png'
-            }));
+             return tabs.map(name => ({
+                 name,
+                 image: (excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] && 
+                       excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 ?
+                       excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] :
+                       'https://placehold.co/40x40.png'
+             }));
         }
         const countryMap = new Map<string, { name: string, image: string }>();
-        excursions.forEach(ex => {
-            if (!countryMap.has(ex.country)) {
-                countryMap.set(ex.country, { name: ex.country, image: ex.images?.[0] || 'https://placehold.co/40x40.png' });
-            }
-        });
+         excursions.forEach(ex => {
+             if (!countryMap.has(ex.country)) {
+                 countryMap.set(ex.country, { 
+                   name: ex.country, 
+                   image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : 'https://placehold.co/40x40.png') 
+                 });
+             }
+         });
         const allCountries = Array.from(countryMap.values());
         return maxTabs ? allCountries.slice(0, maxTabs) : allCountries;
     }, [excursions, maxTabs, tabs, tabType]);

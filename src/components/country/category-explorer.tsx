@@ -78,10 +78,10 @@ export const CategoryExplorer = ({ tags, allTags, countryName, cityName, onShowA
     const tagImages = useMemo(() => {
         const images = new Map<string, string>();
         excursions.forEach(ex => {
-            const ids = Array.isArray(ex.tag_ids) ? ex.tag_ids : [];
-            ids.forEach((tid: string) => {
-                if (!images.has(tid) && ex.images?.[0]) images.set(tid, ex.images[0]);
-            });
+             const ids = Array.isArray(ex.tag_ids) ? ex.tag_ids : [];
+             ids.forEach((tid: string) => {
+                 if (!images.has(tid) && ex.images?.[0] && ex.images?.[0].length > 0) images.set(tid, ex.images[0]);
+             });
         });
         return images;
     }, [excursions]);
