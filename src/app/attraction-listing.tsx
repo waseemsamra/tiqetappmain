@@ -155,7 +155,7 @@ const renderCarousel = () => (
 
         <CarouselContent className="-ml-4">
           {filteredExcursions.map((excursion) => (
-            <CarouselItem key={excursion.id} className="pl-4 basis-1/2 lg:basis-1/3 xl:basis-1/3">
+            <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
               <div className="h-full py-4">
                 <AttractionCard
                   excursion={excursion}
