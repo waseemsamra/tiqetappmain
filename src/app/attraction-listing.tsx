@@ -1,3 +1,4 @@
+// GitHub update: 2026-06-13T17:28:37Z - Sync trigger
 "use client";
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
