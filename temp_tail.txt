@@ -1,0 +1,16 @@
+                                height={60} 
+                                className="rounded-lg object-cover" 
+                                data-ai-hint={item.aiHint}
+                             />
+                             <span className="text-left">{item.question}</span>
+                           </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground text-base pl-20">
+                            {item.answer}
+                        </AccordionContent>
+                    </AccordionItem>
+                ))}
+            </Accordion>
+        </section>
+    )
+}
