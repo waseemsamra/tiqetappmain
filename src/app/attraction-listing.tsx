@@ -1,7 +1,4 @@
-
-'use client';
-
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Excursion, HeroContent } from '@/types';
@@ -108,100 +105,100 @@ export default function AttractionListingSection({ title, excursions, showViewAl
     }, [activeTab, excursions, showTabs, tabType]);
 
     const renderGrid = () => (
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-           {excursions.map((excursion) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {excursions.map((excursion) => (
                 <div key={excursion.id} className="h-full">
-                   <AttractionCard 
-                        excursion={excursion} 
-                        wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                    <AttractionCard
+                      excursion={excursion}
+                      wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
                     />
-               </div>
-           ))}
-       </div>
+                </div>
+            ))}
+        </div>
     );
 
-const renderCarousel = () => (
-    <div className="relative">
-      <Carousel
-        opts={{ align: "start", loop: false }}
-        className="w-full"
-      >
-        {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (
-          <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
-            {cities.map(city => (
-              <CityTab
-                key={city.name}
-                city={city.name}
-                image={city.image}
-                isActive={activeTab === city.name}
-                onClick={() => setActiveTab(city.name as string)}
-              />
-            ))}
-          </div>
-        )}
+    const renderCarousel = () => (
+        <div className="relative">
+            <Carousel
+                opts={{ align: "start", loop: false }}
+                className="w-full"
+            >
+                {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (
+                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
+                        {cities.map(city => (
+                            <CityTab
+                                key={city.name}
+                                city={city.name}
+                                image={city.image}
+                                isActive={activeTab === city.name}
+                                onClick={() => setActiveTab(city.name as string)}
+                            />
+                        ))}
+                    </div>
+                )}
 
-        {showTabs && tabs && tabs.length > 1 && tabType === 'country' && (
-          <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
-            {countries.map(country => (
-              <CountryTab
-                key={country.name}
-                country={country.name}
-                isActive={activeTab === country.name}
-                onClick={() => setActiveTab(country.name as string)}
-              />
-            ))}
-          </div>
-        )}
+                {showTabs && tabs && tabs.length > 1 && tabType === 'country' && (
+                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
+                        {countries.map(country => (
+                            <CountryTab
+                                key={country.name}
+                                country={country.name}
+                                isActive={activeTab === country.name}
+                                onClick={() => setActiveTab(country.name as string)}
+                            />
+                        ))}
+                    </div>
+                )}
 
-        <CarouselContent className="-ml-4">
-          {filteredExcursions.map((excursion) => (
-            <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
-              <div className="h-full py-4">
-                <AttractionCard
-                  excursion={excursion}
-                  wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
-                />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-        <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-      </Carousel>
-    </div>
-  );
-
-  if (!excursions || excursions.length === 0) {
-    return null;
-  }
-
-  const getExploreUrl = () => {
-    if (tabType === 'country') {
-      return `/country/${encodeURIComponent(activeTab || '')}`;
-    }
-    return `/city/${encodeURIComponent(activeTab || '')}`;
-  };
-
-  return (
-    <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 text-left mb-4 md:mb-0">
-          {title}
-        </h2>
-      </div>
-
-      {layout === 'grid' ? renderGrid() : renderCarousel()}
-
-      {showViewAllButton && layout === 'carousel' && (
-        <div className="mt-8 text-left">
-          <Link href={getExploreUrl()}>
-            <Button variant="outline">
-              Explore {activeTab || 'All'} <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+                <CarouselContent className="-ml-4">
+                    {filteredExcursions.map((excursion) => (
+                        <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
+                            <div className="h-full py-4">
+                                <AttractionCard
+                                  excursion={excursion}
+                                  wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                                  layout="horizontal"
+                                />
+                            </div>
+                        )}
+                    )}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+            </Carousel>
         </div>
-      )}
-    </div>
-  );
-}
+    );
 
+    if (!excursions || excursions.length === 0) {
+        return null;
+    }
+
+    const getExploreUrl = () => {
+        if (tabType === 'country') {
+            return `/country/${encodeURIComponent(activeTab || '')}`;
+        }
+        return `/city/${encodeURIComponent(activeTab || '')}`;
+    };
+
+    return (
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 text-left mb-4 md:mb-0">
+                    {title}
+                </h2>
+            </div>
+
+            {layout === 'grid' ? renderGrid() : renderCarousel()}
+
+            {showViewAllButton && layout === 'carousel' && (
+                <div className="mt-8 text-left">
+                    <Link href={getExploreUrl()}>
+                        <Button variant="outline">
+                            Explore {activeTab || 'All'} <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
+                </div>
+            )}
+        </div>
+    );
+}
