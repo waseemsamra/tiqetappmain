@@ -115,7 +115,7 @@ export default function AttractionListingSection({ title, excursions, showViewAl
                 </div>
             ))}
         </div>
-    );
+}
 
     const renderCarousel = () => (
         <div className="relative">
