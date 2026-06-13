@@ -15,10 +15,15 @@ interface FaqItem {
 }
 
 interface FaqSectionProps {
-  items: FaqItem[];
+  items?: FaqItem[];
 }
 
-export default function FaqSection({ items }: FaqSectionProps) {
+export default function FaqSection({ items = [] }: FaqSectionProps) {
+  // If no items or not an array, render nothing
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+
   return (
     <Accordion type="single" collapsible className="w-full">
       {items.map((item, index) => (
