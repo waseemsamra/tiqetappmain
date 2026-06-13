@@ -37,7 +37,6 @@ const CountryTab = ({ country, isActive, onClick }: { country: string, isActive:
     </button>
 );
 
-
 interface AttractionListingSectionProps {
     title: string;
     excursions: Excursion[];
@@ -66,7 +65,6 @@ export default function AttractionListingSection({ title, excursions, showViewAl
             }
         });
         const allCities = Array.from(cityMap.values());
-        // If maxTabs is set, limit to first N cities
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
     }, [excursions, maxTabs, tabs, tabType]);
 
@@ -84,7 +82,6 @@ export default function AttractionListingSection({ title, excursions, showViewAl
             }
         });
         const allCountries = Array.from(countryMap.values());
-        // If maxTabs is set, limit to first N countries
         return maxTabs ? allCountries.slice(0, maxTabs) : allCountries;
     }, [excursions, maxTabs, tabs, tabType]);
 
@@ -104,17 +101,18 @@ export default function AttractionListingSection({ title, excursions, showViewAl
         return excursions;
     }, [activeTab, excursions, showTabs, tabType]);
 
-        }
+    const renderGrid = () => (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {excursions.map((excursion) => (
+            {filteredExcursions.map((excursion) => (
                 <div key={excursion.id} className="h-full">
                     <AttractionCard
-                      excursion={excursion}
-                      wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> ,
+                        excursion={excursion}
+                        wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
                     />
                 </div>
-            }})
+            ))}
         </div>
+    );
 
     const renderCarousel = () => (
         <div className="relative">
@@ -154,13 +152,13 @@ export default function AttractionListingSection({ title, excursions, showViewAl
                         <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
                             <div className="h-full py-4">
                                 <AttractionCard
-                                  excursion={excursion}
-                                  wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
-                                  layout="horizontal"
+                                    excursion={excursion}
+                                    wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                                    layout="horizontal"
                                 />
                             </div>
-                        )}
-                    )}
+                        </CarouselItem>
+                    ))}
                 </CarouselContent>
                 <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
                 <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
