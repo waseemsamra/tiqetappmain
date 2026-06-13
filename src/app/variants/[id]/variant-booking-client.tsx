@@ -1,3 +1,4 @@
+// Updated: 2026-06-13T20:25:59+04:00 - GitHub update trigger
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
