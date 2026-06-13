@@ -97,7 +97,7 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
             <AttractionListingSection
              title="Most popular things to do"
              excursions={homePageData}
-             layout="carousel"
+             layout="grid"
              showViewAllButton={false}
              showTabs={false}
              tabType="city"
