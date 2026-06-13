@@ -36,13 +36,15 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                     ? 'w-2/5 min-w-[120px] sm:w-full sm:h-48'
                     : 'w-full h-48'
             )}>
-                 <Image 
-                     src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : 'https://placehold.co/400x300.png'} 
-                     alt={excursion.name} 
-                     fill
-                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-                     data-ai-hint="attraction"
-                 />
+      {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                        <Image 
+                          src={excursion.images?.[0]} 
+                          alt={excursion.name} 
+                          fill
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+                          data-ai-hint="attraction"
+                        />
+                      )}
             </div>
             
             <div className={cn(

@@ -185,7 +185,9 @@ function DetailsPageContent() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                               <div className="flex items-start gap-4">
-                                 <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/64x64.png'} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" />
+                                 {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
+                                   <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" />
+                                 ) : null}
                                  <h3 className="font-bold flex-1">{excursion.name}</h3>
                              </div>
                              <div className="border-t border-muted -mx-6 my-4" />

@@ -86,7 +86,9 @@ function CheckoutPageContent() {
                      <Card className="sticky top-24">
                         <CardHeader className="p-0">
                             <div className="relative aspect-[4/3]">
-                                 <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/400x300.png'} alt={excursion.name} fill className="object-cover rounded-t-lg" />
+                                 {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
+                                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" />
+                                 ) : null}
                             </div>
                         </CardHeader>
                         <CardContent className="p-6 space-y-4">

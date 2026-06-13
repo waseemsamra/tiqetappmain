@@ -262,13 +262,15 @@ export function UniversalSearch() {
                                     <li className="px-3 py-2 text-xs font-semibold text-muted-foreground bg-muted/50">Activities</li>
                                     {results.activities.map((ex) => (
                                         <li key={ex.id}>
-                                             <Link href={`/excursions/${ex.id}`} className="flex items-center gap-4 p-3 hover:bg-muted">
-                                                 <Image src={ex.images[0] && ex.images[0].length > 0 ? ex.images[0] : 'https://placehold.co/48x48.png'} alt={ex.name} width={48} height={48} className="rounded-md object-cover" />
-                                                 <div>
-                                                     <p className="font-semibold">{ex.name}</p>
-                                                     <p className="text-sm text-muted-foreground">{ex.city}, {ex.country}</p>
-                                                 </div>
-                                             </Link>
+                                              <Link href={`/excursions/${ex.id}`} className="flex items-center gap-4 p-3 hover:bg-muted">
+                                                  {ex.images?.[0] && ex.images?.[0].length > 0 && (
+                                                    <Image src={ex.images[0]} alt={ex.name} width={48} height={48} className="rounded-md object-cover" />
+                                                  )}
+                                                  <div>
+                                                      <p className="font-semibold">{ex.name}</p>
+                                                      <p className="text-sm text-muted-foreground">{ex.city}, {ex.country}</p>
+                                                  </div>
+                                              </Link>
                                         </li>
                                     ))}
                                 </>
