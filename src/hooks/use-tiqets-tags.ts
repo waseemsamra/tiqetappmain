@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import type { TiqetsTag } from '@/types';
 
 export function useTiqetsTags() {
-  const [tags, setTags] = useState<{ id: string; name: string; type_name: string }[]>([]);
+  const [tags, setTags] = useState<TiqetsTag[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

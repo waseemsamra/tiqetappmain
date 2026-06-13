@@ -13,7 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CategoryExplorer } from '@/components/country/category-explorer';
 import { AllExperiences } from '@/components/country/all-experiences';
-import { FaqSection } from '@/components/country/faq-section';
+import FaqSection from '@/components/country/faq-section';
 import { Separator } from '@/components/ui/separator';
 import { AttractionCard } from '@/components/attraction-card';
 import { useState, useEffect, useMemo } from 'react';
@@ -65,7 +65,11 @@ export default function CityClientPage({
     }, [user]);
 
     const topRatedExcursions = useMemo(() => 
-        [...initialExcursions].sort((a, b) => b.rating - a.rating).slice(0, 10),
+        [...initialExcursions].sort((a, b) => {
+            const ratingA = a.rating ?? 0;
+            const ratingB = b.rating ?? 0;
+            return ratingB - ratingA;
+        }).slice(0, 10),
     [initialExcursions]);
 
     const handPickedExcursions = useMemo(() => 
@@ -74,9 +78,10 @@ export default function CityClientPage({
     
     const filteredExcursions = useMemo(() => {
         if (selectedTagIds.length === 0) return initialExcursions;
-        return initialExcursions.filter(excursion => 
-            (excursion as any).tag_ids?.some((tid: string) => selectedTagIds.includes(tid))
-        );
+        return initialExcursions.filter(excursion => {
+            const tagIds = Array.isArray(excursion.tag_ids) ? excursion.tag_ids : [];
+            return tagIds.some((tid: string) => selectedTagIds.includes(tid));
+        });
     }, [initialExcursions, selectedTagIds]);
     
     const renderWishlistButton = (excursion: Excursion) => {
@@ -148,8 +153,8 @@ export default function CityClientPage({
             </section>
             
              <div className="space-y-16">
-                <Separator />
-                <FaqSection countryName={cityName} />
+        <Separator />
+        <FaqSection />
             </div>
 
         </div>
