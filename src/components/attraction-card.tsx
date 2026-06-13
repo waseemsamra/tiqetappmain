@@ -10,7 +10,7 @@ const StarRating = ({ rating }: { rating: number | undefined }) => (
         <Star className="h-4 w-4 text-yellow-400 fill-current" />
         <span className="text-sm font-bold text-gray-800">{Number(rating || 0).toFixed(1)}</span>
     </div>
-}
+);
 
 
 export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vertical' }: { excursion: Excursion, wishlistButton?: React.ReactNode, rank?: number, layout?: 'horizontal' | 'vertical' }) => (
