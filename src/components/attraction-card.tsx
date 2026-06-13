@@ -53,13 +53,25 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                 <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{excursion.description}</p>
                 
-                {/* Fixed: Align review with price, not with "From" */}
-                <div className="flex justify-between mt-auto pt-4">
-                    <div className="flex items-end">
+                {/* Responsive alignment */}
+                <div className={cn(
+                    "flex justify-between mt-auto pt-4",
+                    layout === 'horizontal' 
+                        ? "sm:items-center" // Desktop: center align
+                        : "items-center" // Vertical layout: center align
+                )}>
+                    <div className={cn(
+                        layout === 'horizontal' 
+                            ? "sm:flex sm:items-center" // Desktop: normal
+                            : "flex items-center" // Vertical: normal
+                    )}>
                         <StarRating rating={excursion.rating} />
                     </div>
                     <div className="text-right">
-                        <span className="text-xs text-gray-500 block">From</span>
+                        <span className={cn(
+                            "text-xs text-gray-500",
+                            layout === 'horizontal' ? "sm:inline md:block" : "block"
+                        )}>From</span>
                         <p className="font-bold text-gray-900">€{Number(excursion.price || 0).toFixed(2)}</p>
                     </div>
                 </div>
