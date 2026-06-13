@@ -67,7 +67,7 @@ export function FaqSection({ countryName }: { countryName: string }) {
                     <AccordionItem key={index} value={`item-${index}`}>
                         <AccordionTrigger className="text-lg hover:no-underline">
                            <div className="flex items-center gap-4">
-                             <Image 
+                                <Image                                  src={item.image}                                   alt={item.question}                                   width={60}                                   height={60}                                   className="rounded-lg object-cover unoptimized"                                   data-ai-hint="attraction"                                 />
                                 src={item.image} 
                                 alt={item.question} 
                                 width={60} 

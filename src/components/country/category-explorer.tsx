@@ -32,7 +32,7 @@ const CategoryCard = ({ category, countryName, cityName, isSelected, onSelect }:
         <div className="group relative">
             <Link href={`/search?${searchQuery}`} className="block">
                 <div className="relative rounded-lg overflow-hidden h-24">
-                    <Image src={category.image} alt={category.name} fill className="object-cover" data-ai-hint="attraction" />
+                    <Image src={category.image} alt={category.name} fill className="object-cover unoptimized" data-ai-hint="attraction" />
                     <div className="absolute inset-0 bg-black/40" />
                     <div className="absolute bottom-2 left-3 text-white">
                         <h3 className="font-bold">{category.name}</h3>
