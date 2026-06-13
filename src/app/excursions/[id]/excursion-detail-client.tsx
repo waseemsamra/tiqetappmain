@@ -22,26 +22,9 @@ export default function ExcursionDetailClient({
     addRecentlyViewed(excursion.id);
   }, [excursion.id, addRecentlyViewed]);
 
-  const activeVariants = useMemo(() => {
-    const isActive = (v: any) => {
-      if (typeof v.status === 'boolean') return v.status;
-      if (typeof v.status === 'string') return !['inactive', 'sold_out', 'unavailable', 'cancelled', 'closed', 'expired'].includes(v.status);
-      return true;
-    };
-    const fetched = (excursion.variants || []).filter(isActive);
-    if (fetched.length > 0) return fetched;
-    return [
-      {
-        id: `${excursion.id}-default`,
-        name: 'Standard Ticket',
-        price: (excursion as any).price || 0,
-        duration: excursion.duration,
-        description: excursion.description || 'Entry ticket with standard access',
-        images: excursion.images,
-        status: 'available',
-      } as any,
-    ];
-  }, [excursion]);
+  const variants = useMemo(() => {
+    return excursion.variants || [];
+  }, [excursion.variants]);
 
   return (
     <>
@@ -58,22 +41,24 @@ export default function ExcursionDetailClient({
           reviews={excursion.reviewsTotal || excursion.reviews?.length}
         />
 
-        <main className="space-y-6 mt-8">
-          {activeVariants.length > 0 && (
-            <section>
-              <h2 className="text-xl font-bold mb-4">Available ticket options</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {activeVariants.map((variant) => (
-                  <VariantCard 
-                    key={variant.id} 
-                    variant={variant} 
-                    excursion={excursion}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-        </main>
+       <main className="space-y-6 mt-8">
+         {variants.length > 0 ? (
+           <section>
+             <h2 className="text-xl font-bold mb-4">Available ticket options</h2>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+               {variants.map((variant) => (
+                 <VariantCard 
+                   key={variant.id} 
+                   variant={variant} 
+                   excursion={excursion}
+                 />
+               ))}
+             </div>
+           </section>
+         ) : (
+           <p className="text-center text-muted-foreground">No ticket options available for this excursion.</p>
+         )}
+       </main>
       </div>
     </>
   );
