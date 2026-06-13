@@ -109,6 +109,7 @@ export default function AttractionListingSection({ title, excursions, showViewAl
                     <AttractionCard
                         excursion={excursion}
                         wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                        layout="horizontal"
                     />
                 </div>
             ))}
