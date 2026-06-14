@@ -16,28 +16,28 @@ import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const marketingContent = [
-    {
-        id: 'promo-video-1',
-        type: 'Video',
-        title: 'Exotic Getaway Promo',
-        thumbnail: 'https://picsum.photos/seed/promo1/400/225',
-        description: 'A captivating video showcasing stunning travel destinations. Perfect for social media stories.',
-    },
-    {
-        id: 'image-post-1',
-        type: 'Image',
-        title: 'Paris Adventure',
-        thumbnail: 'https://picsum.photos/seed/promo2/400/225',
-        description: 'High-quality image of the Eiffel Tower. Ideal for Instagram and Facebook posts.',
-    },
-    {
-        id: 'email-template-1',
-        type: 'Email',
-        title: 'Exclusive Summer Deals',
-        thumbnail: 'https://picsum.photos/seed/promo3/400/225',
-        description: 'A pre-written email template to send to your prospect list about the latest summer promotions.',
-    },
-];
+     {
+         id: 'promo-video-1',
+         type: 'Video',
+         title: 'Exotic Getaway Promo',
+         thumbnail: null,
+         description: 'A captivating video showcasing stunning travel destinations. Perfect for social media stories.',
+     },
+     {
+         id: 'image-post-1',
+         type: 'Image',
+         title: 'Paris Adventure',
+         thumbnail: null,
+         description: 'High-quality image of the Eiffel Tower. Ideal for Instagram and Facebook posts.',
+     },
+     {
+         id: 'email-template-1',
+         type: 'Email',
+         title: 'Exclusive Summer Deals',
+         thumbnail: null,
+         description: 'A pre-written email template to send to your prospect list about the latest summer promotions.',
+     },
+ ];
 
 const MarketingContentCard = ({ content, onGenerateLink }: { content: (typeof marketingContent)[0], onGenerateLink: (contentId: string, campaign: string) => void }) => {
     const { toast } = useToast();
@@ -51,10 +51,12 @@ const MarketingContentCard = ({ content, onGenerateLink }: { content: (typeof ma
 
     return (
         <Card className="overflow-hidden">
-            <div className="relative aspect-video">
-                <Image src={content.thumbnail} alt={content.title} fill className="object-cover" />
-                 <div className="absolute top-2 right-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full">{content.type}</div>
-            </div>
+             <div className="relative aspect-video">
+                 {content.thumbnail && content.thumbnail.length > 0 && (
+                   <Image src={content.thumbnail} alt={content.title} fill className="object-cover" />
+                 )}
+                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full">{content.type}</div>
+             </div>
             <CardContent className="p-4">
                 <h3 className="font-semibold">{content.title}</h3>
                 <p className="text-sm text-muted-foreground mt-1">{content.description}</p>

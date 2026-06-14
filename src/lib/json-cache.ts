@@ -422,12 +422,12 @@ function getSeedExperiences(): any[] {
       country_name: 'Netherlands',
       price: 25,
       currency: 'EUR',
-      duration: '1 hour',
-      rating: 4.6,
-      reviews_total: 850,
-      image_url: 'https://placehold.co/600x400.png',
-      experience_url: '',
-      product_ids: []
+       duration: '1 hour',
+       rating: 4.6,
+       reviews_total: 850,
+       image_url: null,
+       experience_url: '',
+       product_ids: []
     },
     {
       id: 'exp-eiffel-tower',
@@ -439,12 +439,12 @@ function getSeedExperiences(): any[] {
       country_name: 'France',
       price: 30,
       currency: 'EUR',
-      duration: '1.5 hours',
-      rating: 4.6,
-      reviews_total: 1800,
-      image_url: 'https://placehold.co/600x400.png',
-      experience_url: '',
-      product_ids: []
+       duration: '1.5 hours',
+       rating: 4.6,
+       reviews_total: 1800,
+       image_url: null,
+       experience_url: '',
+       product_ids: []
     },
     {
       id: 'exp-colosseum',
@@ -459,7 +459,7 @@ function getSeedExperiences(): any[] {
       duration: '2 hours',
       rating: 4.8,
       reviews_total: 1500,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: '',
       product_ids: []
     },
@@ -476,7 +476,7 @@ function getSeedExperiences(): any[] {
       duration: '1.5 hours',
       rating: 4.7,
       reviews_total: 1200,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: '',
       product_ids: []
     },
@@ -493,7 +493,7 @@ function getSeedExperiences(): any[] {
       duration: '3 hours',
       rating: 4.9,
       reviews_total: 1600,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: '',
       product_ids: []
     },
@@ -510,7 +510,7 @@ function getSeedExperiences(): any[] {
       duration: '2 hours',
       rating: 4.7,
       reviews_total: 2100,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: '',
       product_ids: []
     }
@@ -608,7 +608,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '1 hour',
       rating: 4.6,
       reviews_total: 850,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -624,7 +624,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '1.5 hours',
       rating: 4.6,
       reviews_total: 1800,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -640,7 +640,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '2 hours',
       rating: 4.8,
       reviews_total: 1500,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -656,7 +656,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '1.5 hours',
       rating: 4.7,
       reviews_total: 1200,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -672,7 +672,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '1 hour',
       rating: 4.7,
       reviews_total: 1000,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -688,7 +688,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '1.5 hours',
       rating: 4.6,
       reviews_total: 900,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -704,7 +704,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '3 hours',
       rating: 4.9,
       reviews_total: 1600,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -720,7 +720,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '2 hours',
       rating: 4.7,
       reviews_total: 2100,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     },
     {
@@ -736,7 +736,7 @@ function getSeedProducts(): CachedProduct[] {
       duration: '15 minutes',
       rating: 4.8,
       reviews_total: 450,
-      image_url: 'https://placehold.co/600x400.png',
+      image_url: null,
       experience_url: ''
     }
   ];

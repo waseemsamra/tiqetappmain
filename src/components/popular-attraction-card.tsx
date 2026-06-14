@@ -2,17 +2,14 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col group h-full">
         <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-xl">
-                 <Image 
-                     src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : 'https://placehold.co/400x300.png'} 
-                     alt={excursion.name} 
-                     fill 
-                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
-                     data-ai-hint="attraction"
-                 />
-                {excursion.discount && (
-                    <div className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
-                        UP TO -{excursion.discount}%
-                    </div>
+                {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                    <Image 
+                      src={excursion.images?.[0]} 
+                      alt={excursion.name} 
+                      fill 
+                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+                      data-ai-hint="attraction"
+                    />
                 )}
             </div>
             <div className="p-4 flex flex-col flex-grow">

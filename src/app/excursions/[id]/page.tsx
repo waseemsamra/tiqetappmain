@@ -69,7 +69,7 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
             price: isNaN(price) ? 0 : price,
             duration: excursion.duration || 'Not specified',
             description: product.description || product.summary || excursion.description || '',
-            images: (product.image_url && [product.image_url]) || (excursion.images && excursion.images.length > 0 ? excursion.images : ['https://via.placeholder.com/600x400?text=No+Image']),
+            images: (product.image_url && [product.image_url]) || (excursion.images && excursion.images.length > 0 ? excursion.images : []),
             status: 'available',
             whatsincluded: product.whats_included || '',
             whatsnotincluded: product.whats_excluded || '',

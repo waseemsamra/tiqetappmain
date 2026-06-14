@@ -25,9 +25,9 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
       );
     }
 
-    const allImages: string[] = Array.isArray(variant.images)
-      ? variant.images
-      : ['https://placehold.co/800x600.png'];
+     const allImages: string[] = Array.isArray(variant.images)
+       ? variant.images
+       : [];
     const thumbs = allImages.slice(1, 5); // Get next 4 images for thumbnails
 
     return (
@@ -38,36 +38,40 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         
         {/* Hero Section: Responsive Layout */}
         <div className="flex w-full">
-          {/* Mobile: Show only large image (full width) */}
-          {/* Desktop: 50/50 split */}
-          <div className="w-full md:w-1/2">
-            <div className="relative h-[500px] w-full">
-              <Image
-                src={allImages[0]}
-                alt={variant.name}
-                fill
-                className="object-cover w-full h-full"
-                unoptimized
-              />
-            </div>
+           {/* Mobile: Show only large image (full width) */}
+           <div className="w-full md:w-1/2">
+             {allImages[0] && allImages[0].length > 0 && (
+               <div className="relative h-[500px] w-full">
+                 <Image
+                   src={allImages[0]}
+                   alt={variant.name}
+                   fill
+                   className="object-cover w-full h-full"
+                   unoptimized
+                 />
+               </div>
+             )}
+           </div>
           </div>
           
-          {/* Desktop Only: 2x2 Thumbnail Grid (hidden on mobile) */}
-          <div className="hidden md:block w-0 md:w-1/2">
-            <div className="grid grid-cols-2 gap-4 h-[500px] w-full">
-              {thumbs.map((src, idx) => (
-                <div key={idx} className="relative h-full w-full">
-                  <Image
-                    src={src}
-                    alt={`${variant.name} ${idx + 2}`}
-                    fill
-                    className="object-cover w-full h-full"
-                    unoptimized
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+           {/* Desktop Only: 2x2 Thumbnail Grid (hidden on mobile) */}
+           <div className="hidden md:block w-0 md:w-1/2">
+             <div className="grid grid-cols-2 gap-4 h-[500px] w-full">
+               {thumbs.map((src, idx) => (
+                 <div key={idx} className="relative h-full w-full">
+                   {src && src.length > 0 && (
+                     <Image
+                       src={src}
+                       alt={`${variant.name} ${idx + 2}`}
+                       fill
+                       className="object-cover w-full h-full"
+                       unoptimized
+                     />
+                   )}
+                 </div>
+               ))}
+             </div>
+           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

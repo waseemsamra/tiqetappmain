@@ -107,7 +107,7 @@ export const CategoryExplorer = ({ tags, allTags, countryName, cityName, onShowA
         name: tag.name,
         type_name: tag.type_name,
         experienceCount: tagCounts.get(tag.id) || 0,
-        image: tagImages.get(tag.id) || `https://picsum.photos/seed/${encodeURIComponent(tag.name)}/400/300`,
+         image: tagImages.get(tag.id) 
     }));
 
     return (

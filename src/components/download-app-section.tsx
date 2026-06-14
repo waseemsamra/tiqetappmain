@@ -57,15 +57,8 @@ export default function DownloadAppSection() {
                         </p>
                     </div>
 
-                    <div className="relative h-80 md:h-full min-h-[300px]">
-                        <Image
-                            src="https://placehold.co/500x500.png"
-                            alt="AAFare app on mobile phones"
-                            fill
-                            className="object-contain"
-                            data-ai-hint="app user interface"
-                        />
-                    </div>
+                     <div className="relative h-80 md:h-full min-h-[300px]">
+                     </div>
                 </div>
             </div>
         </div>

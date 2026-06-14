@@ -60,18 +60,18 @@ export default function AttractionListingSection({ title, excursions, showViewAl
                   image: excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] && 
                         excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 
                         ? excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] 
-                        : 'https://placehold.co/40x40.png'
+                        : null
               }));
         }
         const cityMap = new Map<string, { name: string, image: string }>();
-         excursions.forEach(ex => {
-             if (!cityMap.has(ex.city)) {
-                 cityMap.set(ex.city, { 
-                   name: ex.city, 
-                   image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : 'https://placehold.co/40x40.png') 
-                 });
-             }
-         });
+          excursions.forEach(ex => {
+              if (!cityMap.has(ex.city)) {
+                  cityMap.set(ex.city, { 
+                    name: ex.city, 
+                    image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : null) 
+                  });
+              }
+          });
         const allCities = Array.from(cityMap.values());
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
     }, [excursions, maxTabs, tabs, tabType]);
@@ -83,18 +83,18 @@ export default function AttractionListingSection({ title, excursions, showViewAl
                   image: excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] && 
                         excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 
                         ? excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] 
-                        : 'https://placehold.co/40x40.png'
+                        : null
               }));
          }
         const countryMap = new Map<string, { name: string, image: string }>();
-         excursions.forEach(ex => {
-             if (!countryMap.has(ex.country)) {
-                 countryMap.set(ex.country, { 
-                   name: ex.country, 
-                   image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : 'https://placehold.co/40x40.png') 
-                 });
-             }
-         });
+          excursions.forEach(ex => {
+              if (!countryMap.has(ex.country)) {
+                  countryMap.set(ex.country, { 
+                    name: ex.country, 
+                    image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : null) 
+                  });
+              }
+          });
         const allCountries = Array.from(countryMap.values());
         return maxTabs ? allCountries.slice(0, maxTabs) : allCountries;
     }, [excursions, maxTabs, tabs, tabType]);

@@ -18,20 +18,20 @@ export function transformTiqetsProduct(product: any): Excursion {
   const ratingsTotal = product.ratings?.total || product.ratings?.count || 0;
   const safeRating = typeof ratingValue === 'number' ? ratingValue : 
                    typeof ratingValue === 'string' && !isNaN(Number(ratingValue)) ? Number(ratingValue) : 0;
-      
-   const imageUrls = Array.isArray(product.images) 
-     ? product.images.map((img: any) => {
-         // If img is a string, use it directly
-         if (typeof img === 'string') {
-           return img;
-         }
-         // If img is an object, try to get the best available size
-         return img?.medium || img?.large || img?.small || img?.extra_large || '';
-       })
-       .filter(Boolean)  // Remove empty strings
-     : [];
-  
-  // For packages without images, try to get images from package_products
+       
+    const imageUrls = Array.isArray(product.images) 
+      ? product.images.map((img: any) => {
+          // If img is a string, use it directly
+          if (typeof img === 'string') {
+            return img;
+          }
+          // If img is an object, try to get the best available size
+          return img?.medium || img?.large || img?.small || img?.extra_large || '';
+        })
+        .filter(img => img && img.length > 0)  // Filter out empty strings
+      : [];
+   
+   // For packages without images, try to get images from package_products
   if (imageUrls.length === 0 && Array.isArray(product.package_products) && product.package_products.length > 0) {
     // We'll populate these asynchronously in the calling code
     // For now, use the summary as it often contains rich info
@@ -307,25 +307,25 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
           allActivities.map(async (p: any) => {
             let images: string[] = [];
             if (Array.isArray(p.images)) {
-              images = p.images
-                .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
-                .filter(Boolean);
+               images = p.images
+                 .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
+                 .filter(img => img && img.length > 0);
             }
             if (images.length === 0 && p.venue?.id) {
       try {
         const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
         if (venueResp.ok) {
-          const venueData = await venueResp.json();
-          images = (venueData.experience?.images || venueData.images || [])
-            .map((img: any) => {
-              // If img is a string, use it directly
-              if (typeof img === 'string') {
-                return img;
-              }
-              // If img is an object, try to get the best available size
-              return img?.medium || img?.large || img?.small || img?.extra_large || '';
-            })
-            .filter(Boolean);  // Remove empty strings
+           const venueData = await venueResp.json();
+           images = (venueData.experience?.images || venueData.images || [])
+             .map((img: any) => {
+               // If img is a string, use it directly
+               if (typeof img === 'string') {
+                 return img;
+               }
+               // If img is an object, try to get the best available size
+               return img?.medium || img?.large || img?.small || img?.extra_large || '';
+             })
+             .filter(img => img && img.length > 0);  // Filter out empty strings
         }
       } catch (e) {}
             }
@@ -469,9 +469,9 @@ export async function fetchTiqetsProductVariants(productIds: string[]): Promise<
          }
          // If img is an object, try to get the best available size
          return img?.medium || img?.large || img?.small || img?.extra_large || '';
-       })
-       .filter(Boolean)  // Remove empty strings
-     : [];
+        })
+        .filter(img => img && img.length > 0)  // Filter out empty strings
+      : [];
 
       results.push({
         id: String(product.id),
@@ -550,9 +550,9 @@ export const fetchTiqetsProductById = async (id: string): Promise<Excursion | nu
              }
              // If img is an object, try to get the best available size
              return img?.medium || img?.large || img?.small || img?.extra_large || '';
-           })
-           .filter(Boolean);  // Remove empty strings
-         if (venueImages.length) result.images = venueImages;
+            })
+            .filter(img => img && img.length > 0);  // Filter out empty strings
+          if (venueImages.length) result.images = venueImages;
        }
      } catch (e) {}
    }

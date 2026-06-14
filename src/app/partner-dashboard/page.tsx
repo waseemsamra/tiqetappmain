@@ -135,7 +135,9 @@ export default async function PartnerDashboardPage() {
                             <TableRow key={excursion.id}>
                                 <TableCell>
                                     <div className="flex items-center gap-4">
-                                         <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/100x75.png'} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" />
+                                         {excursion.images && excursion.images[0] && excursion.images[0].length > 0 && (
+                                           <Image src={excursion.images[0]} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" />
+                                         )}
                                         <div>
                                             <p className="font-medium">{excursion.name}</p>
                                             <p className="text-sm text-muted-foreground">{excursion.city}</p>

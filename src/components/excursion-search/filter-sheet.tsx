@@ -63,9 +63,9 @@ export function FilterDialog({ isOpen, onOpenChange, tags = [], allExcursions, s
                 const tagIds = Array.isArray(ex.tag_ids) ? ex.tag_ids : [];
                 return tagIds.includes(tag.id);
             });
-             const imageUrl = (firstExcursionOfTag?.images?.[0] && firstExcursionOfTag?.images?.[0].length > 0 ? 
-                               firstExcursionOfTag?.images?.[0] : 
-                               'https://picsum.photos/128/128');
+              const imageUrl = (firstExcursionOfTag?.images?.[0] && firstExcursionOfTag?.images?.[0].length > 0 ? 
+                                firstExcursionOfTag?.images?.[0] : 
+                                null);
             imageMap.set(tag.id, imageUrl);
         });
         return imageMap;
@@ -87,7 +87,7 @@ export function FilterDialog({ isOpen, onOpenChange, tags = [], allExcursions, s
                              <CategoryItem 
                                 key={tag.id}
                                 type={tag}
-                                imageSrc={tagImages.get(tag.id) || 'https://picsum.photos/128/128'}
+                                 imageSrc={tagImages.get(tag.id)}
                                 isSelected={selectedTags.includes(tag.id)}
                                 onSelect={() => onTagChange(tag.id)}
                              />

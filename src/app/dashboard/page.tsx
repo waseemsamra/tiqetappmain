@@ -47,7 +47,7 @@ const WishlistItemCard = ({ excursion }: { excursion: Excursion }) => (
     <Link href={`/excursions/${excursion.id}`} className="block group">
         <Card className="overflow-hidden transition-shadow hover:shadow-lg h-full flex flex-col">
             <div className="relative aspect-video">
-                 <Image src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : 'https://placehold.co/400x300.png'} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" />
+                  <Image src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : null} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" />
                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
             <CardContent className="p-4 flex-grow">

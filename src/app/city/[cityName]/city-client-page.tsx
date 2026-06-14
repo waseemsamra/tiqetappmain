@@ -89,25 +89,11 @@ export default function CityClientPage({
         return <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} />;
     };
 
-    return (
-        <>
-        <div className="container mx-auto px-4 py-8 space-y-16">
-            <header className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
-                <Image 
-                  src="https://picsum.photos/seed/12/1200/400" 
-                  alt={`Things to do in ${cityName}`} 
-                  fill 
-                  className="object-cover"
-                  data-ai-hint="city skyline"
-                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-8 text-white">
-                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Things to do in {cityName}</h1>
-                    <p className="mt-2 text-lg max-w-2xl">
-                       Explore the best attractions, tours, and experiences {cityName} has to offer.
-                    </p>
-                </div>
-            </header>
+     return (
+         <>
+         <div className="container mx-auto px-4 py-8 space-y-16">
+              <header className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+              </header>
 
             <section>
                  <div className="mb-2 flex items-center justify-between">
