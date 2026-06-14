@@ -18,12 +18,11 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   }, [productId]);
 
   return (
-    <div>
-      <div
-        data-tiqets-widget="booking"
-        data-product-id={productId}
-        data-trigger-selector="#tiqets-trigger"
-      />
+    <div
+      data-tiqets-widget="booking"
+      data-product-id={productId}
+      data-trigger-selector="#tiqets-trigger"
+    >
       <button
         id="tiqets-trigger"
         type="button"
