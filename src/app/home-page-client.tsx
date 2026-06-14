@@ -83,7 +83,6 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
             title="Best places to visit worldwide"
             excursions={worldwideExcursions}
             showTabs={true}
-            maxTabs={5}
             tabType="city"
             tabs={TARGET_CITIES}
           />
