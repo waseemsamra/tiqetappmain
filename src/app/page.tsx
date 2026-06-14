@@ -34,7 +34,7 @@ export default async function HomePage() {
   } catch {}
 
   const byCity = (city: string, limit = 10) =>
-    allExcursions.filter(ex => (ex.city || '').toLowerCase() === city.toLowerCase()).slice(0, limit);
+    allExcursions.filter(ex => (ex.city || '').toLowerCase().includes(city.toLowerCase())).slice(0, limit);
 
   const uaeExcursions = UAE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);
   const worldwideExcursions = WORLDWIDE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);

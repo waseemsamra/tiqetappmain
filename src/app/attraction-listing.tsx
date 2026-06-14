@@ -110,9 +110,9 @@ export default function AttractionListingSection({ title, excursions, showViewAl
     const filteredExcursions = useMemo(() => {
         if (showTabs && activeTab) {
             if (tabType === 'country') {
-                return excursions.filter(ex => ex.country.toLowerCase() === activeTab.toLowerCase());
+                return excursions.filter(ex => (ex.country || '').toLowerCase().includes(activeTab.toLowerCase()));
             }
-            return excursions.filter(ex => ex.city.toLowerCase() === activeTab.toLowerCase());
+            return excursions.filter(ex => (ex.city || '').toLowerCase().includes(activeTab.toLowerCase()));
         }
         return excursions;
     }, [activeTab, excursions, showTabs, tabType]);
