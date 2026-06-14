@@ -2,9 +2,9 @@ import type { Excursion } from '@/types';
 import { getExcursionById } from '@/app/actions';
 import { createClient } from '@/lib/supabase/server';
 import ExcursionDetailClient from './excursion-detail-client';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import * as TiqetsApi from '@/lib/tiqets-api';
-import { getVariantsForExperience, getExperienceByIdFromCache } from '@/lib/json-cache';
+import { getVariantsForExperience, getExperienceByIdFromCache, loadCache, EXPERIENCES_CACHE_FILE } from '@/lib/json-cache';
 
 export const revalidate = 3600;
 export const dynamic = 'force-dynamic';
@@ -15,12 +15,17 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
 
   let excursion = await getExperienceByIdFromCache(params.id);
 
+  // If not found by this ID, it might be a child product/variant ID.
+  // Find the parent experience and redirect.
   if (!excursion) {
-    excursion = await getExcursionById(params.id);
-  }
+    try {
+      const experiences = await loadCache(EXPERIENCES_CACHE_FILE);
+      const parent = (experiences || []).find((e: any) => Array.isArray(e.product_ids) && e.product_ids.some((pid: any) => String(pid) === params.id));
+      if (parent?.id) {
+        redirect(`/excursions/${parent.id}`);
+      }
+    } catch {}
 
-  if (!excursion) {
-    // Fall back to API
     excursion = await getExcursionById(params.id);
   }
 
