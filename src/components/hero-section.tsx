@@ -20,12 +20,12 @@ export default function HeroSection({ content }: { content: HeroContent | null }
       <div className="absolute inset-0">
         {content.backgroundImage && content.backgroundImage.length > 0 && (
           <Image
-            src={content.backgroundImage}
-            alt="Hero background"
+            src={content.image}
+            alt={content.headline}
             fill
-            className="object-cover object-center"
+            className="object-cover"
             priority
-            data-ai-hint="background"
+            unoptimized
           />
         )}
         <div className="absolute inset-0 bg-black bg-opacity-40" />

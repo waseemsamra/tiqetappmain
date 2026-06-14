@@ -24,7 +24,7 @@ const CityTab = ({ city, image, isActive, onClick }: { city: string, image: stri
         className="flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-muted relative shrink-0"
     >
         {image && image.length > 0 && (
-            <Image src={image} alt={city} width={40} height={40} className="rounded-full object-cover border-2 border-transparent group-hover:border-primary" />
+            <Image src={image} alt={city} width={40} height={40} className="rounded-full object-cover border-2 border-transparent group-hover:border-primary" unoptimized />
         )}
         <span className={cn("font-medium", isActive ? 'text-primary' : 'text-foreground')}>{city}</span>
         {isActive && <div className="absolute bottom-[-17px] left-0 w-full h-0.5 bg-primary rounded-full" />}

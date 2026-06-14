@@ -9,6 +9,7 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                       fill 
                       className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
                       data-ai-hint="attraction"
+                      unoptimized
                     />
                 )}
             </div>

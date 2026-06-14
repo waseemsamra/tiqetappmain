@@ -23,6 +23,7 @@ export const ProductHero = ({ images, title, description, rating, reviews }: Pro
               fill
               className="object-cover"
               priority
+              unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">

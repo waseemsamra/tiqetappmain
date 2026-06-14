@@ -48,7 +48,7 @@ const WishlistItemCard = ({ excursion }: { excursion: Excursion }) => (
         <Card className="overflow-hidden transition-shadow hover:shadow-lg h-full flex flex-col">
             <div className="relative aspect-video">
                   {excursion.images?.[0] && excursion.images?.[0].length > 0 ? (
-                    <Image src={excursion.images?.[0]} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" />
+                    <Image src={excursion.images?.[0]} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" unoptimized />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm">No image</div>
                   )}

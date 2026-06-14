@@ -25,8 +25,8 @@ export default function PastBookings({ bookings }: { bookings: Booking[] }) {
         <Card key={booking.id} className="overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3">
              <div className="relative h-48 md:h-full">
-                {booking.activity.images?.[0] && booking.activity.images?.[0].length > 0 ? (
-                    <Image src={booking.activity.images?.[0]} alt={booking.activity.name} fill className="object-cover" />
+                 {booking.activity.images?.[0] && booking.activity.images?.[0].length > 0 ? (
+                    <Image src={booking.activity.images?.[0]} alt={booking.activity.name} fill className="object-cover" unoptimized />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm">No image</div>
                 )}
