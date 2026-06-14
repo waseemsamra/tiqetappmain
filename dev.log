@@ -47,3 +47,4 @@ Warning: ReactDOM.preload(): Expected two arguments, a non-empty `href` string a
     at r7 (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:19155)
     at ServerInsertedHTMLProvider (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:24939)
  GET / 200 in 8380ms
+ ✓ Compiled in 531ms (430 modules)
