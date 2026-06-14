@@ -18,18 +18,13 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   }, [productId]);
 
   return (
-    <div
-      data-tiqets-widget="booking"
-      data-product-id={productId}
-      data-trigger-selector="#tiqets-trigger"
+    <a
+      href={`https://www.tiqets.com/en/tickets/product-${productId}/`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
     >
-      <button
-        id="tiqets-trigger"
-        type="button"
-        className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-      >
-        Book Now
-      </button>
-    </div>
+      Book Now
+    </a>
   );
 }
