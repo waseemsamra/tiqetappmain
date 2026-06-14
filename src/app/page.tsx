@@ -3,46 +3,31 @@ import { getHeroContent } from '@/lib/hero';
 import { fetchTiqetsProducts } from '@/lib/tiqets-api';
 import HomePageClient from './home-page-client';
 import type { Excursion, HeroContent } from '@/types';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 export const revalidate = 0;
+
+const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
+const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah'];
 
 export default async function HomePage() {
   let allExcursions: Excursion[] = [];
   let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide' };
 
-  let liveExcursions: Excursion[] = [];
   try {
-    liveExcursions = await fetchTiqetsProducts({});
+    const [uaeResults, worldwideResults] = await Promise.all([
+      Promise.all(UAE_CITIES.map(city => fetchTiqetsProducts({ city_name: city }))),
+      Promise.all(WORLDWIDE_CITIES.map(city => fetchTiqetsProducts({ city_name: city }))),
+    ]);
+
+    const combined = [...uaeResults.flat(), ...worldwideResults.flat()];
+    const seen = new Set<string>();
+    allExcursions = combined.filter(ex => {
+      const id = String(ex.id);
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
   } catch {}
-
-  let fallbackExcursions: Excursion[] = [];
-  try {
-    const filePath = join(process.cwd(), 'public', 'excursions.json');
-    const raw = readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    fallbackExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
-  } catch {}
-
-  const liveHasCity = liveExcursions.some(ex => (ex.city || '').trim().length > 0);
-
-  let mergedExcursions = liveExcursions;
-  if (liveHasCity) {
-    const liveIds = new Set(liveExcursions.map(ex => ex.id));
-    const missingCities = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].filter(
-      city => !liveExcursions.some(ex => (ex.city || '').toLowerCase() === city.toLowerCase())
-    );
-    if (missingCities.length > 0) {
-      const supplement = fallbackExcursions
-        .filter(ex => missingCities.some(c => (ex.city || '').toLowerCase() === c.toLowerCase()) && !liveIds.has(ex.id))
-        .slice(0, 20);
-      mergedExcursions = [...liveExcursions, ...supplement];
-    }
-  } else {
-    mergedExcursions = fallbackExcursions;
-  }
-  allExcursions = mergedExcursions;
 
   try {
     heroContent = await getHeroContent();
@@ -51,8 +36,8 @@ export default async function HomePage() {
   const byCity = (city: string, limit = 10) =>
     allExcursions.filter(ex => (ex.city || '').toLowerCase() === city.toLowerCase()).slice(0, limit);
 
-  const uaeExcursions = ['Dubai', 'Abu Dhabi', 'Sharjah'].flatMap(city => byCity(city, 10)).slice(0, 50);
-  const worldwideExcursions = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].flatMap(city => byCity(city, 10)).slice(0, 50);
+  const uaeExcursions = UAE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);
+  const worldwideExcursions = WORLDWIDE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);
   const barcelonaExcursions = byCity('Barcelona', 10);
   const topRatedExcursions = [...allExcursions]
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
