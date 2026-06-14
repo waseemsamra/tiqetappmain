@@ -28,7 +28,7 @@ const simpleHash = (str: string) => {
     return hash;
 };
 
-const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'];
+const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
   // DEPLOYMENT TRIGGER: 2026-06-12T19:30:00+04:00 - Fixed PopularAttractionCard structural error
