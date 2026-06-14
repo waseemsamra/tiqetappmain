@@ -27,7 +27,7 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
         href={`/variants/${variant.id}`}
         className="rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col group h-full bg-white relative border border-gray-200/80"
       >
-        {variantImage || excursionImage && (
+        {(variantImage || excursionImage) && (
           <div className="relative w-full h-48 overflow-hidden">
             <Image
               src={variantImage || excursionImage}
