@@ -3,84 +3,14 @@
   - Environments: .env.local, .env
 
  ✓ Starting...
- ✓ Ready in 2.4s
+ ✓ Ready in 2.1s
  ○ Compiling /src/middleware ...
- ✓ Compiled /src/middleware in 659ms (117 modules)
-(node:45734) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ ✓ Compiled /src/middleware in 574ms (117 modules)
+(node:95622) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
  ○ Compiling / ...
- ✓ Compiled / in 6.7s (934 modules)
-Warning: ReactDOM.preload(): Expected two arguments, a non-empty `href` string and an `options` object with an `as` property valid for a `<link rel="preload" as="..." />` tag. The `href` argument encountered was an empty string.
-    at ImagePreload (webpack-internal:///(ssr)/./node_modules/next/dist/client/image-component.js:214:11)
-    at eval (webpack-internal:///(ssr)/./node_modules/next/dist/client/image-component.js:242:47)
-    at div
-    at div
-    at HeroSection (webpack-internal:///(ssr)/./src/components/hero-section.tsx:12:24)
-    at HomePageClient (webpack-internal:///(ssr)/./src/app/home-page-client.tsx:63:27)
-    at Lazy
-    at InnerLayoutRouter (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/layout-router.js:242:11)
-    at RedirectErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/redirect-boundary.js:73:9)
-    at RedirectBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/redirect-boundary.js:81:11)
-    at NotFoundErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/not-found-boundary.js:76:9)
-    at NotFoundBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/not-found-boundary.js:84:11)
-    at LoadingBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/layout-router.js:347:11)
-    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:158:11)
-    at InnerScrollAndFocusHandler (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/layout-router.js:153:9)
-    at ScrollAndFocusHandler (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/layout-router.js:228:11)
-    at RenderFromTemplateContext (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/render-from-template-context.js:16:44)
-    at Lazy
-    at OuterLayoutRouter (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/layout-router.js:367:11)
-    at Lazy
-    at main
-    at body
-    at html
-    at RedirectErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/redirect-boundary.js:73:9)
-    at RedirectBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/redirect-boundary.js:81:11)
-    at ReactDevOverlay (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)
-    at HotReload (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:322:11)
-    at Router (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/app-router.js:202:11)
-    at ErrorBoundaryHandler (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:112:9)
-    at ErrorBoundary (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/error-boundary.js:158:11)
-    at AppRouter (webpack-internal:///(ssr)/./node_modules/next/dist/client/components/app-router.js:564:13)
-    at Lazy
-    at r7 (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:19155)
-    at r7 (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:19155)
-    at ServerInsertedHTMLProvider (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:40:24939)
- GET / 200 in 8380ms
- ✓ Compiled in 531ms (430 modules)
- ✓ Compiled in 474ms (430 modules)
- ✓ Compiled in 415ms (430 modules)
- ✓ Compiled in 562ms (430 modules)
- ✓ Compiled in 620ms (430 modules)
- ✓ Compiled in 350ms (430 modules)
- ✓ Compiled in 391ms (430 modules)
- ✓ Compiled in 427ms (430 modules)
- ✓ Compiled in 340ms (430 modules)
- ✓ Compiled in 405ms (430 modules)
- ✓ Compiled in 741ms (430 modules)
- ✓ Compiled in 246ms (430 modules)
- ✓ Compiled in 420ms (430 modules)
- ✓ Compiled in 439ms (430 modules)
- ✓ Compiled in 294ms (430 modules)
- ✓ Compiled in 281ms (430 modules)
- ✓ Compiled in 361ms (430 modules)
- ✓ Compiled in 302ms (430 modules)
- ✓ Compiled in 877ms (430 modules)
- ✓ Compiled in 844ms (430 modules)
- ✓ Compiled in 326ms (430 modules)
- ✓ Compiled in 262ms (430 modules)
- ✓ Compiled in 291ms (430 modules)
- ✓ Compiled in 718ms (430 modules)
- ✓ Compiled in 377ms (430 modules)
- ✓ Compiled in 413ms (430 modules)
- ✓ Compiled in 304ms (430 modules)
- ✓ Compiled in 262ms (430 modules)
- ✓ Compiled in 451ms (430 modules)
- ✓ Compiled in 378ms (430 modules)
- ✓ Compiled in 618ms (430 modules)
- ✓ Compiled in 778ms (430 modules)
- ✓ Compiled in 393ms (430 modules)
- ✓ Compiled in 602ms (430 modules)
- ✓ Compiled in 292ms (430 modules)
- ✓ Compiled in 237ms (430 modules)
- ✓ Compiled in 389ms (430 modules)
+ ✓ Compiled / in 6.1s (934 modules)
+ GET / 200 in 12976ms
+ GET / 200 in 5740ms
+ ✓ Compiled in 23ms
+ ✓ Compiled in 794ms (430 modules)
