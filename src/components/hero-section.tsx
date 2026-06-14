@@ -18,14 +18,16 @@ export default function HeroSection({ content }: { content: HeroContent | null }
   return (
     <div className="relative min-h-[60vh] flex items-center">
       <div className="absolute inset-0">
-        <Image
-          src={content.backgroundImage}
-          alt="Hero background"
-          fill
-          className="object-cover object-center"
-          priority
-          data-ai-hint="background"
-        />
+        {content.backgroundImage && content.backgroundImage.length > 0 && (
+          <Image
+            src={content.backgroundImage}
+            alt="Hero background"
+            fill
+            className="object-cover object-center"
+            priority
+            data-ai-hint="background"
+          />
+        )}
         <div className="absolute inset-0 bg-black bg-opacity-40" />
       </div>
 

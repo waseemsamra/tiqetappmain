@@ -108,7 +108,9 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                            <CardDescription>Show more info <Info className="inline h-3 w-3" /></CardDescription>
                        </div>
                         {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
-                          <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" />
+                          {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                            <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" />
+                          )}
                         )}
                         <Calendar
                             mode="single"
@@ -198,7 +200,9 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                      <CardHeader className="p-0">
                          <div className="relative aspect-video">
                              {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                             {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
                                <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" data-ai-hint="attraction" />
+                             )}
                              )}
                          </div>
                      </CardHeader>
