@@ -256,219 +256,140 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
 
   const allExcursions: Excursion[] = [];
 
-  // If city filter is specified, fetch by city_id
   if (params.city_name) {
     const cityNameLower = params.city_name.toLowerCase();
-    
-    // Check if we have a known city ID
-    if (KNOWN_CITY_IDS[cityNameLower]) {
-      const cityId = KNOWN_CITY_IDS[cityNameLower];
-      
-      // Fetch both experiences and products
-      const allActivities: any[] = [];
-      
-      // Try experiences endpoint with pagination
-      try {
-        for (let page = 1; page <= 5; page++) {
-          const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
-          if (response.ok) {
-            const data = await response.json();
-            const products = data.experiences || data.products || data.items || [];
-            allActivities.push(...products);
-            if (products.length < 100) break;
-          } else {
-            break;
-          }
-        }
-      } catch (e) {
-        // Continue
-      }
-      
-      // Also fetch standalone products for this city
-      try {
-        for (let page = 1; page <= 5; page++) {
-          const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
-          if (response.ok) {
-            const data = await response.json();
-            const items = data.products || data.experiences || data.items || [];
-            allActivities.push(...items);
-            if (items.length < 100) break;
-          } else {
-            break;
-          }
-        }
-      } catch (e) {
-        // Continue
-      }
-      
-      if (allActivities.length > 0) {
-        const transformedWithImages = await Promise.all(
-          allActivities.map(async (p: any) => {
-            let images: string[] = [];
-            if (Array.isArray(p.images)) {
-               images = p.images
-                 .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
-                 .filter(img => img && img.length > 0);
-            }
-            if (images.length === 0 && p.venue?.id) {
-      try {
-        const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
-        if (venueResp.ok) {
-           const venueData = await venueResp.json();
-           images = (venueData.experience?.images || venueData.images || [])
-             .map((img: any) => {
-               if (typeof img === 'string') {
-                 return img;
-               }
-               return img?.medium || img?.large || img?.small || img?.extra_large || '';
-             })
-             .filter(img => img && img.length > 0);
-        }
-      } catch (e) {}
-            }
-            return { ...transformTiqetsProduct(p), images };
-          })
-        );
-        return transformedWithImages;
-      }
-      // No live data for this city — do NOT fall back. Return empty results.
+    const cityId = KNOWN_CITY_IDS[cityNameLower];
+    if (!cityId) {
       return [];
     }
-            if (images.length === 0 && p.venue?.id) {
+
+    const allActivities: any[] = [];
+
+    for (let page = 1; page <= 5; page++) {
       try {
-        const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
-        if (venueResp.ok) {
-           const venueData = await venueResp.json();
-           images = (venueData.experience?.images || venueData.images || [])
-             .map((img: any) => {
-               // If img is a string, use it directly
-               if (typeof img === 'string') {
-                 return img;
-               }
-               // If img is an object, try to get the best available size
-               return img?.medium || img?.large || img?.small || img?.extra_large || '';
-             })
-             .filter(img => img && img.length > 0);  // Filter out empty strings
+        const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.experiences || data.products || data.items || [];
+          allActivities.push(...products);
+          if (products.length < 100) break;
+        } else {
+          break;
         }
-      } catch (e) {}
-            }
-            return { ...transformTiqetsProduct(p), images };
-          })
-        );
-        return transformedWithImages;
+      } catch (e) {
+        break;
       }
     }
-    const cities = await getAvailableCities();
-    let match = cities.find(c => c.name && c.name.toLowerCase() === cityNameLower);
-    if (!match) {
-      const countryCodes: Record<string, string> = {
-        'argentina': '50009', 'canada': '50037', 'brazil': '50030',
-        'peru': '50174', 'colombia': '50048', 'mexico': '50157',
-        'united states': '50233', 'spain': '50067', 'france': '50074',
-        'italy': '50109', 'united kingdom': '50076', 'germany': '50056',
-        'netherlands': '50166', 'australia': '50012', 'japan': '50113',
-        'singapore': '50199', 'south korea': '50121', 'india': '50104',
-        'indonesia': '50100', 'thailand': '50218', 'china': '50047',
-        'vietnam': '50241', 'malaysia': '50158', 'cambodia': '50116',
-        'taiwan': '50228', 'new zealand': '50014', 'united arab emirates': '50001',
-        'egypt': '50064', 'turkey': '50225', 'morocco': '50137',
-        'south africa': '50247', 'qatar': '50187', 'jordan': '50112',
-        'kenya': '50114', 'tanzania': '50229', 'austria': '50011',
-        'belgium': '50019', 'croatia': '50097', 'czech republic': '50055',
-        'denmark': '50058', 'estonia': '50063', 'finland': '50069',
-        'greece': '50088', 'hungary': '50099', 'ireland': '50101',
-        'iceland': '50108', 'latvia': '50135', 'lithuania': '50133',
-        'luxembourg': '50134', 'malta': '50153', 'monaco': '50138',
-        'norway': '50167', 'poland': '50179', 'portugal': '50184',
-        'romania': '50189', 'serbia': '50190', 'slovakia': '50203',
-        'slovenia': '50201', 'sweden': '50198', 'switzerland': '50042',
-        'bahamas': '50031', 'dominican republic': '50060', 'jamaica': '50111',
-        'puerto rico': '50182', 'aruba': '50013', 'costa rica': '50049',
-        'ecuador': '50062', 'belize': '50036', 'guatemala': '50090',
-        'bosnia and herzegovina': '50016', 'israel': '50102', 'bulgaria': '50021',
-        'russia': '50191', 'andorra': '50004',
-      };
-      for (const [countryName, countryId] of Object.entries(countryCodes)) {
-        try {
-          const resp = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100`, { method: 'GET', headers });
-          if (resp.ok) {
-            const data = await resp.json();
-            const products = data.experiences || data.products || data.items || [];
-            const filtered = products.filter((e: any) => {
-              const city = (e.address?.city_name || e.city_name || '').toLowerCase();
-              return city === cityNameLower;
-            });
-            if (filtered.length > 0) {
-              return filtered.map(transformTiqetsProduct);
-            }
+
+    for (let page = 1; page <= 5; page++) {
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const items = data.products || data.experiences || data.items || [];
+          allActivities.push(...items);
+          if (items.length < 100) break;
+        } else {
+          break;
+        }
+      } catch (e) {
+        break;
+      }
+    }
+
+    if (allActivities.length > 0) {
+      const transformedWithImages = await Promise.all(
+        allActivities.map(async (p: any) => {
+          let images: string[] = [];
+          if (Array.isArray(p.images)) {
+            images = p.images
+              .map((img: any) => {
+                if (typeof img === 'string') return img;
+                return img?.medium || img?.large || img?.small || img?.extra_large || '';
+              })
+              .filter((img: string) => img && img.length > 0);
           }
-        } catch (e) {}
-      }
+          if (images.length === 0 && p.venue?.id) {
+            try {
+              const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
+              if (venueResp.ok) {
+                const venueData = await venueResp.json();
+                images = (venueData.experience?.images || venueData.images || [])
+                  .map((img: any) => {
+                    if (typeof img === 'string') return img;
+                    return img?.medium || img?.large || img?.small || img?.extra_large || '';
+                  })
+                  .filter((img: string) => img && img.length > 0);
+              }
+            } catch (e) {}
+          }
+          return { ...transformTiqetsProduct(p), images };
+        })
+      );
+      return transformedWithImages;
     }
-  } else if (params.country_id || params.country_name) {
-     // Try to fetch by country filter - use country_id first for better reliability
-     const countryFilter = params.country_id || params.country_name;
-     try {
-       const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryFilter}&page_size=100`, { method: 'GET', headers });
-       if (response.ok) {
-         const data = await response.json();
-         const products = data.experiences || data.products || data.items || [];
-         if (products.length > 0) {
-           return products.map(transformTiqetsProduct);
-         }
-       }
-     } catch (e) {
-       // Continue to fallback
-     }
-} else {
-    // Fetch from prioritized cities for homepage - UAE first for their section, then target cities
+    return [];
+  }
+
+  if (params.country_id || params.country_name) {
+    const countryFilter = params.country_id || params.country_name;
+    try {
+      const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryFilter}&page_size=100`, { method: 'GET', headers });
+      if (response.ok) {
+        const data = await response.json();
+        const products = data.experiences || data.products || data.items || [];
+        if (products.length > 0) {
+          return products.map(transformTiqetsProduct);
+        }
+      }
+    } catch (e) {
+      // continue
+    }
+    return [];
+  } else {
     const prioritizedCities = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'London'];
     const cityPromises = prioritizedCities.map(async (city) => {
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
-      if (!cityId) {
+      if (!cityId) return [];
+
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100&page=1`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.experiences || data.products || data.items || [];
+          if (products.length > 0) {
+            return products.map(transformTiqetsProduct);
+          }
+        }
+      } catch (e) {
+        // continue
+      }
+
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=1`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.products || data.experiences || data.items || [];
+          return products.map(transformTiqetsProduct);
+        }
+      } catch (e) {
         return [];
       }
-      
-// Try experiences first
-       try {
-         const response = await fetch(`${TIQETS_API_BASE}/experiences?city_id=${cityId}&page_size=100`, { method: 'GET', headers });
-         if (response.ok) {
-           const data = await response.json();
-           const products = data.experiences || data.products || data.items || [];
-           if (products.length > 0) {
-             return products.map(transformTiqetsProduct);
-           }
-         }
-       } catch (e) {
-         // Continue
-       }
-       
-       // Try products for cities like New York and standalone products like helicopter tours
-       try {
-         const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100`, { method: 'GET', headers });
-         if (response.ok) {
-           const data = await response.json();
-           const products = data.products || data.experiences || data.items || [];
-           return products.map(transformTiqetsProduct);
-         }
-       } catch (e) {
-         return [];
-       }
-      
+
       return [];
     });
-    
+
     const results = await Promise.all(cityPromises);
-    for (let i = 0; i < results.length; i++) {
-      allExcursions.push(...results[i]);
+    for (const batch of results) {
+      allExcursions.push(...batch);
     }
-    
+
     if (allExcursions.length > 0) {
       return allExcursions.slice(0, 100);
     }
+
+    return [];
   }
-  
-  throw new Error('Tiqets API: Failed to fetch products from any endpoint');
 }
 
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {
