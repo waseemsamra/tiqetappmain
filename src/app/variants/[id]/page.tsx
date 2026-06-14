@@ -38,21 +38,20 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
         
         {/* Hero Section: Responsive Layout */}
         <div className="flex w-full">
-           {/* Mobile: Show only large image (full width) */}
-           <div className="w-full md:w-1/2">
-             {allImages[0] && allImages[0].length > 0 && (
-               <div className="relative h-[500px] w-full">
-                 <Image
-                   src={allImages[0]}
-                   alt={variant.name}
-                   fill
-                   className="object-cover w-full h-full"
-                   unoptimized
-                 />
-               </div>
-             )}
-           </div>
-          </div>
+            {/* Mobile: Show only large image (full width) */}
+            <div className="w-full md:w-1/2">
+              {allImages[0] && allImages[0].length > 0 && (
+                <div className="relative h-[500px] w-full">
+                  <Image
+                    src={allImages[0]}
+                    alt={variant.name}
+                    fill
+                    className="object-cover w-full h-full"
+                    unoptimized
+                  />
+                </div>
+              )}
+            </div>
           
            {/* Desktop Only: 2x2 Thumbnail Grid (hidden on mobile) */}
            <div className="hidden md:block w-0 md:w-1/2">
