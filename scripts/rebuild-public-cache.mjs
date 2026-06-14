@@ -23,6 +23,8 @@ async function main() {
     'Dubai': '60005',
     'Abu Dhabi': '60013',
     'Sharjah': '60007',
+    'Ras al-Khaimah': '60003',
+    'Fujairah': '60009',
     'Barcelona': '66342',
     'Rome': '71631',
     'Paris': '66746',
