@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import ExcursionDetailClient from './excursion-detail-client';
 import { notFound } from 'next/navigation';
 import * as TiqetsApi from '@/lib/tiqets-api';
-import { getVariantsForExperience, getExperienceByIdFromCache, loadCache, EXPERIENCES_CACHE_FILE } from '@/lib/json-cache';
+import { getVariantsForExperience, getExperienceByIdFromCache } from '@/lib/json-cache';
 
 export const revalidate = 3600;
 export const dynamic = 'force-dynamic';
