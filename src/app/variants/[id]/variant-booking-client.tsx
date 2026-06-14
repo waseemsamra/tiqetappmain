@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const SCRIPT_ID = 'tiqets-booking-engine-script';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const existing = document.getElementById(SCRIPT_ID);
     if (!existing) {
@@ -19,41 +17,66 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     }
   }, [productId]);
 
-  const handleClick = () => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const oldWidget = root.querySelector('[data-tiqets-widget="booking"]');
-    if (oldWidget) {
-      oldWidget.removeAttribute('data-initialized');
+  const onClick = () => {
+    const oldRoot = document.getElementById('tiqets-booking-root');
+    if (oldRoot) {
+      oldRoot.innerHTML = '';
     }
 
-    const lightbox = document.querySelector('.basicLightbox');
-    if (lightbox) {
-      lightbox.remove();
+    const root = document.createElement('div');
+    root.id = 'tiqets-booking-root';
+    root.className = 'tiqets-booking-root';
+
+    const widget = document.createElement('div');
+    widget.setAttribute('data-tiqets-widget', 'booking');
+    widget.setAttribute('data-product-id', productId);
+    widget.setAttribute('data-trigger-selector', '#tiqets-trigger');
+
+    const button = document.createElement('button');
+    button.id = 'tiqets-trigger';
+    button.type = 'button';
+    button.className =
+      'block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors';
+    button.textContent = 'Book Now';
+
+    root.appendChild(widget);
+    root.appendChild(button);
+
+    const anchor = document.querySelector('#tiqets-booking-root-anchor');
+    if (anchor) {
+      anchor.replaceWith(root);
+    } else if (oldRoot) {
+      oldRoot.replaceWith(root);
+    } else {
+      document.body.appendChild(root);
     }
 
-    if (typeof window.__TIQETS_LOADER_REINIT === 'function') {
-      window.__TIQETS_LOADER_REINIT();
-    }
+    const engine =
+      (window as any).tiqetsBookingEngine ||
+      (window as any).TiqetsBookingEngine ||
+      (window as any).tiqets_booking_engine;
 
-    const btn = document.getElementById('tiqets-trigger');
-    if (btn && typeof btn.click === 'function') {
-      btn.click();
+    const run = () => {
+      if (engine && typeof engine.open === 'function') {
+        engine.open();
+      } else {
+        button.click();
+      }
+    };
+
+    if (engine && typeof engine.open === 'function') {
+      run();
+    } else {
+      setTimeout(run, 200);
     }
   };
 
   return (
-    <div ref={rootRef} className="tiqets-booking-root">
-      <div
-        data-tiqets-widget="booking"
-        data-product-id={productId}
-        data-trigger-selector="#tiqets-trigger"
-      />
+    <div id=" tiqets-booking-root-anchor">
       <button
-        id="tiqets-trigger"
+        id="tiqets-trigger-anchor"
         type="button"
-        onClick={handleClick}
+        onClick={onClick}
         className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
       >
         Book Now
