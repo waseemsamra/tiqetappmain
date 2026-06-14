@@ -26,8 +26,23 @@ export default async function HomePage() {
   } catch {}
 
   const liveHasCity = liveExcursions.some(ex => (ex.city || '').trim().length > 0);
-  const excursions = liveHasCity ? liveExcursions : fallbackExcursions;
-  allExcursions = excursions;
+
+  let mergedExcursions = liveExcursions;
+  if (liveHasCity) {
+    const liveIds = new Set(liveExcursions.map(ex => ex.id));
+    const missingCities = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam'].filter(
+      city => !liveExcursions.some(ex => (ex.city || '').toLowerCase() === city.toLowerCase())
+    );
+    if (missingCities.length > 0) {
+      const supplement = fallbackExcursions
+        .filter(ex => missingCities.some(c => (ex.city || '').toLowerCase() === c.toLowerCase()) && !liveIds.has(ex.id))
+        .slice(0, 20);
+      mergedExcursions = [...liveExcursions, ...supplement];
+    }
+  } else {
+    mergedExcursions = fallbackExcursions;
+  }
+  allExcursions = mergedExcursions;
 
   try {
     heroContent = await getHeroContent();
