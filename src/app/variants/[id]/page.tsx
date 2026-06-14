@@ -194,7 +194,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                   {Number(variant.price || 0).toFixed(2)}
                 </p>
               </div>
-              <VariantBookingClient productId={variant.id} experienceUrl={variant.experience_url} />
+              <VariantBookingClient key={variant.id} productId={variant.id} experienceUrl={variant.experience_url} />
             </div>
           </div>
         </div>
