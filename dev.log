@@ -49,3 +49,4 @@ Warning: ReactDOM.preload(): Expected two arguments, a non-empty `href` string a
  GET / 200 in 8380ms
  ✓ Compiled in 531ms (430 modules)
  ✓ Compiled in 474ms (430 modules)
+ ✓ Compiled in 415ms (430 modules)
