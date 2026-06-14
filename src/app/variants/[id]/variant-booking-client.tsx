@@ -1,38 +1,24 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 const SCRIPT_ID = 'tiqets-booking-engine-script';
 
-export function VariantBookingClient({ productId, experienceUrl }: { productId: string; experienceUrl?: string }) {
+export function VariantBookingClient({ productId }: { productId: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
-    let mounted = true;
-    const scriptId = 'tiqets-booking-engine-script';
 
-    const existing = document.getElementById(scriptId);
+    const existing = document.getElementById(SCRIPT_ID);
     if (!existing) {
       const script = document.createElement('script');
-      script.id = scriptId;
+      script.id = SCRIPT_ID;
       script.src = 'https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js';
       script.async = true;
       script.defer = true;
-
-      script.onerror = () => {
-        if (mounted) {
-          setLoadError('Booking engine failed to load.');
-        }
-      };
-
       document.body.appendChild(script);
     }
-
-    return () => {
-      mounted = false;
-    };
   }, [productId]);
 
   const handleClick = () => {
@@ -46,8 +32,9 @@ export function VariantBookingClient({ productId, experienceUrl }: { productId: 
       return;
     }
 
-    if (experienceUrl) {
-      window.open(experienceUrl, '_blank', 'noopener,noreferrer');
+    const el = containerRef.current?.querySelector('[data-tiqets-widget="booking"]');
+    if (el && typeof el.click === 'function') {
+      el.click();
     }
   };
 
@@ -66,11 +53,6 @@ export function VariantBookingClient({ productId, experienceUrl }: { productId: 
       >
         Book Now
       </button>
-      {loadError && (
-        <div className="mt-2 text-sm text-red-500 text-center">
-          {loadError}
-        </div>
-      )}
     </div>
   );
 }
