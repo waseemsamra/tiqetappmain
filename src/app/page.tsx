@@ -6,7 +6,7 @@ import type { Excursion, HeroContent } from '@/types';
 
 export const revalidate = 0;
 
-const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Malaysia', 'Thailand'];
+const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah'];
 
 export default async function HomePage() {
