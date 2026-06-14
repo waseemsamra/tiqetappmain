@@ -229,16 +229,17 @@ function BookingVoucherPage() {
                                     value={<Badge className="capitalize">{booking.status}</Badge>}
                                  />
                             </div>
-                             <div className="flex items-center justify-center bg-muted p-4 rounded-lg aspect-square relative">
-                                {activity.images && activity.images[0] && activity.images[0].length > 0 ? (
-                                     <Image
-                                         src={activity.images[0]}
-                                         alt={activity.name}
-                                         layout="fill"
-                                         className="object-cover rounded-md"
-                                     />
-                                 ) : null}
-                             </div>
+                              <div className="flex items-center justify-center bg-muted p-4 rounded-lg aspect-square relative">
+                                 {activity.images && activity.images[0] && activity.images[0].length > 0 ? (
+                                      <Image
+                                          src={activity.images[0]}
+                                          alt={activity.name}
+                                          layout="fill"
+                                          className="object-cover rounded-md"
+                                          unoptimized
+                                      />
+                                  ) : null}
+                              </div>
                         </div>
                     </CardContent>
                     <CardFooter className="bg-background p-6 flex flex-col sm:flex-row justify-end gap-4">

@@ -264,8 +264,8 @@ export function UniversalSearch() {
                                         <li key={ex.id}>
                                               <Link href={`/excursions/${ex.id}`} className="flex items-center gap-4 p-3 hover:bg-muted">
                                                   {ex.images?.[0] && ex.images?.[0].length > 0 && (
-                                                    <Image src={ex.images[0]} alt={ex.name} width={48} height={48} className="rounded-md object-cover" />
-                                                  )}
+                                                  <Image src={ex.images[0]} alt={ex.name} width={48} height={48} className="rounded-md object-cover" unoptimized />
+                                                )}
                                                   <div>
                                                       <p className="font-semibold">{ex.name}</p>
                                                       <p className="text-sm text-muted-foreground">{ex.city}, {ex.country}</p>

@@ -2,7 +2,7 @@ import type { Excursion } from '@/types';
 import { getExcursionById } from '@/app/actions';
 import { createClient } from '@/lib/supabase/server';
 import ExcursionDetailClient from './excursion-detail-client';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import * as TiqetsApi from '@/lib/tiqets-api';
 import { getVariantsForExperience, getExperienceByIdFromCache, loadCache, EXPERIENCES_CACHE_FILE } from '@/lib/json-cache';
 
@@ -15,22 +15,41 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
 
   let excursion = await getExperienceByIdFromCache(params.id);
 
-  // If not found by this ID, it might be a child product/variant ID.
-  // Find the parent experience and redirect.
   if (!excursion) {
-    try {
-      const experiences = await loadCache(EXPERIENCES_CACHE_FILE);
-      const parent = (experiences || []).find((e: any) => Array.isArray(e.product_ids) && e.product_ids.some((pid: any) => String(pid) === params.id));
-      if (parent?.id) {
-        redirect(`/excursions/${parent.id}`);
-      }
-    } catch {}
-
     excursion = await getExcursionById(params.id);
   }
 
   if (!excursion) {
-    // Render a friendly unavailable page instead of raw Next.js 404
+    try {
+      const experiences = await loadCache(EXPERIENCES_CACHE_FILE);
+      const parent = (experiences || []).find((e: any) => Array.isArray(e.product_ids) && e.product_ids.some((pid: any) => String(pid) === params.id));
+      if (parent) {
+        excursion = {
+          id: parent.id,
+          name: parent.title || 'Experience',
+          city: parent.city_name || '',
+          country: parent.country_name || '',
+          description: parent.description || parent.tagline || '',
+          price: parent.price || 0,
+          duration: parent.duration || 'Not specified',
+          images: parent.image_url ? [parent.image_url] : [],
+          rating: parent.rating || 0,
+          activitytypeid: parent.id,
+          excursionType: { id: parent.id, name: parent.tagline || 'Activity' },
+          status: 'active',
+          partner_id: null,
+          reviews: [],
+          product_ids: parent.product_ids || [],
+          reviewsTotal: parent.reviews_total || 0,
+          tag_ids: [],
+          experience_url: parent.experience_url || '',
+          variants: [],
+        } as any;
+      }
+    } catch {}
+  }
+
+  if (!excursion) {
     excursion = {
       id: params.id,
       name: 'Experience Unavailable',

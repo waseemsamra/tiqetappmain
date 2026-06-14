@@ -87,7 +87,7 @@ function CheckoutPageContent() {
                         <CardHeader className="p-0">
                             <div className="relative aspect-[4/3]">
                                  {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
-                                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" />
+                                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" unoptimized />
                                  ) : null}
                             </div>
                         </CardHeader>

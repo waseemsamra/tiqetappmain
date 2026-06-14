@@ -136,7 +136,7 @@ export default async function PartnerDashboardPage() {
                                 <TableCell>
                                     <div className="flex items-center gap-4">
                                          {excursion.images && excursion.images[0] && excursion.images[0].length > 0 && (
-                                           <Image src={excursion.images[0]} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" />
+                                           <Image src={excursion.images[0]} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" unoptimized />
                                          )}
                                         <div>
                                             <p className="font-medium">{excursion.name}</p>

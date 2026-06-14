@@ -191,7 +191,7 @@ function PaymentPageContent() {
                         <CardContent className="space-y-4">
                               <div className="flex items-start gap-4">
                                  {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
-                                   <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" />
+                                   <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" unoptimized />
                                  ) : null}
                                  <h3 className="font-bold flex-1">{excursion.name}</h3>
                              </div>
