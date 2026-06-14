@@ -13,8 +13,11 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Try to get experience from cache first
   let excursion = await getExperienceByIdFromCache(params.id);
+
+  if (!excursion) {
+    excursion = await getExcursionById(params.id);
+  }
 
   if (!excursion) {
     // Fall back to API
