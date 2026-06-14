@@ -14,3 +14,32 @@
  GET / 200 in 5740ms
  ✓ Compiled in 23ms
  ✓ Compiled in 794ms (430 modules)
+ ✓ Compiled in 484ms (430 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 666ms (495 modules)
+ GET / 200 in 7323ms
+   Reload env: .env.local
+   Reload env: .env
+ ✓ Compiled in 509ms (1028 modules)
+ ○ Compiling /city/[cityName] ...
+ ⚠ ./src/lib/destinations-config.ts
+Module not found: Can't resolve 'fs' in '/Users/apple/tiqetapp/src/lib'
+
+Import trace for requested module:
+./src/lib/destinations-config.ts
+./src/app/actions.ts
+./src/app/city/[cityName]/city-client-page.tsx
+[Tiqets] Missing TIQETS_API_KEY; running in offline/local-survey mode.
+[Tiqets] Missing TIQETS_API_KEY; running in offline/local-survey mode.
+ GET /city/Bangkok 200 in 4277ms
+ GET /city/Singapore 200 in 4289ms
+ GET /city/Kuala%20Lumpur 200 in 68ms
+ GET /city/Bangkok 200 in 84ms
+[Tiqets] Missing TIQETS_API_KEY; running in offline/local-survey mode.
+ ⚠ ./src/lib/destinations-config.ts
+Module not found: Can't resolve 'fs' in '/Users/apple/tiqetapp/src/lib'
+
+Import trace for requested module:
+./src/lib/destinations-config.ts
+./src/app/actions.ts
+./src/app/city/[cityName]/city-client-page.tsx
