@@ -258,9 +258,14 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
 
   if (params.city_name) {
     const cityNameLower = params.city_name.toLowerCase();
-    const cityId = KNOWN_CITY_IDS[cityNameLower];
+    let cityId = KNOWN_CITY_IDS[cityNameLower];
     if (!cityId) {
-      return [];
+      const cities = await getAvailableCities();
+      const match = (cities || []).find((c: any) => (c.name || '').toLowerCase() === cityNameLower);
+      if (!match || !match.id) {
+        return [];
+      }
+      cityId = String(match.id);
     }
 
     const allActivities: any[] = [];
