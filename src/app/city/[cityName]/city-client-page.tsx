@@ -89,10 +89,50 @@ export default function CityClientPage({
         return <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} />;
     };
 
+    // Construct hero image from excursions - use first valid image found
+    const heroImage = useMemo(() => {
+        // Try to find an image from top rated excursions first
+        const imageFromTopRated = topRatedExcursions.find(ex => 
+          ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0
+        )?.images?.[0];
+        
+        if (imageFromTopRated) return imageFromTopRated;
+        
+        // Fallback to hand picked excursions
+        const imageFromHandPicked = handPickedExcursions.find(ex => 
+          ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0
+        )?.images?.[0];
+        
+        if (imageFromHandPicked) return imageFromHandPicked;
+        
+        // Fallback to filtered excursions
+        const imageFromFiltered = filteredExcursions.find(ex => 
+          ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0
+        )?.images?.[0];
+        
+        return imageFromFiltered || null; // Return null if no valid image found
+    }, [topRatedExcursions, handPickedExcursions, filteredExcursions]);
+
      return (
          <>
          <div className="container mx-auto px-4 py-8 space-y-16">
               <header className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+                {heroImage && (
+                  <Image
+                    src={heroImage}
+                    alt={`Things to do in ${cityName}`}
+                    fill
+                    className="object-cover"
+                    data-ai-hint="city header"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8 text-white">
+                    <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Things to do in {cityName}</h1>
+                    <p className="mt-2 text-lg max-w-2xl">
+                       Explore the best attractions, tours, and experiences {cityName} has to offer.
+                    </p>
+                </div>
               </header>
 
             <section>
