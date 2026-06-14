@@ -12,18 +12,22 @@ export default async function HomePage() {
   let allExcursions: Excursion[] = [];
   let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide' };
 
+  let liveExcursions: Excursion[] = [];
   try {
-    allExcursions = await fetchTiqetsProducts({});
+    liveExcursions = await fetchTiqetsProducts({});
   } catch {}
 
-  if (!allExcursions.length) {
-    try {
-      const filePath = join(process.cwd(), 'public', 'excursions.json');
-      const raw = readFileSync(filePath, 'utf-8');
-      const parsed = JSON.parse(raw);
-      allExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
-    } catch {}
-  }
+  let fallbackExcursions: Excursion[] = [];
+  try {
+    const filePath = join(process.cwd(), 'public', 'excursions.json');
+    const raw = readFileSync(filePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    fallbackExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
+  } catch {}
+
+  const liveHasCity = liveExcursions.some(ex => (ex.city || '').trim().length > 0);
+  const excursions = liveHasCity ? liveExcursions : fallbackExcursions;
+  allExcursions = excursions;
 
   try {
     heroContent = await getHeroContent();
