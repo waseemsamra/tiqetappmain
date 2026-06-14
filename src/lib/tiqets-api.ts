@@ -13,7 +13,7 @@ const headers = {
 
 const isTiqetsAvailable = !!TIQETS_API_KEY;
 
-export function transformTiqetsProduct(product: any): Excursion {
+export function transformTiqetsProduct(product: any, fallbackCity?: string): Excursion {
   const ratingValue = product.ratings?.average;
   const ratingsTotal = product.ratings?.total || product.ratings?.count || 0;
   const safeRating = typeof ratingValue === 'number' ? ratingValue : 
