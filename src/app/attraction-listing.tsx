@@ -57,13 +57,15 @@ interface AttractionListingSectionProps {
 export default function AttractionListingSection({ title, excursions, showViewAllButton = true, layout = 'carousel', user = null, wishlistIds = new Set(), showTabs = true, tabType, maxTabs, tabs }: AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
-              return tabs.map(name => ({
+              const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
+              return tabs.map(name => {
+                const lower = name.toLowerCase();
+                const match = excursions.find(ex => (ex.city || '').toLowerCase().includes(lower));
+                return {
                   name,
-                  image: excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] && 
-                        excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 
-                        ? excursions.find(ex => ex.city.toLowerCase() === name.toLowerCase())?.images?.[0] 
-                        : null
-              }));
+                  image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
+                };
+              });
         }
         const cityMap = new Map<string, { name: string, image: string }>();
           excursions.forEach(ex => {
@@ -80,13 +82,15 @@ export default function AttractionListingSection({ title, excursions, showViewAl
 
     const countries = useMemo(() => {
          if (tabs && tabType === 'country') {
-              return tabs.map(name => ({
+              const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
+              return tabs.map(name => {
+                const lower = name.toLowerCase();
+                const match = excursions.find(ex => (ex.country || '').toLowerCase().includes(lower));
+                return {
                   name,
-                  image: excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] && 
-                        excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0].length > 0 
-                        ? excursions.find(ex => ex.country.toLowerCase() === name.toLowerCase())?.images?.[0] 
-                        : null
-              }));
+                  image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
+                };
+              });
          }
         const countryMap = new Map<string, { name: string, image: string }>();
           excursions.forEach(ex => {

@@ -1,13 +1,25 @@
 
 import { getHeroContent } from '@/lib/hero';
-import { fetchTiqetsProducts } from '@/lib/tiqets-api';
 import HomePageClient from './home-page-client';
 import type { Excursion, HeroContent } from '@/types';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const revalidate = 0;
 
 const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras al-Khaimah', 'Fujairah'];
+
+function loadLocalFallback(): Excursion[] {
+  try {
+    const filePath = join(process.cwd(), 'public', 'excursions.json');
+    const raw = readFileSync(filePath, 'utf-8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed.experiences) ? parsed.experiences : [];
+  } catch {
+    return [];
+  }
+}
 
 export default async function HomePage() {
   let allExcursions: Excursion[] = [];
@@ -28,6 +40,15 @@ export default async function HomePage() {
       return true;
     });
   } catch {}
+
+  if (!allExcursions.length) {
+    try {
+      const filePath = join(process.cwd(), 'public', 'excursions.json');
+      const raw = readFileSync(filePath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      allExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
+    } catch {}
+  }
 
   try {
     heroContent = await getHeroContent();
