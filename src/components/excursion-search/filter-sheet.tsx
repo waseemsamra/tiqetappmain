@@ -66,7 +66,9 @@ export function FilterDialog({ isOpen, onOpenChange, tags = [], allExcursions, s
               const imageUrl = (firstExcursionOfTag?.images?.[0] && firstExcursionOfTag?.images?.[0].length > 0 ? 
                                 firstExcursionOfTag?.images?.[0] : 
                                 null);
-            imageMap.set(tag.id, imageUrl);
+            if (imageUrl) {
+              imageMap.set(tag.id, imageUrl);
+            }
         });
         return imageMap;
     }, [tags, allExcursions]);

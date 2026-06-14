@@ -110,14 +110,6 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                         {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
                           <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" />
                         )}
-                    </CardHeader>
-                </Card>
-
-                <Card>
-                     <CardHeader>
-                        <CardTitle>When will you visit?</CardTitle>
-                    </CardHeader>
-                    <CardContent>
                         <Calendar
                             mode="single"
                             selected={selectedDate}

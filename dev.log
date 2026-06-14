@@ -1,0 +1,123 @@
+
+> nextn@0.1.0 dev
+> next dev -p 9002
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:9002
+  - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 2.6s
+ ✓ Compiled /src/middleware in 204ms (117 modules)
+(node:47931) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ○ Compiling / ...
+ ✓ Compiled / in 3.8s (911 modules)
+ ⨯ Internal error: TypeError: Cannot read properties of null (reading 'default')
+    at isStaticRequire (./node_modules/next/dist/shared/lib/get-img-props.js:20:16)
+    at isStaticImport (./node_modules/next/dist/shared/lib/get-img-props.js:26:40)
+    at getImgProps (./node_modules/next/dist/shared/lib/get-img-props.js:201:9)
+    at eval (./node_modules/next/dist/client/image-component.js:279:82)
+    at au (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:44746)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:45321)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:44769)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+digest: "2989404995"
+ ⨯ Internal error: TypeError: Cannot read properties of null (reading 'default')
+    at isStaticRequire (./node_modules/next/dist/shared/lib/get-img-props.js:20:16)
+    at isStaticImport (./node_modules/next/dist/shared/lib/get-img-props.js:26:40)
+    at getImgProps (./node_modules/next/dist/shared/lib/get-img-props.js:201:9)
+    at eval (./node_modules/next/dist/client/image-component.js:279:82)
+    at au (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:10446)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:44746)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16908)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:45321)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:44769)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at aC (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:52874)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:50095)
+    at aj (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:53793)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42336
+    at aw (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:42822)
+    at a_ (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:49776)
+    at ab (/Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:11808)
+    at /Users/apple/tiqetapp/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:35:16871
+digest: "2989404995"
+ GET / 500 in 1898ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 801ms (527 modules)
+ GET /favicon.ico 200 in 907ms

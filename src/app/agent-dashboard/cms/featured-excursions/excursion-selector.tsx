@@ -23,7 +23,9 @@ const ExcursionItem = ({ excursion, isFeatured, onToggle }: { excursion: Excursi
     return (
         <Card className={cn("overflow-hidden transition-all", isFeatured && "border-2 border-primary")}>
              <div className="relative aspect-video">
-                 <Image src={excursion.images[0] && excursion.images[0].length > 0 ? excursion.images[0] : 'https://placehold.co/400x300.png'} alt={excursion.name} fill className="object-cover" />
+                 {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover" />
+                 )}
              </div>
             <CardHeader>
                 <CardTitle className="line-clamp-2 text-base">{excursion.name}</CardTitle>
