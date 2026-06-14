@@ -117,15 +117,16 @@ export default function CityClientPage({
          <>
          <div className="container mx-auto px-4 py-8 space-y-16">
               <header className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
-                {heroImage && (
-                  <Image
-                    src={heroImage}
-                    alt={`Things to do in ${cityName}`}
-                    fill
-                    className="object-cover"
-                    data-ai-hint="city header"
-                  />
-                )}
+                 {heroImage && (
+                   <Image
+                     src={heroImage}
+                     alt={`Things to do in ${cityName}`}
+                     fill
+                     className="object-cover"
+                     data-ai-hint="city header"
+                     unoptimized
+                   />
+                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 text-white">
                     <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">Things to do in {cityName}</h1>

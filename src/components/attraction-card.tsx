@@ -52,7 +52,7 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                 layout === 'horizontal' ? 'p-3 sm:p-4' : 'p-4'
             )}>
                 <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{excursion.city}</p>
-                <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name.split(':')[0]}</h3>
+                <h3 className="text-base font-bold text-gray-900 mt-1 group-hover:text-primary transition-colors line-clamp-2">{excursion.name}</h3>
                 <p className="text-sm text-gray-600 mt-1 line-clamp-2">{excursion.description}</p>
                 
                 {/* Responsive alignment */}

@@ -42,6 +42,7 @@ export const ExcursionCard = ({ excursion, wishlistButton }: { excursion: Excurs
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                         data-ai-hint="attraction"
+                        unoptimized
                         />
                       )}
                  </div>
