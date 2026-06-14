@@ -1,7 +1,6 @@
 
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { getHeroContent } from '@/lib/hero';
+import { fetchTiqetsProducts } from '@/lib/tiqets-api';
 import HomePageClient from './home-page-client';
 import type { Excursion, HeroContent } from '@/types';
 
@@ -12,10 +11,7 @@ export default async function HomePage() {
   let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide' };
 
   try {
-    const filePath = join(process.cwd(), 'public', 'excursions.json');
-    const raw = readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw);
-    allExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
+    allExcursions = await fetchTiqetsProducts({});
   } catch {}
 
   try {

@@ -298,8 +298,24 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     }
 
     if (allActivities.length > 0) {
+      // Build a set of child product IDs so we can filter out variants from the flat list.
+      const childProductIds = new Set<string>();
+      for (const p of allActivities) {
+        if (Array.isArray(p.product_ids)) {
+          for (const pid of p.product_ids) {
+            childProductIds.add(String(pid));
+          }
+        }
+      }
+
       const transformedWithImages = await Promise.all(
         allActivities.map(async (p: any) => {
+          const idStr = String(p.id);
+          // Skip child products/variants; only show parent/vistable experiences
+          if (childProductIds.has(idStr) && (!Array.isArray(p.product_ids) || p.product_ids.length === 0)) {
+            return null;
+          }
+
           let images: string[] = [];
           if (Array.isArray(p.images)) {
             images = p.images
@@ -326,7 +342,7 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
           return { ...transformTiqetsProduct(p), images };
         })
       );
-      return transformedWithImages;
+      return transformedWithImages.filter((x): x is NonNullable<typeof x> => x !== null);
     }
     return [];
   }
