@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const SCRIPT_ID = 'tiqets-booking-engine-script';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const existing = document.getElementById(SCRIPT_ID);
     if (!existing) {
@@ -17,14 +19,45 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     }
   }, [productId]);
 
+  const handleClick = () => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    const oldWidget = root.querySelector('[data-tiqets-widget="booking"]');
+    if (oldWidget) {
+      oldWidget.removeAttribute('data-initialized');
+    }
+
+    const lightbox = document.querySelector('.basicLightbox');
+    if (lightbox) {
+      lightbox.remove();
+    }
+
+    if (typeof window.__TIQETS_LOADER_REINIT === 'function') {
+      window.__TIQETS_LOADER_REINIT();
+    }
+
+    const btn = document.getElementById('tiqets-trigger');
+    if (btn && typeof btn.click === 'function') {
+      btn.click();
+    }
+  };
+
   return (
-    <a
-      href={`https://www.tiqets.com/en/tickets/product-${productId}/`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-    >
-      Book Now
-    </a>
+    <div ref={rootRef} className="tiqets-booking-root">
+      <div
+        data-tiqets-widget="booking"
+        data-product-id={productId}
+        data-trigger-selector="#tiqets-trigger"
+      />
+      <button
+        id="tiqets-trigger"
+        type="button"
+        onClick={handleClick}
+        className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+      >
+        Book Now
+      </button>
+    </div>
   );
 }
