@@ -3,7 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CACHE_DIR = join(__dirname, '..', '..', '..', '..', 'cache');
+const CACHE_DIR = join(process.cwd(), 'cache');
 const PRODUCTS_CACHE_FILE = join(CACHE_DIR, 'products.json');
 const HELICOPTER_CACHE_FILE = join(CACHE_DIR, 'helicopter-tours.json');
 const VARIANTS_CACHE_FILE = join(CACHE_DIR, 'variants.json');
@@ -75,7 +75,10 @@ const TARGET_CITIES = [
   { name: 'Rome', id: '71631' },
   { name: 'Paris', id: '66746' },
   { name: 'New York', id: '260932' },
-  { name: 'Amsterdam', id: '75061' }
+  { name: 'Amsterdam', id: '75061' },
+  { name: 'Singapore', id: '78125' },
+  { name: 'Kuala Lumpur', id: '74416' },
+  { name: 'Bangkok', id: '78586' }
 ];
 
 // Ensure cache directory exists
