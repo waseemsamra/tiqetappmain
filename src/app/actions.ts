@@ -59,8 +59,8 @@ export async function searchExcursionsAction(
             .filter(ex => {
                 if (query && !ex.name.toLowerCase().includes(query.toLowerCase())) return false;
                 // Double-check city filter since API may not handle it correctly
-                if (city && ex.city.toLowerCase() !== city.toLowerCase()) return false;
-                if (country && ex.country.toLowerCase() !== country.toLowerCase()) return false;
+                if (city && !(ex.city || '').toLowerCase().includes(city.toLowerCase())) return false;
+                if (country && !(ex.country || '').toLowerCase().includes(country.toLowerCase())) return false;
                 return true;
             })
             .sort((a, b) => (b.rating || 0) - (a.rating || 0));
