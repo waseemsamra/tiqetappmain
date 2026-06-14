@@ -34,13 +34,19 @@ export const ExcursionListCard = ({ excursion, wishlistButton }: { excursion: Ex
             <div className="flex flex-col md:flex-row">
                 <div className="relative md:w-1/3 aspect-video md:aspect-auto">
                     <Link href={`/excursions/${excursion.id}`} className="block h-full w-full">
-                          <Image
-                              src={excursion.images?.[0] && excursion.images?.[0].length > 0 ? excursion.images?.[0] : null}
+                          {excursion.images?.[0] && excursion.images?.[0].length > 0 ? (
+                            <Image
+                              src={excursion.images?.[0]}
                               alt={excursion.name}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
                               data-ai-hint="attraction"
-                          />
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm">
+                              No image
+                            </div>
+                          )}
                     </Link>
                 </div>
                 <div className="flex flex-col flex-grow p-4 md:w-2/3">

@@ -302,7 +302,6 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
       }
       
       if (allActivities.length > 0) {
-        // Fetch venue images for products without images
         const transformedWithImages = await Promise.all(
           allActivities.map(async (p: any) => {
             let images: string[] = [];
@@ -311,6 +310,30 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
                  .map((img: any) => img?.medium || img?.large || img?.small || img?.extra_large || '')
                  .filter(img => img && img.length > 0);
             }
+            if (images.length === 0 && p.venue?.id) {
+      try {
+        const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
+        if (venueResp.ok) {
+           const venueData = await venueResp.json();
+           images = (venueData.experience?.images || venueData.images || [])
+             .map((img: any) => {
+               if (typeof img === 'string') {
+                 return img;
+               }
+               return img?.medium || img?.large || img?.small || img?.extra_large || '';
+             })
+             .filter(img => img && img.length > 0);
+        }
+      } catch (e) {}
+            }
+            return { ...transformTiqetsProduct(p), images };
+          })
+        );
+        return transformedWithImages;
+      }
+      // No live data for this city — do NOT fall back. Return empty results.
+      return [];
+    }
             if (images.length === 0 && p.venue?.id) {
       try {
         const venueResp = await fetch(`${TIQETS_API_BASE}/experiences/${p.venue.id}`, { method: 'GET', headers });
