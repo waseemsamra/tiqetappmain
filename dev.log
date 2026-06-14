@@ -70,3 +70,5 @@ Warning: ReactDOM.preload(): Expected two arguments, a non-empty `href` string a
  ✓ Compiled in 326ms (430 modules)
  ✓ Compiled in 262ms (430 modules)
  ✓ Compiled in 291ms (430 modules)
+ ✓ Compiled in 718ms (430 modules)
+ ✓ Compiled in 377ms (430 modules)
