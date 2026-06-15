@@ -33,9 +33,9 @@ const topCategories = [
 ];
 
 const renderLinks = (items: string[], type: 'query' | 'city' | 'country') => (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-2 sm:gap-3">
         {items.map(item => (
-            <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400">
+            <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
                 <Link href={`/search?${type}=${encodeURIComponent(item)}`}>
                     {item}
                 </Link>
@@ -52,17 +52,17 @@ export default function PopularPlacesSection({ countries }: { countries: string[
                     Discover our most popular places to visit
                 </h2>
 
-                <Tabs defaultValue="destinations" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 bg-gray-200/70 p-1 rounded-lg">
-                        <TabsTrigger value="destinations">Top Destinations</TabsTrigger>
-                        <TabsTrigger value="things-to-do">Top Things to Do</TabsTrigger>
-                        <TabsTrigger value="categories">Top Categories</TabsTrigger>
+                <Tabs defaultValue="things-to-do" className="w-full">
+                    <TabsList className="flex flex-wrap gap-1 bg-gray-200/70 p-1 rounded-lg">
+                        <TabsTrigger value="things-to-do" className="px-4 py-2 text-sm">Top Things to Do</TabsTrigger>
+                        <TabsTrigger value="destinations" className="px-4 py-2 text-sm">Top Destinations</TabsTrigger>
+                        <TabsTrigger value="categories" className="px-4 py-2 text-sm">Top Categories</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="destinations" className="bg-white p-6 rounded-b-lg border border-t-0">
-                        {renderLinks(topDestinations, 'city')}
-                    </TabsContent>
                     <TabsContent value="things-to-do" className="bg-white p-6 rounded-b-lg border border-t-0">
                         {renderLinks(topThingsToDo, 'query')}
+                    </TabsContent>
+                    <TabsContent value="destinations" className="bg-white p-6 rounded-b-lg border border-t-0">
+                        {renderLinks(topDestinations, 'city')}
                     </TabsContent>
                     <TabsContent value="categories" className="bg-white p-6 rounded-b-lg border border-t-0">
                         {renderLinks(topCategories, 'query')}
