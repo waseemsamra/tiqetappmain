@@ -4,17 +4,12 @@ import { useEffect } from 'react';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const scriptId = 'tiqets-booking-engine-script';
-
-    if (document.getElementById(scriptId)) {
-      document.getElementById(scriptId)?.remove();
-    }
+    const existing = document.getElementById('tiqets-booking-engine-script');
+    if (existing) return;
 
     const script = document.createElement('script');
-    script.id = scriptId;
-    script.src = `https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js?cb=${Date.now()}`;
+    script.id = 'tiqets-booking-engine-script';
+    script.src = 'https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js';
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
