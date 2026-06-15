@@ -16,13 +16,13 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   }, [productId]);
 
   return (
-    <>
-      <div
-        id="tiqets-booking-container"
-        data-tiqets-widget="booking"
-        data-product-id={productId}
-        data-trigger-selector="#tiqets-trigger"
-      />
+    <div
+      data-tiqets-widget="booking"
+      data-product-id={productId}
+      data-partner="time_travel_tourism_dubai"
+      data-currency="EUR"
+      data-trigger-selector="#tiqets-trigger"
+    >
       <button
         id="tiqets-trigger"
         type="button"
@@ -30,6 +30,6 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       >
         Book Now
       </button>
-    </>
+    </div>
   );
 }
