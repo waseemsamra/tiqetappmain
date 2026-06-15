@@ -16,17 +16,20 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   }, [productId]);
 
   return (
-    <div
-      data-tiqets-widget="booking"
-      data-product-id={productId}
-      data-trigger-selector="#tiqets-trigger"
-    >
+    <>
+      <div
+        id="tiqets-booking-container"
+        data-tiqets-widget="booking"
+        data-product-id={productId}
+        data-trigger-selector="#tiqets-trigger"
+      />
       <button
+        id="tiqets-trigger"
         type="button"
         className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
       >
         Book Now
       </button>
-    </div>
+    </>
   );
 }
