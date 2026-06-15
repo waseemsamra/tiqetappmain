@@ -35,7 +35,7 @@ export function AllExperiences({ excursions, onShowFilters, selectedTagIds, coun
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {excursionsToShow.map(ex => (
-                    <AttractionCard key={ex.id} excursion={ex} />
+                    <AttractionCard key={ex.id} excursion={ex} layout="horizontal" />
                 ))}
             </div>
 
