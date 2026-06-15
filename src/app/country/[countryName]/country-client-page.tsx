@@ -145,19 +145,22 @@ export default function CountryClientPage({
                 {topExcursions.length > 0 && (
                     <section>
                         <h2 className="text-2xl md:text-3xl font-bold mb-6">Top 10 Experiences in {countryName}</h2>
-                        <Carousel opts={{ align: "start" }} className="w-full">
+                        <Carousel opts={{ align: "start", loop: false }} className="w-full">
                             <CarouselContent className="-ml-4">
-                                {topExcursions.map(excursion => (
-                                    <CarouselItem key={excursion.id} className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/5">
-                                        <AttractionCard 
-                                            excursion={excursion} 
-                                            wishlistButton={renderWishlistButton(excursion)}
-                                        />
+                                {topExcursions.map((excursion, index) => (
+                                    <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
+                                        <div className="h-full py-4">
+                                            <AttractionCard 
+                                                excursion={excursion} 
+                                                wishlistButton={renderWishlistButton(excursion)}
+                                                layout="horizontal"
+                                            />
+                                        </div>
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-                            <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                            <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                            <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
                         </Carousel>
                     </section>
                 )}
