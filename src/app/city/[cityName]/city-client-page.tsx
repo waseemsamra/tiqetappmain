@@ -160,7 +160,7 @@ export default function CityClientPage({
                         {topRatedExcursions.map((ex, index) => (
                              <CarouselItem key={ex.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
                                  <div className="h-full py-4">
-                                     <AttractionCard excursion={ex} rank={index+1} wishlistButton={renderWishlistButton(ex)} layout="horizontal" />
+                                     <AttractionCard excursion={ex} rank={index+1} wishlistButton={renderWishlistButton(ex)} />
                                  </div>
                              </CarouselItem>
                         ))}

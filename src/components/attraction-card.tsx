@@ -60,8 +60,8 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                 <div className={cn(
                     "flex justify-between mt-auto pt-4",
                     layout === 'horizontal' 
-                        ? "sm:items-center" // Desktop: center align
-                        : "items-center" // Vertical layout: center align
+                        ? "items-center"
+                        : "items-center"
                 )}>
                     <div className={cn(
                         layout === 'horizontal' 
