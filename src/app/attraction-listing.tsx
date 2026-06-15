@@ -1,4 +1,3 @@
-// GitHub update: 2026-06-13T17:28:37Z - Sync trigger
 "use client";
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
@@ -51,56 +50,67 @@ interface AttractionListingSectionProps {
     showTabs?: boolean;
     tabType?: 'country' | 'city' | undefined;
     maxTabs?: number;
-    tabs?: string[]; // Explicit tab names (cities or countries)
+    tabs?: string[];
 }
 
-export default function AttractionListingSection({ title, excursions, showViewAllButton = true, layout = 'carousel', user = null, wishlistIds = new Set(), showTabs = true, tabType, maxTabs, tabs }: AttractionListingSectionProps) {
+export default function AttractionListingSection({
+    title,
+    excursions,
+    showViewAllButton = true,
+    layout = 'carousel',
+    user = null,
+    wishlistIds = new Set(),
+    showTabs = true,
+    tabType,
+    maxTabs,
+    tabs
+}: AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
-              const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
-              return tabs.map(name => {
+            const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
+            return tabs.map(name => {
                 const lower = name.toLowerCase();
                 const match = excursions.find(ex => (ex.city || '').toLowerCase().includes(lower));
                 return {
-                  name,
-                  image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
+                    name,
+                    image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
                 };
-              });
+            });
         }
         const cityMap = new Map<string, { name: string, image: string }>();
-          excursions.forEach(ex => {
-              if (!cityMap.has(ex.city)) {
-                  cityMap.set(ex.city, { 
+        excursions.forEach(ex => {
+            if (!cityMap.has(ex.city)) {
+                cityMap.set(ex.city, { 
                     name: ex.city, 
                     image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : null) 
-                  });
-              }
-          });
+                });
+            }
+        });
         const allCities = Array.from(cityMap.values());
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
     }, [excursions, maxTabs, tabs, tabType]);
 
     const countries = useMemo(() => {
-         if (tabs && tabType === 'country') {
-              const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
-              return tabs.map(name => {
+        if (tabs && tabType === 'country') {
+            const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
+            return tabs.map(name => {
                 const lower = name.toLowerCase();
                 const match = excursions.find(ex => (ex.country || '').toLowerCase().includes(lower));
                 return {
-                  name,
-                  image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
+                    name,
+                    image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
                 };
-              });
-         }
+            });
+        }
         const countryMap = new Map<string, { name: string, image: string }>();
-          excursions.forEach(ex => {
-              if (!countryMap.has(ex.country)) {
-                  countryMap.set(ex.country, { 
+        excursions.forEach(ex => {
+            if (!countryMap.has(ex.country)) {
+                countryMap.set(ex.country, { 
                     name: ex.country, 
                     image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : null) 
-                  });
-              }
-          });
+                });
+            }
+        });
         const allCountries = Array.from(countryMap.values());
         return maxTabs ? allCountries.slice(0, maxTabs) : allCountries;
     }, [excursions, maxTabs, tabs, tabType]);
@@ -110,7 +120,7 @@ export default function AttractionListingSection({ title, excursions, showViewAl
             ? (countries.length > 0 ? countries[0].name : null)
             : (cities.length > 0 ? cities[0].name : null)
     );
-    
+
     const filteredExcursions = useMemo(() => {
         if (showTabs && activeTab) {
             if (tabType === 'country') {
@@ -136,60 +146,61 @@ export default function AttractionListingSection({ title, excursions, showViewAl
     );
 
     const renderCarousel = () => {
-      const carouselKey = showTabs && activeTab ? activeTab : 'all';
-      return (
-        <div className="relative">
-            <Carousel
-                key={carouselKey}
-                opts={{ align: "start", loop: false }}
-                className="w-full"
-            >
-                {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (
-                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
-                        {cities.map(city => (
-                            <CityTab
-                                key={city.name}
-                                city={city.name}
-                                image={city.image}
-                                isActive={activeTab === city.name}
-                                onClick={() => setActiveTab(city.name as string)}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                {showTabs && tabs && tabs.length > 1 && tabType === 'country' && (
-                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
-                        {countries.map(country => (
-                            <CountryTab
-                                key={country.name}
-                                country={country.name}
-                                isActive={activeTab === country.name}
-                                onClick={() => setActiveTab(country.name as string)}
-                            />
-                        ))}
-                    </div>
-                )}
-
-                <CarouselContent className="-ml-4">
-                    {filteredExcursions.map((excursion) => (
-                        <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
-                            <div className="h-full py-4">
-                                <AttractionCard
-                                    excursion={excursion}
-                                    wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
-                                    layout="horizontal"
+        const carouselKey = showTabs && activeTab ? activeTab : 'all';
+        return (
+            <div className="relative">
+                <Carousel
+                    key={carouselKey}
+                    opts={{ align: "start", loop: false }}
+                    className="w-full"
+                >
+                    {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (
+                        <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
+                            {cities.map(city => (
+                                <CityTab
+                                    key={city.name}
+                                    city={city.name}
+                                    image={city.image}
+                                    isActive={activeTab === city.name}
+                                    onClick={() => setActiveTab(city.name as string)}
                                 />
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-                <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-            </Carousel>
-        </div>
-    );
-    
+                            ))}
+                        </div>
+                    )}
+
+                    {showTabs && tabs && tabs.length > 1 && tabType === 'country' && (
+                        <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4">
+                            {countries.map(country => (
+                                <CountryTab
+                                    key={country.name}
+                                    country={country.name}
+                                    isActive={activeTab === country.name}
+                                    onClick={() => setActiveTab(country.name as string)}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    <CarouselContent className="-ml-4">
+                        {filteredExcursions.map((excursion) => (
+                            <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
+                                <div className="h-full py-4">
+                                    <AttractionCard
+                                        excursion={excursion}
+                                        wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                                        layout="horizontal"
+                                    />
+                                </div>
+                            </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                    <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                </Carousel>
+            </div>
+        );
+    };
+
     if (!excursions || excursions.length === 0) {
         return null;
     }
