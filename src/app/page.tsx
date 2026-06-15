@@ -25,12 +25,15 @@ function loadLocalExcursions(): Excursion[] {
 
 export default async function HomePage() {
   const allExcursions: Excursion[] = loadLocalExcursions();
-  let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide' };
+  let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide', backgroundImage: '' };
 
   try {
     const fetched = await getHeroContent();
-    if (fetched?.headline) heroContent.headline = fetched.headline;
-    if (fetched?.subheading) heroContent.subheading = fetched.subheading;
+    heroContent = {
+      headline: fetched.headline || heroContent.headline,
+      subheading: fetched.subheading || heroContent.subheading,
+      backgroundImage: fetched.backgroundImage || '',
+    };
   } catch {}
 
   const byCity = (city: string, limit = 10) =>
