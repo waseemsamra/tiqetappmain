@@ -1,4 +1,4 @@
-
+ 
 import { getHeroContent } from '@/lib/hero';
 import HomePageClient from './home-page-client';
 import type { Excursion, HeroContent } from '@/types';
@@ -10,7 +10,7 @@ export const revalidate = 0;
 const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras al-Khaimah', 'Fujairah'];
 
-function loadLocalFallback(): Excursion[] {
+function loadLocalExcursions(): Excursion[] {
   try {
     const filePath = join(process.cwd(), 'public', 'excursions.json');
     const raw = readFileSync(filePath, 'utf-8');
@@ -22,36 +22,13 @@ function loadLocalFallback(): Excursion[] {
 }
 
 export default async function HomePage() {
-  let allExcursions: Excursion[] = [];
+  const allExcursions: Excursion[] = loadLocalExcursions();
   let heroContent: HeroContent = { headline: 'Discover Amazing Experiences', subheading: 'Find the best things to do worldwide' };
 
   try {
-    const [uaeResults, worldwideResults] = await Promise.all([
-      Promise.all(UAE_CITIES.map(city => fetchTiqetsProducts({ city_name: city }))),
-      Promise.all(WORLDWIDE_CITIES.map(city => fetchTiqetsProducts({ city_name: city }))),
-    ]);
-
-    const combined = [...uaeResults.flat(), ...worldwideResults.flat()];
-    const seen = new Set<string>();
-    allExcursions = combined.filter(ex => {
-      const id = String(ex.id);
-      if (seen.has(id)) return false;
-      seen.add(id);
-      return true;
-    });
-  } catch {}
-
-  if (!allExcursions.length) {
-    try {
-      const filePath = join(process.cwd(), 'public', 'excursions.json');
-      const raw = readFileSync(filePath, 'utf-8');
-      const parsed = JSON.parse(raw);
-      allExcursions = Array.isArray(parsed.experiences) ? parsed.experiences : [];
-    } catch {}
-  }
-
-  try {
-    heroContent = await getHeroContent();
+    const fetched = await getHeroContent();
+    if (fetched?.headline) heroContent.headline = fetched.headline;
+    if (fetched?.subheading) heroContent.subheading = fetched.subheading;
   } catch {}
 
   const byCity = (city: string, limit = 10) =>
@@ -68,7 +45,7 @@ export default async function HomePage() {
     <HomePageClient
       allExcursions={allExcursions}
       topRatedExcursions={topRatedExcursions}
-      heroContent={heroContent || { headline: '', subheading: '' }}
+      heroContent={heroContent}
       uaeExcursions={uaeExcursions}
       worldwideExcursions={worldwideExcursions}
       barcelonaExcursions={barcelonaExcursions}
