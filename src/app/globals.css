@@ -90,3 +90,26 @@ body {
     animation-play-state: paused;
   }
 }
+
+@layer components {
+  @media (max-width: 767px) {
+    .home-section-title,
+    h1, h2, h3 {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 700;
+    }
+  }
+}
+
+@layer base {
+  .section-compact {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .section-compact + .section-compact {
+    margin-top: 0;
+    padding-top: 1rem;
+  }
+}
