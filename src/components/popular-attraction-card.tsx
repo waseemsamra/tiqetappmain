@@ -22,7 +22,7 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                     <StarRating rating={excursion.rating} />
                     <div className="text-right">
                         <span className="text-xs text-gray-500">From</span>
-                        <p className="font-bold text-lg text-gray-900">\${excursion.price.toFixed(2)}</p>
+                        <p className="font-bold text-lg text-gray-900">€{Number(excursion.price || 0).toFixed(2)}</p>
                     </div>
                 </div>
             </div>

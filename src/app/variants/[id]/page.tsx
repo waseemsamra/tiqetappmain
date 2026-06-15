@@ -190,8 +190,7 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
               <div className="mb-4">
                 <span className="text-sm text-gray-500">Price</span>
                 <p className="font-bold text-2xl">
-                  {variant.currency === "EUR" ? "â¬" : variant.currency === "USD" ? "$" : variant.currency === "GBP" ? "£" : variant.currency}
-                  {Number(variant.price || 0).toFixed(2)}
+                  €{Number(variant.price || 0).toFixed(2)}
                 </p>
               </div>
               <VariantBookingClient key={variant.id} productId={variant.id} experienceUrl={variant.experience_url} />
