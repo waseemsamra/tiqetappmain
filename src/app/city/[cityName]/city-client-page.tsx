@@ -158,11 +158,11 @@ export default function CityClientPage({
                  <Carousel opts={{ align: "start", loop: false }} className="w-full">
                     <CarouselContent className="-ml-4">
                         {topRatedExcursions.map((ex, index) => (
-                             <CarouselItem key={ex.id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-4">
-                                <div className="h-full py-4">
-                                    <AttractionCard excursion={ex} rank={index+1} wishlistButton={renderWishlistButton(ex)} />
-                                </div>
-                            </CarouselItem>
+                             <CarouselItem key={ex.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">
+                                 <div className="h-full py-4">
+                                     <AttractionCard excursion={ex} rank={index+1} wishlistButton={renderWishlistButton(ex)} layout="horizontal" />
+                                 </div>
+                             </CarouselItem>
                         ))}
                     </CarouselContent>
                     <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
