@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -19,11 +22,14 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const container = document.getElementById('tiqets-booking-container');
-    const trigger = document.getElementById('tiqets-trigger');
+    const container = containerRef.current;
+    const trigger = triggerRef.current;
     if (!container || !trigger) return;
+
+    container.setAttribute('data-tiqets-widget', 'booking');
+    container.setAttribute('data-product-id', productId);
+    container.setAttribute('data-trigger-selector', `#book-trigger-${productId}`);
+    trigger.id = `book-trigger-${productId}`;
 
     const timer = window.setTimeout(() => {
       if (container.children.length === 0) {
@@ -36,15 +42,10 @@ export function VariantBookingClient({ productId }: { productId: string }) {
 
   return (
     <>
-      <div
-        key={productId}
-        id="tiqets-booking-container"
-        data-tiqets-widget="booking"
-        data-product-id={productId}
-        data-trigger-selector="#tiqets-trigger"
-      />
+      <div ref={containerRef} id="tiqets-booking-container" />
       <button
-        id="tiqets-trigger"
+        ref={triggerRef}
+        id={`book-trigger-${productId}`}
         type="button"
         className="block w-full text-center bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
       >
