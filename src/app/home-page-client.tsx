@@ -68,7 +68,7 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
   }, [allExcursions]);
 
     return (
-        <>
+        <div className="home-compact">
           <HeroSection content={heroContent} />
           <FeatureCards />
           <AttractionListingSection
@@ -103,6 +103,6 @@ export default function HomePageClient({ allExcursions, topRatedExcursions, hero
            />
           <PopularPlacesSection countries={popularCountries} />
           <HelpCenterSection />
-        </>
+        </div>
     );
 }

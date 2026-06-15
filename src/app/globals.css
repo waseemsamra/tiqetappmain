@@ -95,21 +95,34 @@ body {
   @media (max-width: 767px) {
     .home-section-title,
     h1, h2, h3 {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 0.95rem;
       font-weight: 700;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 }
 
 @layer base {
   .section-compact {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
   .section-compact + .section-compact {
     margin-top: 0;
-    padding-top: 1rem;
+    padding-top: 0.5rem;
+  }
+  .home-compact > * + * {
+    margin-top: 0.25rem;
+  }
+  .home-compact [class*="py-12"],
+  .home-compact [class*="py-16"],
+  .home-compact [class*="py-8"],
+  .home-compact [class*="py-"] {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
   }
 }
