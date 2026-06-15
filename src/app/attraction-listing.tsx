@@ -225,7 +225,7 @@ export default function AttractionListingSection({
             {showViewAllButton && layout === 'carousel' && (
                 <div className="mt-8 text-left">
                     <Link href={getExploreUrl()}>
-                        <Button variant="outline">
+                        <Button variant="outline" className="w-full md:w-auto">
                             Explore {activeTab || 'All'} <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     </Link>
