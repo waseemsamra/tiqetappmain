@@ -1,4 +1,4 @@
- 
+
 import { getHeroContent } from '@/lib/hero';
 import HomePageClient from './home-page-client';
 import type { Excursion, HeroContent } from '@/types';
