@@ -3,7 +3,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Globe } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Globe, ChevronDown } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { SettingsModal } from './settings-modal';
 
@@ -41,6 +42,51 @@ const GooglePlayButton = () => (
     </a>
 );
 
+const footerSections = [
+  {
+    id: 'explore',
+    title: 'Explore',
+    links: [
+      { href: '/destinations', label: 'Destinations', isHardLink: true },
+      { href: '/search', label: 'Experiences', isHardLink: false },
+      { href: '/excursions/top-searched', label: 'Top Experiences', isHardLink: false },
+      { href: '#', label: 'Hotels', isHardLink: true },
+      { href: '#', label: 'Flights', isHardLink: true },
+      { href: '#', label: 'Travel Deals', isHardLink: true },
+    ],
+  },
+  {
+    id: 'company',
+    title: 'Company',
+    links: [
+      { href: '#', label: 'About Us', isHardLink: true },
+      { href: '#', label: 'Careers', isHardLink: true },
+      { href: '#', label: 'Press', isHardLink: true },
+      { href: '#', label: 'Blog', isHardLink: true },
+    ],
+  },
+  {
+    id: 'support',
+    title: 'Support',
+    links: [
+      { href: '#', label: 'Help Center', isHardLink: true },
+      { href: '#', label: 'Contact Us', isHardLink: true },
+      { href: '#', label: 'FAQs', isHardLink: true },
+      { href: '/booking/lookup', label: 'Find My Booking', isHardLink: false },
+      { href: '/admin', label: 'Admin', isHardLink: false },
+    ],
+  },
+  {
+    id: 'partnerships',
+    title: 'Partnerships',
+    links: [
+      { href: '#', label: 'Become a Partner', isHardLink: true },
+      { href: '#', label: 'Affiliates', isHardLink: true },
+      { href: '#', label: 'Advertise', isHardLink: true },
+    ],
+  },
+];
+
 const FooterLink = ({ href, children, isHardLink = false }: { href: string; children: React.ReactNode, isHardLink?: boolean }) => {
     const linkContent = <span className="hover:text-primary transition-colors text-sm">{children}</span>;
     return (
@@ -61,70 +107,78 @@ const Footer = () => {
     <>
       <footer className="bg-gray-800 text-gray-300">
         <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-              {/* Explore */}
-              <div className="space-y-4">
-                  <h3 className="font-bold text-white text-base">Explore</h3>
-                  <ul className="space-y-2">
-                      <FooterLink href="/destinations" isHardLink={true}>Destinations</FooterLink>
-                      <FooterLink href="/search">Experiences</FooterLink>
-                      <FooterLink href="/excursions/top-searched">Top Experiences</FooterLink>
-                      <FooterLink href="#">Hotels</FooterLink>
-                      <FooterLink href="#">Flights</FooterLink>
-                      <FooterLink href="#">Travel Deals</FooterLink>
-                  </ul>
+          <div className="md:hidden">
+            <Accordion type="single" collapsible className="w-full">
+              {footerSections.map((section) => (
+                <AccordionItem key={section.id} value={section.id} className="border-gray-700">
+                  <AccordionTrigger className="text-white hover:no-underline">
+                    <span className="font-bold text-base">{section.title}</span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="space-y-2 pt-2">
+                      {section.links.map((link) => (
+                        <FooterLink key={link.label} href={link.href} isHardLink={link.isHardLink}>{link.label}</FooterLink>
+                      ))}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+
+          <div className="hidden md:grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+            {footerSections.map((section) => (
+              <div key={section.id} className="space-y-4">
+                <h3 className="font-bold text-white text-base">{section.title}</h3>
+                <ul className="space-y-2">
+                  {section.links.map((link) => (
+                    <FooterLink key={link.label} href={link.href} isHardLink={link.isHardLink}>{link.label}</FooterLink>
+                  ))}
+                </ul>
               </div>
-              {/* Company */}
-              <div className="space-y-4">
-                  <h3 className="font-bold text-white text-base">Company</h3>
-                  <ul className="space-y-2">
-                      <FooterLink href="#">About Us</FooterLink>
-                      <FooterLink href="#">Careers</FooterLink>
-                      <FooterLink href="#">Press</FooterLink>
-                      <FooterLink href="#">Blog</FooterLink>
-                  </ul>
-              </div>
-              {/* Support */}
-              <div className="space-y-4">
-                  <h3 className="font-bold text-white text-base">Support</h3>
-                  <ul className="space-y-2">
-                      <FooterLink href="#">Help Center</FooterLink>
-                      <FooterLink href="#">Contact Us</FooterLink>
-                      <FooterLink href="#">FAQs</FooterLink>
-                      <FooterLink href="/booking/lookup">Find My Booking</FooterLink>
-                      <FooterLink href="/admin">Admin</FooterLink>
-                  </ul>
-              </div>
-              {/* Partnerships */}
-              <div className="space-y-4">
-                  <h3 className="font-bold text-white text-base">Partnerships</h3>
-                  <ul className="space-y-2">
-                      <FooterLink href="#">Become a Partner</FooterLink>
-                      <FooterLink href="#">Affiliates</FooterLink>
-                      <FooterLink href="#">Advertise</FooterLink>
-                  </ul>
+            ))}
+
+            {/* App & Language */}
+            <div className="col-span-2 space-y-6">
+                <div>
+                    <h3 className="font-bold text-white text-base mb-4">Get the App</h3>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <AppStoreButton />
+                      <GooglePlayButton />
+                    </div>
+                </div>
+
+                <div>
+                    <Button 
+                        variant="outline"
+                        onClick={() => setIsSettingsModalOpen(true)}
+                        className="bg-gray-700 border-gray-600 text-white w-full max-w-xs hover:bg-gray-600 hover:text-white"
+                    >
+                         <Globe className="mr-2 h-4 w-4" />
+                         <span>Language & Currency</span>
+                    </Button>
+                </div>
+            </div>
+          </div>
+
+          <div className="md:hidden mt-8">
+              <div>
+                  <h3 className="font-bold text-white text-base mb-4">Get the App</h3>
+                  <div className="flex flex-col gap-4">
+                    <AppStoreButton />
+                    <GooglePlayButton />
+                  </div>
               </div>
 
-              {/* App & Language */}
-              <div className="col-span-2 space-y-6">
-                  <div>
-                      <h3 className="font-bold text-white text-base mb-4">Get the App</h3>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <AppStoreButton />
-                        <GooglePlayButton />
-                      </div>
-                  </div>
-
-                  <div>
-                      <Button 
-                          variant="outline"
-                          onClick={() => setIsSettingsModalOpen(true)}
-                          className="bg-gray-700 border-gray-600 text-white w-full max-w-xs hover:bg-gray-600 hover:text-white"
-                      >
-                           <Globe className="mr-2 h-4 w-4" />
-                           <span>Language & Currency</span>
-                      </Button>
-                  </div>
+              <div className="mt-4">
+                  <Button 
+                      variant="outline"
+                      onClick={() => setIsSettingsModalOpen(true)}
+                      className="bg-gray-700 border-gray-600 text-white w-full hover:bg-gray-600 hover:text-white"
+                  >
+                       <Globe className="mr-2 h-4 w-4" />
+                       <span>Language & Currency</span>
+                  </Button>
               </div>
           </div>
 
