@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import type { Excursion, ExcursionVariant } from '@/types';
 import { Star } from 'lucide-react';
 
@@ -23,7 +22,7 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
     const title = variant.name || excursion.name;
 
     return (
-      <Link
+      <a
         href={`/variants/${variant.id}`}
         className="rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col group h-full bg-white relative border border-gray-200/80"
       >
@@ -53,6 +52,6 @@ export const VariantCard = ({ variant, excursion }: VariantCardProps) => {
             </div>
           </div>
         </div>
-      </Link>
+      </a>
     );
 };
