@@ -7,25 +7,27 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     if (typeof window === 'undefined') return;
 
     const scriptId = 'tiqets-booking-engine-script';
-    const existing = document.getElementById(scriptId);
-    if (existing) {
-      existing.remove();
+
+    if (document.getElementById(scriptId)) {
+      document.getElementById(scriptId)?.remove();
     }
 
     const script = document.createElement('script');
     script.id = scriptId;
-    script.src = 'https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js';
+    script.src = `https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js?cb=${Date.now()}`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
   }, [productId]);
 
   return (
-    <div
-      data-tiqets-widget="booking"
-      data-product-id={productId}
-      data-trigger-selector="#tiqets-trigger"
-    >
+    <>
+      <div
+        id="tiqets-booking-container"
+        data-tiqets-widget="booking"
+        data-product-id={productId}
+        data-trigger-selector="#tiqets-trigger"
+      />
       <button
         id="tiqets-trigger"
         type="button"
@@ -33,6 +35,6 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       >
         Book Now
       </button>
-    </div>
+    </>
   );
 }
