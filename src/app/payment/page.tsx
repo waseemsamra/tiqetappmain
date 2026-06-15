@@ -205,7 +205,7 @@ function PaymentPageContent() {
                             <div className="border-t border-muted w-full pt-4" />
                             <div className="w-full text-lg flex justify-between items-center">
                                 <span className="font-bold">Total:</span>
-                                <span className="font-extrabold">${totalPrice.toFixed(2)}</span>
+                                <span className="font-extrabold">€{totalPrice.toFixed(2)}</span>
                             </div>
                         </CardFooter>
                     </Card>

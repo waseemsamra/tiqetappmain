@@ -48,7 +48,7 @@ const DayWithPrice = ({
         >
             <div className="text-sm">{format(date, 'd')}</div>
              <div className={cn("text-xs mt-1", isSelected ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
-                 ${Number(excursion.price || 0).toFixed(2)}
+                  €{Number(excursion.price || 0).toFixed(2)}
              </div>
         </div>
     );
@@ -176,7 +176,7 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                            <div>
                                 <p className="font-semibold">Entry ticket</p>
                                 <p className="text-sm text-muted-foreground">Age: 4-99</p>
-                                 <p className="font-bold mt-1">US${Number(excursion.price || 0).toFixed(2)}</p>
+                                 <p className="font-bold mt-1">€{Number(excursion.price || 0).toFixed(2)}</p>
                            </div>
                             <div className="flex items-center gap-2">
                                 <Button
@@ -234,7 +234,7 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                         <Separator />
                         <div className="flex justify-between items-center">
                             <span>Price</span>
-                            <span>{quantity > 0 ? `US$${totalPrice.toFixed(2)}` : 'US$--.--'}</span>
+                            <span>{quantity > 0 ? `€${totalPrice.toFixed(2)}` : '€--.--'}</span>
                         </div>
                      </CardContent>
                      <CardFooter>
@@ -242,7 +242,7 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                             <Separator />
                             <div className="flex justify-between items-center font-bold text-lg pt-4">
                                 <span>Total price</span>
-                                <span>{quantity > 0 ? `US$${totalPrice.toFixed(2)}` : 'US$--.--'}</span>
+<span>{quantity > 0 ? `€${totalPrice.toFixed(2)}` : '€--.--'}</span>
                             </div>
                             <Button size="lg" className="w-full mt-4 bg-purple-600 hover:bg-purple-700" onClick={handleNextStep} disabled={isPending}>
                                 Go to the next step
