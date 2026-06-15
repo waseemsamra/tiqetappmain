@@ -189,7 +189,7 @@ export default function AttractionListingSection({ title, excursions, showViewAl
             </Carousel>
         </div>
     );
-
+    
     if (!excursions || excursions.length === 0) {
         return null;
     }
