@@ -135,9 +135,12 @@ export default function AttractionListingSection({ title, excursions, showViewAl
         </div>
     );
 
-    const renderCarousel = () => (
+    const renderCarousel = () => {
+      const carouselKey = showTabs && activeTab ? activeTab : 'all';
+      return (
         <div className="relative">
             <Carousel
+                key={carouselKey}
                 opts={{ align: "start", loop: false }}
                 className="w-full"
             >
