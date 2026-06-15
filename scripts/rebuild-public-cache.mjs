@@ -17,8 +17,21 @@ async function fetchJson(url) {
   return res.json();
 }
 
+async function fetchAllPages(baseUrl) {
+  const allItems = [];
+  let page = 1;
+  while (true) {
+    const data = await fetchJson(baseUrl + '&page=' + page);
+    const items = data.experiences || data.products || data.items || [];
+    if (items.length === 0) break;
+    allItems.push(...items);
+    if (items.length < 100) break;
+    page++;
+  }
+  return allItems;
+}
+
 async function main() {
-  let added = 0;
   const ids = {
     'Dubai': '60005',
     'Abu Dhabi': '60013',
@@ -34,12 +47,16 @@ async function main() {
     'Kuala Lumpur': '74416',
     'Bangkok': '78586',
   };
+
+  let added = 0;
   for (const [city, cityId] of Object.entries(ids)) {
     console.log('Fetching ' + city);
-    const data = await fetchJson('https://api.tiqets.com/v2/experiences?city_id=' + cityId + '&page_size=100');
-    const items = data.experiences || data.products || data.items || [];
-    const newItems = items.filter((e) => !existingIds.has(String(e.id)));
-    console.log('  ' + city + ': ' + newItems.length + ' new');
+    const expItems = await fetchAllPages('https://api.tiqets.com/v2/experiences?city_id=' + cityId + '&page_size=100');
+    const prodItems = await fetchAllPages('https://api.tiqets.com/v2/products?city_id=' + cityId + '&page_size=100');
+    const allItems = [...expItems, ...prodItems];
+
+    const newItems = allItems.filter((e) => !existingIds.has(String(e.id)));
+    console.log('  ' + city + ': ' + newItems.length + ' new (exp=' + expItems.length + ', prod=' + prodItems.length + ')');
 
     for (const e of newItems) {
       existingIds.add(String(e.id));
