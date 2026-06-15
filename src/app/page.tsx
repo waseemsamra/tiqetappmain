@@ -7,6 +7,8 @@ import { join } from 'path';
 
 export const revalidate = 0;
 
+// DEPLOYMENT TRIGGER: 2026-06-15T04:23:00+04:00 - Force deploy for Singapore KL Bangkok tab fix
+
 const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras al-Khaimah', 'Fujairah'];
 
