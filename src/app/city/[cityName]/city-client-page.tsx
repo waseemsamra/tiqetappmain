@@ -162,10 +162,11 @@ export default function CityClientPage({
                                  <div className="h-full py-4">
                                      <AttractionCard excursion={ex} rank={index+1} wishlistButton={renderWishlistButton(ex)} layout="horizontal" />
                                  </div>
-                              </CarouselItem>
-                          </CarouselContent>
-                             <CarouselPrevious className="absolute left-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
-                             <CarouselNext className="absolute right-[-2.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                             </CarouselItem>
+                        ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
+                    <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden lg:flex" />
                 </Carousel>
             </section>
             
