@@ -6,6 +6,28 @@ import * as TiqetsApi from '@/lib/tiqets-api';
 const PAGE_SIZE = 100;
 const MAX_PAGES = 5;
 
+async function fetchAllPages(
+  urlBuilder: (page: number) => string,
+  extractor: (data: any) => any[],
+): Promise<any[]> {
+  const pages = Array.from({ length: MAX_PAGES }, (_, i) => i + 1);
+  const batches = await Promise.all(
+    pages.map(async (p) => {
+      const resp = await fetch(urlBuilder(p), {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Token ${process.env.TIQETS_API_KEY}`,
+          'User-Agent': 'my user agent',
+        },
+      });
+      if (!resp.ok) return [];
+      const data = await resp.json();
+      return extractor(data);
+    }),
+  );
+  return batches.flat();
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -20,17 +42,10 @@ export async function GET(request: Request) {
 
     // 0. City search by ID - fastest path
     if (city_id) {
-      let allActivities: any[] = [];
-      for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${city_id}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
-        });
-        if (!resp.ok) break;
-        const data = await resp.json();
-        const batch = (data.experiences || data.products || data.items || []);
-        allActivities.push(...batch);
-        if (batch.length < PAGE_SIZE) break;
-      }
+      const allActivities = await fetchAllPages(
+        (p) => `https://api.tiqets.com/v2/experiences?city_id=${city_id}&page_size=${PAGE_SIZE}&page=${p}`,
+        (data) => data.experiences || data.products || data.items || [],
+      );
       const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
       let filtered = transformed;
       if (query) {
@@ -49,17 +64,10 @@ export async function GET(request: Request) {
         return NextResponse.json({ activities: [], countries: [], cities: [], total: 0, page, totalPages: 0 });
       }
 
-      let allActivities: any[] = [];
-      for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`, {
-          headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
-        });
-        if (!resp.ok) break;
-        const data = await resp.json();
-        const batch = (data.experiences || data.products || data.items || []);
-        allActivities.push(...batch);
-        if (batch.length < PAGE_SIZE) break;
-      }
+      const allActivities = await fetchAllPages(
+        (p) => `https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`,
+        (data) => data.experiences || data.products || data.items || [],
+      );
 
       const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
       let filtered = transformed;
@@ -96,29 +104,17 @@ export async function GET(request: Request) {
       };
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
       if (cityId) {
-        let allActivities: any[] = [];
-        // Try experiences endpoint first
-        for (let p = 1; p <= MAX_PAGES; p++) {
-          const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
-          });
-          if (!resp.ok) break;
-          const data = await resp.json();
-          const batch = (data.experiences || data.products || data.items || []);
-          allActivities.push(...batch);
-          if (batch.length < PAGE_SIZE) break;
-        }
-        // Also fetch standalone products for this city (e.g., helicopter tours)
-        for (let p = 1; p <= MAX_PAGES; p++) {
-          const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
-            headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
-          });
-          if (!resp.ok) break;
-          const data = await resp.json();
-          const batch = (data.products || data.experiences || data.items || []);
-          allActivities.push(...batch);
-          if (batch.length < PAGE_SIZE) break;
-        }
+        const [experiences, products] = await Promise.all([
+          fetchAllPages(
+            (p) => `https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`,
+            (data) => data.experiences || data.products || data.items || [],
+          ),
+          fetchAllPages(
+            (p) => `https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`,
+            (data) => data.products || data.experiences || data.items || [],
+          ),
+        ]);
+        const allActivities = [...experiences, ...products];
         const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
         let filtered = transformed;
         if (query) {

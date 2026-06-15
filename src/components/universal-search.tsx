@@ -56,39 +56,21 @@ export function UniversalSearch() {
     };
     
     const debouncedSearch = useDebouncedCallback(async (currentQuery: string) => {
-        if (currentQuery.length < 1) {
-            setResults({ countries: [], cities: [], activities: [] });
-            setIsLoading(false);
-            setIsDropdownOpen(false);
+        if (currentQuery.trim().length < 2) {
+            setSuggestions([]);
+            setLoading(false);
             return;
         }
-
-        const cacheKey = currentQuery.trim().toLowerCase();
-        const cached = getCachedSearch(cacheKey);
-        if (cached) {
-            setResults(cached);
-            setIsDropdownOpen(true);
-            setIsLoading(false);
-            return;
-        }
-
-        try {
-            const res = await fetch(`/api/search?query=${encodeURIComponent(currentQuery)}`);
-            const data = await res.json();
-            const activities = Array.isArray(data.activities) ? data.activities : [];
-            const countries = Array.isArray(data.countries) ? data.countries : [];
-            const cities = Array.isArray(data.cities) ? data.cities : [];
-            const result = { countries, cities, activities: activities.slice(0, 5) };
-            setCachedSearch(cacheKey, result);
-            setResults(result);
-            setIsDropdownOpen(true);
-        } catch (error) {
-            console.error('Search error:', error);
-            setResults({ countries: [], cities: [], activities: [] });
-        } finally {
-            setIsLoading(false);
-        }
-    }, 300);
+        const res = await fetch(`/api/search?query=${encodeURIComponent(currentQuery.trim())}`);
+        const data = await res.json();
+        const combined = [
+            ...(data.countries || []).map((c: Country) => ({ type: 'country' as const, item: c })),
+            ...(data.cities || []).map((c: City) => ({ type: 'city' as const, item: c })),
+            ...(data.excursions || []).map((e: Excursion) => ({ type: 'activity' as const, item: e })),
+        ];
+        setSuggestions(combined);
+        setLoading(false);
+    }, 150);
 
     useEffect(() => {
         if (query && !isListening) {
