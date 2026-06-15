@@ -4,17 +4,9 @@
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import topThingsToDoData from '@/../public/top-things-to-do.json';
 
-const topThingsToDo = [
-    "Acropolis of Athens", "Alhambra", "Amsterdam Canal Cruises", "Burj Khalifa", 
-    "Casa Batlló", "Colosseum", "Disneyland® Paris", "Doge's Palace", "Duomo di Milano", 
-    "Edge NYC", "Eiffel Tower", "Keukenhof", "Kew Gardens", "London Eye", "Louvre Museum", 
-    "Moco Museum Amsterdam", "Mount Vesuvius", "National Palace of Pena & Park", 
-    "New York City Cards", "Oceanogràfic de Valencia", "Palace of Versailles", 
-    "Park Güell", "Pompeii", "SUMMIT One Vanderbilt", "Sagrada Familia", 
-    "Seine River Cruises", "St. Peter's Basilica", "Tower of London", "Van Gogh Museum", 
-    "Vatican Museums"
-];
+const topThingsToDo = topThingsToDoData.topThingsToDo;
 
 const topDestinations = [
     "Amsterdam", "Barcelona", "Dubai", "Florence", "Las Vegas", "Lisbon", 
@@ -32,11 +24,35 @@ const topCategories = [
     "Trips & Excursions in Las Vegas", "Water Activities in Dubai"
 ];
 
-const renderLinks = (items: string[], type: 'query' | 'city' | 'country') => (
+const renderLinks = (items: Array<{name: string, slug: string, id: number}>, type: 'query' | 'city' | 'country') => (
+    <div className="flex flex-wrap gap-2 sm:gap-3">
+        {items.map(item => (
+            <Button key={item.id} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
+                <Link href={`/excursions/${item.id}`}>
+                    {item.name}
+                </Link>
+            </Button>
+        ))}
+    </div>
+);
+
+const renderDestinationLinks = (items: string[]) => (
     <div className="flex flex-wrap gap-2 sm:gap-3">
         {items.map(item => (
             <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
-                <Link href={`/search?${type}=${encodeURIComponent(item)}`}>
+                <Link href={`/search?city=${encodeURIComponent(item)}`}>
+                    {item}
+                </Link>
+            </Button>
+        ))}
+    </div>
+);
+
+const renderCategoryLinks = (items: string[]) => (
+    <div className="flex flex-wrap gap-2 sm:gap-3">
+        {items.map(item => (
+            <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
+                <Link href={`/search?query=${encodeURIComponent(item)}`}>
                     {item}
                 </Link>
             </Button>
@@ -62,10 +78,10 @@ export default function PopularPlacesSection({ countries }: { countries: string[
                         {renderLinks(topThingsToDo, 'query')}
                     </TabsContent>
                     <TabsContent value="destinations" className="bg-white p-6 rounded-b-lg border border-t-0">
-                        {renderLinks(topDestinations, 'city')}
+                        {renderDestinationLinks(topDestinations)}
                     </TabsContent>
                     <TabsContent value="categories" className="bg-white p-6 rounded-b-lg border border-t-0">
-                        {renderLinks(topCategories, 'query')}
+                        {renderCategoryLinks(topCategories)}
                     </TabsContent>
                 </Tabs>
             </div>
