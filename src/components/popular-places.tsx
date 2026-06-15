@@ -69,10 +69,10 @@ export default function PopularPlacesSection({ countries }: { countries: string[
                 </h2>
 
                 <Tabs defaultValue="things-to-do" className="w-full">
-                    <TabsList className="flex flex-wrap gap-1 bg-gray-200/70 p-1 rounded-lg">
-                        <TabsTrigger value="things-to-do" className="px-4 py-2 text-sm">Top Things to Do</TabsTrigger>
-                        <TabsTrigger value="destinations" className="px-4 py-2 text-sm">Top Destinations</TabsTrigger>
-                        <TabsTrigger value="categories" className="px-4 py-2 text-sm">Top Categories</TabsTrigger>
+                    <TabsList className="flex gap-1 bg-gray-200/70 p-1 rounded-lg overflow-x-auto">
+                        <TabsTrigger value="things-to-do" className="px-4 py-2 text-sm whitespace-nowrap">Top Things to Do</TabsTrigger>
+                        <TabsTrigger value="destinations" className="px-4 py-2 text-sm whitespace-nowrap">Top Destinations</TabsTrigger>
+                        <TabsTrigger value="categories" className="px-4 py-2 text-sm whitespace-nowrap">Top Categories</TabsTrigger>
                     </TabsList>
                     <TabsContent value="things-to-do" className="bg-white p-6 rounded-b-lg border border-t-0">
                         {renderLinks(topThingsToDo, 'query')}
