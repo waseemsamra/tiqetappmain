@@ -39,8 +39,8 @@ export default async function HomePage() {
   const byCity = (city: string, limit = 10) =>
     allExcursions.filter(ex => (ex.city || '').toLowerCase().includes(city.toLowerCase())).slice(0, limit);
 
-  const uaeExcursions = UAE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);
-  const worldwideExcursions = WORLDWIDE_CITIES.flatMap(city => byCity(city, 10)).slice(0, 50);
+  const uaeExcursions = UAE_CITIES.flatMap(city => byCity(city, 10));
+  const worldwideExcursions = WORLDWIDE_CITIES.flatMap(city => byCity(city, 10));
   const barcelonaExcursions = byCity('Barcelona', 10);
   const topRatedExcursions = [...allExcursions]
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
