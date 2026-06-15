@@ -1,14 +1,15 @@
 import { notFound } from 'next/navigation';
 import { fetchTiqetsProductById } from '@/lib/tiqets-api';
 import { Star } from 'lucide-react';
-import { VariantBookingClient } from './variant-booking-client';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
 
 export const dynamic = 'force-dynamic';
 
@@ -193,7 +194,9 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
                   €{Number(variant.price || 0).toFixed(2)}
                 </p>
               </div>
-              <VariantBookingClient key={variant.id} productId={variant.id} experienceUrl={variant.experience_url} />
+              <Link href={`/booking?activityId=${variant.id}`}>
+                <Button className="w-full" size="lg">Book Now</Button>
+              </Link>
             </div>
           </div>
         </div>
