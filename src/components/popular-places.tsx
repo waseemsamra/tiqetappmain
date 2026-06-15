@@ -25,9 +25,9 @@ const topCategories = [
 ];
 
 const renderLinks = (items: Array<{name: string, slug: string, id: number}>, type: 'query' | 'city' | 'country') => (
-    <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className="flex flex-wrap justify-start gap-2 sm:gap-3">
         {items.map(item => (
-            <Button key={item.id} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
+            <Button key={item.id} variant="outline" asChild className="rounded-lg bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-xs sm:text-sm px-3 py-2 flex-none">
                 <Link href={`/excursions/${item.id}`}>
                     {item.name}
                 </Link>
@@ -37,9 +37,9 @@ const renderLinks = (items: Array<{name: string, slug: string, id: number}>, typ
 );
 
 const renderDestinationLinks = (items: string[]) => (
-    <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className="flex flex-wrap justify-start gap-2 sm:gap-3">
         {items.map(item => (
-            <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
+            <Button key={item} variant="outline" asChild className="rounded-lg bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-xs sm:text-sm px-3 py-2 flex-none">
                 <Link href={`/search?city=${encodeURIComponent(item)}`}>
                     {item}
                 </Link>
@@ -49,9 +49,9 @@ const renderDestinationLinks = (items: string[]) => (
 );
 
 const renderCategoryLinks = (items: string[]) => (
-    <div className="flex flex-wrap gap-2 sm:gap-3">
+    <div className="flex flex-wrap justify-start gap-2 sm:gap-3">
         {items.map(item => (
-            <Button key={item} variant="outline" asChild className="rounded-full bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-sm sm:text-base px-3 py-2 min-w-[120px] flex-1 sm:flex-none">
+            <Button key={item} variant="outline" asChild className="rounded-lg bg-white text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400 text-xs sm:text-sm px-3 py-2 flex-none">
                 <Link href={`/search?query=${encodeURIComponent(item)}`}>
                     {item}
                 </Link>
