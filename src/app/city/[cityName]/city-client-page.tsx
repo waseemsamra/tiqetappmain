@@ -46,6 +46,7 @@ interface CityClientPageProps {
 
 export default function CityClientPage({ 
     initialExcursions,
+    allExcursionTypes,
     cityName,
     countryName,
     user 
