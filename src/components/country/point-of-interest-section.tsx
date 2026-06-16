@@ -6,84 +6,84 @@ import Link from 'next/link';
 
 const POIS = [
   {
-    id: 'dubai-marina',
+    id: '245524',
     name: 'Dubai Marina',
     description: 'Waterfront dining, yacht rides and canal walks.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 36,
-    url: 'https://www.tiqets.com/en/dubai-marina-tickets-l245524/',
+    url: '/locations/245524',
   },
   {
-    id: 'jumeirah-mosque',
+    id: '145633',
     name: 'Jumeirah Mosque in Dubai',
     description: 'Iconic mosque and cultural landmark.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 8,
-    url: 'https://www.tiqets.com/en/jumeirah-mosque-dubai-tickets/',
+    url: '/locations/145633',
   },
   {
-    id: 'jbr-beach',
+    id: '245524',
     name: 'Jumeirah Beach (JBR Beach) in Dubai',
     description: 'Public beach with water sports and beachfront dining.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 8,
-    url: 'https://www.tiqets.com/en/jbr-beach-dubai-tickets/',
+    url: '/locations/245524',
   },
   {
-    id: 'aura-skypool',
+    id: '250293',
     name: 'AURA SKYPOOL in Dubai',
     description: "World's highest infinity pool with panoramic views.",
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 6,
-    url: 'https://www.tiqets.com/en/aura-skypool-dubai-tickets/',
+    url: '/locations/250293',
   },
   {
-    id: 'mall-of-the-emirates',
+    id: '233588',
     name: 'Mall of the Emirates in Dubai',
     description: 'Award-winning mall with Ski Dubai and entertainment.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 5,
-    url: 'https://www.tiqets.com/en/mall-of-the-emirates-dubai-tickets/',
+    url: '/locations/233588',
   },
   {
-    id: 'riverland-dubai',
+    id: '168349',
     name: 'Riverland Dubai in Dubai',
     description: 'Dining and entertainment district at the heart of Dubai Parks and Resorts.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 4,
-    url: 'https://www.tiqets.com/en/riverland-dubai-tickets/',
+    url: '/locations/168349',
   },
   {
-    id: 'kite-beach',
+    id: '245525',
     name: 'Kite Beach',
     description: 'Popular beach with kite surfing, food trucks and art.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 4,
-    url: 'https://www.tiqets.com/en/kite-beach-dubai-tickets/',
+    url: '/locations/245525',
   },
   {
-    id: 'souk-madinat-jumeirah',
+    id: '233613',
     name: 'Souk Madinat Jumeirah in Dubai',
     description: 'Traditional souk with canals, dining and views of Burj Al Arab.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 3,
-    url: 'https://www.tiqets.com/en/souk-madinat-jumeirah-dubai-tickets/',
+    url: '/locations/233613',
   },
   {
-    id: 'wafi-city',
+    id: '',
     name: 'Wafi City',
     description: 'Luxury mall with nightlife and wellness.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 3,
-    url: 'https://www.tiqets.com/en/wafi-city-dubai-tickets/',
+    url: '#',
   },
   {
-    id: 'marina-beach',
+    id: '245525',
     name: 'Marina Beach in Dubai',
     description: 'Beachfront promenade with dining and water sports.',
     image: 'https://cdn.tiqets.com/images/placeholder-location.jpg',
     experienceCount: 3,
-    url: 'https://www.tiqets.com/en/marina-beach-dubai-tickets/',
+    url: '/locations/245525',
   },
 ];
 
@@ -91,7 +91,7 @@ const Card = ({ poi }: { poi: typeof POIS[number] }) => {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <Link href={poi.url} target="_blank" rel="noopener noreferrer">
+    <Link href={poi.url} className="block">
       <div className="rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden group h-full bg-white relative border border-gray-200/80 flex flex-col">
         <div className="relative w-full h-48 overflow-hidden bg-gray-100">
           {!imgError ? (
