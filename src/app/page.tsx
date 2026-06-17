@@ -9,6 +9,7 @@ export const revalidate = 0;
 
 // DEPLOYMENT TRIGGER: 2026-06-15T04:23:00+04:00 - Force deploy for Singapore KL Bangkok tab fix
 
+const TOP_CITY = 'New York';
 const WORLDWIDE_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
 const UAE_CITIES = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ras al-Khaimah', 'Fujairah'];
 
@@ -41,7 +42,7 @@ export default async function HomePage() {
 
   const uaeExcursions = UAE_CITIES.flatMap(city => byCity(city, 10));
   const worldwideExcursions = WORLDWIDE_CITIES.flatMap(city => byCity(city, 10));
-  const barcelonaExcursions = byCity('Barcelona', 10);
+  const topCityExcursions = byCity(TOP_CITY, 10);
   const topRatedExcursions = [...allExcursions]
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
     .slice(0, 20);
@@ -53,7 +54,8 @@ export default async function HomePage() {
       heroContent={heroContent}
       uaeExcursions={uaeExcursions}
       worldwideExcursions={worldwideExcursions}
-      barcelonaExcursions={barcelonaExcursions}
+      topCityExcursions={topCityExcursions}
+      topCityName={TOP_CITY}
     />
   );
 };
