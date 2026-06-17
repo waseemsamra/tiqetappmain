@@ -13,7 +13,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CategoryExplorer } from '@/components/country/category-explorer';
 import { AllExperiences } from '@/components/country/all-experiences';
-import PointOfInterestSection from '@/components/country/point-of-interest-section';
 import FaqSection from '@/components/country/faq-section';
 import { Separator } from '@/components/ui/separator';
 import { AttractionCard } from '@/components/attraction-card';
@@ -180,8 +179,6 @@ export default function CityClientPage({
                     countryName={cityName}
                 />
             </section>
-            
-            <PointOfInterestSection />
             
             <div className="space-y-16">
         <Separator />

@@ -14,7 +14,8 @@ async function getLocation(id: string) {
 
   if (!res.ok) return null;
   const data = await res.json();
-  return data.location || data;
+  if (!data.success || !data.location) return null;
+  return data.location;
 }
 
 async function getLocationExperiences(locationId: string) {

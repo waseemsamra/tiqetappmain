@@ -14,7 +14,13 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   }
 
   const data = await res.json();
-  const location = data.location || data;
+  const location = data.location;
+
+  if (!data.success || !location) {
+    return {
+      title: 'Location Not Found | Aafare',
+    };
+  }
 
   return {
     title: `${location.name} | Things to Do in ${location.city || 'Dubai'} | Aafare`,
