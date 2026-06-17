@@ -26,21 +26,20 @@ export const ProductHero = ({ images, title, description, rating, reviews }: Pro
               unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
-              <div>
+            <div className="absolute bottom-6 left-6 right-6 flex items-end gap-4">
+              <div className="flex-1 min-w-0">
                 {rating !== undefined && (
-                  <div className="flex items-center gap-2 text-sm text-white mb-1">
+                  <div className="flex items-center gap-2 text-sm text-white mb-2">
                     <Star className="h-4 w-4 text-yellow-400 fill-current" />
                     <span className="font-bold">{Number(rating || 0).toFixed(1)}({reviews || 0} reviews)</span>
                   </div>
                 )}
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white drop-shadow-lg leading-tight">
+                  {title} Tickets
+                </h1>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">
-                {title} Tickets
-              </h1>
-              
               {description && (
-                <div className="max-w-xs text-right">
+                <div className="hidden sm:block max-w-xs flex-shrink-0 text-right">
                   <p className="text-white text-xs md:text-sm drop-shadow-lg line-clamp-3">
                     {description}
                   </p>
