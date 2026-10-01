@@ -24,6 +24,7 @@ export default function TransfersPage() {
     <ProductPageShell
       titleKey="search.airportTransfers"
       subtitleKey="search.transfersSubtitle"
+      showHeader={false}
     >
       {TRANSFERS_MODE === 'api' ? (
         <TransfersSearchForm />

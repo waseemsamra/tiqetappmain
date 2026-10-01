@@ -14,10 +14,13 @@ import { useT } from '@/components/language-provider';
 export function ProductPageShell({
   titleKey,
   subtitleKey,
+  showHeader = true,
   children,
 }: {
   titleKey: string;
   subtitleKey: string;
+  /** Set false to keep only the breadcrumb, for pages that supply their own heading. */
+  showHeader?: boolean;
   children: ReactNode;
 }) {
   const t = useT();
@@ -37,12 +40,16 @@ export function ProductPageShell({
           </ol>
         </nav>
 
-        <h1 className="text-[26px] font-semibold tracking-[-0.3px] text-slate-900 max-md:text-[21px]">
-          {t(titleKey)}
-        </h1>
-        <p className="mt-1.5 text-[15px] text-slate-600">{t(subtitleKey)}</p>
+        {showHeader && (
+          <>
+            <h1 className="text-[26px] font-semibold tracking-[-0.3px] text-slate-900 max-md:text-[21px]">
+              {t(titleKey)}
+            </h1>
+            <p className="mt-1.5 text-[15px] text-slate-600">{t(subtitleKey)}</p>
+          </>
+        )}
 
-        <div className="mt-7">{children}</div>
+        <div className={showHeader ? 'mt-7' : 'mt-4'}>{children}</div>
       </div>
     </div>
   );
