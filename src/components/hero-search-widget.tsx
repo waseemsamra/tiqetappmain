@@ -42,6 +42,9 @@ import { cn } from '@/lib/utils';
 type TabId = HomeTabId;
 
 
+// Flight search is owned by Travelpayouts and only renders on their host.
+const FLIGHTS_SEARCH_URL = 'https://flights.aafare.com/';
+
 // Only Activities and Transfers are live. The rest stay in the strip as
 // disabled placeholders so the roadmap is visible without offering dead ends.
 const TABS: Array<{ id: TabId; icon: typeof Ticket; enabled: boolean }> = [
