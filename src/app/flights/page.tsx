@@ -1,20 +1,18 @@
-import { ProductPageShell } from '@/components/product-page-shell';
-import { TravelpayoutsFlightsWidget } from '@/components/travelpayouts-flights-widget';
+import { redirect } from 'next/navigation';
 
 /**
- * Flight search page, backed by the Travelpayouts white-label metasearch.
+ * Flight search is hosted by Travelpayouts on `flights.aafare.com`.
  *
- * The loader is scoped to this page (see TravelpayoutsFlightsWidget) so the
- * partner script does not run on the rest of the site.
+ * Travelpayouts renders its white-label experience only for that host and sends
+ * no `X-Frame-Options`, but embedding it produced an empty widget: the
+ * `tpwl-search` / `tpwl-tickets` containers from their setup guide are legacy
+ * placeholders, and the live build mounts its own app from `tp.media` instead.
+ * A redirect is therefore both simpler and more reliable than an iframe.
+ *
+ * Replace this with a real page once we host flight search ourselves.
  */
+const FLIGHTS_SEARCH_URL = 'https://flights.aafare.com/';
+
 export default function FlightsPage() {
-  return (
-    <ProductPageShell
-      titleKey="search.flights"
-      subtitleKey="search.flightsSubtitle"
-      showHeader={false}
-    >
-      <TravelpayoutsFlightsWidget />
-    </ProductPageShell>
-  );
+  redirect(FLIGHTS_SEARCH_URL);
 }
