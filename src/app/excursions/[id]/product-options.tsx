@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import type { ExcursionVariant } from '@/types';
 import { Button } from '@/components/ui/button';
+import { formatPrice } from '@/lib/currency';
 
 interface ProductOptionsProps {
   variants: ExcursionVariant[];
@@ -23,12 +24,12 @@ export const ProductOptions = ({ variants, productId, experienceUrl }: ProductOp
             variant={selectedVariant?.id === variant.id ? 'default' : 'outline'}
             onClick={() => setSelectedVariant(variant)}
           >
-            {Number(variant.price || 0) > 0 ? `€${Number(variant.price || 0).toFixed(2)}` : 'Select'}
+            {Number(variant.price || 0) > 0 ? formatPrice(variant.price, variant.currency) : 'Select'}
           </Button>
         ))}
       </div>
       <Button className="w-full" disabled={!selectedVariant || Number(selectedVariant.price || 0) === 0}>
-        {selectedVariant && Number(selectedVariant.price || 0) > 0 ? `Reserve - €${Number(selectedVariant.price || 0).toFixed(2)}` : 'Reserve'}
+        {selectedVariant && Number(selectedVariant.price || 0) > 0 ? `Reserve - ${formatPrice(selectedVariant.price, selectedVariant.currency)}` : 'Reserve'}
       </Button>
     </div>
   );

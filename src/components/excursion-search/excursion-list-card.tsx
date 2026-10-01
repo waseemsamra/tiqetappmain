@@ -1,22 +1,14 @@
 
 import Image from 'next/image';
+import { StarRating } from "@/components/star-rating";
 import Link from 'next/link';
 import { Star, MapPin } from 'lucide-react';
 import type { Excursion, ExcursionType } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { imageUrlFor } from '@/lib/tiqets-image';
+import { formatPrice } from '@/lib/currency';
 
-const StarRating = ({ rating }: { rating: number }) => (
-    <div className="flex items-center gap-1">
-        {[...Array(5)].map((_, i) => (
-            <Star
-                key={i}
-                className={`h-4 w-4 ${i < Math.round(rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-            />
-        ))}
-        <span className="text-sm font-bold text-gray-800">{rating.toFixed(1)}</span>
-    </div>
-);
 
 
 export const ExcursionListCard = ({ excursion, wishlistButton }: { excursion: Excursion, wishlistButton?: React.ReactNode | null }) => {
@@ -36,7 +28,7 @@ export const ExcursionListCard = ({ excursion, wishlistButton }: { excursion: Ex
                     <Link href={`/excursions/${excursion.id}`} className="block h-full w-full">
                           {excursion.images?.[0] && excursion.images?.[0].length > 0 ? (
                             <Image
-                              src={excursion.images?.[0]}
+                              src={imageUrlFor(excursion.images?.[0], 'list')}
                               alt={excursion.name}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -59,10 +51,10 @@ export const ExcursionListCard = ({ excursion, wishlistButton }: { excursion: Ex
                         </p>
                     </Link>
                     <div className="mt-auto pt-4 flex items-end justify-between">
-                        <StarRating rating={excursion.rating} />
+                        <StarRating rating={excursion.rating} reviewCount={excursion.reviewsTotal} />
                         <div className="text-right">
                             <span className="text-xs text-gray-500">From</span>
-                            <p className="font-bold text-2xl text-gray-900">${excursion.price.toFixed(2)}</p>
+                            <p className="font-bold text-2xl text-gray-900">{formatPrice(excursion.price, excursion.currency)}</p>
                             <Button asChild size="sm" className="mt-2">
                                 <Link href={`/excursions/${excursion.id}`}>View Details</Link>
                             </Button>

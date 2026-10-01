@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import * as TiqetsApi from '@/lib/tiqets-api';
+import { withPreferences } from '@/lib/tiqets-api';
 
 const PAGE_SIZE = 100;
 const MAX_PAGES = 5;
@@ -13,7 +14,7 @@ async function fetchAllPages(
   const pages = Array.from({ length: MAX_PAGES }, (_, i) => i + 1);
   const batches = await Promise.all(
     pages.map(async (p) => {
-      const resp = await fetch(urlBuilder(p), {
+      const resp = await fetch(withPreferences(urlBuilder(p)), {
         headers: {
           Accept: 'application/json',
           Authorization: `Token ${process.env.TIQETS_API_KEY}`,
@@ -158,7 +159,7 @@ export async function GET(request: Request) {
     if (matchedCountry) {
       let allActivities: any[] = [];
       for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`, {
+        const resp = await fetch(withPreferences(`https://api.tiqets.com/v2/experiences?country_id=${matchedCountry.id}&page_size=${PAGE_SIZE}&page=${p}`), {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
@@ -178,7 +179,7 @@ export async function GET(request: Request) {
       let allActivities: any[] = [];
       // Try experiences endpoint
       for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
+        const resp = await fetch(withPreferences(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`), {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;
@@ -189,7 +190,7 @@ export async function GET(request: Request) {
       }
       // Also fetch standalone products for this city
       for (let p = 1; p <= MAX_PAGES; p++) {
-        const resp = await fetch(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`, {
+        const resp = await fetch(withPreferences(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`), {
           headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' },
         });
         if (!resp.ok) break;

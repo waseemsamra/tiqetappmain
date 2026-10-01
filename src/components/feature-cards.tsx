@@ -3,6 +3,7 @@
 
 import { DollarSign, ShieldCheck, Ticket } from 'lucide-react';
 import React from 'react';
+import { useT } from '@/components/language-provider';
 import {
   Carousel,
   CarouselContent,
@@ -26,21 +27,22 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: React.ElementTy
 );
 
 export default function FeatureCards() {
+    const t = useT();
     const features = [
         {
             icon: DollarSign,
-            title: "Stay flexible",
-            description: "Flexible cancellation options on all venues"
+            title: t('feature.flexibleTitle'),
+            description: t('feature.flexibleBody')
         },
         {
             icon: ShieldCheck,
-            title: "Book with confidence",
-            description: "Easy booking and skip-the-line entry on your phone"
+            title: t('feature.confidentTitle'),
+            description: t('feature.confidentBody')
         },
         {
             icon: Ticket,
-            title: "Enjoy culture your way",
-            description: "The best experiences at museums and attractions worldwide"
+            title: t('feature.cultureTitle'),
+            description: t('feature.cultureBody')
         }
     ];
 

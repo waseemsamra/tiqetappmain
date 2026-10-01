@@ -17,13 +17,18 @@ import { WishlistButton } from '@/components/wishlist-button';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 
-const CityTab = ({ city, image, isActive, onClick }: { city: string, image: string, isActive: boolean, onClick: () => void }) => (
-    <button 
-        onClick={onClick} 
-        className="flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-muted relative shrink-0"
+const CityTab = ({ city, image, isActive, onClick }: { city: string; image?: string; isActive: boolean; onClick: () => void }) => (
+    <button
+        onClick={onClick}
+        className="flex items-center gap-3 p-2 rounded-lg transition-colors hover:bg-muted relative shrink-0 group"
     >
-        {image && image.length > 0 && (
-            <Image src={image} alt={city} width={40} height={40} className="rounded-full object-cover border-2 border-transparent group-hover:border-primary" unoptimized />
+        {image && (
+            // The box is an explicit square: Tailwind's preflight sets
+            // `img { height: auto }`, which overrides the width/height attributes
+            // and collapses a 16:9 source into a 40x23 ellipse instead of a circle.
+            <span className="relative block h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-transparent transition-colors group-hover:border-primary">
+                <Image src={image} alt={city} fill sizes="40px" className="object-cover" unoptimized />
+            </span>
         )}
         <span className={cn("font-medium", isActive ? 'text-primary' : 'text-foreground')}>{city}</span>
         {isActive && <div className="absolute bottom-[-17px] left-0 w-full h-0.5 bg-primary rounded-full" />}
@@ -47,10 +52,14 @@ interface AttractionListingSectionProps {
     layout?: 'carousel' | 'grid';
     user?: any;
     wishlistIds?: Set<string>;
+    /** Optional city label shown inside a generated placeholder circle. */
+    coverLabel?: string;
     showTabs?: boolean;
     tabType?: 'country' | 'city' | undefined;
     maxTabs?: number;
     tabs?: string[];
+    /** City to working cover image, verified server-side so tabs never 404. */
+    cityImages?: Map<string, string>;
 }
 
 export default function AttractionListingSection({
@@ -63,32 +72,28 @@ export default function AttractionListingSection({
     showTabs = true,
     tabType,
     maxTabs,
-    tabs
-}: AttractionListingSectionProps) {
+    tabs,
+    cityImages
+} : AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
-            const lowerNameToTab = new Map(tabs.map(n => [n.toLowerCase(), n]));
-            return tabs.map(name => {
-                const lower = name.toLowerCase();
-                const match = excursions.find(ex => (ex.city || '').toLowerCase().includes(lower));
-                return {
-                    name,
-                    image: match?.images?.[0] && match.images?.[0].length > 0 ? match.images?.[0] : null,
-                };
-            });
+            return tabs.map(name => ({
+                name,
+                image: cityImages?.get(name) ?? null,
+            }));
         }
         const cityMap = new Map<string, { name: string, image: string }>();
         excursions.forEach(ex => {
             if (!cityMap.has(ex.city)) {
                 cityMap.set(ex.city, { 
                     name: ex.city, 
-                    image: (ex.images?.[0] && ex.images?.[0].length > 0 ? ex.images?.[0] : null) 
+                    image: cityImages?.get(ex.city) ?? (ex.images?.[0] || null)
                 });
             }
         });
         const allCities = Array.from(cityMap.values());
         return maxTabs ? allCities.slice(0, maxTabs) : allCities;
-    }, [excursions, maxTabs, tabs, tabType]);
+    }, [excursions, maxTabs, tabs, tabType, cityImages]);
 
     const countries = useMemo(() => {
         if (tabs && tabType === 'country') {

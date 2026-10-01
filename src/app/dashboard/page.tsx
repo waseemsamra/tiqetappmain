@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import Link from 'next/link';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
 import { getWishlistItems, getUpcomingBookingsForUser, getAgentStats, getAgentReferrals, getAgentRank } from '@/app/actions';
 import { format } from 'date-fns';
 import type { Excursion, Booking, Referral } from '@/types';
@@ -48,7 +49,7 @@ const WishlistItemCard = ({ excursion }: { excursion: Excursion }) => (
         <Card className="overflow-hidden transition-shadow hover:shadow-lg h-full flex flex-col">
             <div className="relative aspect-video">
                   {excursion.images?.[0] && excursion.images?.[0].length > 0 ? (
-                    <Image src={excursion.images?.[0]} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" unoptimized />
+                    <Image src={imageUrlFor(excursion.images?.[0], 'card')} alt={excursion.name} fill className="object-cover" data-ai-hint="attraction" unoptimized />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm">No image</div>
                   )}

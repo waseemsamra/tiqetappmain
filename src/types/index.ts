@@ -2,10 +2,39 @@ export type ExcursionVariant = {
   id: string;
   name: string;
   price: number;
+  currency?: string;
   duration?: string;
   description?: string;
   images?: string[];
   status?: string;
+  /** ISO 639-3 tour languages, from the Availability API. Empty = no selector. */
+  language_selection?: string[];
+  /** This product's own rating, which differs from the parent experience's. */
+  rating?: number;
+  reviewsTotal?: number;
+
+  // Detail fields from the Content API, used by the option cards and the
+  // overview accordions. All optional: Tiqets returns them per product and
+  // coverage varies.
+  promo_label?: string | null;
+  whats_included?: string;
+  whats_excluded?: string;
+  cancellation?: { policy?: string; window?: number | null } | null;
+  smartphone_ticket?: boolean;
+  instant_ticket_delivery?: boolean;
+  wheelchair_access?: boolean;
+  skip_line?: boolean;
+  audio_guide_languages?: string[] | null;
+  age_range?: string | null;
+  advance_arrival_time?: string | null;
+  good_to_know?: string;
+  must_know?: string;
+  usage?: string;
+  opening_times?: any;
+  safety_measures?: string;
+  sale_status?: string;
+  /** Tiqets' own flag for a product that bundles several experiences. */
+  is_package?: boolean;
 };
 
 export type ExcursionType = {
@@ -43,6 +72,7 @@ export type Excursion = {
   country: string;
   description: string;
   price: number | string;
+  currency?: string;
   duration: string;
   activitytypeid: string;
   excursionType: ExcursionType;

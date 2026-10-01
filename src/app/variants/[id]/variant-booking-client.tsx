@@ -27,7 +27,7 @@ export function VariantBookingClient({ productId }: { productId: string }) {
         data-tiqets-widget="booking"
         data-product-id={productId}
         data-partner="time_travel_tourism_dubai"
-        data-currency="EUR"
+        data-currency="USD"
         data-trigger-selector={`#tiqets-trigger-${productId}`}
       />
       <button

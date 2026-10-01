@@ -6,6 +6,7 @@ import type { Excursion } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
 import { Star, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { addOrRemoveFromFeatured } from '@/lib/user-service';
@@ -24,7 +25,7 @@ const ExcursionItem = ({ excursion, isFeatured, onToggle }: { excursion: Excursi
         <Card className={cn("overflow-hidden transition-all", isFeatured && "border-2 border-primary")}>
              <div className="relative aspect-video">
                  {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
-                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover" />
+                   <Image src={imageUrlFor(excursion.images[0], 'thumb')} alt={excursion.name} fill className="object-cover" />
                  )}
              </div>
             <CardHeader>

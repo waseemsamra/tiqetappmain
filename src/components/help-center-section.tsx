@@ -1,7 +1,10 @@
+'use client';
 
 import { LifeBuoy } from 'lucide-react';
+import { useT } from '@/components/language-provider';
 
 export default function HelpCenterSection() {
+  const t = useT();
   return (
     <div className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,9 +15,9 @@ export default function HelpCenterSection() {
                     </div>
                 </div>
                 <div className="ml-8">
-                    <h2 className="text-2xl font-bold text-white">AAFare Help Center</h2>
+                    <h2 className="text-2xl font-bold text-white">{t('home.helpCenter')}</h2>
                     <p className="mt-2 text-white/90">
-                        Our customer service team is available 24/7 via chat, email and WhatsApp.
+                        {t('home.helpCenterBody')}
                     </p>
                 </div>
             </div>

@@ -35,6 +35,7 @@ export const tiqetsAvailabilityTool = defineTool(
 
     try {
       const url = new URL(`https://api.tiqets.com/v2/products/${productId}/availability/`);
+      url.searchParams.set('currency', 'USD');
       if (startDate) url.searchParams.append('start_date', startDate);
       if (endDate) url.searchParams.append('end_date', endDate);
 

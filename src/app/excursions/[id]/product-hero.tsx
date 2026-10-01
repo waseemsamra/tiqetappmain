@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Star } from 'lucide-react';
+import { imageUrlFor } from '@/lib/tiqets-image';
 
 interface ProductHeroProps {
   images: string[];
@@ -12,7 +13,7 @@ interface ProductHeroProps {
 }
 
 export const ProductHero = ({ images, title, description, rating, reviews }: ProductHeroProps) => {
-    const heroImage = (images && images[0] && images[0].length > 0 ? images[0] : null);
+    const heroImage = (images && images[0] && images[0].length > 0 ? imageUrlFor(images[0], 'hero') : null);
     return (
       <>
         {heroImage && (

@@ -1,17 +1,15 @@
-
 'use client';
 
+import { useEffect, useState } from 'react';
+import { MessageCircle, Wallet } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -19,7 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Languages, WalletCards } from 'lucide-react';
+import { CURRENCIES, LANGUAGES } from '@/lib/preferences';
+import { usePreferences } from './preferences-provider';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -27,51 +26,97 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onOpenChange }: SettingsModalProps) {
+  const { preferences, savePreferences, isSaving } = usePreferences();
+  const [language, setLanguage] = useState(preferences.language);
+  const [currency, setCurrency] = useState(preferences.currency);
+
+  // Re-sync whenever the modal is opened so it never shows a stale selection.
+  useEffect(() => {
+    if (isOpen) {
+      setLanguage(preferences.language);
+      setCurrency(preferences.currency);
+    }
+  }, [isOpen, preferences.language, preferences.currency]);
+
+  const handleSave = () => {
+    savePreferences({ language, currency });
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Update your settings</DialogTitle>
+      <DialogContent className="rounded-[14px] p-0 gap-0 sm:max-w-[440px]">
+        <DialogHeader className="flex flex-row items-center justify-between space-y-0 border-b border-border px-6 py-[22px] pr-4">
+          <DialogTitle className="text-[19px] font-bold tracking-[-0.2px]">
+            Update your settings
+          </DialogTitle>
         </DialogHeader>
-        <div className="py-4 space-y-6">
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base">
-              <Languages className="h-5 w-5" />
+
+        <div className="space-y-5 px-6 py-6">
+          <div className="relative space-y-2.5">
+            <label
+              htmlFor="settings-language"
+              className="flex items-center gap-2.5 text-[15px] font-bold tracking-[-0.1px]"
+            >
+              <MessageCircle className="h-[15px] w-[15px]" />
               Language
-            </Label>
-            <Select defaultValue="en">
-              <SelectTrigger>
+            </label>
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger
+                id="settings-language"
+                className="h-[52px] w-full rounded-[10px] border-[1.5px] px-[18px] text-[15px] data-[state=open]:border-[#6B6EE0] data-[state=open]:shadow-[0_0_0_4px_rgba(107,110,224,0.12)]"
+              >
                 <SelectValue placeholder="Language" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
+              <SelectContent className="max-h-[340px] rounded-[10px]">
+                {LANGUAGES.map((option) => (
+                  <SelectItem key={option.code} value={option.code} className="py-3 text-[15px]">
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-base">
-              <WalletCards className="h-5 w-5" />
+
+          <div className="relative space-y-2.5">
+            <label
+              htmlFor="settings-currency"
+              className="flex items-center gap-2.5 text-[15px] font-bold tracking-[-0.1px]"
+            >
+              <Wallet className="h-[15px] w-[15px]" />
               Currency
-            </Label>
-            <Select defaultValue="usd">
-              <SelectTrigger>
+            </label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger
+                id="settings-currency"
+                className="h-[52px] w-full rounded-[10px] border-[1.5px] px-[18px] text-[15px] data-[state=open]:border-[#6B6EE0] data-[state=open]:shadow-[0_0_0_4px_rgba(107,110,224,0.12)]"
+              >
                 <SelectValue placeholder="Currency" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="usd">USD ($)</SelectItem>
-                <SelectItem value="eur">EUR (€)</SelectItem>
-                <SelectItem value="gbp">GBP (£)</SelectItem>
+              <SelectContent className="max-h-[340px] rounded-[10px]">
+                {CURRENCIES.map((option) => (
+                  <SelectItem key={option.code} value={option.code} className="py-3 text-[15px]">
+                    {option.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Where applicable, prices will be converted and shown in the currency you select. The currency you pay in may differ based on your reservation.
+
+          <p className="text-[13px] leading-[1.6] text-muted-foreground">
+            Where applicable, prices will be converted and shown in the currency you select. The
+            currency you pay in may differ based on your reservation.
           </p>
         </div>
-        <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-6">Save</Button>
+
+        <DialogFooter className="px-6 pb-6">
+          <Button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="h-[52px] w-full rounded-[10px] bg-[#6B6EE0] text-[15px] font-bold tracking-[0.2px] hover:bg-[#5A5DC8] hover:shadow-[0_8px_20px_rgba(107,110,224,0.35)]"
+          >
+            {isSaving ? 'Saving…' : 'Save'}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

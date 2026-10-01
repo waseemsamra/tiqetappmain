@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useT } from '@/components/language-provider';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -61,18 +62,19 @@ const renderCategoryLinks = (items: string[]) => (
 );
 
 export default function PopularPlacesSection({ countries }: { countries: string[] }) {
+    const t = useT();
     return (
         <div className="bg-muted/30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <h2 className="text-3xl font-bold text-gray-900 text-left mb-8">
-                    Discover our most popular places to visit
+                    {t('home.discoverPopular')}
                 </h2>
 
                 <Tabs defaultValue="things-to-do" className="w-full">
                     <TabsList className="flex gap-1 bg-gray-200/70 p-1 rounded-lg overflow-x-auto">
-                        <TabsTrigger value="things-to-do" className="px-4 py-2 text-sm whitespace-nowrap">Top Things to Do</TabsTrigger>
-                        <TabsTrigger value="destinations" className="px-4 py-2 text-sm whitespace-nowrap">Top Destinations</TabsTrigger>
-                        <TabsTrigger value="categories" className="px-4 py-2 text-sm whitespace-nowrap">Top Categories</TabsTrigger>
+                        <TabsTrigger value="things-to-do" className="px-4 py-2 text-sm whitespace-nowrap">{t('home.tabTopThings')}</TabsTrigger>
+                        <TabsTrigger value="destinations" className="px-4 py-2 text-sm whitespace-nowrap">{t('home.tabTopDestinations')}</TabsTrigger>
+                        <TabsTrigger value="categories" className="px-4 py-2 text-sm whitespace-nowrap">{t('home.tabTopCategories')}</TabsTrigger>
                     </TabsList>
                     <TabsContent value="things-to-do" className="bg-white p-6 rounded-b-lg border border-t-0">
                         {renderLinks(topThingsToDo, 'query')}

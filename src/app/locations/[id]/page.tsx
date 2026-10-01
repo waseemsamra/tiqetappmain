@@ -1,5 +1,8 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
+import { formatPrice } from '@/lib/currency';
+import { withPreferences } from '@/lib/tiqets-api';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Star } from 'lucide-react';
 
@@ -19,7 +22,7 @@ async function getLocation(id: string) {
 }
 
 async function getLocationExperiences(locationId: string) {
-  const res = await fetch(`https://api.tiqets.com/v2/experiences?location_id=${locationId}&page_size=20`, {
+  const res = await fetch(withPreferences(`https://api.tiqets.com/v2/experiences?location_id=${locationId}&page_size=20`), {
     headers: {
       Accept: 'application/json',
       'User-Agent': 'my user agent',
@@ -61,7 +64,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
           {location.images && location.images[0] && (
             <div className="relative h-64 md:h-96 w-full">
               <Image
-                src={location.images[0]}
+                src={imageUrlFor(location.images[0], 'hero')}
                 alt={location.name}
                 fill
                 className="object-cover"
@@ -111,7 +114,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
                       {exp.images && exp.images[0] && (
                         <div className="relative h-48 w-full">
                           <Image
-                            src={exp.images[0]}
+                            src={imageUrlFor(exp.images[0], 'card')}
                             alt={exp.name}
                             fill
                             className="object-cover"
@@ -125,7 +128,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
                         </h3>
                         {exp.price && (
                           <p className="text-primary font-semibold">
-                            €{Number(exp.price).toFixed(2)}
+                            {formatPrice(exp.price, exp.currency)}
                           </p>
                         )}
                         {exp.rating && (

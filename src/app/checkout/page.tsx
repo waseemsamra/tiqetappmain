@@ -5,6 +5,7 @@
 import { Suspense, useEffect, useState, useTransition } from 'react';
 import { notFound, useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -87,7 +88,7 @@ function CheckoutPageContent() {
                         <CardHeader className="p-0">
                             <div className="relative aspect-[4/3]">
                                  {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
-                                   <Image src={excursion.images[0]} alt={excursion.name} fill className="object-cover rounded-t-lg" unoptimized />
+                                   <Image src={imageUrlFor(excursion.images[0], 'card')} alt={excursion.name} fill className="object-cover rounded-t-lg" unoptimized />
                                  ) : null}
                             </div>
                         </CardHeader>
@@ -101,7 +102,7 @@ function CheckoutPageContent() {
                          <CardFooter className="flex-col items-stretch space-y-4">
                             <div className="w-full text-lg flex justify-between items-center">
                                 <span className="font-bold">Total:</span>
-                                <span className="font-extrabold">${Number((excursion.price || 0) * quantity).toFixed(2)}</span>
+                                <span className="font-extrabold">{formatPrice(Number(excursion.price || 0) * quantity, excursion.currency)}</span>
                             </div>
                             <Button size="lg" className="w-full" onClick={handleConfirmAndPay}>
                                 <CreditCard className="mr-2 h-4 w-4" />

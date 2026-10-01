@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
 import Link from 'next/link';
 import { Search, MapPin, Mic, Sparkles, Building, Globe } from 'lucide-react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -246,7 +247,7 @@ export function UniversalSearch() {
                                         <li key={ex.id}>
                                               <Link href={`/excursions/${ex.id}`} className="flex items-center gap-4 p-3 hover:bg-muted">
                                                   {ex.images?.[0] && ex.images?.[0].length > 0 && (
-                                                  <Image src={ex.images[0]} alt={ex.name} width={48} height={48} className="rounded-md object-cover" unoptimized />
+                                                  <Image src={imageUrlFor(ex.images[0], 'mini')} alt={ex.name} width={48} height={48} className="rounded-md object-cover" unoptimized />
                                                 )}
                                                   <div>
                                                       <p className="font-semibold">{ex.name}</p>

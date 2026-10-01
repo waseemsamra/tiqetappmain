@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { LineChart, Ticket, DollarSign, Users, PlusCircle, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
+import { formatPrice } from '@/lib/currency';
 import Link from 'next/link';
 import {
   ChartContainer,
@@ -136,7 +138,7 @@ export default async function PartnerDashboardPage() {
                                 <TableCell>
                                     <div className="flex items-center gap-4">
                                          {excursion.images && excursion.images[0] && excursion.images[0].length > 0 && (
-                                           <Image src={excursion.images[0]} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" unoptimized />
+                                           <Image src={imageUrlFor(excursion.images[0], 'thumb')} alt={excursion.name} width={64} height={48} className="rounded-md object-cover" unoptimized />
                                          )}
                                         <div>
                                             <p className="font-medium">{excursion.name}</p>
@@ -153,7 +155,7 @@ export default async function PartnerDashboardPage() {
                                         {excursion.status?.replace('_', ' ') || 'Inactive'}
                                     </Badge>
                                 </TableCell>
-                                <TableCell className="text-right font-mono">${excursion.price.toLocaleString()}</TableCell>
+                                <TableCell className="text-right font-mono">{formatPrice(excursion.price, excursion.currency)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

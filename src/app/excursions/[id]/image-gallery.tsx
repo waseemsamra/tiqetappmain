@@ -5,18 +5,19 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { GalleryHorizontal } from 'lucide-react';
+import { imageUrlFor } from '@/lib/tiqets-image';
 
 
 export const ImageGallery = ({ images }: { images: string[] }) => {
       // Filter out any invalid/empty images to comply with no fallback data requirement
       const validImages = images.filter(img => img && img.length > 0);
-      
+
       if (validImages.length === 0) {
           return null; // Render nothing if no valid images
       }
 
-      const mainImage = validImages[0];
-     const gridImages = validImages.slice(1, 5);
+      const mainImage = imageUrlFor(validImages[0], 'gallery');
+     const gridImages = validImages.slice(1, 5).map(img => imageUrlFor(img, 'card'));
 
      return (
        <div className="w-full">

@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { pickFirstTiqetsImageUrl, pickTiqetsImageUrls } from '@/lib/tiqets-image';
+import { withPreferences } from '@/lib/tiqets-api';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CACHE_DIR = join(process.cwd(), 'cache');
@@ -156,7 +158,7 @@ async function fetchProductsForCity(cityId: string, cityName: string, variantsAr
   for (let page = 1; page <= 3; page++) {
     try {
       const resp = await fetch(
-        `https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${pageSize}&page=${page}`,
+        withPreferences(`https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${pageSize}&page=${page}`),
         { method: 'GET', headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' } }
       );
       
@@ -265,7 +267,7 @@ async function fetchProductsForCity(cityId: string, cityName: string, variantsAr
   for (let page = 1; page <= 3; page++) {
     try {
       const resp = await fetch(
-        `https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${pageSize}&page=${page}`,
+        withPreferences(`https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${pageSize}&page=${page}`),
         { method: 'GET', headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' } }
       );
       
@@ -312,7 +314,7 @@ async function fetchProductsForCity(cityId: string, cityName: string, variantsAr
 async function fetchProductById(productId: string): Promise<any | null> {
   try {
     const resp = await fetch(
-      `https://api.tiqets.com/v2/products/${productId}`,
+      withPreferences(`https://api.tiqets.com/v2/products/${productId}`),
       { method: 'GET', headers: { 'Accept': 'application/json', 'Authorization': `Token ${process.env.TIQETS_API_KEY}`, 'User-Agent': 'my user agent' } }
     );
     
@@ -328,7 +330,7 @@ async function fetchProductById(productId: string): Promise<any | null> {
       price: product.price || product.from_price,
       currency: product.currency,
       duration: product.duration,
-      image_urls: product.images ? product.images.map((img: any) => img?.medium || img?.large || img?.small).filter(Boolean) : []
+      image_urls: pickTiqetsImageUrls(product.images)
     };
   } catch (e) {
     console.error(`Error fetching product ${productId}:`, e);
@@ -342,8 +344,7 @@ function isHelicopterTour(product: CachedProduct): boolean {
 }
 
 function extractFirstImageUrl(images: any[]): string | undefined {
-  if (!images || !images.length) return undefined;
-  return images[0]?.large || images[0]?.medium || images[0]?.small || images[0]?.extra_large;
+  return pickFirstTiqetsImageUrl(images);
 }
 
 function sleep(ms: number): Promise<void> {
@@ -424,7 +425,7 @@ function getSeedExperiences(): any[] {
       city_name: 'Amsterdam',
       country_name: 'Netherlands',
       price: 25,
-      currency: 'EUR',
+      currency: 'USD',
        duration: '1 hour',
        rating: 4.6,
        reviews_total: 850,
@@ -441,7 +442,7 @@ function getSeedExperiences(): any[] {
       city_name: 'Paris',
       country_name: 'France',
       price: 30,
-      currency: 'EUR',
+      currency: 'USD',
        duration: '1.5 hours',
        rating: 4.6,
        reviews_total: 1800,
@@ -458,7 +459,7 @@ function getSeedExperiences(): any[] {
       city_name: 'Rome',
       country_name: 'Italy',
       price: 28,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '2 hours',
       rating: 4.8,
       reviews_total: 1500,
@@ -475,7 +476,7 @@ function getSeedExperiences(): any[] {
       city_name: 'Barcelona',
       country_name: 'Spain',
       price: 32,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1.5 hours',
       rating: 4.7,
       reviews_total: 1200,
@@ -607,7 +608,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Amsterdam',
       country_name: 'Netherlands',
       price: 25,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1 hour',
       rating: 4.6,
       reviews_total: 850,
@@ -623,7 +624,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Paris',
       country_name: 'France',
       price: 30,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1.5 hours',
       rating: 4.6,
       reviews_total: 1800,
@@ -639,7 +640,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Rome',
       country_name: 'Italy',
       price: 28,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '2 hours',
       rating: 4.8,
       reviews_total: 1500,
@@ -655,7 +656,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Barcelona',
       country_name: 'Spain',
       price: 32,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1.5 hours',
       rating: 4.7,
       reviews_total: 1200,
@@ -671,7 +672,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Barcelona',
       country_name: 'Spain',
       price: 35,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1 hour',
       rating: 4.7,
       reviews_total: 1000,
@@ -687,7 +688,7 @@ function getSeedProducts(): CachedProduct[] {
       city_name: 'Barcelona',
       country_name: 'Spain',
       price: 28,
-      currency: 'EUR',
+      currency: 'USD',
       duration: '1.5 hours',
       rating: 4.6,
       reviews_total: 900,

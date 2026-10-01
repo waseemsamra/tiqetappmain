@@ -14,6 +14,7 @@ import { getExcursionById } from '@/app/actions';
 import { Skeleton } from '@/components/ui/skeleton';
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
 import { getUserProfileDataAction } from './actions';
 
 interface UserProfileData {
@@ -186,7 +187,7 @@ function DetailsPageContent() {
                         <CardContent className="space-y-4">
                               <div className="flex items-start gap-4">
                                  {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
-                                   <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" unoptimized />
+                                   <Image src={imageUrlFor(excursion.images[0], 'mini')} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" unoptimized />
                                  ) : null}
                                  <h3 className="font-bold flex-1">{excursion.name}</h3>
                              </div>
@@ -199,7 +200,7 @@ function DetailsPageContent() {
                          <CardFooter>
                             <div className="w-full text-lg flex justify-between items-center">
                                 <span className="font-bold">Total:</span>
-                                <span className="font-extrabold">${totalPrice}</span>
+                                <span className="font-extrabold">{formatPrice(totalPrice, excursion.currency)}</span>
                             </div>
                         </CardFooter>
                     </Card>

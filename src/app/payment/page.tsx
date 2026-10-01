@@ -5,6 +5,8 @@
 import { Suspense, useEffect, useState, useTransition } from 'react';
 import { notFound, useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { imageUrlFor } from '@/lib/tiqets-image';
+import { formatPrice } from '@/lib/currency';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -191,7 +193,7 @@ function PaymentPageContent() {
                         <CardContent className="space-y-4">
                               <div className="flex items-start gap-4">
                                  {excursion.images && excursion.images[0] && excursion.images[0].length > 0 ? (
-                                   <Image src={excursion.images[0]} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" unoptimized />
+                                   <Image src={imageUrlFor(excursion.images[0], 'mini')} alt={excursion.name} width={64} height={64} className="rounded-md object-cover" unoptimized />
                                  ) : null}
                                  <h3 className="font-bold flex-1">{excursion.name}</h3>
                              </div>
@@ -205,7 +207,7 @@ function PaymentPageContent() {
                             <div className="border-t border-muted w-full pt-4" />
                             <div className="w-full text-lg flex justify-between items-center">
                                 <span className="font-bold">Total:</span>
-                                <span className="font-extrabold">€{totalPrice.toFixed(2)}</span>
+                                <span className="font-extrabold">{formatPrice(totalPrice, excursion.currency)}</span>
                             </div>
                         </CardFooter>
                     </Card>

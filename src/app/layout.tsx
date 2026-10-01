@@ -5,6 +5,8 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+import { PreferencesProvider } from '@/components/preferences-provider';
+import { getDisplayCurrency, getDisplayLanguage } from '@/lib/tiqets-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,14 +25,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const language = getDisplayLanguage();
+
   return (
-    <html lang="en" className="h-full">
+    <html lang={language} className="h-full">
       <body className={`${inter.variable} font-sans flex flex-col h-full antialiased bg-background`}>
-         <Header />
-         <main className="flex-grow pt-20">
-             {children}
-         </main>
-        <Footer />
+        <PreferencesProvider
+          initialPreferences={{
+            language,
+            currency: getDisplayCurrency(),
+          }}
+        >
+          <Header />
+          <main className="flex-grow pt-20">{children}</main>
+          <Footer />
+        </PreferencesProvider>
         <Toaster />
       </body>
     </html>

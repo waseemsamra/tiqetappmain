@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { readFileSync, writeFileSync } from 'fs';
+import { pickTiqetsImageUrls } from '../src/lib/tiqets-image.ts';
 
 const filePath = './public/excursions.json';
 const raw = readFileSync(filePath, 'utf-8');
@@ -69,12 +70,10 @@ async function main() {
         price: Number(e.from_price || e.price || 0),
         duration: e.duration || 'Not specified',
         rating: Number(e.ratings?.average || 0),
-        images: Array.isArray(e.images)
-          ? e.images.map((img) => {
-              if (typeof img === 'string') return img;
-              return img?.medium || img?.large || img?.small || img?.extra_large || '';
-            }).filter(Boolean)
-          : [],
+        // Tiqets exposes the real review total as `ratings.total`; without it
+        // cards can only show the average, never the "(15,295)" count.
+        reviewsTotal: Number(e.ratings?.total || e.ratings?.count || 0),
+        images: pickTiqetsImageUrls(e.images),
         product_ids: Array.isArray(e.product_ids) ? e.product_ids : [],
         experience_url: e.experience_url || '',
         product_groups: []

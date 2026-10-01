@@ -1,17 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+import { StarRating } from "@/components/star-rating";
 import Link from 'next/link';
 import { Star, MapPin } from 'lucide-react';
 import type { Excursion } from '@/types';
 import { cn } from '@/lib/utils';
+import { imageUrlFor } from '@/lib/tiqets-image';
+import { formatPrice } from '@/lib/currency';
 
-const StarRating = ({ rating }: { rating: number | undefined }) => (
-    <div className="flex items-center gap-1">
-        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-        <span className="text-sm font-bold text-gray-800">{Number(rating || 0).toFixed(1)}</span>
-    </div>
-);
 
 export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vertical' }: { excursion: Excursion, wishlistButton?: React.ReactNode, rank?: number, layout?: 'horizontal' | 'vertical' }) => (
     <div className={cn(
@@ -38,7 +35,7 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
             )}>
       {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
                         <Image 
-                          src={excursion.images?.[0]} 
+                          src={imageUrlFor(excursion.images?.[0], 'card')} 
                           alt={excursion.name} 
                           fill
                           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
@@ -68,14 +65,14 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                             ? "sm:flex sm:items-center" // Desktop: normal
                             : "flex items-center" // Vertical: normal
                     )}>
-                        <StarRating rating={excursion.rating} />
+                        <StarRating rating={excursion.rating} reviewCount={excursion.reviewsTotal} />
                     </div>
                     <div className="text-right">
                         <span className={cn(
                             "text-xs text-gray-500",
                             layout === 'horizontal' ? "sm:inline md:block" : "block"
                         )}>From</span>
-                        <p className="font-bold text-gray-900">€{Number(excursion.price || 0).toFixed(2)}</p>
+                        <p className="font-bold text-gray-900">{formatPrice(excursion.price, excursion.currency)}</p>
                     </div>
                 </div>
             </div>

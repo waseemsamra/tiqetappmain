@@ -8,15 +8,25 @@ import AttractionListingSection from '@/app/attraction-listing';
 import FeatureCards from '@/components/feature-cards';
 import HelpCenterSection from '@/components/help-center-section';
 import PopularPlacesSection from '@/components/popular-places';
+import { LanguageProvider, useT } from '@/components/language-provider';
 
 interface HomePageClientProps {
     allExcursions: Excursion[];
     topRatedExcursions: Excursion[];
     heroContent: HeroContent;
-    uaeExcursions: Excursion[];
+    /** Experiences in the visitor's own country; falls back to the UAE. */
+    featuredExcursions: Excursion[];
+    /** Already-translated heading, e.g. "Best places to visit in Singapore". */
+    featuredTitle: string;
+    /** Cities with inventory in that country, used for the tab row. */
+    featuredCities: string[];
+    /** City to working cover image; a delisted image resolves to a live one. */
+    cityImages?: Map<string, string>;
     worldwideExcursions: Excursion[];
     topCityExcursions: Excursion[];
     topCityName: string;
+    /** UI language code from the visitor's cookie, e.g. `de`. */
+    language: string;
 }
 
 const simpleHash = (str: string) => {
@@ -30,13 +40,15 @@ const simpleHash = (str: string) => {
 };
 
 const TARGET_CITIES = ['Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'Singapore', 'Kuala Lumpur', 'Bangkok'];
-const UAE_CITIES = ["Dubai", "Abu Dhabi", "Sharjah", "Ras al-Khaimah", "Fujairah"];
 
-export default function HomePageClient({ 
+function HomeSections({ 
     allExcursions, 
     topRatedExcursions, 
     heroContent, 
-    uaeExcursions, 
+    featuredExcursions,
+    featuredTitle,
+    featuredCities,
+    cityImages,
     worldwideExcursions, 
     topCityExcursions, 
     topCityName 
@@ -57,34 +69,38 @@ export default function HomePageClient({
             .slice(0, 8);
     }, [allExcursions]);
 
+    const t = useT();
+
     return (
         <div className="home-compact">
             <HeroSection content={heroContent} />
             <FeatureCards />
             <AttractionListingSection
-                title="Best places to visit in United Arab Emirates"
-                excursions={uaeExcursions}
+                title={featuredTitle}
+                excursions={featuredExcursions}
                 showTabs={true}
                 maxTabs={5}
                 tabType="city"
-                tabs={UAE_CITIES}
+                tabs={featuredCities}
+                cityImages={cityImages}
             />
             <AttractionListingSection
-                title="Best places to visit worldwide"
+                title={t('home.bestPlacesWorldwide')}
                 excursions={worldwideExcursions}
                 showTabs={true}
                 tabType="city"
                 tabs={TARGET_CITIES}
+                cityImages={cityImages}
             />
             <AttractionListingSection
-                title={`Top 10 things to do in ${topCityName}`}
+                title={t('home.topThingsInCity', { city: topCityName })}
                 excursions={topCityExcursions}
                 layout="carousel"
                 showViewAllButton={false}
                 showTabs={false}
             />
                 <AttractionListingSection
-                 title="Most popular things to do"
+                 title={t('home.mostPopular')}
                  excursions={homePageData}
                  layout="grid"
                  showViewAllButton={false}
@@ -94,5 +110,13 @@ export default function HomePageClient({
             <PopularPlacesSection countries={popularCountries} />
             <HelpCenterSection />
         </div>
+    );
+}
+
+export default function HomePageClient(props: HomePageClientProps) {
+    return (
+        <LanguageProvider language={props.language}>
+            <HomeSections {...props} />
+        </LanguageProvider>
     );
 }

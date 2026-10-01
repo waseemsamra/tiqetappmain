@@ -1,3 +1,5 @@
+import { imageUrlFor, pickFirstTiqetsImageUrl } from '@/lib/tiqets-image';
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const res = await fetch(`https://api.tiqets.com/v2/locations/${params.id}`, {
     headers: {
@@ -28,7 +30,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     openGraph: {
       title: `${location.name} | Aafare`,
       description: location.description || `Discover experiences at ${location.name}`,
-      images: location.images?.[0] ? [location.images[0]] : [],
+      images: location.images?.[0] ? [imageUrlFor(pickFirstTiqetsImageUrl(location.images) ?? location.images[0], 'og')] : [],
       type: 'website',
     },
   };

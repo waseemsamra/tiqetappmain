@@ -1,4 +1,6 @@
 import { fetchTiqetsProducts } from '@/lib/tiqets-api';
+import { withPreferences } from '@/lib/tiqets-api';
+import { pickTiqetsImageUrls } from '@/lib/tiqets-image';
 import { notFound } from 'next/navigation';
 import CountryClientPage from './country-client-page';
 import type { Country, Excursion } from '@/types';
@@ -117,7 +119,7 @@ export default async function CountryPage({ params }: { params: { countryName: s
             let hasMore = true;
             
             while (hasMore) {
-                const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryInfo.id}&page=${page}&page_size=100`, { method: 'GET', headers });
+                const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryInfo.id}&page=${page}&page_size=100`), { method: 'GET', headers });
                 if (response.ok) {
                     const data = await response.json();
                     const experiences = data.experiences || [];
@@ -141,11 +143,11 @@ export default async function CountryPage({ params }: { params: { countryName: s
                 country: product.address?.country_name || countryName,
                 description: product.description || '',
                 price: product.from_price || product.price || 0,
+                currency: product.currency || 'USD',
                 duration: product.duration || 'Not specified',
-                images: Array.isArray(product.images) 
-                    ? product.images.map((img: any) => img?.medium || img?.large || '').filter(Boolean)
-                    : [],
+                images: pickTiqetsImageUrls(product.images),
                 rating: product.ratings?.average || undefined,
+                reviewsTotal: product.ratings?.total || product.ratings?.count || undefined,
                 excursionType: { id: product.id?.toString() || '', name: product.tagline || 'Activity' },
                 status: 'active' as const,
                 product_ids: [],
