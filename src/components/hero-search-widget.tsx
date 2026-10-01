@@ -47,7 +47,7 @@ type TabId = HomeTabId;
 const TABS: Array<{ id: TabId; icon: typeof Ticket; enabled: boolean }> = [
   { id: 'activities', icon: Ticket, enabled: true },
   { id: 'stays', icon: Bed, enabled: false },
-  { id: 'flights', icon: Plane, enabled: false },
+  { id: 'flights', icon: Plane, enabled: true },
   { id: 'packages', icon: Luggage, enabled: false },
   { id: 'transfers', icon: Car, enabled: true },
 ];
