@@ -42,12 +42,14 @@ import { cn } from '@/lib/utils';
 type TabId = HomeTabId;
 
 
-const TABS: Array<{ id: TabId; icon: typeof Ticket }> = [
-  { id: 'activities', icon: Ticket },
-  { id: 'stays', icon: Bed },
-  { id: 'flights', icon: Plane },
-  { id: 'packages', icon: Luggage },
-  { id: 'transfers', icon: Car },
+// Only Activities and Transfers are live. The rest stay in the strip as
+// disabled placeholders so the roadmap is visible without offering dead ends.
+const TABS: Array<{ id: TabId; icon: typeof Ticket; enabled: boolean }> = [
+  { id: 'activities', icon: Ticket, enabled: true },
+  { id: 'stays', icon: Bed, enabled: false },
+  { id: 'flights', icon: Plane, enabled: false },
+  { id: 'packages', icon: Luggage, enabled: false },
+  { id: 'transfers', icon: Car, enabled: true },
 ];
 
 /**
@@ -231,7 +233,7 @@ export function HeroSearchWidget() {
         aria-label={t('search.widgetLabel')}
         className="flex items-end justify-center gap-1 overflow-x-auto rounded-t-[13px] border-b border-slate-200 px-6 pb-0 pt-[22px]"
       >
-        {TABS.map(({ id, icon: Icon }) => {
+        {TABS.map(({ id, icon: Icon, enabled }) => {
           const active = activeTab === id;
           return (
             <button
@@ -239,15 +241,23 @@ export function HeroSearchWidget() {
               role="tab"
               type="button"
               aria-selected={active}
-              onClick={() => selectTab(id)}
+              aria-disabled={!enabled || undefined}
+              disabled={!enabled}
+              title={enabled ? undefined : t('search.tabComingSoon')}
+              onClick={() => enabled && selectTab(id)}
               className={cn(
                 'relative flex min-w-[100px] flex-col items-center gap-2 rounded-t-lg border-2 border-b-0 px-5 pb-4 pt-3 transition-colors',
+                !enabled && 'cursor-not-allowed opacity-45',
                 active
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-slate-900 hover:bg-slate-50',
+                  : 'border-transparent text-slate-900',
+                enabled && !active && 'hover:bg-slate-50',
               )}
             >
-              <Icon className={cn('h-7 w-7', active ? 'text-primary' : 'text-slate-900')} aria-hidden />
+              <Icon
+                className={cn('h-7 w-7', active ? 'text-primary' : 'text-slate-900')}
+                aria-hidden
+              />
               <span
                 className={cn(
                   'whitespace-nowrap text-sm tracking-[-0.1px]',
