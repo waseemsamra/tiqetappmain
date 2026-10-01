@@ -204,11 +204,19 @@ export function HeroSearchWidget() {
     setIsOpen(false);
     reset();
 
-    // Activities searches inline here. Every other product needs the full page
-    // width, so it gets its own page with the site header.
-    if (id !== 'activities') {
-      router.push(`/${id}`);
+    // Activities searches inline here.
+    if (id === 'activities') return;
+
+    // Flight search is hosted by Travelpayouts on their own subdomain, so go
+    // there directly instead of bouncing through our /flights redirect.
+    if (id === 'flights') {
+      window.location.href = FLIGHTS_SEARCH_URL;
+      return;
     }
+
+    // Everything else needs the full page width, so it gets its own page with
+    // the site header.
+    router.push(`/${id}`);
   };
 
   const handleQueryChange = (value: string) => {
