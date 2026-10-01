@@ -122,6 +122,42 @@ function Field({
   );
 }
 
+function DateField({
+  icon: Icon,
+  label,
+  grow = 'flex-1',
+}: {
+  icon: typeof CalendarDays;
+  label: string;
+  grow?: 'flex-1' | 'flex-1-5' | 'flex-2';
+}) {
+  const [value, setValue] = useState('');
+
+  return (
+    <div
+      className={cn(
+        'group flex min-w-0 cursor-text items-center gap-3 rounded-[10px] border-[1.5px] border-slate-200 bg-white px-4 py-3 transition-colors',
+        'hover:border-slate-300 focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/10',
+        grow,
+      )}
+    >
+      <Icon className="h-[17px] w-5 shrink-0 text-slate-800" aria-hidden />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <span className="mb-0.5 text-[11px] font-medium leading-tight tracking-[0.2px] text-slate-500">
+          {label}
+        </span>
+        <input
+          type="date"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full bg-transparent p-0 text-[15px] font-semibold leading-tight tracking-[-0.2px] text-slate-900 outline-none"
+          aria-label={label}
+        />
+      </div>
+    </div>
+  );
+}
+
 function SearchButton({
   label,
   onClick,
@@ -411,7 +447,11 @@ export function HeroSearchWidget() {
             </div>
 
             <Field icon={MapPin} label={t('search.where')} value={t('search.anywhere')} grow="flex-1" />
-            <Field icon={CalendarDays} label={t('search.when')} value={t('search.anyDate')} grow="flex-1" />
+            <DateField
+              icon={CalendarDays}
+              label={t('search.when')}
+              grow="flex-1"
+            />
             <Field icon={Users} label={t('search.travelers')} value={t('search.twoAdults')} grow="flex-1" />
 
             <SearchButton
