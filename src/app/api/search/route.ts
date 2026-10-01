@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import * as TiqetsApi from '@/lib/tiqets-api';
 import { withPreferences } from '@/lib/tiqets-api';
+import { suggest } from '@/lib/search-index';
 
 const PAGE_SIZE = 100;
 const MAX_PAGES = 5;
@@ -38,8 +39,21 @@ export async function GET(request: Request) {
     const country = (searchParams.get('country') || '').trim();
     const types = searchParams.getAll('types');
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const suggestMode = searchParams.get('suggest') === '1';
 
     const lower = query.toLowerCase();
+
+    // Autocomplete: ranked local search over the cached corpus. This runs before
+    // the browse paths because it is the only one that stays fast on each
+    // keystroke — the others walk several paged API calls per request.
+    if (suggestMode) {
+      const hits = await suggest(query, { perType: 6, total: 16 });
+      return NextResponse.json({
+        countries: hits.filter((h) => h.type === 'country').map((h) => h.item),
+        cities: hits.filter((h) => h.type === 'city').map((h) => h.item),
+        excursions: hits.filter((h) => h.type === 'activity').map((h) => h.item),
+      });
+    }
 
     // 0. City search by ID - fastest path
     if (city_id) {

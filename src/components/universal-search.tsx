@@ -6,42 +6,15 @@ import Image from 'next/image';
 import { imageUrlFor } from '@/lib/tiqets-image';
 import Link from 'next/link';
 import { Search, MapPin, Mic, Sparkles, Building, Globe } from 'lucide-react';
-import { useDebouncedCallback } from 'use-debounce';
-import type { Excursion, Country, City } from '@/types';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import VoiceVisualizer from './voice-visualizer';
 import { useToast } from '@/hooks/use-toast';
-
-interface SearchResults {
-    countries: Country[];
-    cities: City[];
-    activities: Excursion[];
-}
-
-const SEARCH_CACHE_TTL = 5 * 60 * 1000;
-const SEARCH_CACHE = new Map<string, { data: SearchResults; timestamp: number }>();
-
-function getCachedSearch(key: string): SearchResults | null {
-    const entry = SEARCH_CACHE.get(key);
-    if (!entry) return null;
-    const isStale = Date.now() - entry.timestamp > SEARCH_CACHE_TTL;
-    if (isStale) {
-        SEARCH_CACHE.delete(key);
-        return null;
-    }
-    return entry.data;
-}
-
-function setCachedSearch(key: string, value: SearchResults) {
-    SEARCH_CACHE.set(key, { data: value, timestamp: Date.now() });
-}
+import { useSuggestSearch } from '@/hooks/use-suggest-search';
 
 export function UniversalSearch() {
     const router = useRouter();
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<SearchResults>({ countries: [], cities: [], activities: [] });
-    const [isLoading, setIsLoading] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const { toast } = useToast();
@@ -49,40 +22,23 @@ export function UniversalSearch() {
     const searchContainerRef = useRef<HTMLDivElement>(null);
     const recognitionRef = useRef<any>(null);
 
+    const { results, isLoading, search: runSearch, reset } = useSuggestSearch();
+
     const handleSearchRedirect = (e: React.FormEvent) => {
         e.preventDefault();
         if (!query.trim()) return;
         setIsDropdownOpen(false);
         router.push(`/search?query=${encodeURIComponent(query)}`);
     };
-    
-    const debouncedSearch = useDebouncedCallback(async (currentQuery: string) => {
-        if (currentQuery.trim().length < 2) {
-            setSuggestions([]);
-            setLoading(false);
-            return;
-        }
-        const res = await fetch(`/api/search?query=${encodeURIComponent(currentQuery.trim())}`);
-        const data = await res.json();
-        const combined = [
-            ...(data.countries || []).map((c: Country) => ({ type: 'country' as const, item: c })),
-            ...(data.cities || []).map((c: City) => ({ type: 'city' as const, item: c })),
-            ...(data.excursions || []).map((e: Excursion) => ({ type: 'activity' as const, item: e })),
-        ];
-        setSuggestions(combined);
-        setLoading(false);
-    }, 150);
 
     useEffect(() => {
         if (query && !isListening) {
-            setIsLoading(true);
-            debouncedSearch(query);
+            runSearch(query);
         } else if (!query) {
-            setResults({ countries: [], cities: [], activities: [] });
-            setIsLoading(false);
+            reset();
             setIsDropdownOpen(false);
         }
-    }, [query, debouncedSearch, isListening]);
+    }, [query, runSearch, reset, isListening]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -260,7 +216,7 @@ export function UniversalSearch() {
                             )}
                         </ul>
                     )}
-                    {!isLoading && query.length >= 1 && results.countries.length === 0 && results.cities.length === 0 && results.activities.length === 0 && (
+                    {!isLoading && query.trim().length >= 2 && results.countries.length === 0 && results.cities.length === 0 && results.activities.length === 0 && (
                         <div className="p-4 text-center text-muted-foreground">No results found for "{query}".</div>
                     )}
                 </div>

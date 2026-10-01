@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import type { HeroContent } from '@/types';
-import { UniversalSearch } from '@/components/universal-search';
+import { HeroSearchWidget } from '@/components/hero-search-widget';
 
 export default function HeroSection({ content }: { content: HeroContent | null }) {
 
@@ -31,7 +31,9 @@ export default function HeroSection({ content }: { content: HeroContent | null }
         <div className="absolute inset-0 bg-black bg-opacity-40" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4">
+      {/* z-20 outranks the z-index controls in the sections that follow, so the
+          search dropdown paints over them rather than under them. */}
+      <div className="relative z-20 container mx-auto px-4">
         <div className="text-left">
           <h1 className="text-4xl md:text-6xl font-bold text-white text-left mb-6">
             {content.headline}
@@ -40,7 +42,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
             {content.subheading}
           </p>
 
-          <UniversalSearch />
+          <HeroSearchWidget />
           
         </div>
       </div>
