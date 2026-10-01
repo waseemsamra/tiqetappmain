@@ -16,7 +16,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
   }
 
   return (
-    <div className="relative min-h-[60vh] flex items-center">
+    <div className="relative min-h-[60vh] flex items-start pt-14">
       <div className="absolute inset-0">
         {(content.backgroundImage && content.backgroundImage.length > 0) && (
           <Image
@@ -38,7 +38,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
           <h1 className="text-4xl md:text-6xl font-bold text-white text-left mb-6">
             {content.headline}
           </h1>
-          <p className="text-xl text-white text-left max-w-2xl mb-10 opacity-95">
+          <p className="hidden md:block text-xl text-white text-left max-w-2xl mb-10 opacity-95">
             {content.subheading}
           </p>
 

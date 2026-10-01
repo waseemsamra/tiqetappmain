@@ -48,6 +48,7 @@ export function useSuggestSearch(debounceMs = 250) {
   const [results, setResults] = useState<SearchResults>(EMPTY);
   const [isLoading, setIsLoading] = useState(false);
   const requestIdRef = useRef(0);
+  const categoryRef = useRef<string>('all');
 
   const runSearch = useDebouncedCallback(async (currentQuery: string) => {
     const trimmed = currentQuery.trim();
@@ -57,7 +58,7 @@ export function useSuggestSearch(debounceMs = 250) {
       return;
     }
 
-    const key = trimmed.toLowerCase();
+    const key = `${categoryRef.current}:${trimmed.toLowerCase()}`;
     const cached = getCachedSearch(key);
     if (cached) {
       setResults(cached);
@@ -67,8 +68,9 @@ export function useSuggestSearch(debounceMs = 250) {
 
     const requestId = ++requestIdRef.current;
     try {
+      const categoryParam = categoryRef.current !== 'all' ? `&category=${categoryRef.current}` : '';
       const res = await fetch(
-        `/api/search?query=${encodeURIComponent(key.slice(0, MAX_QUERY_LENGTH))}&suggest=1`,
+        `/api/search?query=${encodeURIComponent(trimmed.slice(0, MAX_QUERY_LENGTH))}&suggest=1${categoryParam}`,
       );
       if (!res.ok) throw new Error(`Search failed: ${res.status}`);
       const data = await res.json();
@@ -92,7 +94,8 @@ export function useSuggestSearch(debounceMs = 250) {
   }, debounceMs);
 
   // Called on every keystroke; the debounce lives in `runSearch`.
-  const search = (query: string) => {
+  const search = (query: string, category?: string) => {
+    if (category) categoryRef.current = category;
     if (!query.trim()) {
       setResults(EMPTY);
       setIsLoading(false);
