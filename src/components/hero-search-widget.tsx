@@ -650,140 +650,140 @@ export function HeroSearchWidget() {
             ))}
           </div>
 
-          {/* Search form row - aligned with chips above */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-            <div className="relative min-w-0 flex-1">
-              <Field
-                icon={SearchIcon}
-                label={t('search.whatLookingFor')}
-                value={query}
-                placeholder={t('search.whatPlaceholder')}
-                onChange={handleQueryChange}
-                onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
-                inputRef={queryInputRef}
-                grow="flex-1"
-              />
+          {/* Search input - full width */}
+          <div className="relative mb-3">
+            <Field
+              icon={SearchIcon}
+              label={t('search.whatLookingFor')}
+              value={query}
+              placeholder={t('search.whatPlaceholder')}
+              onChange={handleQueryChange}
+              onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
+              inputRef={queryInputRef}
+              grow="flex-1"
+            />
 
-              {/* Suggestions render under the field, inside the widget. */}
-              {isOpen && (
-                <div className="absolute left-0 right-0 top-full z-50 mt-1.5 max-h-[min(380px,55vh)] overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-[0_8px_32px_rgba(15,23,42,0.12)]">
-{isLoading && (
-            <ul className="p-2" role="status" aria-label={t('search.loading')}>
-              {[...Array(3)].map((_, i) => (
-                <li key={i} className="flex items-center gap-4 p-3">
-                  <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
-                  <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" aria-hidden />
-                </li>
-              ))}
-              {[...Array(3)].map((_, i) => (
-                <li key={`city-${i}`} className="flex items-center gap-4 p-3">
-                  <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
-                  <div className="h-4 w-1/2 animate-pulse bg-slate-200 rounded" aria-hidden />
-                </li>
-              ))}
-              {[...Array(4)].map((_, i) => (
-                <li key={`activity-${i}`} className="flex items-center gap-4 p-3">
-                  <div className="h-12 w-12 rounded-md animate-pulse bg-slate-200" aria-hidden />
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" aria-hidden />
-                    <div className="h-3 w-1/2 animate-pulse bg-slate-200 rounded" aria-hidden />
+            {/* Suggestions render under the field, inside the widget. */}
+            {isOpen && (
+              <div className="absolute left-0 right-0 top-full z-50 mt-1.5 max-h-[min(380px,55vh)] overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-[0_8px_32px_rgba(15,23,42,0.12)]">
+                {isLoading && (
+                  <ul className="p-2" role="status" aria-label={t('search.loading')}>
+                    {[...Array(3)].map((_, i) => (
+                      <li key={i} className="flex items-center gap-4 p-3">
+                        <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
+                        <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" aria-hidden />
+                      </li>
+                    ))}
+                    {[...Array(3)].map((_, i) => (
+                      <li key={`city-${i}`} className="flex items-center gap-4 p-3">
+                        <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
+                        <div className="h-4 w-1/2 animate-pulse bg-slate-200 rounded" aria-hidden />
+                      </li>
+                    ))}
+                    {[...Array(4)].map((_, i) => (
+                      <li key={`activity-${i}`} className="flex items-center gap-4 p-3">
+                        <div className="h-12 w-12 rounded-md animate-pulse bg-slate-200" aria-hidden />
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" aria-hidden />
+                          <div className="h-3 w-1/2 animate-pulse bg-slate-200 rounded" aria-hidden />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {!isLoading && hasResults && (
+                  <ul>
+                    {results.countries.length > 0 && (
+                      <>
+                        <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                          {t('search.groupCountries')}
+                        </li>
+                        {results.countries.map((country) => (
+                          <li key={`country-${country.id}`}>
+                            <Link
+                              href={`/country/${encodeURIComponent(country.name)}`}
+                              onClick={() => setIsOpen(false)}
+                              className="flex items-center gap-4 p-3 hover:bg-slate-50"
+                            >
+                              <Globe className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
+                              <p className="truncate font-semibold">{country.name}</p>
+                            </Link>
+                          </li>
+                        ))}
+                      </>
+                    )}
+
+                    {results.cities.length > 0 && (
+                      <>
+                        <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                          {t('search.groupCities')}
+                        </li>
+                        {results.cities.map((city) => (
+                          <li key={`city-${city.id || city.name}`}>
+                            <Link
+                              href={`/city/${encodeURIComponent(city.name)}`}
+                              onClick={() => setIsOpen(false)}
+                              className="flex items-center gap-4 p-3 hover:bg-slate-50"
+                            >
+                              <Building className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
+                              <p className="truncate font-semibold">{city.name}</p>
+                            </Link>
+                          </li>
+                        ))}
+                      </>
+                    )}
+
+                    {results.activities.length > 0 && (
+                      <>
+                        <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                          {t('search.groupActivities')}
+                        </li>
+                        {results.activities.map((ex) => (
+                          <li key={ex.id}>
+                            <button
+                              onClick={() => {
+                                handleNavClick(`/excursions/${ex.id}`);
+                                setIsOpen(false);
+                              }}
+                              className="flex w-full items-center gap-4 p-3 hover:bg-slate-50 text-left"
+                            >
+                              {ex.images?.[0] && (
+                                <Image
+                                  src={imageUrlFor(ex.images[0], 'mini')}
+                                  alt={ex.name}
+                                  width={48}
+                                  height={48}
+                                  className="h-12 w-12 shrink-0 rounded-md object-cover"
+                                  unoptimized
+                                />
+                              )}
+                              <div className="min-w-0">
+                                <p className="truncate font-semibold">{ex.name}</p>
+                                <p className="truncate text-sm text-slate-500">
+                                  {[ex.city, ex.country].filter(Boolean).join(', ')}
+                                </p>
+                              </div>
+                            </button>
+                          </li>
+                        ))}
+                      </>
+                    )}
+                  </ul>
+                )}
+
+                {showEmptyState && (
+                  <div className="p-4 text-center text-slate-500">
+                    {t('search.noResults', { query: query.trim() })}
                   </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                )}
+              </div>
+            )}
+          </div>
 
-          {!isLoading && hasResults && (
-                    <ul>
-                      {results.countries.length > 0 && (
-                        <>
-                          <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
-                            {t('search.groupCountries')}
-                          </li>
-                          {results.countries.map((country) => (
-                            <li key={`country-${country.id}`}>
-                              <Link
-                                href={`/country/${encodeURIComponent(country.name)}`}
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-4 p-3 hover:bg-slate-50"
-                              >
-                                <Globe className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
-                                <p className="truncate font-semibold">{country.name}</p>
-                              </Link>
-                            </li>
-                          ))}
-                        </>
-                      )}
-
-                      {results.cities.length > 0 && (
-                        <>
-                          <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
-                            {t('search.groupCities')}
-                          </li>
-                          {results.cities.map((city) => (
-                            <li key={`city-${city.id || city.name}`}>
-                              <Link
-                                href={`/city/${encodeURIComponent(city.name)}`}
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-4 p-3 hover:bg-slate-50"
-                              >
-                                <Building className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
-                                <p className="truncate font-semibold">{city.name}</p>
-                              </Link>
-                            </li>
-                          ))}
-                        </>
-                      )}
-
-                      {results.activities.length > 0 && (
-                        <>
-                          <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
-                            {t('search.groupActivities')}
-                          </li>
-                          {results.activities.map((ex) => (
-                            <li key={ex.id}>
-                              <button
-                                onClick={() => {
-                                  handleNavClick(`/excursions/${ex.id}`);
-                                  setIsOpen(false);
-                                }}
-                                className="flex w-full items-center gap-4 p-3 hover:bg-slate-50 text-left"
-                              >
-                                {ex.images?.[0] && (
-                                  <Image
-                                    src={imageUrlFor(ex.images[0], 'mini')}
-                                    alt={ex.name}
-                                    width={48}
-                                    height={48}
-                                    className="h-12 w-12 shrink-0 rounded-md object-cover"
-                                    unoptimized
-                                  />
-                                )}
-                                <div className="min-w-0">
-                                  <p className="truncate font-semibold">{ex.name}</p>
-                                  <p className="truncate text-sm text-slate-500">
-                                    {[ex.city, ex.country].filter(Boolean).join(', ')}
-                                  </p>
-                                </div>
-                              </button>
-                            </li>
-                          ))}
-                        </>
-                      )}
-                    </ul>
-                  )}
-
-                  {showEmptyState && (
-                    <div className="p-4 text-center text-slate-500">
-                      {t('search.noResults', { query: query.trim() })}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Where, When, Travelers, Search - responsive grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Where, When, Travelers, Search - one row on desktop */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+            <div className="flex-1">
               <WhereField
                 icon={MapPin}
                 label={t('search.where')}
@@ -791,11 +791,15 @@ export function HeroSearchWidget() {
                 t={t}
                 grow="flex-1"
               />
+            </div>
+            <div className="flex-1">
               <DateField
                 icon={CalendarDays}
                 label={t('search.when')}
                 grow="flex-1"
               />
+            </div>
+            <div className="flex-1">
               <TravelersField
                 icon={Users}
                 label={t('search.travelers')}
@@ -805,13 +809,12 @@ export function HeroSearchWidget() {
                 infantNote={t('search.infantNote')}
                 grow="flex-1"
               />
-
-              <SearchButton
-                label={t('search.submit')}
-                onClick={submitSearch}
-                className="min-h-[46px]"
-              />
             </div>
+            <SearchButton
+              label={t('search.submit')}
+              onClick={submitSearch}
+              className="min-h-[46px] w-full sm:w-auto"
+            />
           </div>
         </div>
       )}

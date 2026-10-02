@@ -65,14 +65,12 @@ function buildSrc(mode: TransferMode, props: AirportTransfersWidgetProps): strin
     return `https://iframe.intui.travel/${language}/?${params.toString()}`;
   }
 
-  // Widget mode (current implementation)
+  // Widget mode (matches Intui's iframe embed code)
   const params = new URLSearchParams({
     p_site: partnerId,
     constructor: '1',
-    wlmode: 'wdg',
-    view: 'detail',
     color_scheme: colorScheme,
-    wg: '0',
+    b: '11111111111111111111111111111111',
     h: headerText,
   });
   return `https://en.intui.travel/?${params.toString()}`;
