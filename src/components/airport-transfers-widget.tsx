@@ -1,19 +1,11 @@
 'use client';
 
 /**
- * Intui airport-transfer booking widget/white-label, shown in the Transfers tab.
+ * Intui airport-transfer booking widget, shown in the Transfers tab.
  *
- * Interim approach while Intui's transfer API is blocked for our server
- * (403 `cf-mitigated: challenge`). Intui self-sizes the frame with
- * `iframeResizer.js`, which posts the measured height back to this window, so
- * that script is injected here rather than hard-coded into the markup.
- *
- * Because the frame is cross-origin, results stay inside it and cannot be
- * lifted into our own main-area panel. Once the API is reachable the widget
- * can be replaced by our own form, which feeds results to the main area.
- *
- * If the browser refuses the frame (the partner host has been observed sending
- * `X-Frame-Options: SAMEORIGIN`), the fallback link keeps booking reachable.
+ * Embeds Intui's booking form via iframe. Intui self-sizes the frame
+ * with `iframeResizer.js`, which posts the measured height back to this
+ * window, so that script is injected here rather than hard-coded.
  *
  * Supports two modes:
  * - widget: Standard Intui widget (current default)
@@ -27,45 +19,36 @@ import { useT } from '@/components/language-provider';
 type TransferMode = 'widget' | 'whitelabel';
 
 interface AirportTransfersWidgetProps {
-  /** 'widget' (default) or 'whitelabel' */
   mode?: TransferMode;
-  /** Partner ID from Intui (p_site for widget, partnerID for whitelabel) */
   partnerId?: string;
-  /** White-label color scheme (only for whitelabel mode) */
   colorScheme?: string;
-  /** White-label language (only for whitelabel mode) */
   language?: string;
-  /** Custom header text for whitelabel mode */
   headerText?: string;
 }
 
 const RESIZER_SRC = 'https://www.intui.travel/public/js/jquery/iframeResizer.js';
 
-/** Height before the partner page reports its own. */
 const FALLBACK_HEIGHT = 318;
 
 function buildSrc(mode: TransferMode, props: AirportTransfersWidgetProps): string {
   const {
     partnerId = '2873517',
-    colorScheme = 'basic',
+    colorScheme = 'bg',
     language = 'en',
     headerText = 'Airport transfers executed by local Professional companies',
   } = props;
 
   if (mode === 'whitelabel') {
-    // White-label iframe URL - configure at https://partner.intui.travel/en/whitelabel/
     const params = new URLSearchParams({
       partnerID: partnerId,
       color_scheme: colorScheme,
       lang: language,
+      h: headerText,
     });
-    if (headerText) {
-      params.set('h', headerText);
-    }
     return `https://iframe.intui.travel/${language}/?${params.toString()}`;
   }
 
-  // Widget mode (matches Intui's iframe embed code)
+  // Widget mode - matches Intui's iframe embed code
   const params = new URLSearchParams({
     p_site: partnerId,
     constructor: '1',
@@ -81,32 +64,37 @@ export function AirportTransfersWidget({
   ...props
 }: AirportTransfersWidgetProps) {
   const t = useT();
-  const frameRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(FALLBACK_HEIGHT);
-  const [resizerReady, setResizerReady] = useState(false);
 
+  // Inject the iframe and iframeResizer script via JavaScript
   useEffect(() => {
-    if (document.querySelector(`script[src="${RESIZER_SRC}"]`)) {
-      setResizerReady(true);
-      return;
+    if (!containerRef.current) return;
+
+    const src = buildSrc(mode, props);
+    const container = containerRef.current;
+
+    // Create iframe
+    const iframe = document.createElement('iframe');
+    iframe.id = 'intuiIframe';
+    iframe.src = src;
+    iframe.style.width = '100%';
+    iframe.style.height = `${FALLBACK_HEIGHT}px`;
+    iframe.style.border = 'none';
+    iframe.scrolling = 'no';
+    iframe.title = t('search.airportTransfers');
+    container.appendChild(iframe);
+
+    // Load iframeResizer script
+    const existingScript = document.querySelector(`script[src="${RESIZER_SRC}"]`);
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = RESIZER_SRC;
+      script.async = true;
+      document.body.appendChild(script);
     }
 
-    const script = document.createElement('script');
-    script.src = RESIZER_SRC;
-    script.async = true;
-    script.onload = () => setResizerReady(true);
-    document.body.appendChild(script);
-
-    return () => {
-      script.remove();
-    };
-  }, []);
-
-  // Grow the frame to the height the partner page reports, so the booking form
-  // is never clipped part-way through an interaction.
-  useEffect(() => {
-    if (!resizerReady) return;
-
+    // Listen for height messages from Intui
     const onMessage = (event: MessageEvent) => {
       let hostname = '';
       try {
@@ -123,31 +111,29 @@ export function AirportTransfersWidget({
       const reported = Number(data?.msg?.height ?? data?.height);
       if (Number.isFinite(reported) && reported > 0) {
         setHeight(Math.ceil(reported));
+        iframe.style.height = `${Math.ceil(reported)}px`;
       }
     };
 
     window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [resizerReady]);
 
-  const src = buildSrc(mode, props);
+    return () => {
+      window.removeEventListener('message', onMessage);
+      // Clean up iframe on unmount
+      if (iframe.parentNode) {
+        iframe.parentNode.removeChild(iframe);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, props.partnerId, props.colorScheme, props.language, props.headerText]);
+
   const fallbackLink = mode === 'whitelabel'
     ? `https://www.intui.travel/transfer/?api&partnerID=${props.partnerId || '287008'}`
     : 'https://www.intui.travel/transfer/?api&partnerID=287008';
 
   return (
     <div>
-      <iframe
-        ref={frameRef}
-        id="intuiIframe"
-        src={src}
-        title={t('search.airportTransfers')}
-        className="w-full border-0"
-        style={{ height: `${height}px` }}
-        loading="lazy"
-        scrolling="no"
-        referrerPolicy="strict-origin-when-cross-origin"
-      />
+      <div ref={containerRef} className="w-full" />
       <a
         href={fallbackLink}
         target="_blank"
