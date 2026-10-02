@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 
 interface CityWithCount {
     name: string;
@@ -27,7 +28,7 @@ export function CitiesSection({ countryName, cities }: CitiesSectionProps) {
     return (
         <section className="mb-16">
             <h2 className="text-2xl md:text-3xl font-bold mb-6">Best Places to Visit in {countryName}</h2>
-            <Carousel opts={{ align: "start" }} className="w-full">
+            <Carousel opts={CAROUSEL_OPTS} className="w-full">
                 <CarouselContent className="-ml-4">
                     {cities.map(city => (
                         <CarouselItem key={city.name} className="pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">

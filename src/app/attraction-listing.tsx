@@ -15,6 +15,7 @@ import { AttractionCard } from '@/components/attraction-card';
 import { WishlistButton } from '@/components/wishlist-button';
 
 import { cn } from '@/lib/utils';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 import { ArrowRight } from 'lucide-react';
 
 const CityTab = ({ city, image, isActive, onClick }: { city: string; image?: string; isActive: boolean; onClick: () => void }) => (
@@ -156,21 +157,7 @@ export default function AttractionListingSection({
             <div className="relative">
                 <Carousel
                     key={carouselKey}
-                    opts={{ 
-                        align: "start", 
-                        loop: false,
-                        dragFree: true,
-                        skipSnaps: false,
-                        watchDrag: true,
-                        draggable: true,
-                        containScroll: "trimSnaps",
-                        speed: 15,
-                        duration: 20,
-                        breakpoints: {
-                            "(min-width: 640px)": { slidesToScroll: 1 },
-                            "(min-width: 1024px)": { slidesToScroll: 1 },
-                        }
-                    }}
+                    opts={CAROUSEL_OPTS}
                     className="w-full"
                 >
                     {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (

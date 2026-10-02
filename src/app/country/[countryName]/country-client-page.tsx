@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 import { useState, useEffect, useMemo } from 'react';
 import { FilterDialog } from '@/components/excursion-search/filter-sheet';
 import { useAuth } from '@/app/auth-provider';
