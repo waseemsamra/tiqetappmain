@@ -146,7 +146,7 @@ export default function CountryClientPage({
                 {topExcursions.length > 0 && (
                     <section>
                         <h2 className="text-2xl md:text-3xl font-bold mb-6">Top 10 Experiences in {countryName}</h2>
-                        <Carousel opts={{ align: "start", loop: false }} className="w-full">
+                        <Carousel opts={CAROUSEL_OPTS} className="w-full">
                             <CarouselContent className="-ml-4">
                                 {topExcursions.map((excursion, index) => (
                                     <CarouselItem key={excursion.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">

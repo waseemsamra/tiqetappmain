@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 
 export type RelatedProduct = {
   id: string;
@@ -99,7 +100,7 @@ export function RelatedProducts({
         </div>
       </div>
 
-      <Carousel opts={{ align: 'start', loop: false }} setApi={setApi} className="relative">
+      <Carousel opts={CAROUSEL_OPTS} setApi={setApi} className="relative">
         <CarouselContent className="-ml-5">
           {products.map((product) => (
             <CarouselItem

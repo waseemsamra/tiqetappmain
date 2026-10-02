@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
     <div className="bg-muted/60 p-6 rounded-xl flex items-start gap-4 min-h-[120px]">
@@ -51,10 +52,7 @@ export default function FeatureCards() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 {/* Mobile carousel - visible on small screens */}
                 <div className="md:hidden">
-                    <Carousel
-                        opts={{ align: "start", loop: false }}
-                        className="w-full"
-                    >
+                    <Carousel opts={CAROUSEL_OPTS} className="w-full">
                         <CarouselContent className="-ml-4">
                             {features.map((feature, index) => (
                                 <CarouselItem key={feature.title} className="pl-4 basis-full">

@@ -7,6 +7,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { PreferencesProvider } from '@/components/preferences-provider';
 import { getDisplayCurrency, getDisplayLanguage } from '@/lib/tiqets-api';
+import { RouteLoadingBar } from '@/components/route-loading-bar';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +42,7 @@ export default async function RootLayout({
           <Footer />
         </PreferencesProvider>
         <Toaster />
+        <RouteLoadingBar />
       </body>
     </html>
   );

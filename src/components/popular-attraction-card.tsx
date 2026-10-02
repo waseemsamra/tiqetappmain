@@ -1,13 +1,32 @@
-export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: { excursion: Excursion, user: User | null, isInitialWishlisted?: boolean }) => (
-    <div className="rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 flex flex-col group h-full">
-        <Link href={`/excursions/${excursion.id}`} className="block h-full flex flex-col">
+'use client';
+
+import Image from 'next/image';
+import { StarRating } from "@/components/star-rating";
+import type { Excursion } from '@/types';
+import type { User } from '@/types';
+import { useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
+
+
+export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: { excursion: Excursion, user: User | null, isInitialWishlisted?: boolean }) => {
+    const router = useRouter();
+    const [isNavigating, setIsNavigating] = useState(false);
+
+    const handleClick = useCallback((e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsNavigating(true);
+      router.push(`/excursions/${excursion.id}`);
+    }, [excursion.id, router]);
+
+    return (
+        <div className={`rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-100 flex flex-col group h-full ${isNavigating ? 'opacity-60 scale-[0.99]' : 'hover:shadow-lg hover:-translate-y-0.5'}`} onClick={handleClick} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e as unknown as React.MouseEvent); } }}>
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-xl">
                 {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
                     <Image 
                       src={excursion.images?.[0]} 
                       alt={excursion.name} 
                       fill 
-                      className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" 
+                      className={`object-cover w-full h-full transition-transform duration-300 ${isNavigating ? 'scale-100' : 'group-hover:scale-105'}`} 
                       data-ai-hint="attraction"
                       unoptimized
                     />
@@ -26,6 +45,6 @@ export const PopularAttractionCard = ({ excursion, user, isInitialWishlisted }: 
                     </div>
                 </div>
             </div>
-        </Link>
-    </div>
-);
+        </div>
+    );
+};
