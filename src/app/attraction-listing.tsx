@@ -156,7 +156,21 @@ export default function AttractionListingSection({
             <div className="relative">
                 <Carousel
                     key={carouselKey}
-                    opts={{ align: "start", loop: false }}
+                    opts={{ 
+                        align: "start", 
+                        loop: false,
+                        dragFree: true,
+                        skipSnaps: false,
+                        watchDrag: true,
+                        draggable: true,
+                        containScroll: "trimSnaps",
+                        speed: 15,
+                        duration: 20,
+                        breakpoints: {
+                            "(min-width: 640px)": { slidesToScroll: 1 },
+                            "(min-width: 1024px)": { slidesToScroll: 1 },
+                        }
+                    }}
                     className="w-full"
                 >
                     {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (

@@ -10,6 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CategoryExplorer } from '@/components/country/category-explorer';
 import { AllExperiences } from '@/components/country/all-experiences';
@@ -156,7 +157,7 @@ export default function CityClientPage({
             
             <section>
                 <h2 className="text-3xl font-bold mb-8">Top things to do in {cityName}</h2>
-                 <Carousel opts={{ align: "start", loop: false }} className="w-full">
+                 <Carousel opts={CAROUSEL_OPTS} className="w-full">
                     <CarouselContent className="-ml-4">
                         {topRatedExcursions.map((ex, index) => (
                              <CarouselItem key={ex.id} className="pl-4 basis-[90%] lg:basis-1/3 xl:basis-1/3">

@@ -14,6 +14,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 
 interface Category {
   id: string;
@@ -116,7 +117,7 @@ export const CategoryExplorer = ({ tags, allTags, countryName, cityName, onShowA
 
     return (
         <div className="relative">
-            <Carousel opts={{ align: "start", loop: false }} className="w-full">
+            <Carousel opts={CAROUSEL_OPTS} className="w-full">
                 <CarouselContent className="-ml-4">
                     {initialCategories.map(cat => (
                         <CarouselItem key={cat.id} className="md:basis-1/2 lg:basis-1/3 xl:basis-1/6 pl-4">
