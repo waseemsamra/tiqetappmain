@@ -16,7 +16,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
   }
 
   return (
-    <div className="relative min-h-[60vh] flex items-start pt-14">
+    <div className="relative min-h-[60vh] flex items-start pt-14 pb-12 md:pb-20">
       <div className="absolute inset-0">
         {(content.backgroundImage && content.backgroundImage.length > 0) && (
           <Image

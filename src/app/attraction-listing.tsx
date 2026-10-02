@@ -220,7 +220,7 @@ export default function AttractionListingSection({
     return (
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 text-left mb-4 md:mb-0">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-left mb-4 md:mb-0">
                     {title}
                 </h2>
             </div>

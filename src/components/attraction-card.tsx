@@ -55,7 +55,7 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                 
                 {/* Responsive alignment */}
                 <div className={cn(
-                    "flex justify-between mt-auto pt-4",
+                    "flex flex-wrap items-center justify-between gap-2 mt-auto pt-3",
                     layout === 'horizontal' 
                         ? "items-center"
                         : "items-center"
@@ -67,12 +67,9 @@ export const AttractionCard = ({ excursion, wishlistButton, rank, layout = 'vert
                     )}>
                         <StarRating rating={excursion.rating} reviewCount={excursion.reviewsTotal} />
                     </div>
-                    <div className="text-right">
-                        <span className={cn(
-                            "text-xs text-gray-500",
-                            layout === 'horizontal' ? "sm:inline md:block" : "block"
-                        )}>From</span>
-                        <p className="font-bold text-gray-900">{formatPrice(excursion.price, excursion.currency)}</p>
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-xs text-gray-500 hidden sm:inline">From</span>
+                        <p className="text-sm font-bold text-gray-900">{formatPrice(excursion.price, excursion.currency)}</p>
                     </div>
                 </div>
             </div>

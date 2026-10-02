@@ -26,15 +26,27 @@ export function StarRating({
 
   return (
     <div className={`flex items-center gap-1 ${className}`}>
-      {[...Array(5)].map((_, i) => (
-        <Star
-          key={i}
-          className={`h-4 w-4 ${i < Math.round(value) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
-        />
-      ))}
-      <span className="text-sm font-bold text-gray-800">{value.toFixed(1)}</span>
+      <Star
+        className={`h-4 w-4 ${value >= 3 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} sm:hidden`}
+      />
+      <Star
+        className={`h-4 w-4 ${value >= 1 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} hidden sm:inline-flex`}
+      />
+      <Star
+        className={`h-4 w-4 ${value >= 2 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} hidden sm:inline-flex`}
+      />
+      <Star
+        className={`h-4 w-4 ${value >= 3 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} hidden sm:inline-flex`}
+      />
+      <Star
+        className={`h-4 w-4 ${value >= 4 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} hidden sm:inline-flex`}
+      />
+      <Star
+        className={`h-4 w-4 ${value >= 5 ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} hidden sm:inline-flex`}
+      />
+      <span className="text-xs font-bold text-gray-800">{value.toFixed(1)}</span>
       {typeof reviewCount === 'number' && reviewCount > 0 && (
-        <span className="text-sm text-gray-500" title={`${reviewCount.toLocaleString()} reviews`}>
+        <span className="text-xs text-gray-500" title={`${reviewCount.toLocaleString()} reviews`}>
           ({formatReviewCount(reviewCount)})
         </span>
       )}
