@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ChevronRight, Sparkles, Star } from 'lucide-react';
 import type { Excursion, ExcursionVariant } from '@/types';
 import { StarRating } from '@/components/star-rating';
@@ -92,9 +93,14 @@ function ExcursionDetailContent({
   nearbyCities?: string[];
 }) {
   const t = useT();
+  const router = useRouter();
   const { addRecentlyViewed } = useRecentlyViewed();
   const [languageCode, setLanguageCode] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  const handleNavClick = useCallback((href: string) => {
+    router.push(href);
+  }, [router]);
 
   useMemo(() => {
     addRecentlyViewed(excursion.id);
@@ -309,7 +315,7 @@ function ExcursionDetailContent({
           </h2>
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {alsoBought.map((item) => (
-              <article key={item.id} className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg">
+              <article key={item.id} className="group relative flex cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:shadow-lg" onClick={() => handleNavClick(`/excursions/${item.id}`)} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNavClick(`/excursions/${item.id}`); } }}>
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
                   {item.images?.[0] && (
                     <Image
@@ -327,12 +333,7 @@ function ExcursionDetailContent({
                 <div className="flex grow flex-col p-3 sm:p-4">
                   <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">{item.city}</p>
                   <h3 className="mt-1 line-clamp-2 min-h-[40px] text-base font-bold text-gray-900 transition-colors group-hover:text-primary">
-                    <Link
-                      href={`/excursions/${item.id}`}
-                      className="after:absolute after:inset-0 after:content-['']"
-                    >
-                      {item.name}
-                    </Link>
+                    {item.name}
                   </h3>
                   <p className="mt-1 line-clamp-2 text-sm text-gray-600">{item.description}</p>
                   <div className="mt-auto flex items-center justify-between pt-4">
@@ -362,13 +363,13 @@ function ExcursionDetailContent({
           </h2>
           <div className="flex flex-wrap gap-x-5 gap-y-2.5">
             {topThings.map((item) => (
-              <Link
+              <button
                 key={item.id}
-                href={`/excursions/${item.id}`}
+                onClick={() => handleNavClick(`/excursions/${item.id}`)}
                 className="relative pr-5 text-xs font-medium text-gray-600 after:absolute after:right-1 after:top-[-1px] after:text-sm after:text-gray-400 hover:text-[#00B4D8] hover:after:text-[#00B4D8]"
               >
                 {item.name}
-              </Link>
+              </button>
             ))}
           </div>
         </section>

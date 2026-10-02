@@ -542,6 +542,10 @@ export function HeroSearchWidget() {
     router.push(`/${id}`);
   };
 
+  const handleNavClick = (href: string) => {
+    router.push(href);
+  };
+
   const handleQueryChange = (value: string) => {
     setQuery(value);
     search(value, category);
@@ -738,10 +742,12 @@ export function HeroSearchWidget() {
                           </li>
                           {results.activities.map((ex) => (
                             <li key={ex.id}>
-                              <Link
-                                href={`/excursions/${ex.id}`}
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-4 p-3 hover:bg-slate-50"
+                              <button
+                                onClick={() => {
+                                  handleNavClick(`/excursions/${ex.id}`);
+                                  setIsOpen(false);
+                                }}
+                                className="flex w-full items-center gap-4 p-3 hover:bg-slate-50 text-left"
                               >
                                 {ex.images?.[0] && (
                                   <Image
@@ -759,7 +765,7 @@ export function HeroSearchWidget() {
                                     {[ex.city, ex.country].filter(Boolean).join(', ')}
                                   </p>
                                 </div>
-                              </Link>
+                              </button>
                             </li>
                           ))}
                         </>

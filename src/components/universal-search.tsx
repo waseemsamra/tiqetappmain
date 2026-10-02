@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { imageUrlFor } from '@/lib/tiqets-image';
@@ -30,6 +30,10 @@ export function UniversalSearch() {
         setIsDropdownOpen(false);
         router.push(`/search?query=${encodeURIComponent(query)}`);
     };
+
+    const handleNavClick = useCallback((href: string) => {
+        router.push(href);
+    }, [router]);
 
     useEffect(() => {
         if (query && !isListening) {
@@ -196,20 +200,23 @@ export function UniversalSearch() {
                                     ))}
                                 </>
                             )}
-                            {results.activities.length > 0 && (
+{results.activities.length > 0 && (
                                 <>
                                     <li className="px-3 py-2 text-xs font-semibold text-muted-foreground bg-muted/50">Activities</li>
                                     {results.activities.map((ex) => (
                                         <li key={ex.id}>
-                                              <Link href={`/excursions/${ex.id}`} className="flex items-center gap-4 p-3 hover:bg-muted">
-                                                  {ex.images?.[0] && ex.images?.[0].length > 0 && (
-                                                  <Image src={imageUrlFor(ex.images[0], 'mini')} alt={ex.name} width={48} height={48} className="rounded-md object-cover" unoptimized />
-                                                )}
-                                                  <div>
-                                                      <p className="font-semibold">{ex.name}</p>
-                                                      <p className="text-sm text-muted-foreground">{ex.city}, {ex.country}</p>
-                                                  </div>
-                                              </Link>
+                                              <button 
+                                                onClick={() => handleNavClick(`/excursions/${ex.id}`)}
+                                                className="flex w-full items-center gap-4 p-3 hover:bg-muted text-left"
+                                              >
+                                                {ex.images?.[0] && ex.images?.[0].length > 0 && (
+                                                <Image src={imageUrlFor(ex.images[0], 'mini')} alt={ex.name} width={48} height={48} className="rounded-md object-cover" unoptimized />
+                                              )}
+                                                <div>
+                                                    <p className="font-semibold">{ex.name}</p>
+                                                    <p className="text-sm text-muted-foreground">{ex.city}, {ex.country}</p>
+                                                </div>
+                                              </button>
                                         </li>
                                     ))}
                                 </>
