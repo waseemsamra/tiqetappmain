@@ -70,7 +70,7 @@ function buildSrc(mode: TransferMode, props: AirportTransfersWidgetProps): strin
     p_site: partnerId,
     constructor: '1',
     color_scheme: colorScheme,
-    b: '11111111111111111111111111111111',
+    b: '111111100011111111',
     h: headerText,
   });
   return `https://en.intui.travel/?${params.toString()}`;

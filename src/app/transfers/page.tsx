@@ -20,20 +20,6 @@ export default function TransfersPage() {
   return (
     <div className="bg-white min-h-screen">
       <div className="w-full px-6 py-8 max-md:py-6">
-        <div className="mb-4">
-          <nav aria-label="Breadcrumb" className="text-[13px] text-slate-500">
-            <ol className="flex items-center gap-1.5">
-              <li>
-                <a href="/" className="hover:text-slate-900">
-                  Home
-                </a>
-              </li>
-              <li aria-hidden>/</li>
-              <li className="text-slate-900 font-medium">Airport Transfers</li>
-            </ol>
-          </nav>
-        </div>
-
         <div className="w-full">
           {TRANSFERS_MODE === 'api' ? (
             <TransfersSearchForm />
