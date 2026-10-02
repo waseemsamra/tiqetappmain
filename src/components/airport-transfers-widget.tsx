@@ -13,7 +13,6 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
 import { useT } from '@/components/language-provider';
 
 type TransferMode = 'widget' | 'whitelabel';
@@ -127,22 +126,9 @@ export function AirportTransfersWidget({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, props.partnerId, props.colorScheme, props.language, props.headerText]);
 
-  const fallbackLink = mode === 'whitelabel'
-    ? `https://www.intui.travel/transfer/?api&partnerID=${props.partnerId || '287008'}`
-    : 'https://www.intui.travel/transfer/?api&partnerID=287008';
-
   return (
     <div>
       <div ref={containerRef} className="w-full" />
-      <a
-        href={fallbackLink}
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-slate-600 underline underline-offset-2 hover:text-slate-900"
-      >
-        {t('search.continueOnIntui')}
-        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-      </a>
     </div>
   );
 }
