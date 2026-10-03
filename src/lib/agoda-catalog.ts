@@ -92,6 +92,17 @@ export const AGODA_DESTINATIONS: AgodaDestination[] = [
   { slug: 'male', name: 'Malé', country: 'Maldives', countryCode: 'MV', latitude: 4.1755, longitude: 73.5093, radiusKm: 10 },
 ];
 
-export function findDestination(slug?: string): AgodaDestination {
-  return AGODA_DESTINATIONS.find((d) => d.slug === slug) ?? AGODA_DESTINATIONS[0];
+export function findDestination(input?: string): AgodaDestination {
+  const q = (input ?? '').trim().toLowerCase();
+  if (!q) return AGODA_DESTINATIONS[0];
+  return (
+    AGODA_DESTINATIONS.find((d) => d.slug === q) ??
+    AGODA_DESTINATIONS.find((d) => d.name.toLowerCase() === q) ??
+    AGODA_DESTINATIONS.find(
+      (d) => `${d.name}, ${d.country}`.toLowerCase() === q,
+    ) ??
+    // Partial name match so the searchable field resolves free-text input.
+    AGODA_DESTINATIONS.find((d) => d.name.toLowerCase().includes(q)) ??
+    AGODA_DESTINATIONS[0]
+  );
 }

@@ -1,4 +1,5 @@
 import { ProductPageShell } from '@/components/product-page-shell';
+import { StaysDestinationField } from '@/components/stays-destination-field';
 import { StaysResults } from '@/components/stays-results';
 import {
   AgodaApiError,
@@ -76,6 +77,7 @@ function NumberSelect({
 /** Navy search strip with the white search bar. */
 function SearchStrip(props: {
   selected: string;
+  hotelQuery: string;
   checkIn: string;
   checkOut: string;
   adults: number;
@@ -83,27 +85,30 @@ function SearchStrip(props: {
 }) {
   return (
     <div className="-mx-4 mb-5 bg-[#1A2B49] px-4 py-3.5 md:-mx-6 md:px-6">
-      <form method="get" action="/stays" className="mx-auto flex max-w-[1000px] flex-col gap-2 rounded-lg bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.15)] md:flex-row md:items-stretch md:gap-0 md:p-0 md:rounded-md">
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:border-b-0 md:border-r md:py-0">
+      <form method="get" action="/stays" className="mx-auto flex max-w-[1100px] flex-col gap-2 rounded-lg bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.15)] md:flex-row md:items-stretch md:gap-0 md:p-0 md:rounded-md">
+        <StaysDestinationField
+          destinations={AGODA_DESTINATIONS}
+          defaultValue={props.selected}
+        />
+
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:max-w-[190px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
+            <path d="M2 4v16" />
+            <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+            <path d="M2 17h20" />
+            <path d="M6 8v9" />
           </svg>
           <span className="min-w-0 flex-1">
             <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
-              Destination
+              Hotel name
             </span>
-            <select
-              name="destination"
-              defaultValue={props.selected}
-              className="w-full cursor-pointer truncate text-[14px] font-semibold text-[#1A2B49]"
-            >
-              {AGODA_DESTINATIONS.map((d) => (
-                <option key={d.slug} value={d.slug}>
-                  {d.name}, {d.country}
-                </option>
-              ))}
-            </select>
+            <input
+              type="text"
+              name="hotel"
+              defaultValue={props.hotelQuery}
+              placeholder="Optional — filters the results"
+              className="w-full text-[14px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
+            />
           </span>
         </label>
 
@@ -188,7 +193,8 @@ export default async function StaysPage({
     return Array.isArray(value) ? value[0] : value;
   };
 
-  const destination = findDestination(first('destination'));
+  const destinationParam = first('destination')?.trim() ?? '';
+  const hotelQuery = first('hotel')?.trim() ?? '';
 
   const tomorrow = addDays(new Date(), 1);
   const dayAfter = addDays(new Date(), 2);
@@ -200,21 +206,35 @@ export default async function StaysPage({
     ? (first('sortBy') as string)
     : '';
 
+  // A purely numeric destination query is an Agoda hotel ID —
+  // look the property up directly. The Long Tail Search API
+  // has no name search, so a hotel name goes through the
+  // optional "Hotel name" field, which filters the results
+  // of the chosen destination client-side.
+  const hotelIdSearch = /^\d+$/.test(destinationParam)
+    ? Number.parseInt(destinationParam, 10)
+    : null;
+  const destination = hotelIdSearch
+    ? null
+    : findDestination(destinationParam);
+
   let hotels: AgodaHotelResult[] = [];
   let error: { id: number; message: string } | null = null;
 
   // The API accepts exactly one of cityId / geo / hotelId per request.
   // Prefer the city ID when the catalog knows it, otherwise fall back
   // to a radius search around the destination centre.
-  const searchTarget = destination.cityId
-    ? { cityId: destination.cityId }
-    : {
-        geo: {
-          latitude: destination.latitude,
-          longitude: destination.longitude,
-          searchRadius: destination.radiusKm,
-        },
-      };
+  const searchTarget = hotelIdSearch
+    ? { hotelIds: [hotelIdSearch] }
+    : destination.cityId
+      ? { cityId: destination.cityId }
+      : {
+          geo: {
+            latitude: destination.latitude,
+            longitude: destination.longitude,
+            searchRadius: destination.radiusKm,
+          },
+        };
 
   try {
     const response = await searchAgodaHotels(
@@ -239,10 +259,22 @@ export default async function StaysPage({
 
   const currency = hotels[0]?.currency ?? getDisplayCurrency();
 
+  // Direct hotel lookups have no destination context — the
+  // result itself names the property, and area/distance
+  // filters (which need destination data) are skipped.
+  const destinationName = hotelIdSearch
+    ? hotels[0]?.hotelName ?? `Hotel #${hotelIdSearch}`
+    : destination.name;
+
   return (
     <ProductPageShell titleKey="search.stays" subtitleKey="search.staysSubtitle" showHeader={false}>
       <SearchStrip
-        selected={destination.slug}
+        selected={
+          hotelIdSearch
+            ? String(hotelIdSearch)
+            : `${destination.name}, ${destination.country}`
+        }
+        hotelQuery={hotelQuery}
         checkIn={checkIn}
         checkOut={checkOut}
         adults={adults}
