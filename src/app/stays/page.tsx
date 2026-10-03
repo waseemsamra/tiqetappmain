@@ -293,12 +293,13 @@ export default async function StaysPage({
       {hotels.length > 0 ? (
         <StaysResults
           hotels={hotels}
-          destinationName={destination.name}
+          destinationName={destinationName}
           currency={currency}
           sortBy={sortBy}
           sortOptions={SORT_OPTIONS}
-          areas={destination.areas}
-          center={destination}
+          areas={hotelIdSearch ? undefined : destination.areas}
+          center={hotelIdSearch ? undefined : destination}
+          initialQuery={hotelQuery}
         />
       ) : (
         !error && (
