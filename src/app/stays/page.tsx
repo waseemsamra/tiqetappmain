@@ -48,6 +48,17 @@ const SORT_OPTIONS = [
   { value: 'AllGuestsReviewScore', label: 'Review score' },
 ];
 
+/** Rejects if the promise does not settle within ms. */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      timer = setTimeout(() => reject(new Error('Search timed out')), ms);
+    }),
+  ]).finally(() => clearTimeout(timer));
+}
+
 function NumberSelect({
   name,
   from,
@@ -227,6 +238,12 @@ export default async function StaysPage({
       ? ''
       : destinationParam);
 
+  // The API has no name search, so a property-name query
+  // searches every known destination in parallel and the
+  // merged results are filtered by name client-side.
+  const propertyOnlySearch =
+    !hotelIdSearch && !matched && destinationParam !== '';
+
   let hotels: AgodaHotelResult[] = [];
   let error: { id: number; message: string } | null = null;
 
@@ -246,18 +263,69 @@ export default async function StaysPage({
         };
 
   try {
-    const response = await searchAgodaHotels(
-      buildSearchCriteria({
-        ...searchTarget,
-        checkInDate: checkIn,
-        checkOutDate: checkOut,
-        adults,
-        children,
-        maxResults: 30,
-        sortBy: sortBy || undefined,
-      }),
-    );
-    hotels = response.results;
+    if (hotelIdSearch) {
+      const response = await searchAgodaHotels(
+        buildSearchCriteria({
+          hotelIds: [hotelIdSearch],
+          checkInDate: checkIn,
+          checkOutDate: checkOut,
+          adults,
+          children,
+          maxResults: 30,
+        }),
+      );
+      hotels = response.results;
+    } else if (propertyOnlySearch) {
+      const responses = await Promise.allSettled(
+        AGODA_DESTINATIONS.map((d) =>
+          withTimeout(
+            searchAgodaHotels(
+              buildSearchCriteria({
+                ...(d.cityId
+                  ? { cityId: d.cityId }
+                  : {
+                      geo: {
+                        latitude: d.latitude,
+                        longitude: d.longitude,
+                        searchRadius: d.radiusKm,
+                      },
+                    }),
+                checkInDate: checkIn,
+                checkOutDate: checkOut,
+                adults,
+                children,
+                maxResults: 30,
+              }),
+            ),
+            6000,
+          ),
+        ),
+      );
+      const seen = new Set<number>();
+      for (const response of responses) {
+        if (response.status === 'fulfilled') {
+          for (const hotel of response.value.results) {
+            if (!seen.has(hotel.hotelId)) {
+              seen.add(hotel.hotelId);
+              hotels.push(hotel);
+            }
+          }
+        }
+      }
+    } else {
+      const response = await searchAgodaHotels(
+        buildSearchCriteria({
+          ...searchTarget,
+          checkInDate: checkIn,
+          checkOutDate: checkOut,
+          adults,
+          children,
+          maxResults: 30,
+          sortBy: sortBy || undefined,
+        }),
+      );
+      hotels = response.results;
+    }
   } catch (e) {
     if (e instanceof AgodaApiError) {
       error = { id: e.id, message: e.message };
@@ -273,7 +341,9 @@ export default async function StaysPage({
   // filters (which need destination data) are skipped.
   const destinationName = hotelIdSearch
     ? hotels[0]?.hotelName ?? `Hotel #${hotelIdSearch}`
-    : destination.name;
+    : propertyOnlySearch
+      ? destinationParam
+      : destination.name;
 
   return (
     <ProductPageShell titleKey="search.stays" subtitleKey="search.staysSubtitle" showHeader={false}>
@@ -311,8 +381,16 @@ export default async function StaysPage({
           currency={currency}
           sortBy={sortBy}
           sortOptions={SORT_OPTIONS}
-          areas={hotelIdSearch ? undefined : destination.areas}
-          center={hotelIdSearch ? undefined : destination}
+          areas={
+            hotelIdSearch || propertyOnlySearch
+              ? undefined
+              : destination.areas
+          }
+          center={
+            hotelIdSearch || propertyOnlySearch
+              ? undefined
+              : destination
+          }
           initialQuery={propertyQuery}
         />
       ) : (
@@ -325,7 +403,7 @@ export default async function StaysPage({
               Try different dates or another destination.
             </p>
             <p className="mt-4 text-[13px] text-[#8B96A8]">
-              Searched {destination.name} · {formatDateLabel(checkIn)} →{' '}
+              Searched {destinationName} · {formatDateLabel(checkIn)} →{' '}
               {formatDateLabel(checkOut)} · {adults} adult
               {adults === 1 ? '' : 's'}
               {children > 0 ? `, ${children} child${children === 1 ? '' : 'ren'}` : ''}

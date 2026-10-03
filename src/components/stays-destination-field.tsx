@@ -77,7 +77,14 @@ export function StaysDestinationField({
     } else if (e.key === 'ArrowUp' && matches.length > 0) {
       e.preventDefault();
       setHighlight((h) => (h - 1 + matches.length) % matches.length);
-    } else if (e.key === 'Enter' && open && matches.length > 0) {
+    } else if (
+      e.key === 'Enter' &&
+      open &&
+      matches.length > 0 &&
+      // An idle, pre-filled field submits the form
+      // instead of re-picking the current destination.
+      !idle
+    ) {
       e.preventDefault();
       pick(matches[Math.min(highlight, matches.length - 1)]);
     } else if (e.key === 'Escape') {
