@@ -221,11 +221,28 @@ function HotelCard({
     </div>
   );
 
-  // Clicking a card searches our own products for the
-  // destination; the Agoda detail page stays available
-  // through the "Hotel details" link on the card.
-  const searchProducts = () => {
-    router.push(`/search?query=${encodeURIComponent(destinationName)}`);
+  // Clicking a card searches our own products for
+  // the destination. When the catalog has no
+  // products there (the API returns zero), fall
+  // back to the hotel's detail page on Agoda.
+  const searchProducts = async () => {
+    try {
+      const res = await fetch(
+        `/api/search?query=${encodeURIComponent(destinationName)}`,
+      );
+      const data = await res.json();
+      if (data.total > 0) {
+        router.push(
+          `/search?query=${encodeURIComponent(destinationName)}`,
+        );
+        return;
+      }
+    } catch {
+      // Network failure — fall through to the detail page.
+    }
+    if (hotel.landingURL) {
+      window.open(hotel.landingURL, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
