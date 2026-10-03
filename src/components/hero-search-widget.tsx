@@ -4,9 +4,8 @@
  * Tabbed hero search.
  *
  * The Activities tab is the live search: it uses the same ranked suggest
- * endpoint as the standalone bar. The other four tabs are presentational
- * shells — their fields are local state and submit nowhere, because no
- * stays/flights/packages/transfers inventory exists to search yet.
+ * endpoint as the standalone bar. Stays, Flights and Transfers route to
+ * their own pages; Packages is the only presentational shell left.
  *
  * Only the Activities surface owns translated copy. The other tabs deliberately
  * reuse those same keys rather than adding a second vocabulary per tab, so
@@ -46,12 +45,11 @@ type TabId = HomeTabId;
 // Flight search is owned by Travelpayouts and only renders on their host.
 const FLIGHTS_SEARCH_URL = 'https://flights.aafare.com/';
 
-// Only Activities, Flights, and Transfers are live. Stays/Packages show as
-// "Coming soon" badges in the tab strip so the roadmap is visible without
-// offering dead ends.
+// Only Packages still shows as a "Coming soon" badge in the tab
+// strip so the roadmap is visible without offering a dead end.
 const TABS: Array<{ id: TabId; icon: typeof Ticket; enabled: boolean; comingSoon?: boolean; color: string }> = [
   { id: 'activities', icon: Ticket, enabled: true, color: '#3b82f6' },      // blue
-  { id: 'stays', icon: Bed, enabled: false, comingSoon: true, color: '#8b5cf6' }, // purple
+  { id: 'stays', icon: Bed, enabled: true, color: '#8b5cf6' },              // purple
   { id: 'flights', icon: Plane, enabled: true, color: '#06b6d4' },         // cyan
   { id: 'packages', icon: Luggage, enabled: false, comingSoon: true, color: '#f59e0b' }, // amber
   { id: 'transfers', icon: Car, enabled: true, color: '#10b981' },         // emerald
