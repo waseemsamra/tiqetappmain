@@ -38,7 +38,7 @@ export default async function RootLayout({
           }}
         >
           <Header />
-          <main className="flex-grow pt-20">{children}</main>
+          <main className="flex-grow pt-14">{children}</main>
           <Footer />
         </PreferencesProvider>
         <Toaster />
