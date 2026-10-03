@@ -134,7 +134,7 @@ export function StaysDestinationField({
           aria-autocomplete="list"
           aria-label="Destination"
           autoComplete="off"
-          className="w-full text-[15px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
+          className="w-full py-3.5 text-[16px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
         />
       </span>
       <ChevronDown className="h-3 w-3 shrink-0 text-[#8B96A8]" />
@@ -154,7 +154,7 @@ export function StaysDestinationField({
                     pick(d);
                   }}
                   onMouseEnter={() => setHighlight(i)}
-                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[14px] ${
+                  className={`flex w-full items-center gap-2.5 px-4 py-3 text-left text-[14px] ${
                     i === highlight ? 'bg-[#F0F5FF]' : ''
                   }`}
                 >

@@ -74,7 +74,7 @@ function NumberSelect({
     <select
       name={name}
       defaultValue={current}
-      className="w-full cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-2.5 py-2.5 text-[16px] text-[#1A2B49]"
+      className="w-full cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-2.5 py-3.5 text-[16px] text-[#1A2B49]"
     >
       {Array.from({ length: to - from + 1 }, (_, i) => from + i).map((n) => (
         <option key={n} value={n} selected={n === current}>
@@ -95,14 +95,14 @@ function SearchStrip(props: {
   children: number;
 }) {
   return (
-    <div className="-mx-4 mb-5 bg-[#1A2B49] px-4 py-4 md:-mx-6 md:px-6">
+    <div className="-mx-4 mb-5 bg-[#1A2B49] px-4 py-5 md:-mx-6 md:px-6">
       <form method="get" action="/stays" className="mx-auto flex max-w-[1100px] flex-col gap-2 rounded-lg bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.15)] md:flex-row md:items-stretch md:gap-0 md:p-0 md:rounded-md">
         <StaysDestinationField
           destinations={AGODA_DESTINATIONS}
           defaultValue={props.selected}
         />
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[190px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-4 md:max-w-[190px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M2 4v16" />
             <path d="M2 8h18a2 2 0 0 1 2 2v10" />
@@ -118,12 +118,12 @@ function SearchStrip(props: {
               name="hotel"
               defaultValue={props.hotelQuery}
               placeholder="Optional — filters the results"
-              className="w-full py-2 text-[16px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
+              className="w-full py-3.5 text-[16px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
             />
           </span>
         </label>
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-4 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
@@ -136,12 +136,12 @@ function SearchStrip(props: {
               type="date"
               name="checkIn"
               defaultValue={props.checkIn}
-              className="w-full text-[16px] font-semibold text-[#1A2B49]"
+              className="w-full py-3.5 text-[16px] font-semibold text-[#1A2B49]"
             />
           </span>
         </label>
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-4 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
@@ -154,12 +154,12 @@ function SearchStrip(props: {
               type="date"
               name="checkOut"
               defaultValue={props.checkOut}
-              className="w-full text-[16px] font-semibold text-[#1A2B49]"
+              className="w-full py-3.5 text-[16px] font-semibold text-[#1A2B49]"
             />
           </span>
         </label>
 
-        <div className="flex gap-2 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[170px] md:border-b-0 md:border-r md:gap-3 md:py-0">
+        <div className="flex gap-2 border-b border-[#E8EDF2] px-4 py-4 md:max-w-[170px] md:border-b-0 md:border-r md:gap-3 md:py-0">
           <span className="flex min-w-0 flex-1 items-center gap-2.5">
             <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -185,7 +185,7 @@ function SearchStrip(props: {
 
         <button
           type="submit"
-          className="rounded-md bg-[#5392F9] px-8 py-4 text-[16px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#3772CE] md:rounded-none md:py-4"
+          className="rounded-md bg-[#5392F9] px-8 py-5 text-[16px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#3772CE] md:rounded-none md:py-5"
         >
           Search
         </button>
