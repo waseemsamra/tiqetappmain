@@ -7,7 +7,7 @@ import {
   searchAgodaHotels,
   type AgodaHotelResult,
 } from '@/lib/agoda-api';
-import { AGODA_DESTINATIONS, findDestination } from '@/lib/agoda-catalog';
+import { AGODA_DESTINATIONS, matchDestination } from '@/lib/agoda-catalog';
 import { getDisplayCurrency } from '@/lib/tiqets-api';
 
 /** Clamps a query param to an integer within [min, max]. */
@@ -63,7 +63,7 @@ function NumberSelect({
     <select
       name={name}
       defaultValue={current}
-      className="w-full cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-2.5 py-2 text-[14px] text-[#1A2B49]"
+      className="w-full cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-2.5 py-2.5 text-[16px] text-[#1A2B49]"
     >
       {Array.from({ length: to - from + 1 }, (_, i) => from + i).map((n) => (
         <option key={n} value={n} selected={n === current}>
@@ -84,14 +84,14 @@ function SearchStrip(props: {
   children: number;
 }) {
   return (
-    <div className="-mx-4 mb-5 bg-[#1A2B49] px-4 py-3.5 md:-mx-6 md:px-6">
+    <div className="-mx-4 mb-5 bg-[#1A2B49] px-4 py-4 md:-mx-6 md:px-6">
       <form method="get" action="/stays" className="mx-auto flex max-w-[1100px] flex-col gap-2 rounded-lg bg-white p-2 shadow-[0_2px_8px_rgba(0,0,0,0.15)] md:flex-row md:items-stretch md:gap-0 md:p-0 md:rounded-md">
         <StaysDestinationField
           destinations={AGODA_DESTINATIONS}
           defaultValue={props.selected}
         />
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:max-w-[190px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[190px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M2 4v16" />
             <path d="M2 8h18a2 2 0 0 1 2 2v10" />
@@ -99,7 +99,7 @@ function SearchStrip(props: {
             <path d="M6 8v9" />
           </svg>
           <span className="min-w-0 flex-1">
-            <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+            <span className="block text-[12px] font-medium uppercase tracking-wide text-[#8B96A8]">
               Hotel name
             </span>
             <input
@@ -107,48 +107,48 @@ function SearchStrip(props: {
               name="hotel"
               defaultValue={props.hotelQuery}
               placeholder="Optional — filters the results"
-              className="w-full text-[14px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
+              className="w-full py-2 text-[16px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
             />
           </span>
         </label>
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
           </svg>
           <span className="min-w-0 flex-1">
-            <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+            <span className="block text-[12px] font-medium uppercase tracking-wide text-[#8B96A8]">
               Check-in
             </span>
             <input
               type="date"
               name="checkIn"
               defaultValue={props.checkIn}
-              className="w-full text-[14px] font-semibold text-[#1A2B49]"
+              className="w-full text-[16px] font-semibold text-[#1A2B49]"
             />
           </span>
         </label>
 
-        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
+        <label className="flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[180px] md:border-b-0 md:border-r md:py-0">
           <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="4" width="18" height="18" rx="2" />
             <path d="M16 2v4M8 2v4M3 10h18" />
           </svg>
           <span className="min-w-0 flex-1">
-            <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+            <span className="block text-[12px] font-medium uppercase tracking-wide text-[#8B96A8]">
               Check-out
             </span>
             <input
               type="date"
               name="checkOut"
               defaultValue={props.checkOut}
-              className="w-full text-[14px] font-semibold text-[#1A2B49]"
+              className="w-full text-[16px] font-semibold text-[#1A2B49]"
             />
           </span>
         </label>
 
-        <div className="flex gap-2 border-b border-[#E8EDF2] px-4 py-2.5 md:max-w-[170px] md:border-b-0 md:border-r md:gap-3 md:py-0">
+        <div className="flex gap-2 border-b border-[#E8EDF2] px-4 py-3.5 md:max-w-[170px] md:border-b-0 md:border-r md:gap-3 md:py-0">
           <span className="flex min-w-0 flex-1 items-center gap-2.5">
             <svg className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
@@ -156,7 +156,7 @@ function SearchStrip(props: {
               <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
             <span className="min-w-0 flex-1">
-              <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+              <span className="block text-[12px] font-medium uppercase tracking-wide text-[#8B96A8]">
                 Adults
               </span>
               <NumberSelect name="adults" from={1} to={36} current={props.adults} />
@@ -164,7 +164,7 @@ function SearchStrip(props: {
           </span>
           <span className="flex min-w-0 flex-1 items-center gap-2.5">
             <span className="min-w-0 flex-1">
-              <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+              <span className="block text-[12px] font-medium uppercase tracking-wide text-[#8B96A8]">
                 Children
               </span>
               <NumberSelect name="children" from={0} to={35} current={props.children} />
@@ -174,7 +174,7 @@ function SearchStrip(props: {
 
         <button
           type="submit"
-          className="rounded-md bg-[#5392F9] px-8 py-3 text-[14px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#3772CE] md:rounded-none md:py-0"
+          className="rounded-md bg-[#5392F9] px-8 py-4 text-[16px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-[#3772CE] md:rounded-none md:py-4"
         >
           Search
         </button>
@@ -214,9 +214,18 @@ export default async function StaysPage({
   const hotelIdSearch = /^\d+$/.test(destinationParam)
     ? Number.parseInt(destinationParam, 10)
     : null;
-  const destination = hotelIdSearch
-    ? null
-    : findDestination(destinationParam);
+  const matched = hotelIdSearch
+    ? undefined
+    : matchDestination(destinationParam);
+  const destination = matched ?? AGODA_DESTINATIONS[0];
+
+  // Free text that matches no destination is a property
+  // name: filter the properties of the destination instead.
+  const propertyQuery =
+    hotelQuery ||
+    (hotelIdSearch || matched || !destinationParam
+      ? ''
+      : destinationParam);
 
   let hotels: AgodaHotelResult[] = [];
   let error: { id: number; message: string } | null = null;
@@ -272,9 +281,14 @@ export default async function StaysPage({
         selected={
           hotelIdSearch
             ? String(hotelIdSearch)
-            : `${destination.name}, ${destination.country}`
+            : matched
+              ? `${matched.name}, ${matched.country}`
+              : // Keep free text in the field so a property
+                // search shows what was typed.
+                (destinationParam ||
+                  `${destination.name}, ${destination.country}`)
         }
-        hotelQuery={hotelQuery}
+        hotelQuery={propertyQuery}
         checkIn={checkIn}
         checkOut={checkOut}
         adults={adults}
@@ -283,10 +297,10 @@ export default async function StaysPage({
 
       {error && (
         <div className="mb-5 rounded-lg border border-rose-200 bg-rose-50 px-5 py-4">
-          <p className="text-[14px] font-semibold text-rose-700">
+          <p className="text-[16px] font-semibold text-rose-700">
             Hotel search unavailable
           </p>
-          <p className="mt-1 text-[13px] text-rose-600">{error.message}</p>
+          <p className="mt-1 text-[16px] text-rose-600">{error.message}</p>
         </div>
       )}
 
@@ -299,18 +313,18 @@ export default async function StaysPage({
           sortOptions={SORT_OPTIONS}
           areas={hotelIdSearch ? undefined : destination.areas}
           center={hotelIdSearch ? undefined : destination}
-          initialQuery={hotelQuery}
+          initialQuery={propertyQuery}
         />
       ) : (
         !error && (
           <div className="rounded-lg border border-dashed border-[#D1D9E2] bg-[#F7F9FC] px-6 py-12 text-center">
-            <p className="text-[15px] font-medium text-[#1A2B49]">
+            <p className="text-[17px] font-medium text-[#1A2B49]">
               No available properties
             </p>
-            <p className="mt-1 text-[13px] text-[#8B96A8]">
+            <p className="mt-1 text-[16px] text-[#8B96A8]">
               Try different dates or another destination.
             </p>
-            <p className="mt-4 text-[12px] text-[#8B96A8]">
+            <p className="mt-4 text-[13px] text-[#8B96A8]">
               Searched {destination.name} · {formatDateLabel(checkIn)} →{' '}
               {formatDateLabel(checkOut)} · {adults} adult
               {adults === 1 ? '' : 's'}

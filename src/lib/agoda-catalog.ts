@@ -93,16 +93,26 @@ export const AGODA_DESTINATIONS: AgodaDestination[] = [
 ];
 
 export function findDestination(input?: string): AgodaDestination {
+  return matchDestination(input) ?? AGODA_DESTINATIONS[0];
+}
+
+/**
+ * Finds a destination by slug, name, "Name, Country" or
+ * partial name. Returns undefined when nothing matches, so
+ * callers can tell a destination search from free text.
+ */
+export function matchDestination(
+  input?: string,
+): AgodaDestination | undefined {
   const q = (input ?? '').trim().toLowerCase();
-  if (!q) return AGODA_DESTINATIONS[0];
+  if (!q) return undefined;
   return (
     AGODA_DESTINATIONS.find((d) => d.slug === q) ??
     AGODA_DESTINATIONS.find((d) => d.name.toLowerCase() === q) ??
     AGODA_DESTINATIONS.find(
       (d) => `${d.name}, ${d.country}`.toLowerCase() === q,
     ) ??
-    // Partial name match so the searchable field resolves free-text input.
     AGODA_DESTINATIONS.find((d) => d.name.toLowerCase().includes(q)) ??
-    AGODA_DESTINATIONS[0]
+    AGODA_DESTINATIONS.find((d) => d.country.toLowerCase().includes(q))
   );
 }

@@ -25,13 +25,31 @@ export function StaysDestinationField({
   const wrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /**
+   * The field ships pre-filled with the selected destination's
+   * "Name, Country" display string. That idle state lists every
+   * destination, so the dropdown is usable straight away instead
+   * of opening on "No matching destination".
+   */
+  const idle = destinations.some(
+    (d) =>
+      `${d.name}, ${d.country}`.toLowerCase() === query.trim().toLowerCase(),
+  );
+
   const matches = destinations.filter((d) => {
+    if (idle || !query.trim()) return true;
     const q = query.trim().toLowerCase();
-    if (!q) return true;
+    const name = d.name.toLowerCase();
+    const country = d.country.toLowerCase();
     return (
-      d.name.toLowerCase().includes(q) ||
-      d.country.toLowerCase().includes(q) ||
-      d.slug.toLowerCase().includes(q)
+      name.includes(q) ||
+      country.includes(q) ||
+      d.slug.toLowerCase().includes(q) ||
+      // Match in both directions: the field ships pre-filled
+      // with the "Name, Country" display string, which must
+      // still match its own destination.
+      q.includes(name) ||
+      q.includes(country)
     );
   });
 
@@ -70,7 +88,7 @@ export function StaysDestinationField({
   return (
     <div
       ref={wrapRef}
-      className="relative flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-2.5 md:border-b-0 md:border-r md:py-0"
+      className="relative flex flex-1 items-center gap-2.5 border-b border-[#E8EDF2] px-4 py-3.5 md:border-b-0 md:border-r md:py-0"
     >
       <svg
         className="h-3.5 w-3.5 shrink-0 text-[#8B96A8]"
@@ -83,7 +101,7 @@ export function StaysDestinationField({
         <path d="m21 21-4.3-4.3" />
       </svg>
       <span className="min-w-0 flex-1">
-        <span className="block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+        <span className="block text-[11px] font-medium uppercase tracking-wide text-[#8B96A8]">
           Destination
         </span>
         <input
@@ -96,7 +114,12 @@ export function StaysDestinationField({
             setHighlight(0);
             setOpen(true);
           }}
-          onFocus={() => setOpen(true)}
+          onFocus={(e) => {
+            setOpen(true);
+            setHighlight(0);
+            // Select the pre-filled text so typing replaces it.
+            e.target.select();
+          }}
           onKeyDown={onKeyDown}
           placeholder="City, country or hotel ID"
           role="combobox"
@@ -104,15 +127,15 @@ export function StaysDestinationField({
           aria-autocomplete="list"
           aria-label="Destination"
           autoComplete="off"
-          className="w-full text-[14px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
+          className="w-full text-[15px] font-semibold text-[#1A2B49] outline-none placeholder:font-normal placeholder:text-[#8B96A8]"
         />
       </span>
       <ChevronDown className="h-3 w-3 shrink-0 text-[#8B96A8]" />
       {open && (
         <ul className="absolute left-0 right-0 top-full z-50 mt-1.5 max-h-[280px] overflow-y-auto rounded-md border border-[#E8EDF2] bg-white py-1 shadow-[0_8px_24px_rgba(15,23,42,0.12)]">
           {matches.length === 0 ? (
-            <li className="px-4 py-2.5 text-[13px] text-[#8B96A8]">
-              No matching destination
+            <li className="px-4 py-2.5 text-[15px] text-[#8B96A8]">
+              No matching destination — Search filters properties instead
             </li>
           ) : (
             matches.map((d, i) => (
@@ -124,7 +147,7 @@ export function StaysDestinationField({
                     pick(d);
                   }}
                   onMouseEnter={() => setHighlight(i)}
-                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[13px] ${
+                  className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-[14px] ${
                     i === highlight ? 'bg-[#F0F5FF]' : ''
                   }`}
                 >

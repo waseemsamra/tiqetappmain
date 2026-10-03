@@ -92,7 +92,7 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
             </div>
           )}
           {discount > 0 && (
-            <div className="absolute inset-x-0 top-0 z-10 flex items-center gap-1.5 bg-[#1A2B49] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+            <div className="absolute inset-x-0 top-0 z-10 flex items-center gap-1.5 bg-[#1A2B49] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
               <Star className="h-2.5 w-2.5 text-yellow-300" fill="currentColor" />
               VIP Deal
             </div>
@@ -114,7 +114,7 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
 
         {/* Content */}
         <div className="flex min-w-0 flex-col gap-1.5 p-4">
-          <h3 className="text-[15px] font-bold leading-snug text-[#1A2B49]">
+          <h3 className="text-[16px] font-bold leading-snug text-[#1A2B49]">
             {hotel.hotelName}
           </h3>
           <div className="flex gap-0.5 text-[#F5A623]">
@@ -128,7 +128,7 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
             ))}
           </div>
           {hotel.latitude !== undefined && hotel.longitude !== undefined && (
-            <div className="flex items-start gap-1.5 text-[11px] text-[#5392F9]">
+            <div className="flex items-start gap-1.5 text-[12px] text-[#5392F9]">
               <MapPin className="mt-px h-2.5 w-2.5 shrink-0 text-[#E23F3F]" />
               <span>
                 {hotel.latitude.toFixed(2)}, {hotel.longitude.toFixed(2)} ·{' '}
@@ -136,7 +136,7 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
               </span>
             </div>
           )}
-          <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 text-[11px] text-[#5C6B85]">
+          <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 pt-2 text-[12px] text-[#5C6B85]">
             {hotel.includeBreakfast && (
               <span className="flex items-center gap-1">
                 <Coffee className="h-2.5 w-2.5 text-[#8B96A8]" />
@@ -151,7 +151,7 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
             )}
           </div>
           {discount > 0 && (
-            <div className="inline-flex w-fit items-center gap-1.5 rounded bg-[#1A2B49] px-2 py-0.5 text-[10px] font-bold text-white">
+            <div className="inline-flex w-fit items-center gap-1.5 rounded bg-[#1A2B49] px-2 py-0.5 text-[11px] font-bold text-white">
               <Star className="h-2.5 w-2.5 text-yellow-300" fill="currentColor" />
               Deals
             </div>
@@ -162,31 +162,31 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
         <div className="flex flex-col justify-between gap-3 border-t border-[#E8EDF2] p-4 text-right lg:border-l lg:border-t-0">
           <div className="flex flex-col items-start gap-0.5 lg:items-end">
             <span
-              className={`text-[15px] font-bold ${
+              className={`text-[16px] font-bold ${
                 hotel.reviewScore >= 8 ? 'text-[#2E9C6C]' : 'text-[#1A2B49]'
               }`}
             >
               {hotel.reviewScore.toFixed(1)} {scoreLabel(hotel.reviewScore)}
             </span>
             {hotel.reviewCount !== undefined && (
-              <span className="text-[10px] text-[#8B96A8]">
+              <span className="text-[11px] text-[#8B96A8]">
                 {hotel.reviewCount.toLocaleString()} reviews
               </span>
             )}
           </div>
           <div className="flex flex-col items-start gap-0.5 lg:items-end">
             {discount > 0 && hasStrike && (
-              <span className="text-[12px] text-[#8B96A8] line-through">
+              <span className="text-[13px] text-[#8B96A8] line-through">
                 {formatMoney(hotel.crossedOutRate as number, currency)}{' '}
                 <span className="font-semibold text-[#E23F3F] no-underline">
                   -{discount}%
                 </span>
               </span>
             )}
-            <span className="text-[22px] font-extrabold leading-none text-[#1A2B49]">
+            <span className="text-[24px] font-extrabold leading-none text-[#1A2B49]">
               {formatMoney(hotel.dailyRate, currency)}
             </span>
-            <span className="mt-1 text-[10px] leading-snug text-[#8B96A8]">
+            <span className="mt-1 text-[11px] leading-snug text-[#8B96A8]">
               Per night before taxes and fees
             </span>
           </div>
@@ -532,7 +532,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
     badge?: string;
   }) => (
     <div
-      className={`flex items-center gap-2 py-1 text-[12px] ${
+      className={`flex items-center gap-2 py-1 text-[13px] ${
         soon ? 'text-[#8B96A8]' : 'cursor-pointer text-[#5C6B85] transition-colors hover:text-[#1A2B49]'
       }`}
     >
@@ -555,7 +555,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
         </span>
       ) : (
         count !== undefined && (
-          <span className="ml-auto text-[11px] text-[#8B96A8]">({count})</span>
+          <span className="ml-auto text-[12px] text-[#8B96A8]">({count})</span>
         )
       )}
     </div>
@@ -571,14 +571,14 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
       {couponOpen && (
         <div className="flex items-center justify-center gap-4 border-b border-[#FADCDC] bg-[#FDE8E8] px-6 py-3">
           <Ticket className="h-5 w-5 shrink-0 text-[#E23F3F]" />
-          <p className="text-[13px] leading-snug text-[#1A2B49]">
-            <strong className="text-[14px] font-bold text-[#E23F3F]">
+          <p className="text-[14px] leading-snug text-[#1A2B49]">
+            <strong className="text-[15px] font-bold text-[#E23F3F]">
               Looking for instant coupons?
             </strong>
             <br />
             Check out our Coupons &amp; Deals page for today&apos;s discounts
           </p>
-          <span className="hidden cursor-pointer whitespace-nowrap rounded bg-white px-3.5 py-1.5 text-[13px] font-semibold text-[#5392F9] transition-colors hover:bg-[#F0F5FF] sm:inline-block">
+          <span className="hidden cursor-pointer whitespace-nowrap rounded bg-white px-3.5 py-1.5 text-[14px] font-semibold text-[#5392F9] transition-colors hover:bg-[#F0F5FF] sm:inline-block">
             See all coupons
           </span>
           <button
@@ -598,7 +598,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           {/* Map preview */}
           <div className="relative flex h-28 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#F5F0E1] via-[#E8F4E0] to-[#D4E8F0] shadow-[inset_0_0_0_1px_#E8EDF2]">
             <MapPin className="relative z-10 h-7 w-7 text-[#E23F3F] drop-shadow" />
-            <span className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[11px] font-bold uppercase tracking-wider text-[#1A2B49]">
+            <span className="absolute bottom-2 left-1/2 z-10 -translate-x-1/2 text-[12px] font-bold uppercase tracking-wider text-[#1A2B49]">
               Search on map
             </span>
           </div>
@@ -611,18 +611,18 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Text search"
-              className="w-full min-w-0 text-[13px] text-[#1A2B49] placeholder:text-[#8B96A8]"
+              className="w-full min-w-0 text-[14px] text-[#1A2B49] placeholder:text-[#8B96A8]"
             />
           </div>
 
           {/* Budget */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Your budget (per night)
             </p>
             <div className="mb-3 flex gap-2">
               <div className="min-w-0 flex-1">
-                <label className="mb-1 block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+                <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-[#8B96A8]">
                   Min
                 </label>
                 <input
@@ -630,11 +630,11 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
                   placeholder={String(priceFloor)}
-                  className="w-full rounded border border-[#E8EDF2] px-2.5 py-2 text-[13px] font-medium text-[#1A2B49] focus:border-[#5392F9] focus:outline-none"
+                  className="w-full rounded border border-[#E8EDF2] px-2.5 py-2 text-[14px] font-medium text-[#1A2B49] focus:border-[#5392F9] focus:outline-none"
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <label className="mb-1 block text-[10px] font-medium uppercase tracking-wide text-[#8B96A8]">
+                <label className="mb-1 block text-[11px] font-medium uppercase tracking-wide text-[#8B96A8]">
                   Max
                 </label>
                 <input
@@ -642,18 +642,18 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
                   placeholder={String(priceCeil)}
-                  className="w-full rounded border border-[#E8EDF2] px-2.5 py-2 text-[13px] font-medium text-[#1A2B49] focus:border-[#5392F9] focus:outline-none"
+                  className="w-full rounded border border-[#E8EDF2] px-2.5 py-2 text-[14px] font-medium text-[#1A2B49] focus:border-[#5392F9] focus:outline-none"
                 />
               </div>
             </div>
-            <p className="text-[11px] text-[#8B96A8]">
+            <p className="text-[12px] text-[#8B96A8]">
               Price range: {currency} {priceFloor} to {currency} {priceCeil}
             </p>
           </div>
 
           {/* Your filters */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Your filters
             </p>
             <FilterRow soon label="Pay at the hotel" />
@@ -661,7 +661,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Popular filters */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Popular filters for {destinationName}
             </p>
             <FilterRow soon label="Location: 7+ Very good" />
@@ -675,7 +675,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Guest rating */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Guest rating
             </p>
             {RATING_THRESHOLDS.map(({ threshold, label }) => (
@@ -691,7 +691,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Location rating */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Location rating
             </p>
             {/* Per-hotel location scores come from the
@@ -703,7 +703,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Star rating */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Star rating
             </p>
             {/* Agoda Luxe is a curated collection that needs
@@ -722,7 +722,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Availability */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Availability
             </p>
             <FilterRow
@@ -735,7 +735,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Property type */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Property type
             </p>
             {(propertyTypeExpanded
@@ -748,7 +748,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
               <button
                 type="button"
                 onClick={() => setPropertyTypeExpanded((v) => !v)}
-                className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+                className="mt-1.5 text-[13px] font-semibold text-[#5392F9] hover:underline"
               >
                 {propertyTypeExpanded ? 'Show less' : 'Show more'}
               </button>
@@ -757,7 +757,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Payment options */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Payment options
             </p>
             {/* Rate-level payment fields (paymentModel, freeCancellation)
@@ -772,7 +772,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Room offers */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Room offers
             </p>
             <FilterRow
@@ -807,7 +807,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Rooms and beds */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Rooms and beds
             </p>
             {/* Room-level occupancy (bedrooms, bathrooms,
@@ -816,7 +816,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
             {['Bedrooms', 'Bathrooms', 'Beds'].map((label) => (
               <div key={label} className="py-1">
                 <div className="mb-1 flex items-center justify-between">
-                  <span className="text-[11px] font-medium text-[#5C6B85]">
+                  <span className="text-[12px] font-medium text-[#5C6B85]">
                     {label}
                   </span>
                   <span className="rounded bg-[#F7F9FC] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#8B96A8]">
@@ -825,7 +825,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
                 </div>
                 <select
                   disabled
-                  className="w-full cursor-not-allowed appearance-none rounded border border-[#E8EDF2] bg-[#F7F9FC] px-2.5 py-1.5 text-[12px] text-[#8B96A8]"
+                  className="w-full cursor-not-allowed appearance-none rounded border border-[#E8EDF2] bg-[#F7F9FC] px-2.5 py-1.5 text-[13px] text-[#8B96A8]"
                 >
                   <option>Any</option>
                 </select>
@@ -835,7 +835,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Room amenities */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Room amenities
             </p>
             {/* Room-level amenities come from the Content
@@ -851,7 +851,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
               <button
                 type="button"
                 onClick={() => setAmenitiesExpanded((v) => !v)}
-                className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+                className="mt-1.5 text-[13px] font-semibold text-[#5392F9] hover:underline"
               >
                 {amenitiesExpanded ? 'Show less' : 'Show more'}
               </button>
@@ -860,7 +860,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Bed type */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Bed type
             </p>
             {/* Bedding comes from the Demand Search API
@@ -872,7 +872,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Popular with families */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Popular with families
             </p>
             {/* "Kids stay for free" is a rate-level benefit
@@ -883,7 +883,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           {/* Neighborhood */}
           {areaStats && (
             <div className="rounded-lg bg-white">
-              <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
                 Neighborhood
               </p>
               {(neighborhoodExpanded
@@ -902,7 +902,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
                 <button
                   type="button"
                   onClick={() => setNeighborhoodExpanded((v) => !v)}
-                  className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+                  className="mt-1.5 text-[13px] font-semibold text-[#5392F9] hover:underline"
                 >
                   {neighborhoodExpanded ? 'Show less' : 'Show more'}
                 </button>
@@ -912,7 +912,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Property facilities */}
           <div className="rounded-lg bg-white">
-            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+            <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
               Property facilities
             </p>
             {/* Per-hotel facilities come from the Content Feed
@@ -927,7 +927,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
               <button
                 type="button"
                 onClick={() => setFacilitiesExpanded((v) => !v)}
-                className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+                className="mt-1.5 text-[13px] font-semibold text-[#5392F9] hover:underline"
               >
                 {facilitiesExpanded ? 'Show less' : 'Show more'}
               </button>
@@ -937,7 +937,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           {/* Distance to center */}
           {distanceStats && (
             <div className="rounded-lg bg-white">
-              <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              <p className="mb-2.5 text-[14px] font-bold text-[#1A2B49]">
                 Distance to center
               </p>
               {/* "Inside city center" needs Agoda's city-center
@@ -966,8 +966,8 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E23F3F] text-white">
               <Flame className="h-3.5 w-3.5" />
             </div>
-            <p className="text-[12px] leading-snug text-[#5C6B85]">
-              <strong className="text-[13px] font-bold text-[#E23F3F]">
+            <p className="text-[13px] leading-snug text-[#5C6B85]">
+              <strong className="text-[14px] font-bold text-[#E23F3F]">
                 Hurry! {Math.max(1, Math.round(hotels.length * 0.46))} of {hotels.length} properties are in high demand!
               </strong>
               <br />
@@ -977,18 +977,18 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
 
           {/* Toolbar */}
           <div className="flex items-center justify-between py-1">
-            <p className="text-[16px] font-bold text-[#1A2B49]">
+            <p className="text-[18px] font-bold text-[#1A2B49]">
               {filtered.length} {filtered.length === 1 ? 'property' : 'properties'} in {destinationName}
             </p>
             <div className="flex items-center gap-2">
-              <label htmlFor="stays-sort" className="text-[12px] text-[#5C6B85]">
+              <label htmlFor="stays-sort" className="text-[13px] text-[#5C6B85]">
                 Sort by:
               </label>
               <select
                 id="stays-sort"
                 value={sortBy}
                 onChange={(e) => changeSort(e.target.value)}
-                className="cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-3.5 py-2 text-[12px] font-medium text-[#1A2B49] transition-colors hover:border-[#D1D9E2]"
+                className="cursor-pointer rounded-md border border-[#E8EDF2] bg-white px-3.5 py-2 text-[13px] font-medium text-[#1A2B49] transition-colors hover:border-[#D1D9E2]"
               >
                 {sortOptions.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -1002,8 +1002,8 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           {/* Cards */}
           {filtered.length === 0 ? (
             <div className="rounded-lg border border-dashed border-[#D1D9E2] bg-[#F7F9FC] px-6 py-12 text-center">
-              <p className="text-[15px] font-medium text-[#1A2B49]">No properties match your filters</p>
-              <p className="mt-1 text-[13px] text-[#8B96A8]">
+              <p className="text-[16px] font-medium text-[#1A2B49]">No properties match your filters</p>
+              <p className="mt-1 text-[14px] text-[#8B96A8]">
                 Try widening your budget or clearing filters.
               </p>
             </div>
