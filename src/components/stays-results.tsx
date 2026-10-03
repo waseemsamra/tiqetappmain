@@ -333,11 +333,13 @@ interface Props {
   areas?: AgodaArea[];
   /** Destination centre for the distance filter. */
   center?: { latitude: number; longitude: number };
+  /** Hotel name typed in the search strip — pre-fills the text filter. */
+  initialQuery?: string;
 }
 
-export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions, areas, center }: Props) {
+export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions, areas, center, initialQuery }: Props) {
   const [couponOpen, setCouponOpen] = useState(true);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery ?? '');
   const [availableOnly, setAvailableOnly] = useState(true);
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [minPrice, setMinPrice] = useState('');
@@ -976,7 +978,7 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           {/* Toolbar */}
           <div className="flex items-center justify-between py-1">
             <p className="text-[16px] font-bold text-[#1A2B49]">
-              {filtered.length} properties in {destinationName}
+              {filtered.length} {filtered.length === 1 ? 'property' : 'properties'} in {destinationName}
             </p>
             <div className="flex items-center gap-2">
               <label htmlFor="stays-sort" className="text-[12px] text-[#5C6B85]">
