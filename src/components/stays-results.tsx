@@ -1,8 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Coffee,
+  ExternalLink,
   Flame,
   Heart,
   MapPin,
@@ -58,7 +60,17 @@ function haversineKm(
 /** Max distance from an area centre for a hotel to count as "in" that area. */
 const AREA_RADIUS_KM = 6;
 
-function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: string }) {
+function HotelCard({
+  hotel,
+  currency,
+  destinationName,
+}: {
+  hotel: AgodaHotelResult;
+  currency: string;
+  /** Destination queried when the card is clicked. */
+  destinationName: string;
+}) {
+  const router = useRouter();
   const [liked, setLiked] = useState(false);
   const hasStrike =
     hotel.crossedOutRate !== undefined && hotel.crossedOutRate > hotel.dailyRate;
@@ -102,6 +114,8 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
             aria-label="Save to wishlist"
             onClick={(e) => {
               e.preventDefault();
+              // Stop the card's product-search navigation.
+              e.stopPropagation();
               setLiked((v) => !v);
             }}
             className="absolute right-2.5 top-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-[#5C6B85] transition-colors hover:text-[#E23F3F]"
@@ -189,25 +203,44 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
             <span className="mt-1 text-[11px] leading-snug text-[#8B96A8]">
               Per night before taxes and fees
             </span>
+            {hotel.landingURL && (
+              <a
+                href={hotel.landingURL}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                onClick={(e) => e.stopPropagation()}
+                className="mt-1 inline-flex items-center gap-1 text-[13px] font-semibold text-[#5392F9] hover:underline"
+              >
+                Hotel details
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 
-  if (hotel.landingURL) {
-    return (
-      <a
-        href={hotel.landingURL}
-        target="_blank"
-        rel="noopener noreferrer sponsored"
-        className="block cursor-pointer"
-      >
-        {card}
-      </a>
-    );
-  }
-  return <div className="cursor-pointer">{card}</div>;
+  // Clicking a card searches our own products for the
+  // destination; the Agoda detail page stays available
+  // through the "Hotel details" link on the card.
+  const searchProducts = () => {
+    router.push(`/search?query=${encodeURIComponent(destinationName)}`);
+  };
+
+  return (
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={searchProducts}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') searchProducts();
+      }}
+      className="block cursor-pointer"
+    >
+      {card}
+    </div>
+  );
 }
 
 /**
@@ -1010,7 +1043,12 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           ) : (
             <div className="flex flex-col gap-3.5">
               {filtered.map((hotel) => (
-                <HotelCard key={hotel.hotelId} hotel={hotel} currency={currency} />
+                <HotelCard
+                  key={hotel.hotelId}
+                  hotel={hotel}
+                  currency={currency}
+                  destinationName={destinationName}
+                />
               ))}
             </div>
           )}
