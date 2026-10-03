@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import type { AgodaHotelResult } from '@/lib/agoda-api';
+import type { AgodaArea } from '@/lib/agoda-catalog';
 
 export function scoreLabel(score: number): string {
   if (score >= 9) return 'Exceptional';
@@ -37,6 +38,25 @@ function formatMoney(amount: number, currency: string): string {
 function hotelImage(url?: string): string | undefined {
   return url?.replace(/^http:\/\//, 'https://');
 }
+
+/** Great-circle distance in km between two coordinates. */
+function haversineKm(
+  a: { latitude: number; longitude: number },
+  b: { latitude: number; longitude: number },
+): number {
+  const R = 6371;
+  const dLat = ((b.latitude - a.latitude) * Math.PI) / 180;
+  const dLng = ((b.longitude - a.longitude) * Math.PI) / 180;
+  const lat1 = (a.latitude * Math.PI) / 180;
+  const lat2 = (b.latitude * Math.PI) / 180;
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/** Max distance from an area centre for a hotel to count as "in" that area. */
+const AREA_RADIUS_KM = 6;
 
 function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: string }) {
   const [liked, setLiked] = useState(false);
@@ -217,6 +237,92 @@ const PROPERTY_TYPES = [
 ];
 
 const PROPERTY_TYPES_PREVIEW = 8;
+const NEIGHBORHOOD_PREVIEW = 10;
+const FACILITIES_PREVIEW = 8;
+const AMENITIES_PREVIEW = 8;
+
+/**
+ * Agoda's room amenity taxonomy. Room-level assignment
+ * comes from the Content Feed API (feed_id 14
+ * "Facilities per Roomtype"), so the rows render with a
+ * "Soon" marker until that feed is connected.
+ */
+const ROOM_AMENITIES = [
+  'TV',
+  'Washing machine',
+  'Coffee/tea maker',
+  'Air conditioning',
+  'Balcony/terrace',
+  'Refrigerator',
+  'Ironing facilities',
+  'Bathtub',
+  'Kitchen',
+  'Heating',
+  'Private pool',
+  'Internet access',
+  'Pets allowed in room',
+];
+
+/**
+ * Agoda's bed-type taxonomy. Bedding assignment
+ * comes from the Demand Search API
+ * (rooms[].normalBedding) / Content Feed, so the
+ * rows render with a "Soon" marker until those
+ * are connected.
+ */
+const BED_TYPES = [
+  'King',
+  'Double',
+  'Queen',
+  'Single/twin',
+  'Bunk bed',
+];
+
+/**
+ * Distance buckets from the destination centre.
+ * "Inside city center" needs Agoda's city-center
+ * boundary data, so it stays a "Soon" row; the
+ * distance buckets are computed from hotel coordinates.
+ */
+const DISTANCE_BUCKETS = [
+  { key: 'inside', label: 'Inside city center' },
+  { key: 'lt2', label: '<2 km to center', test: (d: number) => d < 2 },
+  { key: '2-5', label: '2-5 km to center', test: (d: number) => d >= 2 && d < 5 },
+  { key: '5-10', label: '5-10 km to center', test: (d: number) => d >= 5 && d < 10 },
+  { key: 'gt10', label: '>10 km to center', test: (d: number) => d >= 10 },
+];
+
+/**
+ * Agoda's property facility taxonomy. Per-hotel facility
+ * assignment comes from the Content Feed API (feed_id 9
+ * "Facilities per Hotel"), so the rows render with a
+ * "Soon" marker until that feed is connected.
+ */
+const PROPERTY_FACILITIES = [
+  'Swimming pool',
+  'Internet',
+  'Car park',
+  'Airport transfer',
+  'Gym/fitness',
+  'Front desk [24-hour]',
+  'Family/child friendly',
+  'Non-smoking',
+  'Spa/sauna',
+  'Restaurants',
+  'Smoking area',
+  'Pets allowed',
+  'Nightclub',
+  'Facilities for disabled guests',
+  'Business facilities',
+  'Golf course [on-site]',
+];
+
+const RATING_THRESHOLDS = [
+  { threshold: 9, label: 'Exceptional' },
+  { threshold: 8, label: 'Excellent' },
+  { threshold: 7, label: 'Very good' },
+  { threshold: 6, label: 'Good' },
+];
 
 interface Props {
   hotels: AgodaHotelResult[];
@@ -224,16 +330,134 @@ interface Props {
   currency: string;
   sortBy: string;
   sortOptions: { value: string; label: string }[];
+  areas?: AgodaArea[];
+  /** Destination centre for the distance filter. */
+  center?: { latitude: number; longitude: number };
 }
 
-export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions }: Props) {
+export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions, areas, center }: Props) {
   const [couponOpen, setCouponOpen] = useState(true);
   const [query, setQuery] = useState('');
-  const [minRating, setMinRating] = useState(0);
   const [availableOnly, setAvailableOnly] = useState(true);
+  const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [propertyTypeExpanded, setPropertyTypeExpanded] = useState(false);
+  const [neighborhoodExpanded, setNeighborhoodExpanded] = useState(false);
+  const [facilitiesExpanded, setFacilitiesExpanded] = useState(false);
+  const [amenitiesExpanded, setAmenitiesExpanded] = useState(false);
+  const [selectedAreas, setSelectedAreas] = useState<Set<string>>(new Set());
+  const [selectedStars, setSelectedStars] = useState<Set<number>>(new Set());
+  const [selectedDistances, setSelectedDistances] = useState<Set<string>>(new Set());
+  const [breakfastOnly, setBreakfastOnly] = useState(false);
+
+  /**
+   * Assigns each result to its nearest area (within AREA_RADIUS_KM)
+   * using the coordinates the search API returns, then counts
+   * properties per area. Hotels outside every area fall into
+   * an "Other" bucket.
+   */
+  const areaStats = useMemo(() => {
+    if (!areas || areas.length === 0) return null;
+    const counts = new Map<string, number>();
+    const hotelArea = new Map<number, string>();
+    for (const h of hotels) {
+      if (h.latitude === undefined || h.longitude === undefined) continue;
+      let best: string | null = null;
+      let bestDistance = AREA_RADIUS_KM;
+      for (const area of areas) {
+        const distance = haversineKm(h, area);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = area.name;
+        }
+      }
+      const name = best ?? 'Other';
+      hotelArea.set(h.hotelId, name);
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+    const list = [
+      ...areas.map((area) => ({ name: area.name, count: counts.get(area.name) ?? 0 })),
+      ...(counts.has('Other')
+        ? [{ name: 'Other', count: counts.get('Other') as number }]
+        : []),
+    ].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+    return { list, hotelArea };
+  }, [areas, hotels]);
+
+  /**
+   * Buckets each result's star rating into Agoda's 1–5 star
+   * classes (a 4.5-star hotel counts as a 5-star property)
+   * and counts properties per class.
+   */
+  const starStats = useMemo(() => {
+    const counts = new Map<number, number>();
+    for (const h of hotels) {
+      const star = Math.min(5, Math.max(1, Math.round(h.starRating)));
+      counts.set(star, (counts.get(star) ?? 0) + 1);
+    }
+    return [5, 4, 3, 2, 1].map((star) => ({
+      star,
+      count: counts.get(star) ?? 0,
+    }));
+  }, [hotels]);
+
+  const toggleStar = (star: number) => {
+    setSelectedStars((prev) => {
+      const next = new Set(prev);
+      if (next.has(star)) next.delete(star);
+      else next.add(star);
+      return next;
+    });
+  };
+
+  const toggleRating = (threshold: number) => {
+    setSelectedRatings((prev) => {
+      const next = new Set(prev);
+      if (next.has(threshold)) next.delete(threshold);
+      else next.add(threshold);
+      return next;
+    });
+  };
+
+  /**
+   * Computes each result's straight-line distance to
+   * the destination centre and buckets it for the
+   * distance filter.
+   */
+  const distanceStats = useMemo(() => {
+    if (!center) return null;
+    const bucketOf = new Map<number, string>();
+    const counts = new Map<string, number>();
+    for (const h of hotels) {
+      if (h.latitude === undefined || h.longitude === undefined) continue;
+      const distance = haversineKm(h, center);
+      const bucket =
+        DISTANCE_BUCKETS.find((b) => b.test && b.test(distance))?.key ??
+        'gt10';
+      bucketOf.set(h.hotelId, bucket);
+      counts.set(bucket, (counts.get(bucket) ?? 0) + 1);
+    }
+    return { bucketOf, counts };
+  }, [hotels, center]);
+
+  const toggleDistance = (key: string) => {
+    setSelectedDistances((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const toggleArea = (name: string) => {
+    setSelectedAreas((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -241,14 +465,39 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
     const max = maxPrice === '' ? Number.POSITIVE_INFINITY : Number.parseFloat(maxPrice) || Number.POSITIVE_INFINITY;
     return hotels.filter((h) => {
       if (q && !h.hotelName.toLowerCase().includes(q)) return false;
-      if (h.reviewScore < minRating) return false;
+      if (
+        selectedRatings.size > 0 &&
+        ![...selectedRatings].some((t) => h.reviewScore >= t)
+      ) {
+        return false;
+      }
       // The Long Tail Search API only returns bookable properties,
       // so every result satisfies "show only available properties".
       if (!availableOnly) return false;
+      if (
+        selectedAreas.size > 0 &&
+        (!areaStats || !selectedAreas.has(areaStats.hotelArea.get(h.hotelId) ?? ''))
+      ) {
+        return false;
+      }
+      if (
+        selectedStars.size > 0 &&
+        !selectedStars.has(Math.min(5, Math.max(1, Math.round(h.starRating))))
+      ) {
+        return false;
+      }
+      if (breakfastOnly && !h.includeBreakfast) return false;
+      if (
+        selectedDistances.size > 0 &&
+        (!distanceStats ||
+          !selectedDistances.has(distanceStats.bucketOf.get(h.hotelId) ?? ''))
+      ) {
+        return false;
+      }
       if (h.dailyRate < min || h.dailyRate > max) return false;
       return true;
     });
-  }, [hotels, query, minRating, availableOnly, minPrice, maxPrice]);
+  }, [hotels, query, selectedRatings, availableOnly, selectedAreas, selectedStars, selectedDistances, breakfastOnly, areaStats, distanceStats, minPrice, maxPrice]);
 
   const changeSort = (value: string) => {
     const url = new URL(window.location.href);
@@ -270,12 +519,15 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
     label,
     count,
     soon = false,
+    badge,
   }: {
     checked?: boolean;
     onChange?: (v: boolean) => void;
     label: string;
     count?: number;
     soon?: boolean;
+    /** Small inline tag, e.g. Agoda's "New" marker. */
+    badge?: string;
   }) => (
     <div
       className={`flex items-center gap-2 py-1 text-[12px] ${
@@ -290,6 +542,11 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
         className={`h-4 w-4 shrink-0 accent-[#5392F9] ${soon ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}
       />
       <span>{label}</span>
+      {badge && (
+        <span className="rounded bg-[#E8F4FD] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#5392F9]">
+          {badge}
+        </span>
+      )}
       {soon ? (
         <span className="ml-auto rounded bg-[#F7F9FC] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#8B96A8]">
           Soon
@@ -410,14 +667,55 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
             <FilterRow soon label="Private pool" />
             <FilterRow soon label="Balcony/terrace" />
             <FilterRow soon label="Pets allowed in room" />
-            <FilterRow
-              checked={minRating === 6}
-              onChange={(v) => setMinRating(v ? 6 : 0)}
-              label="Guest rating: 6+ Good"
-              count={hotels.filter((h) => h.reviewScore >= 6).length}
-            />
             <FilterRow soon label="Pets allowed" />
             <FilterRow soon label="Smoking area" />
+          </div>
+
+          {/* Guest rating */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Guest rating
+            </p>
+            {RATING_THRESHOLDS.map(({ threshold, label }) => (
+              <FilterRow
+                key={threshold}
+                checked={selectedRatings.has(threshold)}
+                onChange={() => toggleRating(threshold)}
+                label={`${threshold}+ ${label}`}
+                count={hotels.filter((h) => h.reviewScore >= threshold).length}
+              />
+            ))}
+          </div>
+
+          {/* Location rating */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Location rating
+            </p>
+            {/* Per-hotel location scores come from the
+                Content Feed, not the Long Tail response. */}
+            <FilterRow soon label="9+ Exceptional" />
+            <FilterRow soon label="8+ Excellent" />
+            <FilterRow soon label="7+ Very good" />
+          </div>
+
+          {/* Star rating */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Star rating
+            </p>
+            {/* Agoda Luxe is a curated collection that needs
+                content-feed data to identify. */}
+            <FilterRow soon badge="New" label="Agoda Luxe" />
+            {starStats.map((s) => (
+              <FilterRow
+                key={s.star}
+                checked={selectedStars.has(s.star)}
+                onChange={() => toggleStar(s.star)}
+                label={`${s.star}-Star rating`}
+                count={s.count}
+              />
+            ))}
           </div>
 
           {/* Availability */}
@@ -454,6 +752,209 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
               </button>
             )}
           </div>
+
+          {/* Payment options */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Payment options
+            </p>
+            {/* Rate-level payment fields (paymentModel, freeCancellation)
+                come from the Demand Search API / Content Feed, which are
+                not part of the Long Tail Search response. */}
+            <FilterRow soon label="Free cancellation" />
+            <FilterRow soon label="Pay at the hotel" />
+            <FilterRow soon label="Book now, pay later" />
+            <FilterRow soon label="Pay now" />
+            <FilterRow soon label="Book without credit card" />
+          </div>
+
+          {/* Room offers */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Room offers
+            </p>
+            <FilterRow
+              checked={breakfastOnly}
+              onChange={setBreakfastOnly}
+              label="Breakfast included"
+              count={hotels.filter((h) => h.includeBreakfast).length}
+            />
+            {/* Rate-level offers (meals, check-in/out times,
+                deliveries, gym equipment, dietary options) come
+                from the Demand Search API (rooms[].benefits) or
+                the Content Feed. */}
+            <FilterRow soon label="Dinner included" />
+            <FilterRow soon label="Lunch included" />
+            <FilterRow soon label="Early check-in" />
+            <FilterRow soon label="Late check-out" />
+            <FilterRow soon label="Outside food delivery allowed" />
+            <FilterRow soon label="Delivery from nearby convenience store" />
+            <FilterRow soon label="Delivery from family and relatives allowed" />
+            <FilterRow soon label="Free shuttle service" />
+            <FilterRow soon label="Exercise bike" />
+            <FilterRow soon label="Dumbbells" />
+            <FilterRow soon label="Halal" />
+            <FilterRow soon label="Treadmill" />
+            <FilterRow soon label="Car rental" />
+            <FilterRow soon label="Airport transfer" />
+            <FilterRow soon label="Online yoga/fitness classes" />
+            <FilterRow soon label="Vegetarian" />
+            <FilterRow soon label="Telemedicine consulting service" />
+            <FilterRow soon label="Recreation area access with conditions" />
+          </div>
+
+          {/* Rooms and beds */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Rooms and beds
+            </p>
+            {/* Room-level occupancy (bedrooms, bathrooms,
+                beds) comes from the Demand Search API /
+                Content Feed, not the Long Tail response. */}
+            {['Bedrooms', 'Bathrooms', 'Beds'].map((label) => (
+              <div key={label} className="py-1">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="text-[11px] font-medium text-[#5C6B85]">
+                    {label}
+                  </span>
+                  <span className="rounded bg-[#F7F9FC] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#8B96A8]">
+                    Soon
+                  </span>
+                </div>
+                <select
+                  disabled
+                  className="w-full cursor-not-allowed appearance-none rounded border border-[#E8EDF2] bg-[#F7F9FC] px-2.5 py-1.5 text-[12px] text-[#8B96A8]"
+                >
+                  <option>Any</option>
+                </select>
+              </div>
+            ))}
+          </div>
+
+          {/* Room amenities */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Room amenities
+            </p>
+            {/* Room-level amenities come from the Content
+                Feed API (feed_id 14 "Facilities per
+                Roomtype"). */}
+            {(amenitiesExpanded
+              ? ROOM_AMENITIES
+              : ROOM_AMENITIES.slice(0, AMENITIES_PREVIEW)
+            ).map((amenity) => (
+              <FilterRow key={amenity} soon label={amenity} />
+            ))}
+            {ROOM_AMENITIES.length > AMENITIES_PREVIEW && (
+              <button
+                type="button"
+                onClick={() => setAmenitiesExpanded((v) => !v)}
+                className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+              >
+                {amenitiesExpanded ? 'Show less' : 'Show more'}
+              </button>
+            )}
+          </div>
+
+          {/* Bed type */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Bed type
+            </p>
+            {/* Bedding comes from the Demand Search API
+                (rooms[].normalBedding) / Content Feed. */}
+            {BED_TYPES.map((bed) => (
+              <FilterRow key={bed} soon label={bed} />
+            ))}
+          </div>
+
+          {/* Popular with families */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Popular with families
+            </p>
+            {/* "Kids stay for free" is a rate-level benefit
+                from the Demand Search API / Content Feed. */}
+            <FilterRow soon label="Kids stay for free" />
+          </div>
+
+          {/* Neighborhood */}
+          {areaStats && (
+            <div className="rounded-lg bg-white">
+              <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+                Neighborhood
+              </p>
+              {(neighborhoodExpanded
+                ? areaStats.list
+                : areaStats.list.slice(0, NEIGHBORHOOD_PREVIEW)
+              ).map((area) => (
+                <FilterRow
+                  key={area.name}
+                  checked={selectedAreas.has(area.name)}
+                  onChange={() => toggleArea(area.name)}
+                  label={area.name}
+                  count={area.count}
+                />
+              ))}
+              {areaStats.list.length > NEIGHBORHOOD_PREVIEW && (
+                <button
+                  type="button"
+                  onClick={() => setNeighborhoodExpanded((v) => !v)}
+                  className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+                >
+                  {neighborhoodExpanded ? 'Show less' : 'Show more'}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Property facilities */}
+          <div className="rounded-lg bg-white">
+            <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+              Property facilities
+            </p>
+            {/* Per-hotel facilities come from the Content Feed
+                API (feed_id 9 "Facilities per Hotel"). */}
+            {(facilitiesExpanded
+              ? PROPERTY_FACILITIES
+              : PROPERTY_FACILITIES.slice(0, FACILITIES_PREVIEW)
+            ).map((facility) => (
+              <FilterRow key={facility} soon label={facility} />
+            ))}
+            {PROPERTY_FACILITIES.length > FACILITIES_PREVIEW && (
+              <button
+                type="button"
+                onClick={() => setFacilitiesExpanded((v) => !v)}
+                className="mt-1.5 text-[12px] font-semibold text-[#5392F9] hover:underline"
+              >
+                {facilitiesExpanded ? 'Show less' : 'Show more'}
+              </button>
+            )}
+          </div>
+
+          {/* Distance to center */}
+          {distanceStats && (
+            <div className="rounded-lg bg-white">
+              <p className="mb-2.5 text-[13px] font-bold text-[#1A2B49]">
+                Distance to center
+              </p>
+              {/* "Inside city center" needs Agoda's city-center
+                  boundary data; the distance buckets are
+                  computed from hotel coordinates. */}
+              <FilterRow soon label="Inside city center" />
+              {DISTANCE_BUCKETS.filter((bucket) => bucket.test).map(
+                (bucket) => (
+                  <FilterRow
+                    key={bucket.key}
+                    checked={selectedDistances.has(bucket.key)}
+                    onChange={() => toggleDistance(bucket.key)}
+                    label={bucket.label}
+                    count={distanceStats.counts.get(bucket.key) ?? 0}
+                  />
+                ),
+              )}
+            </div>
+          )}
         </aside>
 
         {/* Results */}

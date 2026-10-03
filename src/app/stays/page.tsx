@@ -265,6 +265,8 @@ export default async function StaysPage({
           currency={currency}
           sortBy={sortBy}
           sortOptions={SORT_OPTIONS}
+          areas={destination.areas}
+          center={destination}
         />
       ) : (
         !error && (
