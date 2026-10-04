@@ -513,7 +513,7 @@ export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursi
   );
 
   const transformed = await Promise.all(
-    allProducts.map(async (p: any) => {
+    cityProducts.map(async (p: any) => {
       let images: string[] = [];
       if (Array.isArray(p.images)) {
         images = pickTiqetsImageUrls(p.images);
