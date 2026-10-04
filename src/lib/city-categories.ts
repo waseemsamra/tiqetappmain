@@ -6353,3 +6353,101 @@ export const COUNTRY_CATEGORIES: Record<string, DestinationCategories> = {
         "interests": []
     }
 };
+
+/** Cities each country page on tiqets.com lists (app cities only). */
+export const COUNTRY_CITIES: Record<string, string[]> = {
+    "peru": [
+        "Aguas Calientes",
+        "Cusco",
+        "Lima",
+        "Arequipa"
+    ],
+    "aruba": [
+        "Palm Beach"
+    ],
+    "argentina": [
+        "Buenos Aires",
+        "Bariloche",
+        "Salta",
+        "Ushuaia"
+    ],
+    "mexico": [
+        "Mexico City"
+    ],
+    "bahamas": [
+        "Nassau"
+    ],
+    "brazil": [
+        "Rio de Janeiro"
+    ],
+    "canada": [
+        "Vancouver",
+        "Toronto",
+        "Montreal",
+        "Vaughan",
+        "Calgary",
+        "Banff",
+        "Victoria",
+        "Ottawa",
+        "Jasper",
+        "Squamish",
+        "Golden",
+        "Britannia Beach",
+        "Gatineau",
+        "Saint-Constant",
+        "Lake Louise",
+        "Cochrane",
+        "Whistler",
+        "Kamloops",
+        "Niagara-On-The-Lake",
+        "Brentwood Bay",
+        "Richmond",
+        "Saint-Joseph-de-la-Rive",
+        "Gananoque"
+    ],
+    "united states": [
+        "New York",
+        "Richmond"
+    ],
+    "italy": [
+        "Rome",
+        "Venice",
+        "Florence",
+        "Milan"
+    ],
+    "france": [
+        "Paris"
+    ],
+    "netherlands": [
+        "Amsterdam"
+    ],
+    "spain": [
+        "Barcelona"
+    ],
+    "the netherlands": [
+        "Amsterdam"
+    ],
+    "united arab emirates": [
+        "Dubai",
+        "Abu Dhabi",
+        "Sharjah"
+    ],
+    "belgium": [
+        "Antwerp"
+    ],
+    "portugal": [
+        "Sintra"
+    ],
+    "united kingdom": [
+        "London"
+    ],
+    "singapore": [
+        "Singapore"
+    ],
+    "thailand": [
+        "Bangkok"
+    ],
+    "malaysia": [
+        "Kuala Lumpur"
+    ]
+};

@@ -9,7 +9,6 @@ import FeatureCards from '@/components/feature-cards';
 import HelpCenterSection from '@/components/help-center-section';
 import PopularPlacesSection from '@/components/popular-places';
 import { LanguageProvider, useT } from '@/components/language-provider';
-import AgodaSherpaWidget from '@/components/agoda-sherpa-widget';
 
 interface HomePageClientProps {
     allExcursions: Excursion[];
@@ -109,7 +108,6 @@ function HomeSections({
                  tabType="city"
                />
             <PopularPlacesSection countries={popularCountries} />
-            <AgodaSherpaWidget />
             <HelpCenterSection />
         </div>
     );

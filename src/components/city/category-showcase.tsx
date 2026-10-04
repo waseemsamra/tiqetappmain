@@ -11,9 +11,11 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CATEGORY_IMAGES } from '@/lib/category-images';
+import { categoryPath } from '@/lib/category-pages';
 import type {
   CategoryItem,
   DestinationCategories,
@@ -113,9 +115,9 @@ export function CategoryShowcase({
           screens — sized 10% down */}
       <div className="flex gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
         {rowCategories.map((cat) => (
-          <button
+          <Link
             key={cat.name}
-            type="button"
+            href={categoryPath(cityName, cat.name)}
             className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
           >
             <div className="relative mb-3.5 w-full overflow-hidden rounded-xl bg-[#F0F0F0] aspect-[4/3]">
@@ -131,7 +133,7 @@ export function CategoryShowcase({
             <span className="text-[15px] font-bold leading-snug text-[#1A202C]">
               {cat.name}
             </span>
-          </button>
+          </Link>
         ))}
 
         {/* More categories — opens the discover modal */}
@@ -181,9 +183,9 @@ export function CategoryShowcase({
                 </h3>
                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-6 md:gap-y-3 min-[1101px]:grid-cols-3 min-[1101px]:gap-x-8 min-[1101px]:gap-y-3.5">
                   {visibleModalCategories.map((cat) => (
-                    <button
+                    <Link
                       key={cat.name}
-                      type="button"
+                      href={categoryPath(cityName, cat.name)}
                       className="flex min-w-0 items-center gap-4 rounded-lg px-3 py-2 transition-colors hover:bg-[#F7FAFC]"
                     >
                       <div className="relative h-12 w-[72px] shrink-0 overflow-hidden rounded-lg bg-[#F0F0F0] min-[769px]:h-[52px]">
@@ -199,7 +201,7 @@ export function CategoryShowcase({
                       <span className="text-sm font-semibold leading-snug text-[#1A202C] min-[1101px]:text-[15px]">
                         {cat.name}
                       </span>
-                    </button>
+                    </Link>
                   ))}
                 </div>
 
@@ -227,9 +229,9 @@ export function CategoryShowcase({
                 </h3>
                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-6 md:gap-y-3 min-[1101px]:grid-cols-3 min-[1101px]:gap-x-8 min-[1101px]:gap-y-3.5">
                     {modalInterests.map((cat) => (
-                    <button
+                    <Link
                       key={cat.name}
-                      type="button"
+                      href={categoryPath(cityName, cat.name)}
                       className="flex min-w-0 items-center gap-4 rounded-lg px-3 py-2 transition-colors hover:bg-[#F7FAFC]"
                     >
                       <div className="relative h-12 w-[72px] shrink-0 overflow-hidden rounded-lg bg-[#F0F0F0] min-[769px]:h-[52px]">
@@ -245,7 +247,7 @@ export function CategoryShowcase({
                       <span className="text-sm font-semibold leading-snug text-[#1A202C] min-[1101px]:text-[15px]">
                         {cat.name}
                       </span>
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </section>
