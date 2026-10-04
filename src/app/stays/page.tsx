@@ -7,7 +7,12 @@ import {
   searchAgodaHotels,
   type AgodaHotelResult,
 } from '@/lib/agoda-api';
-import { AGODA_DESTINATIONS, matchDestination } from '@/lib/agoda-catalog';
+import {
+  AGODA_DESTINATIONS,
+  matchDestination,
+  type AgodaDestination,
+} from '@/lib/agoda-catalog';
+import { resolveHotelLinks } from '@/lib/agoda-detail-url';
 import { getDisplayCurrency } from '@/lib/tiqets-api';
 
 /** Clamps a query param to an integer within [min, max]. */
@@ -77,6 +82,7 @@ export default async function StaysPage({
   const checkOut = paramDate(first('checkOut')) ?? toISODate(dayAfter);
   const adults = paramInt(first('adults'), 1, 36, 2);
   const children = paramInt(first('children'), 0, 35, 0);
+  const rooms = paramInt(first('rooms'), 1, 10, 1);
   const sortBy = SORT_OPTIONS.some((o) => o.value === first('sortBy'))
     ? (first('sortBy') as string)
     : '';
@@ -110,6 +116,10 @@ export default async function StaysPage({
 
   let hotels: AgodaHotelResult[] = [];
   let error: { id: number; message: string } | null = null;
+  // Destination that returned each hotel — set by the
+  // property-name search, which fans out to every
+  // destination and merges the results.
+  let hotelDestinations: Record<number, AgodaDestination> | undefined;
 
   // The API accepts exactly one of cityId / geo / hotelId per request.
   // Prefer the city ID when the catalog knows it, otherwise fall back
@@ -166,16 +176,23 @@ export default async function StaysPage({
         ),
       );
       const seen = new Set<number>();
-      for (const response of responses) {
+      const foundDestinations: Record<number, AgodaDestination> = {};
+      responses.forEach((response, index) => {
         if (response.status === 'fulfilled') {
+          // Record which destination's search returned each
+          // property, so its card can link to the Agoda
+          // detail page under that destination's city slug.
+          const found = AGODA_DESTINATIONS[index];
           for (const hotel of response.value.results) {
             if (!seen.has(hotel.hotelId)) {
               seen.add(hotel.hotelId);
               hotels.push(hotel);
+              foundDestinations[hotel.hotelId] = found;
             }
           }
         }
-      }
+      });
+      hotelDestinations = foundDestinations;
     } else {
       const response = await searchAgodaHotels(
         buildSearchCriteria({
@@ -208,6 +225,25 @@ export default async function StaysPage({
     : propertyOnlySearch
       ? destinationParam
       : destination.name;
+
+  // Resolve the card link for every result: the Agoda
+  // detail page when the name-derived slug verifies against
+  // agoda.com, otherwise the tracked partner landing URL.
+  // Property-name searches pass the destination that
+  // returned each hotel; direct hotel-ID lookups have no
+  // destination context, so every card uses the landing
+  // URL there. Slug verdicts are cached for 24h, so only
+  // the first render of a destination pays the cost.
+  const hotelLinks = await resolveHotelLinks({
+    hotels,
+    destination: hotelIdSearch || propertyOnlySearch ? undefined : destination,
+    destinationByHotel: hotelDestinations,
+    checkIn,
+    checkOut,
+    adults,
+    children,
+    rooms,
+  });
 
   return (
     <ProductPageShell titleKey="search.stays" subtitleKey="search.staysSubtitle" showHeader={false}>
@@ -258,6 +294,7 @@ export default async function StaysPage({
               : destination
           }
           initialQuery={propertyQuery}
+          hotelLinks={hotelLinks}
         />
       ) : (
         !error && (

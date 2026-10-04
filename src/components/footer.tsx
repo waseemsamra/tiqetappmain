@@ -42,6 +42,25 @@ const GooglePlayButton = () => (
     </a>
 );
 
+const AgodaBadge = () => (
+    <a
+        href="https://www.agoda.com/partners/partnersearch.aspx?cid=1822679&pcs=8"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Verified Agoda partner"
+    >
+        <img
+            src="https://sherpa.agoda.com/Badge/GetBadge?badgetype=1&refkey=w2YUT5mMPK8RvigE52CFqA%3D%3D"
+            alt="Agoda verified partner"
+            className="h-8 w-auto"
+            loading="lazy"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+        />
+    </a>
+);
+
 const footerSections = [
   {
     id: 'explore',
@@ -189,8 +208,9 @@ const Footer = () => {
                   </Link>
                   <p className="text-sm">&copy; {new Date().getFullYear()} AAFare. All rights reserved.</p>
               </div>
-              <div className="flex items-center space-x-4">
-                  <Link href="#" className="text-gray-400 hover:text-white"><Facebook className="h-5 w-5" /></Link>
+               <div className="flex items-center space-x-4">
+                   <AgodaBadge />
+                   <Link href="#" className="text-gray-400 hover:text-white"><Facebook className="h-5 w-5" /></Link>
                   <Link href="#" className="text-gray-400 hover:text-white"><Twitter className="h-5 w-5" /></Link>
                   <Link href="#" className="text-gray-400 hover:text-white"><Instagram className="h-5 w-5" /></Link>
                   <Link href="#" className="text-gray-400 hover:text-white"><Linkedin className="h-5 w-5" /></Link>

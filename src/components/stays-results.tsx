@@ -58,7 +58,19 @@ function haversineKm(
 /** Max distance from an area centre for a hotel to count as "in" that area. */
 const AREA_RADIUS_KM = 6;
 
-function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: string }) {
+function HotelCard({
+  hotel,
+  currency,
+  href,
+  onOpen,
+}: {
+  hotel: AgodaHotelResult;
+  currency: string;
+  /** Resolved outbound link — Agoda detail page or tracked landing URL. */
+  href?: string;
+  /** Called when the card is clicked, before navigating. */
+  onOpen?: (href: string) => void;
+}) {
   const [liked, setLiked] = useState(false);
   const hasStrike =
     hotel.crossedOutRate !== undefined && hotel.crossedOutRate > hotel.dailyRate;
@@ -195,13 +207,17 @@ function HotelCard({ hotel, currency }: { hotel: AgodaHotelResult; currency: str
     </div>
   );
 
-  if (hotel.landingURL) {
+  if (href) {
     return (
       <a
-        href={hotel.landingURL}
+        href={href}
         target="_blank"
         rel="noopener noreferrer sponsored"
         className="block cursor-pointer"
+        onClick={(e) => {
+          e.preventDefault();
+          onOpen?.(href);
+        }}
       >
         {card}
       </a>
@@ -335,10 +351,18 @@ interface Props {
   center?: { latitude: number; longitude: number };
   /** Hotel name typed in the search strip — pre-fills the text filter. */
   initialQuery?: string;
+  /** Resolved outbound links per hotel ID (Agoda detail page or landing URL). */
+  hotelLinks?: Record<number, string>;
 }
 
-export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions, areas, center, initialQuery }: Props) {
+export function StaysResults({ hotels, destinationName, currency, sortBy, sortOptions, areas, center, initialQuery, hotelLinks }: Props) {
   const [couponOpen, setCouponOpen] = useState(true);
+  // Hotel whose price popup is open — set when a
+  // card is clicked, before the Agoda page opens.
+  const [pricePopup, setPricePopup] = useState<{
+    hotel: AgodaHotelResult;
+    href?: string;
+  } | null>(null);
   const [query, setQuery] = useState(initialQuery ?? '');
   const [availableOnly, setAvailableOnly] = useState(true);
   const [selectedRatings, setSelectedRatings] = useState<Set<number>>(new Set());
@@ -1010,12 +1034,66 @@ export function StaysResults({ hotels, destinationName, currency, sortBy, sortOp
           ) : (
             <div className="flex flex-col gap-3.5">
               {filtered.map((hotel) => (
-                <HotelCard key={hotel.hotelId} hotel={hotel} currency={currency} />
+                <HotelCard
+                  key={hotel.hotelId}
+                  hotel={hotel}
+                  currency={currency}
+                  href={hotelLinks?.[hotel.hotelId] ?? hotel.landingURL}
+                  onOpen={(href) => setPricePopup({ hotel, href })}
+                />
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Price popup — shows the clicked hotel's
+          price before the Agoda page opens. */}
+      {pricePopup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setPricePopup(null)}
+        >
+          <div
+            className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-[16px] font-bold text-[#1A2B49]">
+              {pricePopup.hotel.hotelName}
+            </h3>
+            <p className="mt-3 text-[24px] font-extrabold leading-none text-[#1A2B49]">
+              {formatMoney(pricePopup.hotel.dailyRate, currency)}
+            </p>
+            <p className="mt-1 text-[11px] text-[#8B96A8]">
+              Per night before taxes and fees
+            </p>
+            <p className="mt-2 text-[13px] text-[#5C6B85]">
+              {pricePopup.hotel.reviewScore.toFixed(1)}{' '}
+              {scoreLabel(pricePopup.hotel.reviewScore)}
+              {pricePopup.hotel.reviewCount !== undefined &&
+                ` · ${pricePopup.hotel.reviewCount.toLocaleString()} reviews`}
+            </p>
+            <div className="mt-5 flex gap-2">
+              <a
+                href={pricePopup.href}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
+                onClick={() => setPricePopup(null)}
+                className="flex-1 rounded-md bg-[#5392F9] px-4 py-2.5 text-center text-[14px] font-semibold text-white"
+              >
+                Continue on Agoda
+              </a>
+              <button
+                type="button"
+                onClick={() => setPricePopup(null)}
+                className="rounded-md border border-[#E8EDF2] px-4 py-2.5 text-[14px] font-semibold text-[#5C6B85]"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
