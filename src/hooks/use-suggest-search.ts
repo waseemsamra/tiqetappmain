@@ -12,7 +12,7 @@
  * - the cache is consulted *before* fetching, otherwise it saves nothing.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import type { Excursion, Country, City } from '@/types';
 
@@ -49,6 +49,7 @@ export function useSuggestSearch(debounceMs = 250) {
   const [isLoading, setIsLoading] = useState(false);
   const requestIdRef = useRef(0);
   const categoryRef = useRef<string>('all');
+  const cityRef = useRef<string>('');
 
   const runSearch = useDebouncedCallback(async (currentQuery: string) => {
     const trimmed = currentQuery.trim();
@@ -58,7 +59,7 @@ export function useSuggestSearch(debounceMs = 250) {
       return;
     }
 
-    const key = `${categoryRef.current}:${trimmed.toLowerCase()}`;
+    const key = `${categoryRef.current}:${cityRef.current}:${trimmed.toLowerCase()}`;
     const cached = getCachedSearch(key);
     if (cached) {
       setResults(cached);
@@ -69,8 +70,9 @@ export function useSuggestSearch(debounceMs = 250) {
     const requestId = ++requestIdRef.current;
     try {
       const categoryParam = categoryRef.current !== 'all' ? `&category=${categoryRef.current}` : '';
+      const cityParam = cityRef.current ? `&city=${encodeURIComponent(cityRef.current)}` : '';
       const res = await fetch(
-        `/api/search?query=${encodeURIComponent(trimmed.slice(0, MAX_QUERY_LENGTH))}&suggest=1${categoryParam}`,
+        `/api/search?query=${encodeURIComponent(trimmed.slice(0, MAX_QUERY_LENGTH))}&suggest=1${categoryParam}${cityParam}`,
       );
       if (!res.ok) throw new Error(`Search failed: ${res.status}`);
       const data = await res.json();
@@ -94,8 +96,11 @@ export function useSuggestSearch(debounceMs = 250) {
   }, debounceMs);
 
   // Called on every keystroke; the debounce lives in `runSearch`.
-  const search = (query: string, category?: string) => {
+  // Memoized: callers run this from effects, so a new reference
+  // per render would re-trigger them endlessly.
+  const search = useCallback((query: string, category?: string, city?: string) => {
     if (category) categoryRef.current = category;
+    if (city !== undefined) cityRef.current = city;
     if (!query.trim()) {
       setResults(EMPTY);
       setIsLoading(false);
@@ -103,14 +108,14 @@ export function useSuggestSearch(debounceMs = 250) {
     }
     setIsLoading(true);
     runSearch(query);
-  };
+  }, [runSearch]);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     // Bumping the id orphans any in-flight response so it cannot repopulate.
     requestIdRef.current += 1;
     setResults(EMPTY);
     setIsLoading(false);
-  };
+  }, []);
 
   useEffect(() => () => void runSearch.cancel(), [runSearch]);
 

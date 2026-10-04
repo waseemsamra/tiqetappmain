@@ -232,12 +232,14 @@ function WhereField({
   placeholder,
   t,
   grow = 'flex-1',
+  onChange,
 }: {
   icon: typeof MapPin;
   label: string;
   placeholder: string;
   t: (key: string, vars?: Record<string, string | number>) => string;
   grow?: string;
+  onChange?: (value: string) => void;
 }) {
   const [value, setValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -275,12 +277,14 @@ function WhereField({
 
   const handleChange = (val: string) => {
     setValue(val);
+    onChange?.(val);
     search(val);
     if (val.trim().length >= 2) setIsOpen(true);
   };
 
   const handleSelect = (name: string) => {
     setValue(name);
+    onChange?.(name);
     setIsOpen(false);
   };
 
@@ -420,6 +424,8 @@ export function HeroSearchWidget() {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<TabId>('activities');
+  const [whereValue, setWhereValue] = useState('');
+  const [whenValue, setWhenValue] = useState('');
 
   // ---- Activities search state ----
   const [query, setQuery] = useState('');
@@ -439,9 +445,21 @@ export function HeroSearchWidget() {
   );
 
   const submitSearch = () => {
-    if (!query.trim()) return;
+    const text = query.trim();
+    // A category chip alone (no typed text) still searches: the
+    // chip's label becomes the query, e.g. the Museums chip
+    // searches for "Museums".
+    const categoryLabel =
+      category !== 'all' ? t(`search.category.${category}`).trim() : '';
+    if (!text && !categoryLabel) return;
     setIsOpen(false);
-    router.push(`/search?query=${encodeURIComponent(query.trim())}`);
+    setPaxOpen(false);
+    const params = new URLSearchParams({ query: text || categoryLabel });
+    if (whereValue.trim()) params.set('city', whereValue.trim());
+    if (whenValue) params.set('date', whenValue);
+    params.set('adults', String(actAdults));
+    if (actChildren > 0) params.set('children', String(actChildren));
+    router.push(`/search?${params.toString()}`);
   };
 
   const handleQueryChange = (value: string) => {
@@ -461,10 +479,26 @@ export function HeroSearchWidget() {
   const [guestsOpen, setGuestsOpen] = useState(false);
   const guestsRef = useRef<HTMLDivElement>(null);
 
+  // ---- Activities travelers state ----
+  const [paxOpen, setPaxOpen] = useState(false);
+  const [actAdults, setActAdults] = useState(2);
+  const [actChildren, setActChildren] = useState(0);
+  const paxRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
       if (guestsRef.current && !guestsRef.current.contains(e.target as Node)) {
         setGuestsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, []);
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (paxRef.current && !paxRef.current.contains(e.target as Node)) {
+        setPaxOpen(false);
       }
     };
     document.addEventListener('mousedown', onDown);
@@ -543,14 +577,14 @@ export function HeroSearchWidget() {
       </div>
 
       {/* ---------- Panel ---------- */}
-      <div className="relative z-10 w-full rounded-[14px] bg-[#F5F6F8] p-[52px_36px_34px] shadow-[0_12px_40px_rgba(15,23,42,0.08)] max-lg:p-[44px_24px_30px] max-sm:p-[40px_16px_26px]">
+      <div className="relative z-10 w-full rounded-[14px] bg-[#F5F6F8] p-[52px_36px_34px] shadow-[0_18px_48px_rgba(15,23,42,0.16)] max-lg:p-[44px_24px_30px] max-sm:p-[40px_16px_26px]">
 
         {/* ===== Activities: the live search ===== */}
         {activeTab === 'activities' && (
           <div role="tabpanel">
-            {/* Category chips */}
+            {/* Category chips — horizontally scrollable on mobile */}
             <div
-              className="mb-5 flex flex-wrap gap-[10px]"
+              className="mb-5 flex flex-wrap gap-[10px] max-lg:flex-nowrap max-lg:overflow-x-auto max-lg:scrollbar-hide"
               role="tablist"
               aria-label={t('search.categoryLabel')}
             >
@@ -566,12 +600,12 @@ export function HeroSearchWidget() {
                     setCategory(id);
                     if (query.trim().length >= 2) search(query, id);
                   }}
-                  className={cn(
-                    'rounded-[22px] border-[1.5px] px-[18px] py-[9px] text-[13px] font-semibold transition-colors',
-                    category === id
-                      ? 'border-[#3B6EFF] text-[#3B6EFF]'
-                      : 'border-[#D1D9E2] bg-white text-[#1A2B49] hover:border-[#3B6EFF] hover:text-[#3B6EFF]',
-                  )}
+                   className={cn(
+                     'rounded-[22px] border-[1.5px] px-[18px] py-[9px] text-[13px] font-semibold transition-colors max-lg:shrink-0',
+                     category === id
+                       ? 'border-[#3B6EFF] text-[#3B6EFF]'
+                       : 'border-[#D1D9E2] bg-white text-[#1A2B49] hover:border-[#3B6EFF] hover:text-[#3B6EFF]',
+                   )}
                 >
                   {t(`search.category.${id}`)}
                 </button>
@@ -713,19 +747,73 @@ export function HeroSearchWidget() {
                 placeholder={t('search.wherePlaceholder')}
                 t={t}
                 grow="min-w-0"
+                onChange={setWhereValue}
               />
               <ActivitiesField icon={CalendarDays} label={t('search.when')} grow="min-w-0">
                 <input
                   type="date"
+                  value={whenValue}
                   min={isoIn(0)}
+                  onChange={(e) => setWhenValue(e.target.value)}
                   aria-label={t('search.when')}
                   className="w-full bg-transparent p-0 text-[15px] font-semibold text-[#1A2B49] outline-none"
                 />
               </ActivitiesField>
               <ActivitiesField icon={Users} label={t('search.travelers')} grow="min-w-0">
-                <span className="text-[15px] font-semibold text-[#1A2B49]">
-                  {t('search.pax2')}
-                </span>
+                <div ref={paxRef} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setPaxOpen((open) => !open)}
+                    aria-expanded={paxOpen}
+                    className="flex w-full items-center justify-between gap-2 text-[15px] font-semibold text-[#1A2B49]"
+                  >
+                    <span className="truncate">
+                      {actAdults} {t('search.adults').toLowerCase()}
+                      {actChildren > 0 &&
+                        `, ${actChildren} ${t('search.children').toLowerCase()}`}
+                    </span>
+                    <ChevronDown
+                      className={cn(
+                        'h-3 w-3 shrink-0 text-[#5C6B85] transition-transform',
+                        paxOpen && 'rotate-180',
+                      )}
+                      aria-hidden
+                    />
+                  </button>
+
+                  {paxOpen && (
+                    <div className="absolute right-0 top-full z-50 mt-1.5 w-64 rounded-[10px] bg-white p-4 shadow-[0_12px_40px_rgba(15,23,42,0.12)]">
+                      <div className="mb-3 flex items-center justify-between gap-3">
+                        <span className="text-sm font-medium text-[#1A2B49]">
+                          {t('search.adults')}
+                        </span>
+                        <div className="flex items-center gap-3">
+                          <StepperButton onClick={() => setActAdults((a) => Math.max(1, a - 1))} disabled={actAdults <= 1}>
+                            <Minus className="h-3.5 w-3.5" />
+                          </StepperButton>
+                          <span className="w-6 text-center font-semibold">{actAdults}</span>
+                          <StepperButton onClick={() => setActAdults((a) => Math.min(8, a + 1))} disabled={actAdults >= 8}>
+                            <Plus className="h-3.5 w-3.5" />
+                          </StepperButton>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="text-sm font-medium text-[#1A2B49]">
+                          {t('search.children')}
+                        </span>
+                        <div className="flex items-center gap-3">
+                          <StepperButton onClick={() => setActChildren((c) => Math.max(0, c - 1))} disabled={actChildren <= 0}>
+                            <Minus className="h-3.5 w-3.5" />
+                          </StepperButton>
+                          <span className="w-6 text-center font-semibold">{actChildren}</span>
+                          <StepperButton onClick={() => setActChildren((c) => Math.min(8, c + 1))} disabled={actChildren >= 8}>
+                            <Plus className="h-3.5 w-3.5" />
+                          </StepperButton>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </ActivitiesField>
             </div>
 
@@ -814,7 +902,7 @@ export function HeroSearchWidget() {
                     <Users className="h-[18px] w-5 shrink-0 text-[#5C6B85]" />
                     <span className="flex min-w-0 flex-col">
                       <span className="truncate text-[15px] font-semibold leading-tight text-[#1A2B49]">
-                        {t('search.pax2')}
+                        {adults} {t('search.adults').toLowerCase()}
                       </span>
                       <span className="text-[13px] leading-tight text-[#5C6B85]">
                         {rooms} {rooms === 1 ? t('search.room') : t('search.rooms')}

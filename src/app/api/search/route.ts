@@ -30,6 +30,80 @@ async function fetchAllPages(
   return batches.flat();
 }
 
+/**
+ * City ids the Tiqets listing endpoints accept directly.
+ * The `/cities` catalogue does not cover every market (Dubai,
+ * for instance), so known ids are kept here as a fallback.
+ */
+const KNOWN_CITY_IDS: Record<string, string> = {
+  'barcelona': '66342', 'rome': '71631', 'paris': '66746', 'milan': '71749',
+  'florence': '71854', 'venice': '71510', 'antwerp': '60863', 'sintra': '76496',
+  'amsterdam': '75061', 'new york': '260932', 'dubai': '60005', 'abu dhabi': '60013',
+  'sharjah': '60007', 'lima': '75306', 'cusco': '75323', 'puno': '75296',
+  'arequipa': '75334', 'aguas calientes': '261863', 'london': '67458',
+  'mexico city': '67461', 'buenos aires': '60189', 'ushuaia': '60210',
+  'salta': '60240', 'bariloche': '60331', 'palm beach': '263317', 'nassau': '62236',
+  'rio de janeiro': '61535', 'vancouver': '62496', 'toronto': '62492',
+  'niagara falls': '62419', 'montreal': '25', 'calgary': '62338', 'ottawa': '62431',
+  'victoria': '62501', 'quebec': '62516', 'vaughan': '62499', 'banff': '87579',
+  'jasper': '322', 'beaupre': '137139', 'saint-constant': '62458',
+  'britannia beach': '263089', 'saint-joseph-de-la-rive': '270495',
+  'richmond': '62452', 'mississauga': '62408', 'fort macleod': '136629',
+  'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
+  'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
+  'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
+  'gatineau': '62372', 'squamish': '301', 'madrid': '60400',
+};
+
+/**
+ * Matches every word of the query against an activity's
+ * text fields, so "dinner cruise" also matches "Dhow
+ * Cruise with Dinner" — the words may appear in any
+ * order, unlike a phrase match.
+ */
+function matchesQueryText(ex: any, words: string[]): boolean {
+  const name = ex.name.toLowerCase();
+  const country = ex.country.toLowerCase();
+  const city = ex.city.toLowerCase();
+  return words.every(
+    (w) => name.includes(w) || country.includes(w) || city.includes(w),
+  );
+}
+
+/**
+ * Live city listing used as a suggestion fallback.
+ *
+ * The ranked index covers a snapshot corpus, so a selected
+ * destination can miss real activities (e.g. "dinner" in
+ * Dubai). This pulls the city's activities from the API and
+ * text-filters them the same way the results page does.
+ */
+async function fetchCityMatches(cityName: string, queryText: string): Promise<any[]> {
+  const words = queryText.toLowerCase().split(/\s+/).filter(Boolean);
+  const cityId =
+    KNOWN_CITY_IDS[cityName.toLowerCase()] ||
+    (await TiqetsApi.fetchTiqetsCities()
+      .then((cities) =>
+        cities.find((c) => c.name && c.name.toLowerCase() === cityName.toLowerCase())?.id,
+      )
+      .catch(() => undefined));
+  if (!cityId) return [];
+  const [experiences, products] = await Promise.all([
+    fetchAllPages(
+      (p) => `https://api.tiqets.com/v2/experiences?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`,
+      (data) => data.experiences || data.products || data.items || [],
+    ),
+    fetchAllPages(
+      (p) => `https://api.tiqets.com/v2/products?city_id=${cityId}&page_size=${PAGE_SIZE}&page=${p}`,
+      (data) => data.products || data.experiences || data.items || [],
+    ),
+  ]);
+  return [...experiences, ...products]
+    .map(TiqetsApi.transformTiqetsProduct)
+    .filter((ex) => matchesQueryText(ex, words))
+    .slice(0, 6);
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -42,16 +116,25 @@ export async function GET(request: Request) {
     const suggestMode = searchParams.get('suggest') === '1';
 
     const lower = query.toLowerCase();
+    const words = lower.split(/\s+/).filter(Boolean);
 
     // Autocomplete: ranked local search over the cached corpus. This runs before
     // the browse paths because it is the only one that stays fast on each
     // keystroke — the others walk several paged API calls per request.
     if (suggestMode) {
-      const hits = await suggest(query, { perType: 6, total: 16 });
+      const hits = await suggest(query, { perType: 6, total: 16, city: city || undefined });
+      let excursions = hits.filter((h) => h.type === 'activity').map((h) => h.item);
+      // The ranked index covers a snapshot corpus, so a selected
+      // destination can miss real activities (e.g. "dinner" in
+      // Dubai). Fall back to the live city listing so the dropdown
+      // still offers them.
+      if (city && excursions.length === 0) {
+        excursions = await fetchCityMatches(city, query);
+      }
       return NextResponse.json({
         countries: hits.filter((h) => h.type === 'country').map((h) => h.item),
         cities: hits.filter((h) => h.type === 'city').map((h) => h.item),
-        excursions: hits.filter((h) => h.type === 'activity').map((h) => h.item),
+        excursions,
       });
     }
 
@@ -64,7 +147,7 @@ export async function GET(request: Request) {
       const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
       let filtered = transformed;
       if (query) {
-        filtered = filtered.filter(ex => ex.name.toLowerCase().includes(lower) || ex.country.toLowerCase().includes(lower) || ex.city.toLowerCase().includes(lower));
+        filtered = filtered.filter((ex) => matchesQueryText(ex, words));
       }
       const start = (page - 1) * PAGE_SIZE;
       const paged = filtered.slice(start, start + PAGE_SIZE);
@@ -87,7 +170,7 @@ export async function GET(request: Request) {
       const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
       let filtered = transformed;
       if (query) {
-        filtered = filtered.filter(ex => ex.name.toLowerCase().includes(lower) || ex.country.toLowerCase().includes(lower) || ex.city.toLowerCase().includes(lower));
+        filtered = filtered.filter((ex) => matchesQueryText(ex, words));
       }
 
       const start = (page - 1) * PAGE_SIZE;
@@ -98,25 +181,6 @@ export async function GET(request: Request) {
 
     // 2. City search - fetch directly by city_id or known city name
     if (city) {
-      const KNOWN_CITY_IDS: Record<string, string> = {
-        'barcelona': '66342', 'rome': '71631', 'paris': '66746', 'milan': '71749',
-        'florence': '71854', 'venice': '71510', 'antwerp': '60863', 'sintra': '76496',
-        'amsterdam': '75061', 'new york': '260932', 'dubai': '60005', 'abu dhabi': '60013',
-        'sharjah': '60007', 'lima': '75306', 'cusco': '75323', 'puno': '75296',
-        'arequipa': '75334', 'aguas calientes': '261863', 'london': '67458',
-        'mexico city': '67461', 'buenos aires': '60189', 'ushuaia': '60210',
-        'salta': '60240', 'bariloche': '60331', 'palm beach': '263317', 'nassau': '62236',
-        'rio de janeiro': '61535', 'vancouver': '62496', 'toronto': '62492',
-        'niagara falls': '62419', 'montreal': '25', 'calgary': '62338', 'ottawa': '62431',
-        'victoria': '62501', 'quebec': '62516', 'vaughan': '62499', 'banff': '87579',
-        'jasper': '322', 'beaupre': '137139', 'saint-constant': '62458',
-        'britannia beach': '263089', 'saint-joseph-de-la-rive': '270495',
-        'richmond': '62452', 'mississauga': '62408', 'fort macleod': '136629',
-        'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
-        'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
-        'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
-        'gatineau': '62372', 'squamish': '301',
-      };
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
       if (cityId) {
         const [experiences, products] = await Promise.all([
@@ -133,7 +197,7 @@ export async function GET(request: Request) {
         const transformed = allActivities.map(TiqetsApi.transformTiqetsProduct);
         let filtered = transformed;
         if (query) {
-          filtered = filtered.filter(ex => ex.name.toLowerCase().includes(lower) || ex.country.toLowerCase().includes(lower) || ex.city.toLowerCase().includes(lower));
+          filtered = filtered.filter((ex) => matchesQueryText(ex, words));
         }
         const start = (page - 1) * PAGE_SIZE;
         const paged = filtered.slice(start, start + PAGE_SIZE);
@@ -143,26 +207,7 @@ export async function GET(request: Request) {
     }
 
     // 3. General text search - auto-detect country/city from query first
-    const KNOWN_CITY_IDS: Record<string, string> = {
-      'barcelona': '66342', 'rome': '71631', 'paris': '66746', 'milan': '71749',
-      'florence': '71854', 'venice': '71510', 'antwerp': '60863', 'sintra': '76496',
-      'amsterdam': '75061', 'new york': '260932', 'dubai': '60005', 'abu dhabi': '60013',
-      'sharjah': '60007', 'lima': '75306', 'cusco': '75323', 'puno': '75296',
-      'arequipa': '75334', 'aguas calientes': '261863', 'london': '67458',
-      'mexico city': '67461', 'buenos aires': '60189', 'ushuaia': '60210',
-      'salta': '60240', 'bariloche': '60331', 'palm beach': '263317', 'nassau': '62236',
-      'rio de janeiro': '61535', 'vancouver': '62496', 'toronto': '62492',
-      'niagara falls': '62419', 'montreal': '25', 'calgary': '62338', 'ottawa': '62431',
-      'victoria': '62501', 'quebec': '62516', 'vaughan': '62499', 'banff': '87579',
-      'jasper': '322', 'beaupre': '137139', 'saint-constant': '62458',
-      'britannia beach': '263089', 'saint-joseph-de-la-rive': '270495',
-      'richmond': '62452', 'mississauga': '62408', 'fort macleod': '136629',
-      'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
-      'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
-      'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
-'gatineau': '62372', 'squamish': '301', 'madrid': '60400'
-      };
-     const [allCountries, allCities] = await Promise.all([
+    const [allCountries, allCities] = await Promise.all([
       TiqetsApi.fetchTiqetsCountries(),
       TiqetsApi.fetchTiqetsCities().catch(() => []),
     ]);
@@ -221,9 +266,7 @@ export async function GET(request: Request) {
 
     // Fallback: broad fetcher
     const allExcursions = await TiqetsApi.fetchTiqetsProducts();
-    const matchedExcursions = allExcursions.filter(ex =>
-      ex.name.toLowerCase().includes(lower) || ex.country.toLowerCase().includes(lower) || ex.city.toLowerCase().includes(lower)
-    );
+    const matchedExcursions = allExcursions.filter((ex) => matchesQueryText(ex, words));
     const matchedCountries = allCountries.filter(c => c.name.toLowerCase().includes(lower)).slice(0, 10);
     const matchedCities = allCities.filter(c => c.name && c.name.toLowerCase().includes(lower)).slice(0, 10);
     const start = (page - 1) * PAGE_SIZE;

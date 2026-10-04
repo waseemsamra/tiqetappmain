@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { imageUrlFor } from '@/lib/tiqets-image';
 import Link from 'next/link';
@@ -22,13 +22,18 @@ export function UniversalSearch() {
     const searchContainerRef = useRef<HTMLDivElement>(null);
     const recognitionRef = useRef<any>(null);
 
-    const { results, isLoading, search: runSearch, reset } = useSuggestSearch();
+    const searchParams = useSearchParams();
+    const city = searchParams.get('city') || '';
+
+    const { results, isLoading, search, reset } = useSuggestSearch();
 
     const handleSearchRedirect = (e: React.FormEvent) => {
         e.preventDefault();
         if (!query.trim()) return;
         setIsDropdownOpen(false);
-        router.push(`/search?query=${encodeURIComponent(query)}`);
+        const params = new URLSearchParams({ query: query.trim() });
+        if (city) params.set('city', city);
+        router.push(`/search?${params.toString()}`);
     };
 
     const handleNavClick = useCallback((href: string) => {
@@ -37,12 +42,12 @@ export function UniversalSearch() {
 
     useEffect(() => {
         if (query && !isListening) {
-            runSearch(query);
+            search(query, undefined, city);
         } else if (!query) {
             reset();
             setIsDropdownOpen(false);
         }
-    }, [query, runSearch, reset, isListening]);
+    }, [query, search, reset, isListening, city]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -75,7 +80,9 @@ export function UniversalSearch() {
             recognitionRef.current.onend = () => {
                 setIsListening(false);
                 if (recognitionRef.current.finalTranscript) {
-                    router.push(`/search?query=${encodeURIComponent(recognitionRef.current.finalTranscript)}`);
+                    const params = new URLSearchParams({ query: recognitionRef.current.finalTranscript });
+                    if (city) params.set('city', city);
+                    router.push(`/search?${params.toString()}`);
                 }
             };
 
@@ -89,7 +96,7 @@ export function UniversalSearch() {
                 setIsListening(false);
             };
         }
-    }, [toast, router]);
+    }, [toast, router, city]);
 
     const handleVoiceSearch = () => {
         if (isListening) {

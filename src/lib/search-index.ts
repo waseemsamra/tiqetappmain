@@ -317,12 +317,14 @@ function scoreEntry(entry: IndexEntry, query: string): number {
 export interface SuggestOptions {
   perType?: number;
   total?: number;
+  city?: string;
 }
 
 export async function suggest(rawQuery: string, options: SuggestOptions = {}) {
   const query = rawQuery.trim().toLowerCase();
   const perType = options.perType ?? 6;
   const total = options.total ?? 16;
+  const cityFilter = options.city?.trim().toLowerCase();
   if (query.length < 2) return [];
 
   const entries = await getIndex();
@@ -334,6 +336,11 @@ export async function suggest(rawQuery: string, options: SuggestOptions = {}) {
   };
 
   for (const entry of entries) {
+    // A selected destination scopes suggestions to that city's activities.
+    if (cityFilter) {
+      if (entry.type !== 'activity') continue;
+      if (entry.city.toLowerCase() !== cityFilter) continue;
+    }
     const score = scoreEntry(entry, query);
     if (score > 0) buckets[entry.type].push({ entry, score });
   }

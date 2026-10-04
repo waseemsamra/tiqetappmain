@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { Star, MessageSquareText, Clock, Hourglass, Zap } from 'lucide-react';
 import {
   fetchTiqetsProductById,
@@ -78,6 +80,22 @@ export default async function VariantDetailPage({ params }: { params: { id: stri
 
   const product = detail?.product || {};
   const experience = detail?.experience || null;
+
+  // Tag links from the local copy cover this variant
+  // when the live detail does not carry them.
+  if (!Array.isArray(product.tag_ids) || product.tag_ids.length === 0) {
+    try {
+      const local = JSON.parse(
+        readFileSync(join(process.cwd(), 'public', 'excursions.json'), 'utf-8'),
+      );
+      const localTags = local?.variants?.[params.id]?.tag_ids;
+      if (Array.isArray(localTags)) {
+        product.tag_ids = localTags;
+      }
+    } catch {
+      // the live detail already carries tags, or none exist
+    }
+  }
 
   const [availability, reviews, siblings] = await Promise.all([
     fetchTiqetsAvailabilityCached(params.id),

@@ -45,8 +45,8 @@ export default function HeroSection({ content }: { content: HeroContent | null }
         </p>
       </section>
 
-      {/* Search wrapper — overlaps the banner bottom */}
-      <div className="relative z-10 mx-auto -mt-[200px] flex w-full max-w-[1080px] flex-col items-center px-5 pb-20 max-lg:-mt-[180px] max-lg:max-w-[800px] max-lg:pb-[60px] max-sm:-mt-[160px] max-sm:px-[14px]">
+      {/* Search wrapper — overlaps the banner bottom, as wide as the page sections */}
+      <div className="relative z-10 mx-auto -mt-[200px] flex w-full max-w-7xl flex-col items-center px-4 pb-20 sm:px-6 lg:px-8 max-lg:-mt-[180px] max-lg:pb-[60px] max-sm:-mt-[160px]">
         <HeroSearchWidget />
       </div>
     </>

@@ -19,6 +19,7 @@ import { getWishlistIdsAction } from '@/app/actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { AttractionCard } from '@/components/attraction-card';
 import { AllExperiences } from '@/components/country/all-experiences';
+import { COUNTRY_HERO_IMAGES } from '@/lib/hero-images';
 
 type User = { id: string; email?: string } | null;
 
@@ -105,7 +106,8 @@ export default function CountryClientPage({
         return filteredExcursions.slice(0, 10);
     }, [filteredExcursions]);
 
-     const heroImage = countryDetails.heroImage || 
+     const heroImage = COUNTRY_HERO_IMAGES[countryName.toLowerCase()] ||
+                       countryDetails.heroImage || 
                        (initialExcursions.find(ex => ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0)?.images?.[0]) || 
                        'https://aws-tiqets-cdn.imgix.net/images/content/b3f321f3770643ada7b10a1ac63ae6dd.jpg';
 

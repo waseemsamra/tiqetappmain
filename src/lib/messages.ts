@@ -118,6 +118,7 @@ const en: Messages = {
   'search.entireHomes': 'Show me only entire homes and apartments',
   'search.addFlight': 'Add a flight',
   'search.adults': 'Adults',
+  'search.children': 'Children',
 };
 
 const ca: Messages = {
@@ -219,6 +220,7 @@ const ca: Messages = {
   'search.entireHomes': 'Mostra només habitatges sencers i apartaments',
   'search.addFlight': 'Afegir un vol',
   'search.adults': 'Adults',
+  'search.children': 'Nens',
 };
 
 const cs: Messages = {
@@ -320,6 +322,7 @@ const cs: Messages = {
   'search.entireHomes': 'Zobrazit pouze celé domy a byty',
   'search.addFlight': 'Přidat let',
   'search.adults': 'Dospělí',
+  'search.children': 'Děti',
 };
 
 const da: Messages = {
@@ -421,6 +424,7 @@ const da: Messages = {
   'search.entireHomes': 'Vis kun helhuse og lejligheder',
   'search.addFlight': 'Tilføj fly',
   'search.adults': 'Voksne',
+  'search.children': 'Børn',
 };
 
 const de: Messages = {
@@ -522,6 +526,7 @@ const de: Messages = {
   'search.entireHomes': 'Nur ganze Häuser und Wohnungen anzeigen',
   'search.addFlight': 'Flug hinzufügen',
   'search.adults': 'Erwachsene',
+  'search.children': 'Kinder',
 };
 
 const el: Messages = {
@@ -623,6 +628,7 @@ const el: Messages = {
   'search.entireHomes': 'Εμφάνιση μόνο ολόκληρων σπιτιών και διαμερισμάτων',
   'search.addFlight': 'Προσθήκη πτήσης',
   'search.adults': 'Ενήλικες',
+  'search.children': 'Παιδιά',
 };
 
 const es: Messages = {
@@ -724,6 +730,7 @@ const es: Messages = {
   'search.entireHomes': 'Mostrar solo casas enteras y apartamentos',
   'search.addFlight': 'Añadir vuelo',
   'search.adults': 'Adultos',
+  'search.children': 'Niños',
 };
 
 const fr: Messages = {
@@ -825,6 +832,7 @@ const fr: Messages = {
   'search.entireHomes': 'Afficher uniquement les maisons entières et les appartements',
   'search.addFlight': 'Ajouter un vol',
   'search.adults': 'Adultes',
+  'search.children': 'Enfants',
 };
 
 const it: Messages = {
@@ -926,6 +934,7 @@ const it: Messages = {
   'search.entireHomes': 'Mostra solo case intere e appartamenti',
   'search.addFlight': 'Aggiungi volo',
   'search.adults': 'Adulti',
+  'search.children': 'Bambini',
 };
 
 const ko: Messages = {
@@ -1027,6 +1036,7 @@ const ko: Messages = {
   'search.entireHomes': '전체 주택과 아파트만 표시',
   'search.addFlight': '항공권 추가',
   'search.adults': '성인',
+  'search.children': '어린이',
 };
 
 const nl: Messages = {
@@ -1128,6 +1138,7 @@ const nl: Messages = {
   'search.entireHomes': 'Alleen complete huizen en appartementen tonen',
   'search.addFlight': 'Vlucht toevoegen',
   'search.adults': 'Volwassenen',
+  'search.children': 'Kinderen',
 };
 
 const ja: Messages = {
@@ -1229,6 +1240,7 @@ const ja: Messages = {
   'search.entireHomes': '一軒家とアパートのみ表示',
   'search.addFlight': 'フライトを追加',
   'search.adults': '大人',
+  'search.children': '子供',
 };
 
 const pl: Messages = {
@@ -1330,6 +1342,7 @@ const pl: Messages = {
   'search.entireHomes': 'Pokaż tylko całe domy i mieszkania',
   'search.addFlight': 'Dodaj lot',
   'search.adults': 'Dorośli',
+  'search.children': 'Dzieci',
 };
 
 const pt: Messages = {
@@ -1431,6 +1444,7 @@ const pt: Messages = {
   'search.entireHomes': 'Mostrar apenas casas inteiras e apartamentos',
   'search.addFlight': 'Adicionar voo',
   'search.adults': 'Adultos',
+  'search.children': 'Crianças',
 };
 
 const ru: Messages = {
@@ -1532,6 +1546,7 @@ const ru: Messages = {
   'search.entireHomes': 'Показать только целые дома и квартиры',
   'search.addFlight': 'Добавить рейс',
   'search.adults': 'Взрослые',
+  'search.children': 'Дети',
 };
 
 const sv: Messages = {
@@ -1633,6 +1648,7 @@ const sv: Messages = {
   'search.entireHomes': 'Visa endast hela hus och lägenheter',
   'search.addFlight': 'Lägg till flyg',
   'search.adults': 'Vuxna',
+  'search.children': 'Barn',
 };
 
 const zh: Messages = {
@@ -1734,6 +1750,7 @@ const zh: Messages = {
   'search.entireHomes': '仅显示整栋房屋和公寓',
   'search.addFlight': '添加航班',
   'search.adults': '成人',
+  'search.children': '儿童',
 };
 
 /**

@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useTransition } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import type { Excursion, ExcursionType } from '@/types';
+import type { Excursion, TiqetsTag } from '@/types';
 import { ExcursionCard } from '@/components/excursion-search/excursion-card';
 import { ExcursionListCard } from '@/components/excursion-search/excursion-list-card';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import { UniversalSearch } from '@/components/universal-search';
 
 
 interface SearchClientPageProps {
-    allExcursionTypes: ExcursionType[];
+    tags: TiqetsTag[];
 }
 
 const INITIAL_VISIBLE_COUNT = 20;
@@ -35,7 +35,7 @@ const LoadMoreButton = ({ visibleCount, totalCount, onLoadMore }: { visibleCount
 
 
 export default function SearchClientPage({
-    allExcursionTypes,
+    tags,
 }: SearchClientPageProps) {
     const { session } = useAuth();
     const user = session?.user;
@@ -48,7 +48,7 @@ export default function SearchClientPage({
     
     // State for data and filtering
     const [allExcursions, setAllExcursions] = useState<Excursion[]>([]);
-    const [selectedExcursionTypes, setSelectedExcursionTypes] = useState<string[]>([]);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [wishlistIds, setWishlistIds] = useState(new Set<string>());
     const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
     
@@ -102,13 +102,11 @@ export default function SearchClientPage({
     useEffect(() => {
         const currentParams = new URLSearchParams(searchParams.toString());
         fetchExcursions(currentParams);
-        
-        const typeParam = searchParams.get('type');
-        const typesToSelect = typeParam ? [typeParam] : [];
-        setSelectedExcursionTypes(typesToSelect);
-        
+
+        setSelectedTags([]);
+
         setVisibleCount(INITIAL_VISIBLE_COUNT);
-        
+
     }, [searchParams]);
 
     useEffect(() => {
@@ -117,29 +115,34 @@ export default function SearchClientPage({
         }
     }, [user]);
 
-    const handleFilterChange = (typeId: string) => {
-        const newSelection = new Set(selectedExcursionTypes);
-        if (newSelection.has(typeId)) {
-            newSelection.delete(typeId);
-        } else {
-            newSelection.add(typeId);
-        }
-        const newTypesArray = Array.from(newSelection);
-        setSelectedExcursionTypes(newTypesArray);
-        
-        const currentParams = new URLSearchParams(searchParams.toString());
-        currentParams.delete('types');
-        newTypesArray.forEach(t => currentParams.append('types', t));
-        
-        fetchExcursions(currentParams);
+    // Tag filters apply to the already-fetched result set, so
+    // toggling one is instant instead of another API round trip.
+    const handleTagChange = (tagId: string) => {
+        setSelectedTags((prev) => {
+            const next = new Set(prev);
+            if (next.has(tagId)) {
+                next.delete(tagId);
+            } else {
+                next.add(tagId);
+            }
+            return Array.from(next);
+        });
         setVisibleCount(INITIAL_VISIBLE_COUNT);
     };
 
-    const visibleExcursions = useMemo(() => {
-        return allExcursions.slice(0, visibleCount);
-    }, [allExcursions, visibleCount]);
+    const filteredExcursions = useMemo(() => {
+        if (selectedTags.length === 0) return allExcursions;
+        return allExcursions.filter((excursion) => {
+            const tagIds = Array.isArray(excursion.tag_ids) ? excursion.tag_ids : [];
+            return tagIds.some((tid: string) => selectedTags.includes(tid));
+        });
+    }, [allExcursions, selectedTags]);
 
-    const hasMore = visibleCount < allExcursions.length;
+    const visibleExcursions = useMemo(() => {
+        return filteredExcursions.slice(0, visibleCount);
+    }, [filteredExcursions, visibleCount]);
+
+    const hasMore = visibleCount < filteredExcursions.length;
 
     const handleLoadMore = () => {
         setVisibleCount(prev => Math.min(prev + LOAD_MORE_COUNT, allExcursions.length));
@@ -154,9 +157,9 @@ export default function SearchClientPage({
             <main>
                   <div>
                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-                         <p className="text-muted-foreground">
-                             {isSearching ? 'Searching...' : `${allExcursions.length} results found.`}
-                         </p>
+                          <p className="text-muted-foreground">
+                              {isSearching ? 'Searching...' : `${filteredExcursions.length} results found.`}
+                          </p>
                          <div className="flex items-center gap-2 self-end">
                               <Button variant="outline" className="w-full md:w-auto" onClick={() => setIsFilterDialogOpen(true)}>
                                  <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -217,14 +220,14 @@ export default function SearchClientPage({
                      )}
                  </div>
              </main>
-             <FilterDialog
-                 isOpen={isFilterDialogOpen}
-                 onOpenChange={setIsFilterDialogOpen}
-                 excursionTypes={allExcursionTypes}
-                 allExcursions={allExcursions}
-                 selectedExcursionTypes={selectedExcursionTypes}
-                 onExcursionTypeChange={handleFilterChange}
-             />
+              <FilterDialog
+                  isOpen={isFilterDialogOpen}
+                  onOpenChange={setIsFilterDialogOpen}
+                  tags={tags}
+                  allExcursions={allExcursions}
+                  selectedTags={selectedTags}
+                  onTagChange={handleTagChange}
+              />
          </>
      );
 }

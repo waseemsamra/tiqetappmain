@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/carousel';
 import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CategoryExplorer } from '@/components/country/category-explorer';
+import { CategoryShowcase } from '@/components/city/category-showcase';
 import { AllExperiences } from '@/components/country/all-experiences';
 import FaqSection from '@/components/country/faq-section';
 import { Separator } from '@/components/ui/separator';
@@ -23,6 +23,7 @@ import { useAuth } from '@/app/auth-provider';
 import { getWishlistIdsAction } from '@/app/actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { useTiqetsTags } from '@/hooks/use-tiqets-tags';
+import { CITY_HERO_IMAGES } from '@/lib/hero-images';
 
 type User = { id: string; email?: string } | null;
 
@@ -91,8 +92,12 @@ export default function CityClientPage({
         return <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} />;
     };
 
-    // Construct hero image from excursions - use first valid image found
+    // Construct hero image: the city's official Tiqets art first,
+    // then the first valid image found among its excursions.
     const heroImage = useMemo(() => {
+        const official = CITY_HERO_IMAGES[cityName.toLowerCase()];
+        if (official) return official;
+
         // Try to find an image from top rated excursions first
         const imageFromTopRated = topRatedExcursions.find(ex => 
           ex.images && ex.images.length > 0 && ex.images[0] && ex.images[0].length > 0
@@ -139,20 +144,7 @@ export default function CityClientPage({
               </header>
 
             <section>
-                 <div className="mb-2 flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Categories</h2>
-                    {tagsLoading && <span className="text-sm text-muted-foreground">Loading categories...</span>}
-                 </div>
-                 <CategoryExplorer 
-                    tags={tags}
-                    allTags={tags}
-                    countryName={countryName}
-                    cityName={cityName}
-                    onShowAll={() => setIsFilterDialogOpen(true)}
-                    selectedTagIds={selectedTagIds}
-                    onSelectTag={(tagId) => setSelectedTagIds(prev => prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId])}
-                    excursions={initialExcursions}
-                 />
+              <CategoryShowcase cityName={cityName} />
             </section>
             
             <section>
