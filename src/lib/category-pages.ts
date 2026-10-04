@@ -57,7 +57,19 @@ export const CATEGORY_TYPE_IDS: Record<string, string> = {
   'public-transport': '1048',
   'rentals': '1049',
   'science-technology-museums': '703',
-  'sport': '711',
+  'stadiums-arenas': '711',
+  'historical-sites': '708',
+  'archaeological-sites': '709',
+  'wineries': '720',
+  'halloween': '1803',
+  'christmas': '1801',
+  'groups': '1190',
+  'family-friendly': '1189',
+  'adults': '1950',
+  'foodies': '1197',
+  'local-culture-explorers': '1711',
+  'entertainment-enthusiasts': '1195',
+  'wellness': '1985',
   'theme-parks': '712',
   'water-parks': '713',
   'workshops-classes': '1033',
@@ -87,6 +99,10 @@ const NAME_TO_SLUG: Record<string, string> = {
   'nature lovers': 'nature-lovers',
   'nightlife seekers': 'nightlife-seekers',
   'sport fanatics': 'sport-fanatics',
+  'concerts & live music': 'concerts-live-music',
+  'workshops & classes': 'workshops-classes',
+  'local culture explorers': 'local-culture-explorers',
+  'entertainment enthusiasts': 'entertainment-enthusiasts',
 };
 
 /** URL slug -> display name. */
@@ -112,6 +128,19 @@ const SLUG_TO_NAME: Record<string, string> = {
   'nature-lovers': 'Nature lovers',
   'nightlife-seekers': 'Nightlife seekers',
   'sport-fanatics': 'Sport fanatics',
+  'stadiums-arenas': 'Stadiums & Arenas',
+  'historical-sites': 'Historical Sites',
+  'archaeological-sites': 'Archaeological Sites',
+  'wineries': 'Wineries',
+  'halloween': 'Halloween',
+  'christmas': 'Christmas',
+  'groups': 'Groups',
+  'family-friendly': 'Family-friendly',
+  'adults': 'Adults',
+  'foodies': 'Foodies',
+  'local-culture-explorers': 'Local culture explorers',
+  'entertainment-enthusiasts': 'Entertainment enthusiasts',
+  'wellness': 'Wellness',
 };
 
 /** Tiqets type id -> URL slug (inverse of CATEGORY_TYPE_IDS). */
@@ -127,7 +156,11 @@ export function categorySlugByTypeId(typeId: string): string | null {
 /** Lowercased display name -> URL slug. */
 export function categorySlug(name: string): string {
   const key = name.trim().toLowerCase();
-  return NAME_TO_SLUG[key] || key.replace(/\s+/g, '-');
+  if (NAME_TO_SLUG[key]) return NAME_TO_SLUG[key];
+  return key
+    .replace(/&/g, ' ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 /** URL slug -> display name, or a capitalized slug if unknown. */

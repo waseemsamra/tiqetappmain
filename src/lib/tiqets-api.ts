@@ -464,6 +464,76 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
   }
 }
 
+/**
+ * Raw product listing for one city, straight from the
+ * /products endpoint — variant/child products included,
+ * which is how Tiqets counts experiences on its own
+ * category pages. Filter the result by tag_ids for a
+ * category page.
+ */
+export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursion[]> {
+  if (!isTiqetsAvailable) {
+    return [];
+  }
+
+  const cityNameLower = cityName.toLowerCase();
+  let cityId = KNOWN_CITY_IDS[cityNameLower];
+  if (!cityId) {
+    const cities = await getAvailableCities();
+    const match = (cities || []).find((c: any) => (c.name || '').toLowerCase() === cityNameLower);
+    if (!match || !match.id) {
+      return [];
+    }
+    cityId = String(match.id);
+  }
+
+  const allProducts: any[] = [];
+  for (let page = 1; page <= 10; page++) {
+    try {
+      const response = await fetch(withPreferences(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`), { method: 'GET', headers });
+      if (!response.ok) break;
+      const data = await response.json();
+      const items = data.products || data.experiences || data.items || [];
+      allProducts.push(...items);
+      if (items.length < 100) break;
+    } catch (e) {
+      break;
+    }
+  }
+
+  if (allProducts.length === 0) {
+    return [];
+  }
+
+  // The city_id filter is leaky: the API also returns
+  // products from nearby emirates/cities. Keep only
+  // products that actually belong to this city.
+  const cityProducts = allProducts.filter(
+    (p) => !p.city_id || String(p.city_id) === String(cityId),
+  );
+
+  const transformed = await Promise.all(
+    allProducts.map(async (p: any) => {
+      let images: string[] = [];
+      if (Array.isArray(p.images)) {
+        images = pickTiqetsImageUrls(p.images);
+      }
+      if (images.length === 0 && p.venue?.id) {
+        try {
+          const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
+          if (venueResp.ok) {
+            const venueData = await venueResp.json();
+            images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
+          }
+        } catch (e) {}
+      }
+      return { ...transformTiqetsProduct(p), images };
+    }),
+  );
+
+  return transformed;
+}
+
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {
   if (!productIds?.length) return [];
 

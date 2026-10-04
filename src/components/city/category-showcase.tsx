@@ -16,6 +16,7 @@ import { ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CATEGORY_IMAGES } from '@/lib/category-images';
 import { categoryPath } from '@/lib/category-pages';
+import { CategoryChips } from '@/components/city/category-chips';
 import type {
   CategoryItem,
   DestinationCategories,
@@ -113,43 +114,25 @@ export function CategoryShowcase({
           mobile, rectangular image cards grid above:
           7 across on desktop, 3 on tablet, 2 on small
           screens — sized 10% down */}
-      <div className="flex gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
-        {rowCategories.map((cat) => (
-          <Link
-            key={cat.name}
-            href={categoryPath(cityName, cat.name)}
+      <CategoryChips
+        cityName={cityName}
+        items={rowCategories}
+        extra={
+          // More categories — opens the discover modal
+          <button
+            type="button"
+            onClick={() => setModalOpen(true)}
             className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
           >
-            <div className="relative mb-3.5 w-full overflow-hidden rounded-xl bg-[#F0F0F0] aspect-[4/3]">
-              <Image
-                src={cat.image}
-                alt={cat.name}
-                fill
-                sizes="(min-width:1101px) 14vw, (min-width:769px) 25vw, 40vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                unoptimized
-              />
+            <div className="mb-3.5 flex w-full items-center justify-center rounded-xl bg-[#FFF9E6] aspect-[4/3]">
+              <MoreCategoriesIcon className="h-14 w-14" />
             </div>
             <span className="text-[15px] font-bold leading-snug text-[#1A202C]">
-              {cat.name}
+              More categories
             </span>
-          </Link>
-        ))}
-
-        {/* More categories — opens the discover modal */}
-        <button
-          type="button"
-          onClick={() => setModalOpen(true)}
-          className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
-        >
-          <div className="mb-3.5 flex w-full items-center justify-center rounded-xl bg-[#FFF9E6] aspect-[4/3]">
-            <MoreCategoriesIcon className="h-14 w-14" />
-          </div>
-          <span className="text-[15px] font-bold leading-snug text-[#1A202C]">
-            More categories
-          </span>
-        </button>
-      </div>
+          </button>
+        }
+      />
 
       {/* Discover modal */}
       {modalOpen && (

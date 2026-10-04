@@ -3,6 +3,7 @@ const TIQETS_IMGIX_HOST = 'aws-tiqets-cdn.imgix.net';
 export const IMAGE_SIZES = {
   mini: { w: 128, h: 128 },
   thumb: { w: 240, h: 240 },
+  pill: { w: 300, h: 300 },
   avatar: { w: 320, h: 240 },
   list: { w: 640, h: 480 },
   card: { w: 800, h: 600 },

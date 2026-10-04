@@ -13,6 +13,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ChevronDown } from 'lucide-react';
 import { imageUrlFor } from '@/lib/tiqets-image';
+import { CategoryChips } from '@/components/city/category-chips';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { CAROUSEL_OPTS } from '@/lib/carousel-opts';
 import type { Excursion } from '@/types';
 
 export type RelatedCategory = {
@@ -29,6 +38,7 @@ interface CategoryPageClientProps {
   slug: string;
   heroImage: string;
   products: Excursion[];
+  pills: RelatedCategory[];
   relatedCategories: RelatedCategory[];
   cities: string[];
 }
@@ -62,6 +72,7 @@ export default function CategoryPageClient({
   slug,
   heroImage,
   products,
+  pills,
   relatedCategories,
   cities,
 }: CategoryPageClientProps) {
@@ -69,7 +80,7 @@ export default function CategoryPageClient({
 
   const topPicks = [...products]
     .sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0))
-    .slice(0, 3);
+    .slice(0, 10);
   const handPicked = [...products]
     .sort(
       (a, b) =>
@@ -78,11 +89,10 @@ export default function CategoryPageClient({
     )
     .slice(0, 3);
   const visibleProducts = products.slice(0, visible);
-  const pills = relatedCategories.slice(0, 6);
-  const moreSites = relatedCategories.slice(6, 8);
+  const moreSites = relatedCategories.slice(0, 2);
 
   return (
-    <div className="mx-auto max-w-[1120px] px-4 pb-16 sm:px-6">
+    <div className="container mx-auto px-4 pb-16">
       {/* Hero */}
       <div className="relative mb-7 h-[180px] overflow-hidden rounded-[14px] bg-[#2D3A5C] sm:h-[240px] lg:h-[320px]">
         {heroImage && (
@@ -101,33 +111,10 @@ export default function CategoryPageClient({
         </h1>
       </div>
 
-      {/* Related category pills */}
+      {/* Category chips — same row layout as the city page */}
       {pills.length > 0 && (
-        <div className="mb-12 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
-          {pills.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/city/${encodeURIComponent(cityName)}/category/${cat.slug}`}
-              className="group transition-transform duration-300 hover:-translate-y-[3px]"
-            >
-              <div className="mb-3 aspect-square overflow-hidden rounded-xl bg-[#F0F0F0]">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  width={300}
-                  height={300}
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                  unoptimized
-                />
-              </div>
-              <div className="text-[13px] font-bold leading-snug text-[#1A202C]">
-                {cat.name}
-              </div>
-              <div className="text-[11px] leading-snug text-[#718096]">
-                {cat.count} {cat.count === 1 ? 'experience' : 'experiences'}
-              </div>
-            </Link>
-          ))}
+        <div className="mb-12">
+          <CategoryChips cityName={cityName} items={pills} />
         </div>
       )}
 
@@ -137,44 +124,55 @@ export default function CategoryPageClient({
           <h2 className="mb-5 text-xl font-bold tracking-[-0.4px] text-[#1A202C] sm:text-2xl">
             Top 10 {category}
           </h2>
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-            {topPicks.map((ex, index) => (
-              <Link
-                key={ex.id}
-                href={`/excursions/${ex.id}`}
-                className="group relative transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="relative mb-3.5 aspect-[16/11] overflow-hidden rounded-[14px] bg-[#F0F0F0]">
-                  <Image
-                    src={imageUrlFor(ex.images?.[0], 'card')}
-                    alt={ex.name}
-                    fill
-                    sizes="(min-width:1024px) 33vw, 100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                    unoptimized
-                  />
-                  <span className="absolute left-3 top-3 z-10 rounded bg-white px-2 py-1 text-xs font-bold text-[#1A202C] shadow">
-                    #{index + 1}
-                  </span>
-                </div>
-                <h3 className="mb-1.5 text-[17px] font-bold leading-snug text-[#1A202C]">
-                  {ex.name}
-                </h3>
-                <p className="mb-2.5 line-clamp-2 text-[13px] leading-relaxed text-[#4A5568]">
-                  {ex.description || ex.excursionType?.name}
-                </p>
-                <div className="flex items-center gap-1.5 text-xs text-[#4A5568]">
-                  <Star className="h-3 w-3 fill-[#F6B93B] text-[#F6B93B]" />
-                  <span className="font-bold text-[#1A202C]">
-                    {Number(ex.rating || 0).toFixed(1)}
-                  </span>
-                  <span className="text-[#718096]">
-                    ({Number(ex.reviewsTotal || 0).toLocaleString()} reviews)
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <Carousel opts={CAROUSEL_OPTS} className="w-full">
+            <CarouselContent className="-ml-4">
+              {topPicks.map((ex, index) => (
+                <CarouselItem
+                  key={ex.id}
+                  className="pl-4 basis-[85%] min-[481px]:basis-1/2 min-[769px]:basis-1/3 min-[1101px]:basis-1/4"
+                >
+                  <div className="h-full py-4">
+                    <Link
+                      key={ex.id}
+                      href={`/excursions/${ex.id}`}
+                      className="group relative flex h-full flex-col transition-transform duration-300 hover:-translate-y-1"
+                    >
+                      <div className="relative mb-3.5 aspect-[16/11] overflow-hidden rounded-[14px] bg-[#F0F0F0]">
+                        <Image
+                          src={imageUrlFor(ex.images?.[0], 'card')}
+                          alt={ex.name}
+                          fill
+                          sizes="(min-width:1101px) 25vw, (min-width:769px) 33vw, 85vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                          unoptimized
+                        />
+                        <span className="absolute left-3 top-3 z-10 rounded bg-white px-2 py-1 text-xs font-bold text-[#1A202C] shadow">
+                          #{index + 1}
+                        </span>
+                      </div>
+                      <h3 className="mb-1.5 text-[17px] font-bold leading-snug text-[#1A202C]">
+                        {ex.name}
+                      </h3>
+                      <p className="mb-2.5 line-clamp-2 text-[13px] leading-relaxed text-[#4A5568]">
+                        {ex.description || ex.excursionType?.name}
+                      </p>
+                      <div className="mt-auto flex items-center gap-1.5 text-xs text-[#4A5568]">
+                        <Star className="h-3 w-3 fill-[#F6B93B] text-[#F6B93B]" />
+                        <span className="font-bold text-[#1A202C]">
+                          {Number(ex.rating || 0).toFixed(1)}
+                        </span>
+                        <span className="text-[#718096]">
+                          ({Number(ex.reviewsTotal || 0).toLocaleString()} reviews)
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden min-[1101px]:flex" />
+            <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden min-[1101px]:flex" />
+          </Carousel>
         </section>
       )}
 
@@ -193,7 +191,7 @@ export default function CategoryPageClient({
           <strong>{products.length}</strong> options
         </div>
 
-        <div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-3 lg:gap-5">
+        <div className="mb-6 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-4 lg:gap-5">
           {visibleProducts.map((ex) => {
             const badge = badgeFor(ex);
             const price = formatPrice(ex);
@@ -208,7 +206,7 @@ export default function CategoryPageClient({
                     src={imageUrlFor(ex.images?.[0], 'card')}
                     alt={ex.name}
                     fill
-                    sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                    sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     unoptimized
                   />
@@ -362,13 +360,13 @@ export default function CategoryPageClient({
                 href={`/city/${encodeURIComponent(cityName)}/category/${cat.slug}`}
                 className="group transition-transform duration-300 hover:-translate-y-[3px]"
               >
-                <div className="mb-3 aspect-square overflow-hidden rounded-xl bg-[#F0F0F0]">
+                <div className="relative mb-3 aspect-square overflow-hidden rounded-xl bg-[#F0F0F0]">
                   <Image
-                    src={cat.image}
+                    src={imageUrlFor(cat.image, 'pill')}
                     alt={cat.name}
-                    width={400}
-                    height={400}
-                    className="object-cover"
+                    fill
+                    sizes="(min-width:640px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     unoptimized
                   />
                 </div>
