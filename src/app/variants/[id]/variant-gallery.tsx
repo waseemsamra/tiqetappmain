@@ -34,13 +34,19 @@ export function VariantGallery({ images, name }: { images: string[]; name: strin
 
   if (images.length === 0) return null;
 
+  // Mobile shows the single cover image; desktop (md+) shows
+  // the cover plus up to four more images in a grid, with a
+  // "+N" badge on the last tile when the tour has more.
+  const thumbs = images.slice(1, 5);
+  const remaining = images.length - 5;
+
   return (
     <>
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-200 md:aspect-auto md:h-[400px] lg:h-[520px]">
+      <div className="grid grid-cols-1 overflow-hidden rounded-xl bg-slate-200 md:grid-cols-4 md:grid-rows-2 md:h-[400px] lg:h-[520px]">
         <button
           type="button"
           onClick={() => setActive(0)}
-          className="group relative w-full h-full overflow-hidden bg-slate-200"
+          className="group relative aspect-[16/10] w-full overflow-hidden md:aspect-auto md:col-span-2 md:row-span-2 md:h-full"
           aria-label={`Open image gallery, ${images.length} images`}
         >
           <Image
@@ -48,34 +54,54 @@ export function VariantGallery({ images, name }: { images: string[]; name: strin
             alt={name}
             fill
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-            sizes="(min-width: 1024px) 50vw, (min-width: 768px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 50vw, 100vw"
             unoptimized
             priority
           />
+
+          {images.length > 1 && (
+            <span className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-[rgba(45,58,92,0.92)] px-3 py-2 text-sm font-semibold text-white shadow-lg backdrop-blur md:bottom-4 md:right-4 md:gap-2 md:px-4 md:py-2.5 md:text-base">
+              <span className="h-3 w-3 md:h-[13px] md:w-[13px]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-full w-full">
+                  <path d="M8 2v4"></path>
+                  <path d="M16 2v4"></path>
+                  <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                  <path d="M8 14h.01"></path>
+                  <path d="M12 14h.01"></path>
+                  <path d="M16 14h.01"></path>
+                  <path d="M8 18h.01"></path>
+                  <path d="M12 18h.01"></path>
+                  <path d="M16 18h.01"></path>
+                </svg>
+              </span>
+              Gallery
+            </span>
+          )}
         </button>
 
-        {images.length > 1 && (
+        {thumbs.map((src, index) => (
           <button
+            key={src}
             type="button"
-            onClick={() => setActive(0)}
-            className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-lg bg-[rgba(45,58,92,0.92)] px-3 py-2 text-sm font-semibold text-white shadow-lg backdrop-blur transition hover:-translate-y-px hover:bg-[rgba(45,58,92,1)] active:translate-y-0 md:bottom-4 md:right-4 md:gap-2 md:px-4 md:py-2.5 md:text-base"
+            onClick={() => setActive(index + 1)}
+            className="group relative hidden overflow-hidden bg-slate-200 md:block"
+            aria-label={`View image ${index + 2}`}
           >
-            <span className="h-3 w-3 md:h-[13px] md:w-[13px]">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-full w-full">
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                <path d="M8 14h.01"></path>
-                <path d="M12 14h.01"></path>
-                <path d="M16 14h.01"></path>
-                <path d="M8 18h.01"></path>
-                <path d="M12 18h.01"></path>
-                <path d="M16 18h.01"></path>
-              </svg>
-            </span>
-            Gallery
+            <Image
+              src={src}
+              alt={`${name} ${index + 2}`}
+              fill
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              sizes="(min-width: 1024px) 25vw, 100vw"
+              unoptimized
+            />
+            {remaining > 0 && index === thumbs.length - 1 && (
+              <span className="absolute inset-0 flex items-center justify-center bg-black/45 text-xl font-bold text-white">
+                +{remaining}
+              </span>
+            )}
           </button>
-        )}
+        ))}
       </div>
 
       {active !== null && (

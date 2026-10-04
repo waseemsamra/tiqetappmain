@@ -9,6 +9,7 @@ import FeatureCards from '@/components/feature-cards';
 import HelpCenterSection from '@/components/help-center-section';
 import PopularPlacesSection from '@/components/popular-places';
 import { LanguageProvider, useT } from '@/components/language-provider';
+import AgodaSherpaWidget from '@/components/agoda-sherpa-widget';
 
 interface HomePageClientProps {
     allExcursions: Excursion[];
@@ -51,7 +52,7 @@ function HomeSections({
     cityImages,
     worldwideExcursions, 
     topCityExcursions, 
-    topCityName 
+    topCityName
 }: HomePageClientProps) {
     const homePageData = useMemo(() => {
         const shuffledExcursions = [...allExcursions].sort((a, b) => simpleHash(a.id) - simpleHash(b.id));
@@ -108,6 +109,7 @@ function HomeSections({
                  tabType="city"
                />
             <PopularPlacesSection countries={popularCountries} />
+            <AgodaSherpaWidget />
             <HelpCenterSection />
         </div>
     );

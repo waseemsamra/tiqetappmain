@@ -101,6 +101,13 @@ export function agodaDetailUrl(input: {
 const linkCache = new Map<number, { at: number; url: string }>();
 const LINK_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
+// Agoda bot protection window: when slug
+// verification comes back inconclusive twice,
+// skip verification for a short window instead
+// of hammering the blocked endpoint.
+let protectionUntil = 0;
+const PROTECTION_TTL_MS = 10 * 60 * 1000;
+
 /**
  * Resolves the outbound link for every hotel in a result set.
  *
@@ -152,106 +159,162 @@ export async function resolveHotelLinks(input: {
   }
   const results = new Map<number, LinkVerdict>();
 
-  await Promise.all(
-    hotels.map(async (hotel) => {
-      const hotelDestination = destinationByHotel?.[hotel.hotelId] ?? destination;
-      if (!hotelDestination) {
-        results.set(hotel.hotelId, {
-          direct: hotel.landingURL ?? '',
-          url: hotel.landingURL ?? '',
-          fresh: false,
-          verdict: 'fallback',
-        });
-        return;
-      }
+  // Agoda's bot protection fails many requests at
+  // once. When verification comes back inconclusive,
+  // open a short protection window: remaining hotels
+  // in this render and the next few renders keep
+  // their derived URLs instead of hammering the
+  // blocked endpoint.
+  let transientVerdicts = 0;
+  const registerTransient = () => {
+    transientVerdicts += 1;
+    if (transientVerdicts >= 2) {
+      protectionUntil = Date.now() + PROTECTION_TTL_MS;
+    }
+  };
 
-      const direct = agodaDetailUrl({
-        hotel,
-        destination: hotelDestination,
-        checkIn: input.checkIn,
-        checkOut: input.checkOut,
-        adults: input.adults,
-        children: input.children,
-        rooms: input.rooms,
+  const resolveOne = async (hotel: AgodaHotelResult) => {
+    const hotelDestination = destinationByHotel?.[hotel.hotelId] ?? destination;
+    if (!hotelDestination) {
+      results.set(hotel.hotelId, {
+        direct: hotel.landingURL ?? '',
+        url: hotel.landingURL ?? '',
+        fresh: false,
+        verdict: 'fallback',
       });
+      return;
+    }
 
-      const cached = linkCache.get(hotel.hotelId);
-      if (cached && Date.now() - cached.at < LINK_CACHE_TTL_MS) {
-        results.set(hotel.hotelId, {
-          direct,
-          url: cached.url,
-          fresh: false,
-          verdict: 'hotel',
+    const direct = agodaDetailUrl({
+      hotel,
+      destination: hotelDestination,
+      checkIn: input.checkIn,
+      checkOut: input.checkOut,
+      adults: input.adults,
+      children: input.children,
+      rooms: input.rooms,
+    });
+
+    const cached = linkCache.get(hotel.hotelId);
+    if (cached && Date.now() - cached.at < LINK_CACHE_TTL_MS) {
+      results.set(hotel.hotelId, {
+        direct,
+        url: cached.url,
+        fresh: false,
+        verdict: 'hotel',
+      });
+      return;
+    }
+
+    // Agoda frequently canonicalizes a property as
+    // "{name} Hotel", so a plain-slug 404 gets one
+    // retry with a "-hotel" suffix before falling
+    // back to the tracked landing URL.
+    const slug = agodaSlug(hotel.hotelName ?? '');
+    const candidates =
+      slug && !slug.endsWith('-hotel')
+        ? [direct, direct.replace(`/${slug}/hotel/`, `/${slug}-hotel/hotel/`)]
+        : [direct];
+
+    let url = direct;
+    let verdict: LinkVerdict['verdict'] = 'transient';
+    let definitivelyBad = false;
+    for (const candidate of candidates) {
+      try {
+        const response = await fetch(candidate, {
+          method: 'HEAD',
+          redirect: 'follow',
+          cache: 'no-store',
+          signal: AbortSignal.timeout(4000),
         });
-        return;
+        const finalPath = new URL(response.url).pathname;
+        const onHotelPath =
+          finalPath.includes('/hotel/') &&
+          !finalPath.includes('/city/') &&
+          !finalPath.includes('/search');
+
+        if (response.status === 404 || response.status === 410) {
+          // Definitive: the slug does not exist.
+          definitivelyBad = true;
+          continue;
+        }
+        if (response.status < 400) {
+          // Definitive verdict: a resolvable slug
+          // ends on a hotel path — Agoda 301s
+          // non-canonical slugs to the canonical
+          // hotel URL — while an unknown slug ends
+          // on the city or search page.
+          if (onHotelPath) {
+            url = candidate;
+            verdict = 'hotel';
+            break;
+          }
+          definitivelyBad = true;
+          continue;
+        }
+        // Agoda's bot protection answers HEADs
+        // with 403/429/502, so error responses
+        // are inconclusive: keep the derived URL
+        // (the browser follows the same chain the
+        // verification did) and retry later.
+        registerTransient();
+      } catch {
+        // Timeout or network failure — inconclusive.
+        registerTransient();
       }
+    }
+    if (verdict !== 'hotel') {
+      if (definitivelyBad) {
+        url = hotel.landingURL ?? direct;
+        verdict = 'fallback';
+      }
+      // Otherwise the verdict stays transient and
+      // keeps the derived URL.
+    }
+    results.set(hotel.hotelId, { direct, url, fresh: true, verdict });
+  };
 
-      // Agoda frequently canonicalizes a property as
-      // "{name} Hotel", so a plain-slug 404 gets one
-      // retry with a "-hotel" suffix before falling
-      // back to the tracked landing URL.
-      const slug = agodaSlug(hotel.hotelName ?? '');
-      const candidates =
-        slug && !slug.endsWith('-hotel')
-          ? [direct, direct.replace(`/${slug}/hotel/`, `/${slug}-hotel/hotel/`)]
-          : [direct];
-
-      let url = direct;
-      let verdict: LinkVerdict['verdict'] = 'transient';
-      let definitivelyBad = false;
-      for (const candidate of candidates) {
-        try {
-          const response = await fetch(candidate, {
-            method: 'HEAD',
-            redirect: 'follow',
-            cache: 'no-store',
-            signal: AbortSignal.timeout(4000),
-          });
-          const finalPath = new URL(response.url).pathname;
-          const onHotelPath =
-            finalPath.includes('/hotel/') &&
-            !finalPath.includes('/city/') &&
-            !finalPath.includes('/search');
-
-          if (response.status === 404 || response.status === 410) {
-            // Definitive: the slug does not exist.
-            definitivelyBad = true;
-            continue;
-          }
-          if (response.status < 400) {
-            // Definitive verdict: a resolvable slug
-            // ends on a hotel path — Agoda 301s
-            // non-canonical slugs to the canonical
-            // hotel URL — while an unknown slug ends
-            // on the city or search page.
-            if (onHotelPath) {
-              url = candidate;
-              verdict = 'hotel';
-              break;
-            }
-            definitivelyBad = true;
-            continue;
-          }
-          // Agoda's bot protection answers HEADs with
-          // 403/429/502, so error responses are
-          // inconclusive: keep the derived URL (the
-          // browser follows the same chain the
-          // verification did) and retry later.
-        } catch {
-          // Timeout or network failure — inconclusive.
+  // Verify slugs through a small worker pool — a
+  // full parallel burst looks like a scraper to
+  // Agoda's bot protection, and the pool stops
+  // early when a protection window opens.
+  const VERIFY_CONCURRENCY = 4;
+  const queue = [...hotels];
+  await Promise.all(
+    Array.from({ length: Math.min(VERIFY_CONCURRENCY, queue.length) }, async () => {
+      while (queue.length > 0 && Date.now() >= protectionUntil) {
+        const hotel = queue.shift();
+        if (hotel) {
+          await resolveOne(hotel);
         }
       }
-      if (verdict !== 'hotel') {
-        if (definitivelyBad) {
-          url = hotel.landingURL ?? direct;
-          verdict = 'fallback';
-        }
-        // Otherwise the verdict stays transient and
-        // keeps the derived URL.
-      }
-      results.set(hotel.hotelId, { direct, url, fresh: true, verdict });
     }),
   );
+
+  // Hotels left unverified by a protection window
+  // keep their derived URLs.
+  for (const hotel of queue) {
+    const hotelDestination = destinationByHotel?.[hotel.hotelId] ?? destination;
+    if (!hotelDestination) {
+      results.set(hotel.hotelId, {
+        direct: hotel.landingURL ?? '',
+        url: hotel.landingURL ?? '',
+        fresh: false,
+        verdict: 'fallback',
+      });
+      continue;
+    }
+    const direct = agodaDetailUrl({
+      hotel,
+      destination: hotelDestination,
+      checkIn: input.checkIn,
+      checkOut: input.checkOut,
+      adults: input.adults,
+      children: input.children,
+      rooms: input.rooms,
+    });
+    results.set(hotel.hotelId, { direct, url: direct, fresh: false, verdict: 'transient' });
+  }
 
   // Bot protection fails many requests at once, while
   // genuinely unresolvable slugs affect only a minority
