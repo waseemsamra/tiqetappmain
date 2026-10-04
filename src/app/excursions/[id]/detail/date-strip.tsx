@@ -213,8 +213,11 @@ export function DateStrip({
 }) {
   const t = useT();
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const chips = dates.slice(0, 9);
+  // Mobile shows four date boxes; desktop shows
+  // nine. The remaining dates live behind the
+  // calendar modal, opened by the last chip.
   const mobileChips = dates.slice(0, 4);
+  const desktopChips = dates.slice(0, 9);
 
   const first = useMemo(() => parseDate(dates[0]?.date || ''), [dates]);
   const monthLabel = first ? `${MONTHS[first.getMonth()]} ${first.getFullYear()}` : 'Upcoming dates';
@@ -226,8 +229,8 @@ export function DateStrip({
       <h2 className="mb-1 text-base font-bold text-gray-900">{t('detail.checkAvailability')}</h2>
       <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500">{monthLabel}</p>
 
-      {/* Full-width row: the four day chips on mobile, nine on desktop plus the calendar trigger. */}
-      <div className="mb-3.5 flex w-full items-stretch gap-2 border-b border-gray-200 pb-3.5 overflow-x-auto scrollbar-hide pb-3.5">
+      {/* Mobile: four date boxes, remaining dates in the calendar modal. */}
+      <div className="mb-3.5 flex w-full items-stretch gap-2 border-b border-gray-200 pb-3.5 sm:hidden">
         {mobileChips.map((day) => {
           const parsed = parseDate(day.date);
           const soldOut = day.availability === 0;
@@ -241,7 +244,7 @@ export function DateStrip({
               onClick={() => onSelect(day.date)}
               aria-pressed={isSelected}
               aria-label={`${day.date}${soldOut ? ' sold out' : ''}`}
-              className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-center transition shrink-0 sm:min-w-[0] sm:flex-1 ${
+              className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-center transition ${
                 isSelected
                   ? 'border-gray-900 bg-gray-900 text-white'
                   : soldOut
@@ -262,47 +265,59 @@ export function DateStrip({
           );
         })}
 
-        {/* Desktop-only: show 5 more chips (5-9) */}
-        <div className="hidden sm:flex sm:items-stretch sm:gap-2">
-          {chips.slice(4).map((day) => {
-            const parsed = parseDate(day.date);
-            const soldOut = day.availability === 0;
-            const isSelected = selected === day.date;
-
-            return (
-              <button
-                key={day.date}
-                type="button"
-                disabled={soldOut}
-                onClick={() => onSelect(day.date)}
-                aria-pressed={isSelected}
-                aria-label={`${day.date}${soldOut ? ' sold out' : ''}`}
-                className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-center transition ${
-                  isSelected
-                    ? 'border-gray-900 bg-gray-900 text-white'
-                    : soldOut
-                      ? 'cursor-not-allowed border-gray-200 bg-muted text-gray-300 line-through'
-                      : 'border-gray-200 bg-white text-gray-900 hover:border-primary'
-                }`}
-              >
-                <span className={`mb-1 block text-xs font-semibold uppercase tracking-wider ${isSelected ? 'text-white/70' : 'text-gray-500'}`}>
-                  {parsed ? WEEKDAYS[parsed.getDay()] : '--'}
-                </span>
-                <span className="mb-1 block text-lg font-bold leading-none">
-                  {parsed ? parsed.getDate() : '--'}
-                </span>
-                <span className={`block text-xs ${isSelected ? 'text-white/75' : 'text-gray-600'}`}>
-                  {day.price != null ? formatPrice(day.price, day.currency || fromCurrency) : '--'}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
         <button
           type="button"
           onClick={() => setCalendarOpen(true)}
-          className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-gray-300 bg-white px-1 py-2 text-center transition-colors hover:border-primary hover:bg-muted shrink-0 sm:min-w-[0] sm:flex-1"
+          className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-gray-300 bg-white px-1 py-2 text-center transition-colors hover:border-primary hover:bg-muted"
+        >
+          <CalendarDays className="h-3.5 w-3.5 text-primary" />
+          <span className="text-xs font-semibold leading-tight text-gray-600">{t('detail.moreDates')}</span>
+        </button>
+      </div>
+
+      {/* Desktop: nine date chips plus the more-dates
+          chip, all visible in one row. */}
+      <div className="mb-3.5 hidden w-full items-stretch gap-2 border-b border-gray-200 pb-3.5 sm:flex">
+        {desktopChips.map((day) => {
+          const parsed = parseDate(day.date);
+          const soldOut = day.availability === 0;
+          const isSelected = selected === day.date;
+
+          return (
+            <button
+              key={day.date}
+              type="button"
+              disabled={soldOut}
+              onClick={() => onSelect(day.date)}
+              aria-pressed={isSelected}
+              aria-label={`${day.date}${soldOut ? ' sold out' : ''}`}
+              className={`min-w-0 flex-1 rounded-lg border px-1 py-2 text-center transition ${
+                isSelected
+                  ? 'border-gray-900 bg-gray-900 text-white'
+                  : soldOut
+                    ? 'cursor-not-allowed border-gray-200 bg-muted text-gray-300 line-through'
+                    : 'border-gray-200 bg-white text-gray-900 hover:border-primary'
+              }`}
+            >
+              <span className={`mb-1 block text-xs font-semibold uppercase tracking-wider ${isSelected ? 'text-white/70' : 'text-gray-500'}`}>
+                {parsed ? WEEKDAYS[parsed.getDay()] : '--'}
+              </span>
+              <span className="mb-1 block text-lg font-bold leading-none">
+                {parsed ? parsed.getDate() : '--'}
+              </span>
+              <span className={`block text-xs ${isSelected ? 'text-white/75' : 'text-gray-600'}`}>
+                {day.price != null ? formatPrice(day.price, day.currency || fromCurrency) : '--'}
+              </span>
+            </button>
+          );
+        })}
+
+        {/* Last chip: the remaining dates live
+            behind the calendar modal. */}
+        <button
+          type="button"
+          onClick={() => setCalendarOpen(true)}
+          className="flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-gray-300 bg-white px-1 py-2 text-center transition-colors hover:border-primary hover:bg-muted"
         >
           <CalendarDays className="h-3.5 w-3.5 text-primary" />
           <span className="text-xs font-semibold leading-tight text-gray-600">{t('detail.moreDates')}</span>
