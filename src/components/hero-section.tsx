@@ -1,24 +1,33 @@
-
 'use client';
 
 import Image from 'next/image';
 import type { HeroContent } from '@/types';
 import { HeroSearchWidget } from '@/components/hero-search-widget';
 
+/**
+ * Hero, matching the main-screen mockup: a full-width
+ * banner with the headline and subheading centred at
+ * the top of the background image, and the search
+ * widget overlapping the banner's bottom edge.
+ *
+ * The banner image comes from the CMS (content
+ * .backgroundImage), not a stock URL, so every
+ * market can serve its own hero art.
+ */
 export default function HeroSection({ content }: { content: HeroContent | null }) {
-
   if (!content) {
     return (
-        <div className="relative min-h-[60vh] flex items-center justify-center bg-gray-200">
-            <p>Loading...</p>
-        </div>
+      <div className="relative flex h-[360px] w-full items-center justify-center bg-slate-200 max-lg:h-[320px] max-sm:h-[260px]">
+        <p>Loading...</p>
+      </div>
     );
   }
 
   return (
-    <div className="relative flex items-start pb-10 md:pb-14">
-      <div className="absolute inset-0">
-        {(content.backgroundImage && content.backgroundImage.length > 0) && (
+    <>
+      {/* Banner */}
+      <section className="relative h-[360px] w-full overflow-hidden max-lg:h-[320px] max-sm:h-[260px]">
+        {content.backgroundImage && content.backgroundImage.length > 0 && (
           <Image
             src={content.backgroundImage}
             alt={content.headline}
@@ -28,24 +37,18 @@ export default function HeroSection({ content }: { content: HeroContent | null }
             unoptimized
           />
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-40" />
-      </div>
+        <h1 className="absolute left-1/2 top-[22px] z-[3] -translate-x-1/2 whitespace-nowrap text-center text-[28px] font-extrabold tracking-[-0.4px] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.25)] max-lg:top-5 max-lg:text-[22px] max-sm:top-4 max-sm:text-lg">
+          {content.headline}
+        </h1>
+        <p className="absolute left-1/2 top-[58px] z-[3] -translate-x-1/2 whitespace-nowrap text-center text-[15px] leading-snug text-white/95 [text-shadow:0_1px_8px_rgba(0,0,0,0.3)] max-lg:top-[52px] max-lg:max-w-[600px] max-lg:whitespace-normal max-lg:px-5 max-lg:text-[13px] max-sm:top-11 max-sm:max-w-[320px] max-sm:text-xs">
+          {content.subheading}
+        </p>
+      </section>
 
-      {/* z-20 outranks the z-index controls in the sections that follow, so the
-          search dropdown paints over them rather than under them. */}
-      <div className="relative z-20 container mx-auto px-4">
-        <div className="text-left">
-          <h1 className="text-4xl md:text-6xl font-bold text-white text-left mb-6">
-            {content.headline}
-          </h1>
-          <p className="hidden md:block text-xl text-white text-left max-w-2xl mb-10 opacity-95">
-            {content.subheading}
-          </p>
-
-          <HeroSearchWidget />
-          
-        </div>
+      {/* Search wrapper — overlaps the banner bottom */}
+      <div className="relative z-10 mx-auto -mt-[200px] flex w-full max-w-[1080px] flex-col items-center px-5 pb-20 max-lg:-mt-[180px] max-lg:max-w-[800px] max-lg:pb-[60px] max-sm:-mt-[160px] max-sm:px-[14px]">
+        <HeroSearchWidget />
       </div>
-    </div>
+    </>
   );
-};
+}

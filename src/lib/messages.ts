@@ -109,6 +109,15 @@ const en: Messages = {
   'feature.confidentBody': 'Easy booking and skip-the-line entry on your phone',
   'feature.cultureTitle': 'Enjoy culture your way',
   'feature.cultureBody': 'The best experiences at museums and attractions worldwide',
+  'search.stayOvernight': 'Overnight',
+  'search.stayDayUse': 'Day use',
+  'search.checkIn': 'Check-in',
+  'search.checkOut': 'Check-out',
+  'search.room': 'room',
+  'search.rooms': 'rooms',
+  'search.entireHomes': 'Show me only entire homes and apartments',
+  'search.addFlight': 'Add a flight',
+  'search.adults': 'Adults',
 };
 
 const ca: Messages = {
@@ -201,6 +210,15 @@ const ca: Messages = {
   'feature.confidentBody': 'Reserves fàcils i entrada sense cua des del teu telèfon',
   'feature.cultureTitle': 'Gaudeix la cultura al teu manera',
   'feature.cultureBody': 'Les millors experiències en museus i atraccions de tot el món',
+  'search.stayOvernight': 'Allotjament',
+  'search.stayDayUse': 'Ús de dia',
+  'search.checkIn': 'Entrada',
+  'search.checkOut': 'Sortida',
+  'search.room': 'habitació',
+  'search.rooms': 'habitacions',
+  'search.entireHomes': 'Mostra només habitatges sencers i apartaments',
+  'search.addFlight': 'Afegir un vol',
+  'search.adults': 'Adults',
 };
 
 const cs: Messages = {
@@ -293,6 +311,15 @@ const cs: Messages = {
   'feature.confidentBody': 'Snadné rezervace a vstup bez fronty přímo v telefonu',
   'feature.cultureTitle': 'Užijte si kulturu po svém',
   'feature.cultureBody': 'Nejlepší zážitky v muzeích a památkách po celém světě',
+  'search.stayOvernight': 'Přenocování',
+  'search.stayDayUse': 'Denní použití',
+  'search.checkIn': 'Příjezd',
+  'search.checkOut': 'Odjezd',
+  'search.room': 'pokoj',
+  'search.rooms': 'pokoje',
+  'search.entireHomes': 'Zobrazit pouze celé domy a byty',
+  'search.addFlight': 'Přidat let',
+  'search.adults': 'Dospělí',
 };
 
 const da: Messages = {
@@ -385,6 +412,15 @@ const da: Messages = {
   'feature.confidentBody': 'Nem booking og spring-køen adgang på din telefon',
   'feature.cultureTitle': 'Nyd kulturen på din måde',
   'feature.cultureBody': 'De bedste oplevelser på museer og seværdigheder verden over',
+  'search.stayOvernight': 'Overnatning',
+  'search.stayDayUse': 'Dagbrug',
+  'search.checkIn': 'Check-ind',
+  'search.checkOut': 'Check-ud',
+  'search.room': 'værelse',
+  'search.rooms': 'værelser',
+  'search.entireHomes': 'Vis kun helhuse og lejligheder',
+  'search.addFlight': 'Tilføj fly',
+  'search.adults': 'Voksne',
 };
 
 const de: Messages = {
@@ -477,6 +513,15 @@ const de: Messages = {
   'feature.confidentBody': 'Einfache Buchung und Einlass ohne Anstehen auf dem Handy',
   'feature.cultureTitle': 'Kultur genießen, ganz nach deinem Geschmack',
   'feature.cultureBody': 'Die besten Erlebnisse in Museen und Sehenswürdigkeiten weltweit',
+  'search.stayOvernight': 'Übernachtung',
+  'search.stayDayUse': 'Tagesnutzung',
+  'search.checkIn': 'Anreise',
+  'search.checkOut': 'Abreise',
+  'search.room': 'Zimmer',
+  'search.rooms': 'Zimmer',
+  'search.entireHomes': 'Nur ganze Häuser und Wohnungen anzeigen',
+  'search.addFlight': 'Flug hinzufügen',
+  'search.adults': 'Erwachsene',
 };
 
 const el: Messages = {
@@ -569,6 +614,15 @@ const el: Messages = {
   'feature.confidentBody': 'Εύκολες κρατήσεις και είσοδος χωρίς ουρά από το κινητό σας',
   'feature.cultureTitle': 'Απολαύστε τον πολιτισμό με τον τρόπο σας',
   'feature.cultureBody': 'Οι καλύτερες εμπειρίες σε μουσεία και αξιοθέατα παγκοσμίως',
+  'search.stayOvernight': 'Διανυκτέρευση',
+  'search.stayDayUse': 'Ημερήσια χρήση',
+  'search.checkIn': 'Άφιξη',
+  'search.checkOut': 'Αναχώρηση',
+  'search.room': 'δωμάτιο',
+  'search.rooms': 'δωμάτια',
+  'search.entireHomes': 'Εμφάνιση μόνο ολόκληρων σπιτιών και διαμερισμάτων',
+  'search.addFlight': 'Προσθήκη πτήσης',
+  'search.adults': 'Ενήλικες',
 };
 
 const es: Messages = {
@@ -661,6 +715,15 @@ const es: Messages = {
   'feature.confidentBody': 'Reservas fáciles y entrada sin colas desde tu móvil',
   'feature.cultureTitle': 'Disfruta la cultura a tu manera',
   'feature.cultureBody': 'Las mejores experiencias en museos y atracciónes de todo el mundo',
+  'search.stayOvernight': 'Estancia',
+  'search.stayDayUse': 'Uso de día',
+  'search.checkIn': 'Entrada',
+  'search.checkOut': 'Salida',
+  'search.room': 'habitación',
+  'search.rooms': 'habitaciones',
+  'search.entireHomes': 'Mostrar solo casas enteras y apartamentos',
+  'search.addFlight': 'Añadir vuelo',
+  'search.adults': 'Adultos',
 };
 
 const fr: Messages = {
@@ -753,6 +816,15 @@ const fr: Messages = {
   'feature.confidentBody': 'Réservation facile et accès sans file d’attente depuis votre téléphone',
   'feature.cultureTitle': 'Profitez de la culture à votre façon',
   'feature.cultureBody': 'Les meilleures expériences dans les musées et sites touristiques du monde entier',
+  'search.stayOvernight': 'Nuitée',
+  'search.stayDayUse': 'Usage de jour',
+  'search.checkIn': 'Arrivée',
+  'search.checkOut': 'Départ',
+  'search.room': 'chambre',
+  'search.rooms': 'chambres',
+  'search.entireHomes': 'Afficher uniquement les maisons entières et les appartements',
+  'search.addFlight': 'Ajouter un vol',
+  'search.adults': 'Adultes',
 };
 
 const it: Messages = {
@@ -845,6 +917,15 @@ const it: Messages = {
   'feature.confidentBody': 'Prenotazione semplice e ingresso senza fila dal telefono',
   'feature.cultureTitle': 'Goditi la cultura come preferisci',
   'feature.cultureBody': 'Le migliori esperienze in musei e attrazioni di tutto il mondo',
+  'search.stayOvernight': 'Pernottamento',
+  'search.stayDayUse': 'Uso diurno',
+  'search.checkIn': 'Check-in',
+  'search.checkOut': 'Check-out',
+  'search.room': 'camera',
+  'search.rooms': 'camere',
+  'search.entireHomes': 'Mostra solo case intere e appartamenti',
+  'search.addFlight': 'Aggiungi volo',
+  'search.adults': 'Adulti',
 };
 
 const ko: Messages = {
@@ -937,6 +1018,15 @@ const ko: Messages = {
   'feature.confidentBody': '휴대폰으로 간편하게 예약하고 대기 없이 입장',
   'feature.cultureTitle': '원하는 방식으로 문화를 즐기세요',
   'feature.cultureBody': '전 세계 박물관과 명소의 최고의 체험',
+  'search.stayOvernight': '숙박',
+  'search.stayDayUse': '당일 이용',
+  'search.checkIn': '체크인',
+  'search.checkOut': '체크아웃',
+  'search.room': '객실',
+  'search.rooms': '객실',
+  'search.entireHomes': '전체 주택과 아파트만 표시',
+  'search.addFlight': '항공권 추가',
+  'search.adults': '성인',
 };
 
 const nl: Messages = {
@@ -1029,6 +1119,15 @@ const nl: Messages = {
   'feature.confidentBody': 'Eenvoudig boeken en overslaan van de rij op je telefoon',
   'feature.cultureTitle': 'Geniet van cultuur op jouw manier',
   'feature.cultureBody': 'De beste ervaringen in musea en attracties wereldwijd',
+  'search.stayOvernight': 'Overnachting',
+  'search.stayDayUse': 'Daggebruik',
+  'search.checkIn': 'Inchecken',
+  'search.checkOut': 'Uitchecken',
+  'search.room': 'kamer',
+  'search.rooms': 'kamers',
+  'search.entireHomes': 'Alleen complete huizen en appartementen tonen',
+  'search.addFlight': 'Vlucht toevoegen',
+  'search.adults': 'Volwassenen',
 };
 
 const ja: Messages = {
@@ -1121,6 +1220,15 @@ const ja: Messages = {
   'feature.confidentBody': 'スマホで簡単に予約、待ち時間なしで入場',
   'feature.cultureTitle': 'カルチャーを自分らしく',
   'feature.cultureBody': '世界の美術館や名所での最高の体験',
+  'search.stayOvernight': '宿泊',
+  'search.stayDayUse': 'デイユース',
+  'search.checkIn': 'チェックイン',
+  'search.checkOut': 'チェックアウト',
+  'search.room': '部屋',
+  'search.rooms': '部屋',
+  'search.entireHomes': '一軒家とアパートのみ表示',
+  'search.addFlight': 'フライトを追加',
+  'search.adults': '大人',
 };
 
 const pl: Messages = {
@@ -1213,6 +1321,15 @@ const pl: Messages = {
   'feature.confidentBody': 'Łatwa rezerwacja i wejście bez kolejki w telefonie',
   'feature.cultureTitle': 'Ciesz się kulturą po swojemu',
   'feature.cultureBody': 'Najlepsze doświadczenia w muzeach i atrakcjach na całym świecie',
+  'search.stayOvernight': 'Nocleg',
+  'search.stayDayUse': 'Użytek dzienny',
+  'search.checkIn': 'Zameldowanie',
+  'search.checkOut': 'Wymeldowanie',
+  'search.room': 'pokój',
+  'search.rooms': 'pokoje',
+  'search.entireHomes': 'Pokaż tylko całe domy i mieszkania',
+  'search.addFlight': 'Dodaj lot',
+  'search.adults': 'Dorośli',
 };
 
 const pt: Messages = {
@@ -1305,6 +1422,15 @@ const pt: Messages = {
   'feature.confidentBody': 'Reserva fácil e entrada sem filas no telemóvel',
   'feature.cultureTitle': 'Desfrute da cultura à sua maneira',
   'feature.cultureBody': 'As melhores experiências em museus e atrações de todo o mundo',
+  'search.stayOvernight': 'Pernoite',
+  'search.stayDayUse': 'Uso diurno',
+  'search.checkIn': 'Check-in',
+  'search.checkOut': 'Check-out',
+  'search.room': 'quarto',
+  'search.rooms': 'quartos',
+  'search.entireHomes': 'Mostrar apenas casas inteiras e apartamentos',
+  'search.addFlight': 'Adicionar voo',
+  'search.adults': 'Adultos',
 };
 
 const ru: Messages = {
@@ -1397,6 +1523,15 @@ const ru: Messages = {
   'feature.confidentBody': 'Простое бронирование и вход без очереди с телефона',
   'feature.cultureTitle': 'Культура по вашим правилам',
   'feature.cultureBody': 'Лучшие впечатления в музеях и достопримечательностях мира',
+  'search.stayOvernight': 'Проживание',
+  'search.stayDayUse': 'Дневное использование',
+  'search.checkIn': 'Заезд',
+  'search.checkOut': 'Выезд',
+  'search.room': 'номер',
+  'search.rooms': 'номера',
+  'search.entireHomes': 'Показать только целые дома и квартиры',
+  'search.addFlight': 'Добавить рейс',
+  'search.adults': 'Взрослые',
 };
 
 const sv: Messages = {
@@ -1489,6 +1624,15 @@ const sv: Messages = {
   'feature.confidentBody': 'Enkel bokning och entré utan kö i telefonen',
   'feature.cultureTitle': 'Upplev kultur på ditt sätt',
   'feature.cultureBody': 'De bästa upplevelserna på museer och sevärdheter världen över',
+  'search.stayOvernight': 'Övernattning',
+  'search.stayDayUse': 'Dagbruk',
+  'search.checkIn': 'Incheckning',
+  'search.checkOut': 'Utcheckning',
+  'search.room': 'rum',
+  'search.rooms': 'rum',
+  'search.entireHomes': 'Visa endast hela hus och lägenheter',
+  'search.addFlight': 'Lägg till flyg',
+  'search.adults': 'Vuxna',
 };
 
 const zh: Messages = {
@@ -1581,6 +1725,15 @@ const zh: Messages = {
   'feature.confidentBody': '手机轻松预订，免排队入场',
   'feature.cultureTitle': '按自己的方式享受文化',
   'feature.cultureBody': '全球博物馆与景点的最佳体验',
+  'search.stayOvernight': '过夜',
+  'search.stayDayUse': '日间使用',
+  'search.checkIn': '入住',
+  'search.checkOut': '退房',
+  'search.room': '间',
+  'search.rooms': '间',
+  'search.entireHomes': '仅显示整栋房屋和公寓',
+  'search.addFlight': '添加航班',
+  'search.adults': '成人',
 };
 
 /**

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover more ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --blue:#3B6EFF;
+    --blue-hover:#2A5FE0;
+    --text-primary:#1A2B49;
+    --text-secondary:#5C6B85;
+    --text-muted:#8B96A8;
+    --border-light:#E4E9F2;
+    --border-medium:#D1D9E2;
+    --panel-bg:#F5F6F8;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    font-family:var(--font);
+    background:#ffffff;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;outline:none;background:none}
+  input{font-family:inherit;outline:none;border:none;background:none}
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero{
+    position:relative;
+    width:100%;
+    height:360px;
+    background:url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=2400&auto=format&fit=crop') center/cover no-repeat;
+  }
+
+  .hero-title{
+    position:absolute;
+    top:22px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:28px;
+    font-weight:800;
+    color:#ffffff;
+    letter-spacing:-.4px;
+    text-align:center;
+    text-shadow:0 2px 12px rgba(0,0,0,.25);
+    white-space:nowrap;
+    z-index:3;
+  }
+
+  .hero-subtitle{
+    position:absolute;
+    top:58px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:15px;
+    font-weight:400;
+    color:rgba(255,255,255,.92);
+    letter-spacing:.1px;
+    text-align:center;
+    text-shadow:0 1px 8px rgba(0,0,0,.3);
+    white-space:nowrap;
+    z-index:3;
+  }
+
+  /* ============================================
+     SEARCH WRAPPER
+     ============================================ */
+  .search-wrapper{
+    position:relative;
+    z-index:10;
+    max-width:1080px;
+    margin:-200px auto 0;
+    padding:0 20px 80px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  /* ---- Tabs Bar ---- */
+  .tabs-bar{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:#ffffff;
+    border-radius:14px;
+    padding:6px;
+    box-shadow:0 10px 30px rgba(15,23,42,.12);
+    margin-bottom:-22px;
+    gap:0;
+    flex-wrap:wrap;
+    position:relative;
+    z-index:20;
+  }
+
+  .tab{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:12px 18px;
+    font-size:14px;
+    font-weight:500;
+    color:var(--text-secondary);
+    cursor:pointer;
+    transition:color .2s, background .2s;
+    white-space:nowrap;
+    border-radius:10px;
+  }
+  .tab i{
+    font-size:14px;
+    color:var(--text-secondary);
+    transition:color .2s;
+  }
+  .tab:hover{color:var(--text-primary)}
+  .tab:hover i{color:var(--text-primary)}
+
+  .tab.active{
+    color:var(--blue);
+    font-weight:700;
+    background:#F0F4FF;
+  }
+  .tab.active i{color:var(--blue)}
+
+  .tab-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-left:4px;
+    padding:2px 7px;
+    background:#FFF4E0;
+    color:#B26B00;
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.3px;
+    border-radius:10px;
+    text-transform:uppercase;
+    line-height:1.4;
+  }
+
+  /* ---- Panel ---- */
+  .panel{
+    width:100%;
+    background:var(--panel-bg);
+    border-radius:14px;
+    padding:52px 36px 34px;
+    box-shadow:0 12px 40px rgba(15,23,42,.08);
+    position:relative;
+    z-index:10;
+  }
+
+  .stay-pills{display:flex;gap:10px;margin-bottom:20px}
+  .stay-pill{
+    padding:9px 18px;border-radius:22px;font-size:13px;font-weight:600;
+    border:1.5px solid var(--border-medium);color:var(--text-primary);
+    background:#ffffff;cursor:pointer;transition:all .2s;
+  }
+  .stay-pill:hover{border-color:var(--blue);color:var(--blue)}
+  .stay-pill.active{border-color:var(--blue);color:var(--blue)}
+
+  .destination-field{
+    display:flex;align-items:center;gap:14px;padding:16px 22px;
+    background:#ffffff;border-radius:10px;margin-bottom:12px;cursor:text;
+    transition:box-shadow .2s;
+  }
+  .destination-field:hover{box-shadow:0 0 0 2px rgba(59,110,255,.15)}
+  .destination-field i{font-size:18px;color:var(--text-secondary);flex-shrink:0}
+  .destination-field input{flex:1;font-size:16px;font-weight:500;color:var(--text-primary);min-width:0}
+  .destination-field input::placeholder{color:var(--text-muted);font-weight:400}
+
+  .fields-row{
+    display:grid;
+    grid-template-columns:1.4fr 1.4fr 1.1fr;
+    gap:12px;
+    margin-bottom:16px;
+  }
+
+  .date-pair{
+    display:flex;align-items:stretch;background:#ffffff;border-radius:10px;
+    cursor:pointer;overflow:hidden;transition:box-shadow .2s;
+  }
+  .date-pair:hover{box-shadow:0 0 0 2px rgba(59,110,255,.15)}
+  .date-cell{display:flex;align-items:center;gap:12px;padding:16px 20px;flex:1;min-width:0}
+  .date-cell i{font-size:18px;color:var(--text-secondary);flex-shrink:0}
+  .date-cell-content{min-width:0;flex:1}
+  .date-cell-value{font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .date-cell-sub{font-size:13px;color:var(--text-secondary);font-weight:400;margin-top:2px;line-height:1.2}
+  .date-divider{width:1px;background:var(--border-light);margin:14px 0;flex-shrink:0}
+
+  .guests-field{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:16px 20px;background:#ffffff;border-radius:10px;cursor:pointer;
+    transition:box-shadow .2s;
+  }
+  .guests-field:hover{box-shadow:0 0 0 2px rgba(59,110,255,.15)}
+  .guests-field-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+  .guests-field-left > i{font-size:18px;color:var(--text-secondary);flex-shrink:0}
+  .guests-field .chevron-down{font-size:12px;color:var(--text-secondary);flex-shrink:0}
+
+  .checkbox-row{
+    display:flex;align-items:center;gap:12px;padding:10px 0 6px;
+    font-size:14px;color:var(--text-primary);cursor:pointer;user-select:none;
+  }
+  .checkbox-row input[type="checkbox"]{
+    width:18px;height:18px;border:1.5px solid var(--border-medium);
+    border-radius:4px;cursor:pointer;accent-color:var(--blue);flex-shrink:0;
+  }
+
+  .add-flight{
+    display:inline-flex;align-items:center;gap:8px;padding:14px 0 4px;
+    font-size:14px;font-weight:600;color:var(--blue);cursor:pointer;transition:color .2s;
+  }
+  .add-flight i{font-size:12px;font-weight:900}
+  .add-flight:hover{color:var(--blue-hover)}
+
+  .search-btn-wrap{
+    display:flex;justify-content:center;margin-top:24px;margin-bottom:-70px;
+    position:relative;z-index:20;
+  }
+
+  .search-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:18px 90px;background:var(--blue);color:#ffffff;
+    font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    border-radius:50px;cursor:pointer;font-family:inherit;
+    transition:background .2s, transform .1s;
+    box-shadow:0 8px 24px rgba(59,110,255,.35);min-width:420px;
+  }
+  .search-btn:hover{background:var(--blue-hover)}
+  .search-btn:active{transform:scale(.98)}
+
+  .promo-float{
+    position:fixed;bottom:20px;right:20px;background:#ffffff;border-radius:10px;
+    padding:18px 22px;box-shadow:0 8px 32px rgba(15,23,42,.14);
+    max-width:240px;text-align:center;z-index:50;
+    font-size:14px;font-weight:700;color:var(--text-primary);line-height:1.35;
+  }
+  .promo-float span{color:var(--blue)}
+
+  @media (max-width:1024px){
+    .hero{height:320px}
+    .hero-title{font-size:22px;top:20px}
+    .hero-subtitle{font-size:13px;top:52px;white-space:normal;max-width:600px;padding:0 20px}
+    .search-wrapper{margin-top:-180px;max-width:800px;padding-bottom:60px}
+    .panel{padding:44px 24px 30px}
+    .fields-row{grid-template-columns:1fr 1fr}
+    .fields-row .guests-field{grid-column:1 / -1}
+    .promo-float{display:none}
+    .search-btn{min-width:0;padding:16px 60px}
+  }
+
+  @media (max-width:900px){
+    .tabs-bar{overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;scrollbar-width:none;max-width:100%}
+    .tabs-bar::-webkit-scrollbar{display:none}
+    .tab{padding:11px 14px;font-size:13px}
+    .tab i{font-size:13px}
+    .tab-badge{font-size:9px;padding:2px 6px}
+  }
+
+  @media (max-width:640px){
+    .hero{height:260px}
+    .hero-title{font-size:18px;top:16px}
+    .hero-subtitle{font-size:12px;top:44px;white-space:normal;max-width:320px}
+    .search-wrapper{margin-top:-160px;padding:0 14px 60px}
+    .panel{padding:40px 16px 26px;border-radius:12px}
+    .stay-pills{gap:8px}
+    .stay-pill{padding:8px 14px;font-size:12px}
+    .destination-field{padding:14px 16px}
+    .destination-field input{font-size:15px}
+    .fields-row{grid-template-columns:1fr;gap:10px}
+    .date-pair{flex-direction:column}
+    .date-divider{width:100%;height:1px;margin:0 14px;flex-basis:auto}
+    .guests-field{grid-column:auto}
+    .checkbox-row{font-size:13px}
+    .add-flight{font-size:13px}
+    .search-btn-wrap{margin-bottom:-50px}
+    .search-btn{font-size:13px;padding:14px 40px;letter-spacing:1px;min-width:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <h1 class="hero-title">Discover more ways</h1>
+  <p class="hero-subtitle">From iconic attractions to amazing experiences, what will you explore next?</p>
+</section>
+
+<!-- SEARCH WRAPPER -->
+<div class="search-wrapper">
+
+  <!-- Tabs Bar -->
+  <div class="tabs-bar">
+    <button class="tab active"><i class="fa-solid fa-ticket"></i> Activities</button>
+    <button class="tab"><i class="fa-solid fa-hotel"></i> Stays</button>
+    <button class="tab"><i class="fa-solid fa-plane"></i> Flights</button>
+    <button class="tab">
+      <i class="fa-solid fa-suitcase-rolling"></i> Packages
+      <span class="tab-badge">Soon</span>
+    </button>
+    <button class="tab"><i class="fa-solid fa-car"></i> Transfers</button>
+  </div>
+
+  <!-- Panel -->
+  <div class="panel">
+
+    <div class="stay-pills">
+      <button class="stay-pill active">Overnight Stays</button>
+      <button class="stay-pill">Day Use Stays</button>
+    </div>
+
+    <div class="destination-field" onclick="this.querySelector('input').focus()">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" value="Seven Seas Hotel" placeholder="Enter a destination or property">
+    </div>
+
+    <div class="fields-row">
+
+      <div class="date-pair">
+        <div class="date-cell">
+          <i class="fa-regular fa-calendar"></i>
+          <div class="date-cell-content">
+            <div class="date-cell-value">5 Oct 2026</div>
+            <div class="date-cell-sub">Monday</div>
+          </div>
+        </div>
+        <div class="date-divider"></div>
+        <div class="date-cell">
+          <i class="fa-regular fa-calendar"></i>
+          <div class="date-cell-content">
+            <div class="date-cell-value">6 Oct 2026</div>
+            <div class="date-cell-sub">Tuesday</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="guests-field">
+        <div class="guests-field-left">
+          <i class="fa-solid fa-user-group"></i>
+          <div class="date-cell-content">
+            <div class="date-cell-value">2 adults</div>
+            <div class="date-cell-sub">1 room</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-down chevron-down"></i>
+      </div>
+
+    </div>
+
+    <label class="checkbox-row">
+      <input type="checkbox">
+      <span>Show me only entire homes and apartments</span>
+    </label>
+
+    <div class="add-flight">
+      <i class="fa-solid fa-plus"></i>
+      Add a flight
+    </div>
+
+    <div class="search-btn-wrap">
+      <button class="search-btn">Search</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Floating promo -->
+<div class="promo-float">
+  Save <span>10%</span> on your 1st app booking!
+</div>
+
+</body>
+</html>
