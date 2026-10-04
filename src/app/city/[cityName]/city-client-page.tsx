@@ -24,6 +24,7 @@ import { getWishlistIdsAction } from '@/app/actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { useTiqetsTags } from '@/hooks/use-tiqets-tags';
 import { CITY_HERO_IMAGES } from '@/lib/hero-images';
+import type { DestinationCategories } from '@/lib/city-categories';
 
 type User = { id: string; email?: string } | null;
 
@@ -43,6 +44,7 @@ interface CityClientPageProps {
     allExcursionTypes: ExcursionType[];
     cityName: string;
     countryName: string;
+    categories?: DestinationCategories;
     user: User | null;
 }
 
@@ -51,6 +53,7 @@ export default function CityClientPage({
     allExcursionTypes,
     cityName,
     countryName,
+    categories,
     user 
 }: CityClientPageProps) {
     
@@ -144,7 +147,7 @@ export default function CityClientPage({
               </header>
 
             <section>
-              <CategoryShowcase cityName={cityName} />
+              <CategoryShowcase cityName={cityName} data={categories} />
             </section>
             
             <section>

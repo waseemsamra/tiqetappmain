@@ -14,12 +14,10 @@ import Image from 'next/image';
 import { ChevronDown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CATEGORY_IMAGES } from '@/lib/category-images';
-
-type CategoryItem = {
-  name: string;
-  count?: number;
-  image: string;
-};
+import type {
+  CategoryItem,
+  DestinationCategories,
+} from '@/lib/city-categories';
 
 const img = (id: string, w = 400) =>
   `https://images.unsplash.com/${id}?q=80&w=${w}&auto=format&fit=crop`;
@@ -29,43 +27,34 @@ const catImage = (name: string) =>
   CATEGORY_IMAGES[name.toLowerCase()] ||
   img('photo-1546412414-e1885259563a', 300);
 
-/** The six main chips in the row, per the mockup. */
-const ROW_CATEGORIES: CategoryItem[] = [
-  { name: 'Attractions', count: 80, image: catImage('Attractions') },
-  { name: 'Food & Drinks', count: 48, image: catImage('Food & Drinks') },
-  { name: 'City Tours', count: 56, image: catImage('City Tours') },
-  { name: 'Cruises & Boat Tours', count: 30, image: catImage('Cruises & Boat Tours') },
-  { name: 'Nature & Wildlife', count: 30, image: catImage('Nature & Wildlife') },
-  { name: 'Museums', count: 28, image: catImage('Museums') },
-];
-
-/** Full category list inside the modal — first 12 visible, rest behind "Show more". */
-const MODAL_CATEGORIES: CategoryItem[] = [
-  { name: 'Attractions', image: catImage('Attractions') },
-  { name: 'Aviation Activities', image: catImage('Aviation Activities') },
-  { name: 'City Cards & Passes', image: catImage('City Cards & Passes') },
-  { name: 'City Tours', image: catImage('City Tours') },
-  { name: 'Cruises & Boat Tours', image: catImage('Cruises & Boat Tours') },
-  { name: 'Food & Drinks', image: catImage('Food & Drinks') },
-  { name: 'Games & Entertainment', image: catImage('Games & Entertainment') },
-  { name: 'Historical & Archaeological Sites', image: catImage('Historical & Archaeological Sites') },
-  { name: 'Museums', image: catImage('Museums') },
-  { name: 'Nature & Wildlife', image: catImage('Nature & Wildlife') },
-  { name: 'Shows & Theatres', image: catImage('Shows & Theatres') },
-  { name: 'Transfers', image: catImage('Transfers') },
-  { name: 'Travel Services', image: catImage('Travel Services') },
-  { name: 'Trips & Excursions', image: catImage('Trips & Excursions') },
-  { name: 'Water Activities', image: catImage('Water Activities') },
-];
-
-const INTERESTS: CategoryItem[] = [
-  { name: 'Adventure seekers', image: catImage('Adventure seekers') },
-  { name: 'Architecture admirers', image: catImage('Architecture admirers') },
-  { name: 'Hidden Gems', image: catImage('Hidden Gems') },
-  { name: 'Nature lovers', image: catImage('Nature lovers') },
-  { name: 'Nightlife seekers', image: catImage('Nightlife seekers') },
-  { name: 'Sport fanatics', image: catImage('Sport fanatics') },
-];
+/** Fallback for destinations we have no extracted data for. */
+const DEFAULT_CATEGORIES: DestinationCategories = {
+  categories: [
+    'Attractions',
+    'Food & Drinks',
+    'City Tours',
+    'Cruises & Boat Tours',
+    'Nature & Wildlife',
+    'Museums',
+    'Aviation Activities',
+    'City Cards & Passes',
+    'Games & Entertainment',
+    'Historical & Archaeological Sites',
+    'Shows & Theatres',
+    'Transfers',
+    'Travel Services',
+    'Trips & Excursions',
+    'Water Activities',
+  ].map((name) => ({ name, image: catImage(name) })),
+  interests: [
+    'Adventure seekers',
+    'Architecture admirers',
+    'Hidden Gems',
+    'Nature lovers',
+    'Nightlife seekers',
+    'Sport fanatics',
+  ].map((name) => ({ name, image: catImage(name) })),
+};
 
 /** Stacked-ticket tile icon from the mockup. */
 function MoreCategoriesIcon({ className = 'h-8 w-8' }: { className?: string }) {
@@ -79,9 +68,24 @@ function MoreCategoriesIcon({ className = 'h-8 w-8' }: { className?: string }) {
   );
 }
 
-export function CategoryShowcase({ cityName = 'Dubai' }: { cityName?: string }) {
+export function CategoryShowcase({
+  cityName = 'Dubai',
+  data,
+}: {
+  cityName?: string;
+  data?: DestinationCategories;
+}) {
   const [modalOpen, setModalOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const { categories, interests } = data ?? DEFAULT_CATEGORIES;
+  const rowCategories = categories.slice(0, 6);
+  /** Tiqets' own modal lists every category alphabetically. */
+  const modalCategories = [...categories].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
+  const modalInterests = [...interests].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -97,20 +101,22 @@ export function CategoryShowcase({ cityName = 'Dubai' }: { cityName?: string }) 
   }, [modalOpen]);
 
   const visibleModalCategories = expanded
-    ? MODAL_CATEGORIES
-    : MODAL_CATEGORIES.slice(0, 12);
-  const hasExtraCategories = MODAL_CATEGORIES.length > 12;
+    ? modalCategories
+    : modalCategories.slice(0, 12);
+  const hasExtraCategories = modalCategories.length > 12;
 
   return (
     <>
-      {/* Category cards — rectangular image cards, 7 across on
-          desktop, 3 on tablet, 2 on mobile — sized 10% down */}
-      <div className="grid grid-cols-2 gap-3 min-[481px]:gap-4 min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
-        {ROW_CATEGORIES.map((cat) => (
+      {/* Category cards — horizontally scrollable row on
+          mobile, rectangular image cards grid above:
+          7 across on desktop, 3 on tablet, 2 on small
+          screens — sized 10% down */}
+      <div className="flex gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
+        {rowCategories.map((cat) => (
           <button
             key={cat.name}
             type="button"
-            className="group mx-auto flex w-[90%] flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px]"
+            className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
           >
             <div className="relative mb-3.5 w-full overflow-hidden rounded-xl bg-[#F0F0F0] aspect-[4/3]">
               <Image
@@ -125,11 +131,6 @@ export function CategoryShowcase({ cityName = 'Dubai' }: { cityName?: string }) 
             <span className="text-[15px] font-bold leading-snug text-[#1A202C]">
               {cat.name}
             </span>
-            {typeof cat.count === 'number' && (
-              <span className="text-[13px] font-normal text-[#718096]">
-                {cat.count} experiences
-              </span>
-            )}
           </button>
         ))}
 
@@ -137,7 +138,7 @@ export function CategoryShowcase({ cityName = 'Dubai' }: { cityName?: string }) 
         <button
           type="button"
           onClick={() => setModalOpen(true)}
-          className="group mx-auto flex w-[90%] flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px]"
+          className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
         >
           <div className="mb-3.5 flex w-full items-center justify-center rounded-xl bg-[#FFF9E6] aspect-[4/3]">
             <MoreCategoriesIcon className="h-14 w-14" />
@@ -225,7 +226,7 @@ export function CategoryShowcase({ cityName = 'Dubai' }: { cityName?: string }) 
                   Interests
                 </h3>
                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 md:gap-x-6 md:gap-y-3 min-[1101px]:grid-cols-3 min-[1101px]:gap-x-8 min-[1101px]:gap-y-3.5">
-                  {INTERESTS.map((cat) => (
+                    {modalInterests.map((cat) => (
                     <button
                       key={cat.name}
                       type="button"

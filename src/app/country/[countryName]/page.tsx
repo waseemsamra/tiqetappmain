@@ -4,6 +4,7 @@ import { pickTiqetsImageUrls } from '@/lib/tiqets-image';
 import { notFound } from 'next/navigation';
 import CountryClientPage from './country-client-page';
 import type { Country, Excursion } from '@/types';
+import { COUNTRY_CATEGORIES } from '@/lib/city-categories';
 
 export const revalidate = 3600;
 
@@ -221,6 +222,7 @@ export default async function CountryPage({ params }: { params: { countryName: s
             allExcursionTypes={[]}
             countryDetails={countryDetails}
             cities={cities}
+            categories={COUNTRY_CATEGORIES[countryName.toLowerCase()]}
             user={null}
         />
     );
