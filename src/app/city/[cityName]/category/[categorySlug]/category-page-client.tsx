@@ -347,25 +347,26 @@ export default function CategoryPageClient({
         </section>
       )}
 
-      {/* More categories */}
+      {/* More categories — horizontal scroll row on
+          mobile, 2-column grid from sm up */}
       {moreSites.length > 0 && (
         <section className="mb-14">
           <h2 className="mb-5 text-xl font-bold tracking-[-0.4px] text-[#1A202C] sm:text-2xl">
             More Site &amp; Attractions in {cityName}
           </h2>
-          <div className="grid max-w-[400px] grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="flex gap-3 overflow-x-auto pb-4 sm:grid sm:max-w-[400px] sm:grid-cols-2 sm:gap-5 sm:overflow-visible">
             {moreSites.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/city/${encodeURIComponent(cityName)}/category/${cat.slug}`}
-                className="group transition-transform duration-300 hover:-translate-y-[3px]"
+                className="group w-[240px] shrink-0 snap-start transition-transform duration-300 hover:-translate-y-[3px] sm:w-auto"
               >
                 <div className="relative mb-3 aspect-square overflow-hidden rounded-xl bg-[#F0F0F0]">
                   <Image
                     src={imageUrlFor(cat.image, 'pill')}
                     alt={cat.name}
                     fill
-                    sizes="(min-width:640px) 33vw, 100vw"
+                    sizes="(min-width:640px) 33vw, 240px"
                     className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                     unoptimized
                   />

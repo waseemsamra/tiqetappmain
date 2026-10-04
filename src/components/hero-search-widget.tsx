@@ -866,6 +866,7 @@ export function HeroSearchWidget() {
               <StaysDestinationField
                 destinations={AGODA_DESTINATIONS}
                 defaultValue=""
+                onChange={setStayQuery}
               />
             </div>
 

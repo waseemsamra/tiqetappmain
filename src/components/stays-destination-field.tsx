@@ -17,15 +17,24 @@ import type { AgodaDestination } from '@/lib/agoda-catalog';
 export function StaysDestinationField({
   destinations,
   defaultValue,
+  onChange,
 }: {
   destinations: AgodaDestination[];
   defaultValue: string;
+  /** Notifies the parent of every value change so the
+      search submit can forward what was entered. */
+  onChange?: (value: string) => void;
 }) {
   const [query, setQuery] = useState(defaultValue);
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(0);
   const wrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const update = (value: string) => {
+    setQuery(value);
+    onChange?.(value);
+  };
 
   /**
    * The field ships pre-filled with the selected
@@ -68,7 +77,7 @@ export function StaysDestinationField({
   }, []);
 
   const pick = (d: AgodaDestination) => {
-    setQuery(`${d.name}, ${d.country}`);
+    update(`${d.name}, ${d.country}`);
     setOpen(false);
     inputRef.current?.focus();
   };
@@ -108,7 +117,7 @@ export function StaysDestinationField({
         type="text"
         value={query}
         onChange={(e) => {
-          setQuery(e.target.value);
+          update(e.target.value);
           setHighlight(0);
           setOpen(true);
         }}

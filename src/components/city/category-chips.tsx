@@ -35,7 +35,7 @@ export function CategoryChips({
   extra?: ReactNode;
 }) {
   return (
-    <div className="flex gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
+    <div className="flex snap-x snap-proximity gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
       {items.map((cat) => (
         <Link
           key={cat.slug || cat.name}
@@ -44,7 +44,7 @@ export function CategoryChips({
               ? `/city/${encodeURIComponent(cityName)}/category/${cat.slug}`
               : categoryPath(cityName, cat.name)
           }
-          className="group mx-auto flex w-[150px] shrink-0 flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
+          className="group mx-auto flex w-[150px] shrink-0 snap-start flex-col items-start text-left transition-transform duration-200 hover:-translate-y-[3px] min-[481px]:w-[90%]"
         >
           <div className="relative mb-3.5 w-full overflow-hidden rounded-xl bg-[#F0F0F0] aspect-[4/3]">
             <Image

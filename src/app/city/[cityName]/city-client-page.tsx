@@ -48,6 +48,16 @@ interface CityClientPageProps {
     user: User | null;
 }
 
+/** Interest tabs for the "recommended for" section
+    (Tiqets interest tag ids). */
+const RECOMMENDED_TABS = [
+    { id: 'adventure', label: 'Adventure seekers', tagId: '1191' },
+    { id: 'entertainment', label: 'Entertainment enthusiasts', tagId: '1195' },
+    { id: 'art', label: 'Art lovers', tagId: '1193' },
+] as const;
+
+type RecommendedTabId = (typeof RECOMMENDED_TABS)[number]['id'];
+
 export default function CityClientPage({ 
     initialExcursions,
     allExcursionTypes,
@@ -58,6 +68,7 @@ export default function CityClientPage({
 }: CityClientPageProps) {
     
     const [wishlistIds, setWishlistIds] = useState(new Set<string>());
+    const [recommendedTab, setRecommendedTab] = useState<RecommendedTabId>('adventure');
 
     // Centralized filter state
     const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
@@ -78,9 +89,19 @@ export default function CityClientPage({
         }).slice(0, 10),
     [initialExcursions]);
 
-    const handPickedExcursions = useMemo(() => 
+    const handPickedExcursions = useMemo(() =>
         [...initialExcursions].sort((a, b) => simpleHash(a.id) - simpleHash(b.id)).slice(0, 10),
     [initialExcursions]);
+
+    // Experiences for the selected "recommended for"
+    // interest tab — nine per tab.
+    const recommendedExcursions = useMemo(() => {
+        const tab = RECOMMENDED_TABS.find((t) => t.id === recommendedTab);
+        if (!tab) return [];
+        return initialExcursions
+            .filter((ex) => (Array.isArray(ex.tag_ids) ? ex.tag_ids : []).includes(tab.tagId))
+            .slice(0, 9);
+    }, [initialExcursions, recommendedTab]);
     
     const filteredExcursions = useMemo(() => {
         if (selectedTagIds.length === 0) return initialExcursions;
@@ -167,11 +188,47 @@ export default function CityClientPage({
                 </Carousel>
             </section>
             
-            <section>
-                <AllExperiences 
-                    excursions={filteredExcursions} 
-                    onShowFilters={() => setIsFilterDialogOpen(true)}
-                    selectedTagIds={selectedTagIds}
+             <section>
+                 <h2 className="text-3xl font-bold mb-8">Experiences in {cityName} recommended for</h2>
+                 {/* Interest tabs */}
+                 <div className="mb-8 flex flex-wrap gap-2">
+                     {RECOMMENDED_TABS.map((tab) => (
+                         <button
+                             key={tab.id}
+                             type="button"
+                             onClick={() => setRecommendedTab(tab.id)}
+                             className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+                                 recommendedTab === tab.id
+                                     ? 'bg-primary text-primary-foreground'
+                                     : 'bg-[#F0F0F0] text-[#1A202C] hover:bg-[#E2E8F0]'
+                             }`}
+                         >
+                             {tab.label}
+                         </button>
+                     ))}
+                 </div>
+                 {recommendedExcursions.length > 0 && (
+                     <Carousel opts={CAROUSEL_OPTS} className="w-full">
+                         <CarouselContent className="-ml-4">
+                             {recommendedExcursions.map((ex, index) => (
+                                 <CarouselItem key={ex.id} className="pl-4 basis-[85%] min-[481px]:basis-1/2 min-[769px]:basis-1/3 min-[1101px]:basis-1/4">
+                                     <div className="h-full py-4">
+                                         <AttractionCard excursion={ex} rank={index + 1} wishlistButton={renderWishlistButton(ex)} />
+                                     </div>
+                                 </CarouselItem>
+                             ))}
+                         </CarouselContent>
+                         <CarouselPrevious className="absolute left-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden min-[1101px]:flex" />
+                         <CarouselNext className="absolute right-[-1.5rem] top-1/2 -translate-y-1/2 z-10 hidden min-[1101px]:flex" />
+                     </Carousel>
+                 )}
+             </section>
+
+             <section>
+                 <AllExperiences
+                     excursions={filteredExcursions}
+                     onShowFilters={() => setIsFilterDialogOpen(true)}
+                     selectedTagIds={selectedTagIds}
                     countryName={cityName}
                 />
             </section>
