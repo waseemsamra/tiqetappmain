@@ -56,8 +56,13 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       document.body.appendChild(script);
     };
 
-    if (script && (window as any).__TIQETS_LOADER_REINIT) {
-      initBooking();
+    if (script) {
+      // The engine script is already on the page — the desktop
+      // instance mounted first (SSR renders it) and bound its
+      // widget to elements that were removed when the viewport
+      // switched. Re-bind to this instance's container/trigger
+      // so the very first button click opens the checkout modal.
+      setTimeout(initBooking, 50);
     } else {
       loadScript();
     }
