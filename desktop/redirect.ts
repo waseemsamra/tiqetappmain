@@ -1,10 +1,13 @@
 /**
  * Desktop redirect rules.
  *
- * Desktop browsers always get the full Next.js web app. These
- * rules only normalise legacy desktop paths so old URLs land
- * on the correct page.
+ * Desktop browsers always get the full Next.js web app:
+ * - legacy desktop paths are normalised to their new URLs
+ * - desktop (or forced-desktop) visitors on the /m mobile
+ *   page are sent back to the desktop home
  */
+
+import { isMobileUserAgent } from '../mobile/redirect';
 
 const DESKTOP_PATH_REDIRECTS: Record<string, string> = {
   '/index.html': '/',
@@ -12,6 +15,17 @@ const DESKTOP_PATH_REDIRECTS: Record<string, string> = {
   '/main': '/',
 };
 
-export function getDesktopRedirectTarget(pathname: string): string | null {
-  return DESKTOP_PATH_REDIRECTS[pathname] ?? null;
+export function getDesktopRedirectTarget(
+  userAgent: string | null | undefined,
+  pathname: string,
+  forceDesktop = false
+): string | null {
+  const legacy = DESKTOP_PATH_REDIRECTS[pathname];
+  if (legacy) return legacy;
+
+  const onMobilePage = pathname === '/m' || pathname.startsWith('/m/');
+  if (onMobilePage && (forceDesktop || !isMobileUserAgent(userAgent))) {
+    return '/';
+  }
+  return null;
 }

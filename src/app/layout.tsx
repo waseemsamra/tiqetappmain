@@ -1,5 +1,6 @@
 
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
@@ -27,6 +28,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const language = getDisplayLanguage();
+  // Set by src/middleware.ts so chrome-less routes (the /m
+  // mobile page) can render without the desktop header/footer.
+  const pathname = (await headers()).get('x-pathname') ?? '';
+  const isMobilePage = pathname === '/m' || pathname.startsWith('/m/');
 
   return (
     <html lang={language} className="h-full">
@@ -37,9 +42,9 @@ export default async function RootLayout({
             currency: getDisplayCurrency(),
           }}
         >
-          <Header />
-          <main className="flex-grow pt-14">{children}</main>
-          <Footer />
+          {!isMobilePage && <Header />}
+          <main className={`flex-grow ${isMobilePage ? '' : 'pt-14'}`}>{children}</main>
+          {!isMobilePage && <Footer />}
         </PreferencesProvider>
         <Toaster />
         <RouteLoadingBar />

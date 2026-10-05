@@ -1,37 +1,28 @@
 /**
- * Mobile redirect rules.
+ * Mobile redirect rules (web).
  *
- * Detects mobile devices from the user agent and resolves the
- * correct app-store destination for the React Native app in
- * this folder (iOS vs Android).
+ * Mobile browsers are redirected to the /m mobile page.
+ * Desktop browsers keep the full Next.js web app.
+ * `forceDesktop` (from the force_desktop cookie or the
+ * ?desktop=1 param) lets mobile users opt into the
+ * desktop site. Set MOBILE_REDIRECT_ENABLED=false to
+ * disable the redirect entirely.
  */
 
-const IOS_UA = /iphone|ipad|ipod/i;
-const ANDROID_UA = /android/i;
-const OTHER_MOBILE_UA = /mobile|opera mini|iemobile|blackberry|windows phone/i;
+const MOBILE_UA = /android|iphone|ipad|ipod|mobile|opera mini|iemobile|blackberry|windows phone/i;
 
-export type MobilePlatform = 'ios' | 'android' | 'other';
-
-export function detectMobilePlatform(userAgent: string | null | undefined): MobilePlatform | null {
-  if (!userAgent) return null;
-  if (IOS_UA.test(userAgent)) return 'ios';
-  if (ANDROID_UA.test(userAgent)) return 'android';
-  if (OTHER_MOBILE_UA.test(userAgent)) return 'other';
-  return null;
+export function isMobileUserAgent(userAgent: string | null | undefined): boolean {
+  return !!userAgent && MOBILE_UA.test(userAgent);
 }
 
-export function getMobileRedirectTarget(userAgent: string | null | undefined): string | null {
-  const platform = detectMobilePlatform(userAgent);
-  if (!platform) return null;
-
-  const iosUrl = process.env.MOBILE_APPLE_APP_STORE_URL;
-  const androidUrl = process.env.MOBILE_GOOGLE_PLAY_URL;
-
-  switch (platform) {
-    case 'ios':
-      return iosUrl || androidUrl || null;
-    case 'android':
-    case 'other':
-      return androidUrl || iosUrl || null;
-  }
+export function getMobileRedirectTarget(
+  userAgent: string | null | undefined,
+  pathname: string,
+  forceDesktop = false
+): string | null {
+  if (forceDesktop) return null;
+  if (process.env.MOBILE_REDIRECT_ENABLED === 'false') return null;
+  if (!isMobileUserAgent(userAgent)) return null;
+  if (pathname === '/m' || pathname.startsWith('/m/')) return null;
+  return '/m';
 }
