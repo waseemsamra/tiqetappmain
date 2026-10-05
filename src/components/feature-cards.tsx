@@ -27,7 +27,7 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: React.ElementTy
     </div>
 );
 
-export default function FeatureCards() {
+export default function FeatureCards({ hideFirst = false }: { hideFirst?: boolean } = {}) {
     const t = useT();
     const features = [
         {
@@ -47,6 +47,8 @@ export default function FeatureCards() {
         }
     ];
 
+    const visibleFeatures = hideFirst ? features.slice(1) : features;
+
     return (
         <div className="bg-background">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -54,7 +56,7 @@ export default function FeatureCards() {
                 <div className="md:hidden">
                     <Carousel opts={CAROUSEL_OPTS} className="w-full">
                         <CarouselContent className="-ml-4">
-                            {features.map((feature, index) => (
+                            {visibleFeatures.map((feature, index) => (
                                 <CarouselItem key={feature.title} className="pl-4 basis-full">
                                     <div className="h-full py-4">
                                         <FeatureCard {...feature} />
@@ -69,7 +71,7 @@ export default function FeatureCards() {
                 
                 {/* Desktop grid - visible on medium+ screens */}
                 <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {features.map(feature => (
+                    {visibleFeatures.map(feature => (
                         <FeatureCard key={feature.title} {...feature} />
                     ))}
                 </div>

@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Building,
   Calendar,
   Car,
   CarTaxiFront,
   ChevronRight,
+  Compass,
+  Heart,
   Hotel,
   Menu,
   Plane,
-  PlaneTakeoff,
   Search,
   Smartphone,
   Star,
@@ -19,16 +20,20 @@ import {
   User,
   X,
 } from 'lucide-react';
+import { LanguageProvider, useT } from '@/components/language-provider';
+import AttractionListingSection from '@/app/attraction-listing';
+import FeatureCards from '@/components/feature-cards';
+import HelpCenterSection from '@/components/help-center-section';
+import type { Excursion } from '@/types';
+import type { HomePageData } from '@/lib/home-data';
 
-const LOGO_DOTS = ['#F5A623', '#E23F3F', '#7B68EE', '#2E9C6C', '#5392F9'];
-
-type TabKey = 'hotels' | 'flightHotel' | 'flights' | 'activities';
+type TabKey = 'activities' | 'stays' | 'flights' | 'transfers';
 
 const TABS: { key: TabKey; label: string; icon: typeof Hotel }[] = [
-  { key: 'hotels', label: 'Hotels', icon: Hotel },
-  { key: 'flightHotel', label: 'Flight + Hotel', icon: PlaneTakeoff },
-  { key: 'flights', label: 'Flights', icon: Plane },
   { key: 'activities', label: 'Activities', icon: Ticket },
+  { key: 'stays', label: 'Stays', icon: Hotel },
+  { key: 'flights', label: 'Flights', icon: Plane },
+  { key: 'transfers', label: 'Transfers', icon: CarTaxiFront },
 ];
 
 const GIFT_CARDS = [
@@ -48,36 +53,159 @@ const GIFT_CARDS = [
   },
 ];
 
+const BOTTOM_NAV = [
+  { key: 'discover', label: 'Discover', icon: Compass },
+  { key: 'tickets', label: 'Tickets', icon: Ticket },
+  { key: 'wishlist', label: 'Wishlist', icon: Heart },
+  { key: 'profile', label: 'Profile', icon: User },
+] as const;
+
+type NavKey = (typeof BOTTOM_NAV)[number]['key'];
+
 const EXPLORE_ITEMS = [
   { icon: Smartphone, label: 'eSIM' },
   { icon: CarTaxiFront, label: 'Airport Transfer' },
   { icon: Car, label: 'Car Rental' },
 ];
 
-export default function MobileHome() {
-  const [activeTab, setActiveTab] = useState<TabKey>('hotels');
-  const [destination, setDestination] = useState('');
-  const [couponVisible, setCouponVisible] = useState(true);
+const TARGET_CITIES = [
+  'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam',
+  'Singapore', 'Kuala Lumpur', 'Bangkok',
+];
+
+const simpleHash = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return hash;
+};
+
+/** Desktop homepage sections, translated via the language provider. */
+function DesktopSections({
+  featuredExcursions,
+  featuredTitle,
+  featuredCities,
+  cityImages,
+  worldwideExcursions,
+  topCityExcursions,
+  topCityName,
+  homePageData,
+}: {
+  featuredExcursions: Excursion[];
+  featuredTitle: string;
+  featuredCities: string[];
+  cityImages: Map<string, string>;
+  worldwideExcursions: Excursion[];
+  topCityExcursions: Excursion[];
+  topCityName: string;
+  homePageData: Excursion[];
+}) {
+  const t = useT();
 
   return (
-    <div className="min-h-screen bg-white pb-20">
+    <>
+      {/* HeroSection is skipped on mobile — the teal
+          tab/search hero above is the mobile hero. */}
+      <FeatureCards hideFirst />
+      <AttractionListingSection
+        title={featuredTitle}
+        excursions={featuredExcursions}
+        showTabs
+        maxTabs={5}
+        tabType="city"
+        tabs={featuredCities}
+        cityImages={cityImages}
+        nativeScroll
+      />
+      <AttractionListingSection
+        title={t('home.bestPlacesWorldwide')}
+        excursions={worldwideExcursions}
+        showTabs
+        tabType="city"
+        tabs={TARGET_CITIES}
+        cityImages={cityImages}
+        nativeScroll
+      />
+      <AttractionListingSection
+        title={t('home.topThingsInCity', { city: topCityName })}
+        excursions={topCityExcursions}
+        layout="carousel"
+        showViewAllButton={false}
+        showTabs={false}
+        nativeScroll
+      />
+      <AttractionListingSection
+        title={t('home.mostPopular')}
+        excursions={homePageData}
+        layout="grid"
+        showViewAllButton={false}
+        showTabs={false}
+        tabType="city"
+        nativeScroll
+      />
+      {/* PopularPlacesSection is hidden on mobile. */}
+      <HelpCenterSection />
+    </>
+  );
+}
+
+interface MobileHomeProps extends HomePageData {}
+
+export default function MobileHome({
+  allExcursions,
+  topRatedExcursions,
+  featuredExcursions,
+  featuredTitle,
+  featuredCities,
+  cityImages,
+  worldwideExcursions,
+  topCityExcursions,
+  topCityName,
+  language,
+}: MobileHomeProps) {
+  const [activeTab, setActiveTab] = useState<TabKey>('activities');
+  const [destination, setDestination] = useState('');
+  const [couponVisible, setCouponVisible] = useState(true);
+  const [activeNav, setActiveNav] = useState<NavKey>('discover');
+  const [splashVisible, setSplashVisible] = useState(true);
+  const [splashFading, setSplashFading] = useState(false);
+
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => setSplashFading(true), 1200);
+    const hideTimer = setTimeout(() => setSplashVisible(false), 1700);
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  const homePageData = useMemo(() => {
+    const shuffledExcursions = [...allExcursions].sort(
+      (a, b) => simpleHash(a.id) - simpleHash(b.id),
+    );
+    return shuffledExcursions.slice(0, 10);
+  }, [allExcursions]);
+
+  return (
+    <div className="min-h-screen bg-white pb-24">
+      {/* Splash screen — logo centred, fades out on load */}
+      {splashVisible && (
+        <div
+          className={`fixed inset-0 z-[200] flex items-center justify-center bg-white transition-opacity duration-500 ${
+            splashFading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+          <img src="/aafare-logo.png" alt="AAFare" className="h-32 w-32" />
+        </div>
+      )}
+
       {/* Top header */}
       <header className="flex items-center justify-between border-b border-[#F0F2F5] bg-white px-[18px] py-3.5">
         <div className="w-8" />
-        <div className="flex flex-col items-center gap-0.5">
-          <span className="text-[20px] font-extrabold leading-none tracking-[-0.5px] text-[#1A2B49]">
-            AAFare
-          </span>
-          <div className="flex gap-[3px]">
-            {LOGO_DOTS.map((color) => (
-              <span
-                key={color}
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: color }}
-              />
-            ))}
-          </div>
-        </div>
+        <img src="/aafare-logo.png" alt="AAFare" className="h-11 w-auto" />
         <button className="p-1" aria-label="Menu">
           <Menu className="h-6 w-6 text-[#1A2B49]" />
         </button>
@@ -175,23 +303,24 @@ export default function MobileHome() {
         </div>
       </section>
 
-      {/* Welcome gift pack */}
-      <section className="bg-[#0E8FB0] px-3.5 pb-24 pt-6">
-        <div className="mb-4 flex items-center gap-2.5">
-          <h2 className="text-[22px] font-extrabold leading-tight text-white">
-            Welcome gift pack!
-          </h2>
-          <span className="rounded bg-[#E23F3F] px-2 py-[3px] text-[11px] font-bold uppercase tracking-[0.3px] text-white">
-            New
-          </span>
-        </div>
-        <div className="flex gap-2.5 overflow-x-auto pb-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Welcome gift pack — separate panel below the hero */}
+      <section className="px-3.5 pt-8 pb-2">
+        <div className="rounded-2xl bg-[#0E8FB0] px-4 py-5">
+          <div className="mb-4 flex items-center gap-2.5">
+            <h2 className="text-[22px] font-extrabold leading-tight text-white">
+              Welcome gift pack!
+            </h2>
+            <span className="rounded bg-[#E23F3F] px-2 py-[3px] text-[11px] font-bold uppercase tracking-[0.3px] text-white">
+              New
+            </span>
+          </div>
+          <div className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {GIFT_CARDS.map((card) => {
             const Icon = card.icon;
             return (
               <button
                 key={card.title}
-                className="flex min-w-[280px] shrink-0 items-center gap-3 rounded-xl bg-white px-4 py-3.5 text-left transition-transform hover:-translate-y-0.5"
+                className="flex min-w-[280px] shrink-0 snap-start items-center gap-3 rounded-xl bg-white px-4 py-3.5 text-left transition-transform hover:-translate-y-0.5"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#F0F4FF] text-[#5392F9]">
                   <Icon className="h-5 w-5" />
@@ -216,7 +345,22 @@ export default function MobileHome() {
             );
           })}
         </div>
+        </div>
       </section>
+
+      {/* All desktop homepage sections */}
+      <LanguageProvider language={language}>
+        <DesktopSections
+          featuredExcursions={featuredExcursions}
+          featuredTitle={featuredTitle}
+          featuredCities={featuredCities}
+          cityImages={cityImages}
+          worldwideExcursions={worldwideExcursions}
+          topCityExcursions={topCityExcursions}
+          topCityName={topCityName}
+          homePageData={homePageData}
+        />
+      </LanguageProvider>
 
       {/* Explore more */}
       <section className="bg-[#0E8FB0] px-3.5 pb-10 pt-4">
@@ -246,9 +390,9 @@ export default function MobileHome() {
         </div>
       </section>
 
-      {/* Fixed bottom coupon bar */}
+      {/* Fixed bottom coupon bar — sits above the nav */}
       {couponVisible && (
-        <div className="fixed bottom-0 left-0 right-0 z-[100] flex items-center gap-3 border-t border-[#E4E9F2] bg-white px-4 py-3 shadow-[0_-4px_16px_rgba(15,23,42,0.08)]">
+        <div className="fixed bottom-[68px] left-0 right-0 z-[100] flex items-center gap-3 border-t border-[#E4E9F2] bg-white px-4 py-3 shadow-[0_-4px_16px_rgba(15,23,42,0.08)]">
           <button className="shrink-0 p-1" onClick={() => setCouponVisible(false)} aria-label="Close">
             <X className="h-[18px] w-[18px] text-[#5C6B85]" />
           </button>
@@ -264,6 +408,36 @@ export default function MobileHome() {
           </button>
         </div>
       )}
+
+      {/* Fixed bottom navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-[110] flex border-t border-[#E4E9F2] bg-white">
+        {BOTTOM_NAV.map((item) => {
+          const Icon = item.icon;
+          const active = item.key === activeNav;
+          return (
+            <button
+              key={item.key}
+              onClick={() => setActiveNav(item.key)}
+              className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 ${
+                active ? 'text-[#5392F9]' : 'text-[#8B96A8]'
+              }`}
+            >
+              <Icon
+                className="h-6 w-6"
+                fill={item.key === 'wishlist' && active ? '#5392F9' : 'none'}
+                strokeWidth={active ? 2.4 : 2}
+              />
+              <span
+                className={`text-[10px] leading-tight ${
+                  active ? 'font-bold' : 'font-medium'
+                }`}
+              >
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }

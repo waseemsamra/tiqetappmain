@@ -61,6 +61,9 @@ interface AttractionListingSectionProps {
     tabs?: string[];
     /** City to working cover image, verified server-side so tabs never 404. */
     cityImages?: Map<string, string>;
+    /** Render a native momentum scroller instead of the embla carousel
+     *  (smooth touch dragging, like the mobile gift-pack row). */
+    nativeScroll?: boolean;
 }
 
 export default function AttractionListingSection({
@@ -74,7 +77,8 @@ export default function AttractionListingSection({
     tabType,
     maxTabs,
     tabs,
-    cityImages
+    cityImages,
+    nativeScroll = false,
 } : AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
@@ -151,7 +155,60 @@ export default function AttractionListingSection({
         </div>
     );
 
+    const renderNativeScroll = () => {
+        const scrollKey = showTabs && activeTab ? activeTab : 'all';
+        return (
+            <div key={scrollKey}>
+                {showTabs && tabs && tabs.length > 1 && tabType === 'city' && (
+                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {cities.map(city => (
+                            <CityTab
+                                key={city.name}
+                                city={city.name}
+                                image={city.image}
+                                isActive={activeTab === city.name}
+                                onClick={() => setActiveTab(city.name as string)}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                {showTabs && tabs && tabs.length > 1 && tabType === 'country' && (
+                    <div className="flex items-center gap-4 border-b overflow-x-auto pb-4 mb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {countries.map(country => (
+                            <CountryTab
+                                key={country.name}
+                                country={country.name}
+                                isActive={activeTab === country.name}
+                                onClick={() => setActiveTab(country.name as string)}
+                            />
+                        ))}
+                    </div>
+                )}
+
+                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {filteredExcursions.map((excursion) => (
+                        <div
+                            key={excursion.id}
+                            className="w-[80%] sm:w-[45%] lg:w-1/3 shrink-0 snap-start"
+                        >
+                            <AttractionCard
+                                excursion={excursion}
+                                wishlistButton={user ? <WishlistButton activityId={excursion.id} isInitialWishlisted={wishlistIds.has(excursion.id)} /> : undefined}
+                                layout="horizontal"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
     const renderCarousel = () => {
+        if (nativeScroll) {
+            return renderNativeScroll();
+        }
+
         const carouselKey = showTabs && activeTab ? activeTab : 'all';
         return (
             <div className="relative">
@@ -226,7 +283,7 @@ export default function AttractionListingSection({
                 </h2>
             </div>
 
-            {layout === 'grid' ? renderGrid() : renderCarousel()}
+            {layout === 'grid' && !nativeScroll ? renderGrid() : renderCarousel()}
 
             {showViewAllButton && layout === 'carousel' && (
                 <div className="mt-8 text-left">
