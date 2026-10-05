@@ -196,8 +196,15 @@ export default function MobileHome({
 
       {/* Top header */}
       <header className="flex items-center justify-between border-b border-[#F0F2F5] bg-white px-[18px] py-3.5">
-        <div className="w-8" />
-        <img src="/aafare-logo.png" alt="AAFare" className="h-11 w-auto" />
+        <div className="flex items-center gap-2">
+          <img src="/aafare-logo.png" alt="AAFare" className="h-9 w-auto" />
+          <span className="flex flex-col justify-center leading-none">
+            <span className="text-lg font-bold text-[#5392F9]">AAFare</span>
+            <span className="-mt-[2px] text-lg font-bold text-[#5C6B85]">
+              International
+            </span>
+          </span>
+        </div>
         <button className="p-1" aria-label="Menu">
           <Menu className="h-6 w-6 text-[#1A2B49]" />
         </button>

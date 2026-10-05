@@ -24,5 +24,10 @@ export function getMobileRedirectTarget(
   if (process.env.MOBILE_REDIRECT_ENABLED === 'false') return null;
   if (!isMobileUserAgent(userAgent)) return null;
   if (pathname === '/m' || pathname.startsWith('/m/')) return null;
+  // Only the homepage has a dedicated mobile page. Every other
+  // route (city, country, excursion, search, stays, transfers)
+  // renders responsively, so mobile visitors can follow links
+  // and complete the booking flow instead of bouncing back to /m.
+  if (pathname !== '/') return null;
   return '/m';
 }

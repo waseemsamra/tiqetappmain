@@ -21,7 +21,7 @@ export default function Header() {
               <img src="/aafare-logo.png" alt="AAFare" className="h-10 w-auto" />
               <span className="flex flex-col justify-center leading-none">
                 <span className="text-lg font-bold text-primary">AAFare</span>
-                <span className="text-[9px] font-semibold uppercase tracking-[0.5px] text-muted-foreground">
+                <span className="-mt-[2px] text-lg font-bold text-muted-foreground">
                   International
                 </span>
               </span>
