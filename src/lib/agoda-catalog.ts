@@ -92,6 +92,18 @@ export const AGODA_DESTINATIONS: AgodaDestination[] = [
   { slug: 'male', name: 'Malé', country: 'Maldives', countryCode: 'MV', latitude: 4.1755, longitude: 73.5093, radiusKm: 10 },
 ];
 
+/**
+ * Lowercased country name → the catalog's cities in that
+ * country. Powers the "Cities in {country}" row on the
+ * city category pages.
+ */
+export const COUNTRY_CITIES: Record<string, string[]> = {};
+for (const d of AGODA_DESTINATIONS) {
+  const key = d.country.toLowerCase();
+  if (!COUNTRY_CITIES[key]) COUNTRY_CITIES[key] = [];
+  COUNTRY_CITIES[key].push(d.name);
+}
+
 export function findDestination(input?: string): AgodaDestination {
   return matchDestination(input) ?? AGODA_DESTINATIONS[0];
 }

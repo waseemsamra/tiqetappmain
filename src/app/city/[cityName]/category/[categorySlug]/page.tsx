@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { fetchTiqetsCityProducts } from '@/lib/tiqets-api';
-import { CITY_CATEGORIES, COUNTRY_CITIES } from '@/lib/city-categories';
+import { CITY_CATEGORIES } from '@/lib/city-categories';
+import { COUNTRY_CITIES } from '@/lib/agoda-catalog';
 import { CITY_SUBCATEGORIES } from '@/lib/city-subcategories';
 import {
   CATEGORY_TYPE_IDS,
