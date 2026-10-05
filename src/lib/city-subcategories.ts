@@ -89,7 +89,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 2
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/b0b6e6a40437463ba4ad0f400c3bb23b.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -181,7 +181,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 12
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/12801db2f5fe4e55961db49f3dc7ca43.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -225,7 +225,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 3
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/5a14d634b1464f5587ff81e77cd89b80.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -280,7 +280,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 4
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/22d0139fa7eb4c98aa5fddb39f0b6412.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -349,7 +349,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 7
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/06911120f786464a82a04d74dd332a1d.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -475,7 +475,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 23
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/9117853253ce4a1194971535dfb23af4.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -601,7 +601,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 3
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/ca75b1725bf54cba884ad430234eb6f9.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -654,7 +654,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 26
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/667c464bff7441c583213bab09dd08f0.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -778,7 +778,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 2
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/f1b206a81ce74e0cbfc9a3cadedab403.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -833,7 +833,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 6
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/702540ba227d449e95d8638bec9ab9c3.JPG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -863,7 +863,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 11
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/702540ba227d449e95d8638bec9ab9c3.JPG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -983,7 +983,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 3
             },
             {
-                "name": "Science &amp; Technology Museums",
+                "name": "Science & Technology Museums",
                 "slug": "science-technology-museums",
                 "typeId": "703",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/0ebd3891d76d44dfb16342efe1052769.JPG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -1015,7 +1015,7 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 2
             },
             {
-                "name": "Stadiums &amp; Arenas",
+                "name": "Stadiums & Arenas",
                 "slug": "stadiums-arenas",
                 "typeId": "711",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/67601937592d4bac9e06aba8cf7ff580.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",

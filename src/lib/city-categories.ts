@@ -23,7 +23,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
     "barcelona": {
         "categories": [
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/8323f3ff248e49ebad90b9a17ea0e354.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -58,7 +58,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 62
             },
             {
-                "name": "City Cards &amp; Passes",
+                "name": "City Cards & Passes",
                 "slug": "city-cards-passes",
                 "typeId": "1032",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/b9a4067e64b649b99be6d2efea8ae1b4.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -70,7 +70,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
     "rome": {
         "categories": [
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/e2e6d4fc79fd42f5a4c05319fad8cc3a.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -105,7 +105,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 29
             },
             {
-                "name": "Concerts &amp; Live Music",
+                "name": "Concerts & Live Music",
                 "slug": "concerts-live-music",
                 "typeId": "2595",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/8fba35ebe3b949d498cf576996ab1bd2.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -131,7 +131,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 18
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -152,7 +152,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 18
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/e4c3fcaac51744a0b9d26935252e06c0.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -171,7 +171,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 46
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/d8ce6a06f5bf41f9b4e7ef3306cf28f3.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -192,14 +192,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 41
             },
             {
-                "name": "Concerts &amp; Live Music",
+                "name": "Concerts & Live Music",
                 "slug": "concerts-live-music",
                 "typeId": "2595",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/a196df20966d49d682183e5b4c71e4d7.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 7
             },
             {
-                "name": "Trips &amp; Excursions",
+                "name": "Trips & Excursions",
                 "slug": "trips-excursions",
                 "typeId": "1042",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/9af0c9c4882d430cabdf4f7d0a985797.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -225,28 +225,28 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 69
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/1d6d32dd603a4703a6d5e256f5d44d92.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 34
             },
             {
-                "name": "Food &amp; Drinks",
+                "name": "Food & Drinks",
                 "slug": "food-drinks",
                 "typeId": "1034",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/0a45bc1fdf9d448c9613475edf9758f0.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 14
             },
             {
-                "name": "City Cards &amp; Passes",
+                "name": "City Cards & Passes",
                 "slug": "city-cards-passes",
                 "typeId": "1032",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/677216f7d3d04eb88ded410cd8020936.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 11
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/4fb8fedb08374b3dac99c1fa10c8ca6d.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -258,7 +258,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
     "venice": {
         "categories": [
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/4b6b874872fd41c7b096560a7092d3f8.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -272,7 +272,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 27
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/abc56348b77c467ea20a90375e729518.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -286,14 +286,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 28
             },
             {
-                "name": "Concerts &amp; Live Music",
+                "name": "Concerts & Live Music",
                 "slug": "concerts-live-music",
                 "typeId": "2595",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/89a70880e25d4495a28a1997acb0ae43.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 11
             },
             {
-                "name": "City Cards &amp; Passes",
+                "name": "City Cards & Passes",
                 "slug": "city-cards-passes",
                 "typeId": "1032",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/7fd5185ef6c84a9ea94d5c11b4df6355.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -312,7 +312,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 80
             },
             {
-                "name": "Food &amp; Drinks",
+                "name": "Food & Drinks",
                 "slug": "food-drinks",
                 "typeId": "1034",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/fef37e0205e54715b0eadb1833583875.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -326,14 +326,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 56
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/7186f1c028ef424f9998f8d0d195ea71.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 30
             },
             {
-                "name": "Nature &amp; Wildlife",
+                "name": "Nature & Wildlife",
                 "slug": "nature-wildlife",
                 "typeId": "2745",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -352,7 +352,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
     "milan": {
         "categories": [
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/bff1f116bfdf4d7ab2bbeadd82b0a679.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -366,7 +366,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 36
             },
             {
-                "name": "Shows &amp; Theatres",
+                "name": "Shows & Theatres",
                 "slug": "shows-theatres",
                 "typeId": "2596",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/3c0a286454624b79a169011e7262b659.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -380,7 +380,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 30
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/9a315802096e4ed993c5278b16bbe70a.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -413,14 +413,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 18
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/0b290c3f06b34d0e8e4a0b518d1cbed4.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 19
             },
             {
-                "name": "Trips &amp; Excursions",
+                "name": "Trips & Excursions",
                 "slug": "trips-excursions",
                 "typeId": "1042",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -446,7 +446,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
     "buenos aires": {
         "categories": [
             {
-                "name": "Shows &amp; Theatres",
+                "name": "Shows & Theatres",
                 "slug": "shows-theatres",
                 "typeId": "2596",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/60830e45a1324dffa76b61fcf085ca32.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -460,14 +460,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 7
             },
             {
-                "name": "Food &amp; Drinks",
+                "name": "Food & Drinks",
                 "slug": "food-drinks",
                 "typeId": "1034",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/cd0606347a5d40a7ad9ebd08b57ce562.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 5
             },
             {
-                "name": "Concerts &amp; Live Music",
+                "name": "Concerts & Live Music",
                 "slug": "concerts-live-music",
                 "typeId": "2595",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/3d4f13ee0df543bd978ba8bf41505723.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -481,7 +481,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 5
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/8e23c09ff41d4a93ae42f9a8d2aaec77.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -507,14 +507,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 4
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/498744a444f44ad7b72b750c365a5ee9.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 3
             },
             {
-                "name": "Games &amp; Entertainment",
+                "name": "Games & Entertainment",
                 "slug": "games-entertainment",
                 "typeId": "1038",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/feec2b70dc38ab4706b125175e5b413425ea39d32ec59d19977deb9f6fbbef5d.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -540,7 +540,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 23
             },
             {
-                "name": "Shows &amp; Theatres",
+                "name": "Shows & Theatres",
                 "slug": "shows-theatres",
                 "typeId": "2596",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/7d6ccffa1eec43c199df358fca728a42.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -554,14 +554,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 31
             },
             {
-                "name": "Nature &amp; Wildlife",
+                "name": "Nature & Wildlife",
                 "slug": "nature-wildlife",
                 "typeId": "2745",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/3a617c0f6f944ad7b0fc5666bababb3a.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 11
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/63cd16d7d66e413e9bd6b913356aa42c.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -580,7 +580,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 54
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/6a5dca1870f94e1dbb030ca079d63577.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -601,14 +601,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 168
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/99878ba711a440a5bec368d37f306bfc.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 20
             },
             {
-                "name": "City Cards &amp; Passes",
+                "name": "City Cards & Passes",
                 "slug": "city-cards-passes",
                 "typeId": "1032",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/45887f65c8544ad398fa32c74014ffbe.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -627,7 +627,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 31
             },
             {
-                "name": "Historical &amp; Archaeological Sites",
+                "name": "Historical & Archaeological Sites",
                 "slug": "historical-archaeological-sites",
                 "typeId": "2967",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/28e75de8bb0a4e0caf177379707a513c.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -641,21 +641,21 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 38
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/813634a6af7346a5b5c294434795affa.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 14
             },
             {
-                "name": "Trips &amp; Excursions",
+                "name": "Trips & Excursions",
                 "slug": "trips-excursions",
                 "typeId": "1042",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/b0a9a7eeeae44fb4a2fb5a8495944ddf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 11
             },
             {
-                "name": "Food &amp; Drinks",
+                "name": "Food & Drinks",
                 "slug": "food-drinks",
                 "typeId": "1034",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/8127879203ebb410c4679416fc9109b91350ca97818f2b55dc90439874f1b847.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -681,14 +681,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 15
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/e31b32d4f0974117a55b745bc968a5e4.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 22
             },
             {
-                "name": "Trips &amp; Excursions",
+                "name": "Trips & Excursions",
                 "slug": "trips-excursions",
                 "typeId": "1042",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/323c64bf402246c4b816603a6511ac5b.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -735,7 +735,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 10
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/df0e1dcc9e0e418da053a82c9a040c3e.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -754,14 +754,14 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 44
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/ab5a376ebe9d42c8b7d18b1c5b83aca0.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 22
             },
             {
-                "name": "Shows &amp; Theatres",
+                "name": "Shows & Theatres",
                 "slug": "shows-theatres",
                 "typeId": "2596",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/635b16ff5dd94f379fdce0f8e5ec0aa7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -775,7 +775,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 11
             },
             {
-                "name": "Trips &amp; Excursions",
+                "name": "Trips & Excursions",
                 "slug": "trips-excursions",
                 "typeId": "1042",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/323c64bf402246c4b816603a6511ac5b.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -801,7 +801,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 9
             },
             {
-                "name": "Nature &amp; Wildlife",
+                "name": "Nature & Wildlife",
                 "slug": "nature-wildlife",
                 "typeId": "2745",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/cbb29fcf33cc46c49e361604241cd4b4.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
@@ -822,7 +822,7 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "count": 34
             },
             {
-                "name": "Cruises &amp; Boat Tours",
+                "name": "Cruises & Boat Tours",
                 "slug": "cruises-boat-tours",
                 "typeId": "1035",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/ef124566e48a4b218512ac9256466888.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
