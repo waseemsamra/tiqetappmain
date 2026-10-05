@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Building,
-  Calendar,
   CarTaxiFront,
   ChevronRight,
   Compass,
@@ -12,14 +11,16 @@ import {
   Menu,
   Plane,
   Search,
-  Star,
-  Tag,
   Ticket,
   User,
-  X,
 } from 'lucide-react';
 import { LanguageProvider, useT } from '@/components/language-provider';
+import { UniversalSearch } from '@/components/universal-search';
+import { StaysSearchBar } from '@/components/stays-search-bar';
+import { TransfersSearchForm } from '@/components/transfers-search-form';
+import { AGODA_DESTINATIONS } from '@/lib/agoda-catalog';
 import AttractionListingSection from '@/app/attraction-listing';
+import Footer from '@/components/footer';
 import type { Excursion } from '@/types';
 import type { HomePageData } from '@/lib/home-data';
 
@@ -144,7 +145,10 @@ function DesktopSections({
   );
 }
 
-interface MobileHomeProps extends HomePageData {}
+interface MobileHomeProps extends HomePageData {
+  /** Show the bottom nav only for signed-in visitors. */
+  isLoggedIn?: boolean;
+}
 
 export default function MobileHome({
   allExcursions,
@@ -157,10 +161,9 @@ export default function MobileHome({
   topCityExcursions,
   topCityName,
   language,
+  isLoggedIn = false,
 }: MobileHomeProps) {
   const [activeTab, setActiveTab] = useState<TabKey>('activities');
-  const [destination, setDestination] = useState('');
-  const [couponVisible, setCouponVisible] = useState(true);
   const [activeNav, setActiveNav] = useState<NavKey>('discover');
   const [splashVisible, setSplashVisible] = useState(true);
   const [splashFading, setSplashFading] = useState(false);
@@ -182,7 +185,7 @@ export default function MobileHome({
   }, [allExcursions]);
 
   return (
-    <div className="min-h-screen bg-[#F4F6FA] pb-24">
+    <div className={`min-h-screen bg-[#F4F6FA] ${isLoggedIn ? 'pb-24' : 'pb-6'}`}>
       {/* Splash screen — logo centred, fades out on load */}
       {splashVisible && (
         <div
@@ -212,19 +215,6 @@ export default function MobileHome({
 
       {/* Teal hero with tabs + search */}
       <section className="bg-gradient-to-b from-[#0FA0C4] to-[#0D94B5] px-3.5 pb-10 pt-5 text-white">
-        {/* VIP / Platinum badge */}
-        <div className="mb-[18px] flex justify-center">
-          <div className="flex overflow-hidden rounded text-xs font-bold uppercase tracking-[0.5px] shadow-md">
-            <div className="flex items-center gap-[5px] bg-[#0F172A] px-2.5 py-[5px] text-white">
-              <Star className="h-[11px] w-[11px]" fill="#FFD700" strokeWidth={0} />
-              VIP
-            </div>
-            <div className="bg-[#7B68EE] px-3 py-[5px] font-semibold text-white">
-              Platinum
-            </div>
-          </div>
-        </div>
-
         {/* Tab cards */}
         <div className="mb-3.5 grid grid-cols-4 gap-2">
           {TABS.map((tab) => {
@@ -253,52 +243,34 @@ export default function MobileHome({
           })}
         </div>
 
-        {/* Search card */}
-        <div className="rounded-[14px] bg-white p-3.5 text-[#1A2B49] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-          <div className="mb-2.5 flex items-center gap-3 rounded-[10px] border-[1.5px] border-[#5392F9] px-4 py-4">
-            <Search className="h-[17px] w-[17px] shrink-0 text-[#5C6B85]" />
-            <input
-              type="text"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              placeholder="Where would you like to go?"
-              className="min-w-0 flex-1 text-[15px] text-[#1A2B49] outline-none placeholder:text-[#8B96A8]"
+        {/* Search card — the real desktop form per tab */}
+        <div className="rounded-[14px] bg-white p-3 text-[#1A2B49] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+          {activeTab === 'activities' && <UniversalSearch />}
+
+          {activeTab === 'stays' && (
+            <StaysSearchBar
+              destinations={AGODA_DESTINATIONS}
+              defaultDestination=""
+              defaultCheckIn={new Date(Date.now() + 86400000).toISOString().slice(0, 10)}
+              defaultCheckOut={new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10)}
+              defaultAdults={2}
+              defaultChildren={0}
             />
-          </div>
+          )}
 
-          <div className="mb-2.5 grid grid-cols-2 overflow-hidden rounded-[10px] border-[1.5px] border-[#E4E9F2] bg-white">
-            <button className="flex items-center gap-2.5 px-3.5 py-3 hover:bg-[#FAFCFF]">
-              <Calendar className="h-[18px] w-[18px] shrink-0 text-[#1A2B49]" />
-              <div className="min-w-0 flex-1 text-left">
-                <div className="text-xs leading-tight text-[#5C6B85]">Check-in</div>
-                <div className="text-base font-bold leading-tight text-[#5392F9]">
-                  Sun, Oct 4
-                </div>
-              </div>
-            </button>
-            <button className="flex items-center gap-2.5 border-l border-[#E4E9F2] px-3.5 py-3 hover:bg-[#FAFCFF]">
-              <Calendar className="h-[18px] w-[18px] shrink-0 text-[#1A2B49]" />
-              <div className="min-w-0 flex-1 text-left">
-                <div className="text-xs leading-tight text-[#5C6B85]">Check-out</div>
-                <div className="text-base font-bold leading-tight text-[#5392F9]">
-                  Mon, Oct 5
-                </div>
-              </div>
-            </button>
-          </div>
+          {activeTab === 'flights' && (
+            <a
+              href="https://flights.aafare.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#5392F9] py-4 text-base font-bold uppercase tracking-[0.6px] text-white shadow-[0_4px_12px_rgba(83,146,249,0.3)] transition-colors hover:bg-[#3B78E0]"
+            >
+              <Search className="h-[18px] w-[18px]" />
+              Search Flights
+            </a>
+          )}
 
-          <button className="mb-3.5 flex items-center gap-3 rounded-[10px] border-[1.5px] border-[#E4E9F2] px-4 py-3.5 text-left hover:border-[#CBD5E0]">
-            <User className="h-[18px] w-[18px] shrink-0 text-[#1A2B49]" />
-            <span className="min-w-0 flex-1 text-[15px] font-medium text-[#1A2B49]">
-              <span className="font-bold text-[#5392F9]">1</span> Room,{' '}
-              <span className="font-bold text-[#5392F9]">2</span> Adults,{' '}
-              <span className="font-bold text-[#5392F9]">0</span> Children
-            </span>
-          </button>
-
-          <button className="w-full rounded-[10px] bg-[#5392F9] py-4 text-center text-base font-bold uppercase tracking-[0.6px] text-white shadow-[0_4px_12px_rgba(83,146,249,0.3)] transition-colors hover:bg-[#3B78E0] active:scale-[0.99]">
-            Search
-          </button>
+          {activeTab === 'transfers' && <TransfersSearchForm />}
         </div>
       </section>
 
@@ -361,26 +333,15 @@ export default function MobileHome({
         />
       </LanguageProvider>
 
-      {/* Fixed bottom coupon bar — sits above the nav */}
-      {couponVisible && (
-        <div className="fixed bottom-[68px] left-0 right-0 z-[100] flex items-center gap-3 border-t border-[#E4E9F2] bg-white px-4 py-3 shadow-[0_-4px_16px_rgba(15,23,42,0.08)]">
-          <button className="shrink-0 p-1" onClick={() => setCouponVisible(false)} aria-label="Close">
-            <X className="h-[18px] w-[18px] text-[#5C6B85]" />
-          </button>
-          <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#FF6B6B] to-[#E23F3F] text-white">
-            <Tag className="h-[15px] w-[15px]" />
-            <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#E23F3F]" />
-          </div>
-          <span className="min-w-0 flex-1 text-sm font-bold leading-snug text-[#1A2B49]">
-            Find Coupons &amp; Deals
-          </span>
-          <button className="shrink-0 rounded-full border-[1.5px] border-[#E4E9F2] bg-white px-4 py-2 text-[13px] font-bold text-[#5392F9] transition-colors hover:border-[#5392F9] hover:bg-[#F0F4FF]">
-            View all
-          </button>
+      {/* Footer — desktop footer in a rounded panel */}
+      <section className="px-3.5 pt-5">
+        <div className="overflow-hidden rounded-2xl shadow-[0_2px_12px_rgba(15,23,42,0.06)]">
+          <Footer />
         </div>
-      )}
+      </section>
 
-      {/* Fixed bottom navigation */}
+      {/* Fixed bottom navigation — signed-in visitors only */}
+      {isLoggedIn && (
       <nav className="fixed bottom-0 left-0 right-0 z-[110] flex border-t border-[#E4E9F2] bg-white">
         {BOTTOM_NAV.map((item) => {
           const Icon = item.icon;
@@ -409,6 +370,7 @@ export default function MobileHome({
           );
         })}
       </nav>
+      )}
     </div>
   );
 }
