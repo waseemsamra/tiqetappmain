@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { UserCircle, HelpCircle, Globe } from 'lucide-react';
+import { UserCircle, HelpCircle, Globe, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languageShortLabel } from '@/lib/preferences';
 import { SettingsModal } from './settings-modal';
@@ -15,7 +15,8 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-50 bg-background shadow-sm">
-        <div className="container mx-auto px-4">
+        {/* Desktop navigation */}
+        <div className="container mx-auto hidden px-4 md:block">
           <div className="flex h-14 items-center justify-between">
             <Link href="/" aria-label="AAFare" className="flex items-center gap-2">
               <img src="/aafare-logo.png" alt="AAFare" className="h-10 w-auto" />
@@ -53,6 +54,22 @@ export default function Header() {
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* Mobile navigation — consistent top bar on every page */}
+        <div className="flex h-14 items-center justify-between bg-white px-[18px] md:hidden">
+          <Link href="/" aria-label="AAFare" className="flex items-center gap-2">
+            <img src="/aafare-logo.png" alt="AAFare" className="h-9 w-auto" />
+            <span className="flex flex-col justify-center leading-none">
+              <span className="text-lg font-bold text-[#5392F9]">AAFare</span>
+              <span className="-mt-[2px] text-lg font-bold text-[#5C6B85]">
+                International
+              </span>
+            </span>
+          </Link>
+          <button className="p-1" aria-label="Menu">
+            <Menu className="h-6 w-6 text-[#1A2B49]" />
+          </button>
         </div>
       </header>
       <SettingsModal isOpen={isSettingsModalOpen} onOpenChange={setIsSettingsModalOpen} />

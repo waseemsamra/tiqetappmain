@@ -3,20 +3,35 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Building,
+  CarTaxiFront,
   ChevronRight,
   Compass,
   Heart,
+  Hotel,
   Menu,
   Plane,
+  Search,
   Ticket,
   User,
 } from 'lucide-react';
 import { LanguageProvider, useT } from '@/components/language-provider';
-import { HeroSearchWidget } from '@/components/hero-search-widget';
+import { ActivitiesSearchForm } from '@/components/hero-search-widget';
+import { StaysSearchBar } from '@/components/stays-search-bar';
+import { TransfersSearchForm } from '@/components/transfers-search-form';
+import { AGODA_DESTINATIONS } from '@/lib/agoda-catalog';
 import AttractionListingSection from '@/app/attraction-listing';
 import Footer from '@/components/footer';
 import type { Excursion } from '@/types';
 import type { HomePageData } from '@/lib/home-data';
+
+type TabKey = 'activities' | 'stays' | 'flights' | 'transfers';
+
+const TABS: { key: TabKey; label: string; icon: typeof Hotel }[] = [
+  { key: 'activities', label: 'Activities', icon: Ticket },
+  { key: 'stays', label: 'Stays', icon: Hotel },
+  { key: 'flights', label: 'Flights', icon: Plane },
+  { key: 'transfers', label: 'Transfers', icon: CarTaxiFront },
+];
 
 const GIFT_CARDS = [
   {
@@ -148,6 +163,7 @@ export default function MobileHome({
   language,
   isLoggedIn = false,
 }: MobileHomeProps) {
+  const [activeTab, setActiveTab] = useState<TabKey>('activities');
   const [activeNav, setActiveNav] = useState<NavKey>('discover');
   const [splashVisible, setSplashVisible] = useState(true);
   const [splashFading, setSplashFading] = useState(false);
@@ -197,9 +213,65 @@ export default function MobileHome({
         </button>
       </header>
 
-      {/* Teal hero — the desktop search widget */}
-      <section className="bg-gradient-to-b from-[#0FA0C4] to-[#0D94B5] px-3.5 pb-20 pt-5 text-white">
-        <HeroSearchWidget />
+      {/* Teal hero with tabs + search */}
+      <section className="bg-gradient-to-b from-[#0FA0C4] to-[#0D94B5] px-3.5 pb-10 pt-5 text-white">
+        {/* Tab cards */}
+        <div className="mb-3.5 grid grid-cols-4 gap-2">
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const active = tab.key === activeTab;
+            return (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-[10px] px-1.5 py-3.5 text-center transition-colors ${
+                  active
+                    ? 'bg-white text-[#5392F9] shadow-[0_4px_12px_rgba(0,0,0,0.1)]'
+                    : 'bg-white/20 text-white hover:bg-white/30'
+                }`}
+              >
+                <Icon className="h-[26px] w-[26px]" strokeWidth={active ? 2.4 : 2} />
+                <span
+                  className={`text-[13px] leading-tight ${
+                    active ? 'font-bold' : 'font-semibold'
+                  }`}
+                >
+                  {tab.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Search card — the desktop form per tab */}
+        <div className="rounded-[14px] bg-[#F5F6F8] p-3 text-[#1A2B49] shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+          {activeTab === 'activities' && <ActivitiesSearchForm compact />}
+
+          {activeTab === 'stays' && (
+            <StaysSearchBar
+              destinations={AGODA_DESTINATIONS}
+              defaultDestination=""
+              defaultCheckIn={new Date(Date.now() + 86400000).toISOString().slice(0, 10)}
+              defaultCheckOut={new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10)}
+              defaultAdults={2}
+              defaultChildren={0}
+            />
+          )}
+
+          {activeTab === 'flights' && (
+            <a
+              href="https://flights.aafare.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#5392F9] py-4 text-base font-bold uppercase tracking-[0.6px] text-white shadow-[0_4px_12px_rgba(83,146,249,0.3)] transition-colors hover:bg-[#3B78E0]"
+            >
+              <Search className="h-[18px] w-[18px]" />
+              Search Flights
+            </a>
+          )}
+
+          {activeTab === 'transfers' && <TransfersSearchForm />}
+        </div>
       </section>
 
       {/* Welcome gift pack — separate panel below the hero */}

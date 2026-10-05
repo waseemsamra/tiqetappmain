@@ -1,10 +1,9 @@
 'use client';
 
-import { ShieldCheck } from 'lucide-react';
 import type { Excursion, ExcursionVariant } from '@/types';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatPrice } from '@/lib/currency';
+import { VariantBookingClient } from '@/app/variants/[id]/variant-booking-client';
 
 interface BookingCardProps {
   excursion: Excursion;
@@ -35,16 +34,9 @@ export const BookingCard = ({ excursion, selectedVariant }: BookingCardProps) =>
           Keep in mind you need to arrive 30 minutes before start.
         </p>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex-col items-stretch gap-4 p-4">
         {displayPrice > 0 ? (
-          <Button
-            onClick={() => {
-              // TODO: Implement booking logic
-            }}
-            className="w-full"
-          >
-            Book Now
-          </Button>
+          <VariantBookingClient productId={excursion.id} />
         ) : (
           <p className="text-sm font-medium text-center text-muted-foreground">
             Price not available

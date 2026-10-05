@@ -419,6 +419,335 @@ function WhereField({
   );
 }
 
+/**
+ * The activities search form from the hero widget:
+ * category pills, live suggestion search, and the
+ * where / when / travelers row. Extracted so the
+ * mobile page can render the exact same form inside
+ * its own tabbed search card.
+ *
+ * `compact` drops the overlapping pill button that the
+ * desktop hero uses, so the form fits inside a panel.
+ */
+export function ActivitiesSearchForm({
+  compact = false,
+}: { compact?: boolean } = {}) {
+  const t = useT();
+  const router = useRouter();
+
+  // ---- Activities search state ----
+  const [query, setQuery] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [category, setCategory] = useState('all');
+  const [whereValue, setWhereValue] = useState('');
+  const [whenValue, setWhenValue] = useState('');
+  const { results, isLoading, search } = useSuggestSearch();
+  const queryInputRef = useRef<HTMLInputElement>(null);
+
+  // ---- Travelers state ----
+  const [paxOpen, setPaxOpen] = useState(false);
+  const [actAdults, setActAdults] = useState(2);
+  const [actChildren, setActChildren] = useState(0);
+  const paxRef = useRef<HTMLDivElement>(null);
+
+  const hasResults =
+    results.countries.length > 0 ||
+    results.cities.length > 0 ||
+    results.activities.length > 0;
+
+  const showEmptyState = useMemo(
+    () => !isLoading && query.trim().length >= 2 && !hasResults,
+    [isLoading, query, hasResults],
+  );
+
+  const submitSearch = () => {
+    const text = query.trim();
+    // A category chip alone (no typed text) still searches: the
+    // chip's label becomes the query, e.g. the Museums chip
+    // searches for "Museums".
+    const categoryLabel =
+      category !== 'all' ? t(`search.category.${category}`).trim() : '';
+    if (!text && !categoryLabel) return;
+    setIsOpen(false);
+    setPaxOpen(false);
+    const params = new URLSearchParams({ query: text || categoryLabel });
+    if (whereValue.trim()) params.set('city', whereValue.trim());
+    if (whenValue) params.set('date', whenValue);
+    params.set('adults', String(actAdults));
+    if (actChildren > 0) params.set('children', String(actChildren));
+    router.push(`/search?${params.toString()}`);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setQuery(value);
+    search(value, category);
+    if (value.trim().length >= 2) setIsOpen(true);
+  };
+
+  useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (paxRef.current && !paxRef.current.contains(e.target as Node)) {
+        setPaxOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, []);
+
+  return (
+    <div role="tabpanel">
+      {/* Category chips — horizontally scrollable on mobile */}
+      <div
+        className="mb-5 flex flex-wrap gap-[10px] max-lg:flex-nowrap max-lg:overflow-x-auto max-lg:scrollbar-hide"
+        role="tablist"
+        aria-label={t('search.categoryLabel')}
+      >
+        {(
+          ['all', 'attractions', 'tours', 'cruises', 'museums', 'shows', 'dayTrips'] as const
+        ).map((id) => (
+          <button
+            key={id}
+            role="tab"
+            type="button"
+            aria-selected={category === id}
+            onClick={() => {
+              setCategory(id);
+              if (query.trim().length >= 2) search(query, id);
+            }}
+             className={cn(
+               'rounded-[22px] border-[1.5px] px-[18px] py-[9px] text-[13px] font-semibold transition-colors max-lg:shrink-0',
+               category === id
+                 ? 'border-[#3B6EFF] text-[#3B6EFF]'
+                 : 'border-[#D1D9E2] bg-white text-[#1A2B49] hover:border-[#3B6EFF] hover:text-[#3B6EFF]',
+             )}
+          >
+            {t(`search.category.${id}`)}
+          </button>
+        ))}
+      </div>
+
+      {/* Search field with suggestions */}
+      <div className="relative mb-3">
+        <ActivitiesQueryField
+          t={t}
+          value={query}
+          onChange={handleQueryChange}
+          onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
+          inputRef={queryInputRef}
+        />
+
+        {isOpen && (
+          <div className="absolute left-0 right-0 top-full z-50 mt-1.5 max-h-[min(380px,55vh)] overflow-y-auto rounded-[10px] bg-white shadow-[0_12px_40px_rgba(15,23,42,0.12)]">
+            {isLoading && (
+              <ul className="p-2" role="status" aria-label={t('search.loading')}>
+                {[...Array(3)].map((_, i) => (
+                  <li key={i} className="flex items-center gap-4 p-3">
+                    <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
+                    <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" />
+                  </li>
+                ))}
+                {[...Array(3)].map((_, i) => (
+                  <li key={`city-${i}`} className="flex items-center gap-4 p-3">
+                    <div className="h-5 w-5 rounded animate-pulse bg-slate-200" aria-hidden />
+                    <div className="h-4 w-1/2 animate-pulse bg-slate-200 rounded" />
+                  </li>
+                ))}
+                {[...Array(4)].map((_, i) => (
+                  <li key={`activity-${i}`} className="flex items-center gap-4 p-3">
+                    <div className="h-12 w-12 rounded-md animate-pulse bg-slate-200" aria-hidden />
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="h-4 w-3/4 animate-pulse bg-slate-200 rounded" />
+                      <div className="h-3 w-1/2 animate-pulse bg-slate-200 rounded" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {!isLoading && hasResults && (
+              <ul>
+                {results.countries.length > 0 && (
+                  <>
+                    <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                      {t('search.groupCountries')}
+                    </li>
+                    {results.countries.map((country: Country) => (
+                      <li key={`country-${country.id}`}>
+                        <Link
+                          href={`/country/${encodeURIComponent(country.name)}`}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-4 p-3 hover:bg-slate-50"
+                        >
+                          <Globe className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
+                          <p className="truncate font-semibold">{country.name}</p>
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                )}
+
+                {results.cities.length > 0 && (
+                  <>
+                    <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                      {t('search.groupCities')}
+                    </li>
+                    {results.cities.map((city: City) => (
+                      <li key={`city-${city.id || city.name}`}>
+                        <Link
+                          href={`/city/${encodeURIComponent(city.name)}`}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-4 p-3 hover:bg-slate-50"
+                        >
+                          <Building className="h-5 w-5 shrink-0 text-slate-500" aria-hidden />
+                          <p className="truncate font-semibold">{city.name}</p>
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                )}
+
+                {results.activities.length > 0 && (
+                  <>
+                    <li className="bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500">
+                      {t('search.groupActivities')}
+                    </li>
+                    {results.activities.map((ex) => (
+                      <li key={ex.id}>
+                        <button
+                          onClick={() => {
+                            router.push(`/excursions/${ex.id}`);
+                            setIsOpen(false);
+                          }}
+                          className="flex w-full items-center gap-4 p-3 text-left hover:bg-slate-50"
+                        >
+                          {ex.images?.[0] && (
+                            <Image
+                              src={imageUrlFor(ex.images[0], 'mini')}
+                              alt={ex.name}
+                              width={48}
+                              height={48}
+                              className="h-12 w-12 shrink-0 rounded-md object-cover"
+                              unoptimized
+                            />
+                          )}
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold">{ex.name}</p>
+                            <p className="truncate text-sm text-slate-500">
+                              {[ex.city, ex.country].filter(Boolean).join(', ')}
+                            </p>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                  </>
+                )}
+              </ul>
+            )}
+
+            {showEmptyState && (
+              <div className="p-4 text-center text-slate-500">
+                {t('search.noResults', { query: query.trim() })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Where / When / Travelers */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1.4fr_1.4fr_1.1fr]">
+        <WhereField
+          icon={MapPin}
+          label={t('search.where')}
+          placeholder={t('search.wherePlaceholder')}
+          t={t}
+          grow="min-w-0"
+          onChange={setWhereValue}
+        />
+        <ActivitiesField icon={CalendarDays} label={t('search.when')} grow="min-w-0">
+          <input
+            type="date"
+            value={whenValue}
+            min={isoIn(0)}
+            onChange={(e) => setWhenValue(e.target.value)}
+            aria-label={t('search.when')}
+            className="w-full bg-transparent p-0 text-[15px] font-semibold text-[#1A2B49] outline-none"
+          />
+        </ActivitiesField>
+        <ActivitiesField icon={Users} label={t('search.travelers')} grow="min-w-0">
+          <div ref={paxRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setPaxOpen((open) => !open)}
+              aria-expanded={paxOpen}
+              className="flex w-full items-center justify-between gap-2 text-[15px] font-semibold text-[#1A2B49]"
+            >
+              <span className="truncate">
+                {actAdults} {t('search.adults').toLowerCase()}
+                {actChildren > 0 &&
+                  `, ${actChildren} ${t('search.children').toLowerCase()}`}
+              </span>
+              <ChevronDown
+                className={cn(
+                  'h-3 w-3 shrink-0 text-[#5C6B85] transition-transform',
+                  paxOpen && 'rotate-180',
+                )}
+                aria-hidden
+              />
+            </button>
+
+            {paxOpen && (
+              <div className="absolute right-0 top-full z-50 mt-1.5 w-64 rounded-[10px] bg-white p-4 shadow-[0_12px_40px_rgba(15,23,42,0.12)]">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="text-sm font-medium text-[#1A2B49]">
+                    {t('search.adults')}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <StepperButton onClick={() => setActAdults((a) => Math.max(1, a - 1))} disabled={actAdults <= 1}>
+                      <Minus className="h-3.5 w-3.5" />
+                    </StepperButton>
+                    <span className="w-6 text-center font-semibold">{actAdults}</span>
+                    <StepperButton onClick={() => setActAdults((a) => Math.min(8, a + 1))} disabled={actAdults >= 8}>
+                      <Plus className="h-3.5 w-3.5" />
+                    </StepperButton>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-medium text-[#1A2B49]">
+                    {t('search.children')}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <StepperButton onClick={() => setActChildren((c) => Math.max(0, c - 1))} disabled={actChildren <= 0}>
+                      <Minus className="h-3.5 w-3.5" />
+                    </StepperButton>
+                    <span className="w-6 text-center font-semibold">{actChildren}</span>
+                    <StepperButton onClick={() => setActChildren((c) => Math.min(8, c + 1))} disabled={actChildren >= 8}>
+                      <Plus className="h-3.5 w-3.5" />
+                    </StepperButton>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </ActivitiesField>
+      </div>
+
+      {/* Search button — overlaps the panel bottom on the desktop hero */}
+      <div className="relative z-20 mt-6 flex justify-center">
+        <button
+          type="button"
+          onClick={submitSearch}
+          className={cn(
+            'inline-flex items-center justify-center rounded-full bg-[#3B6EFF] px-[140px] py-[8px] text-sm font-bold uppercase tracking-[1.5px] text-white shadow-[0_8px_24px_rgba(59,110,255,0.35)] transition-colors hover:bg-[#2A5FE0] active:scale-[0.98] max-lg:min-w-0 max-lg:px-[60px] max-sm:px-10',
+            !compact && '-mb-[70px] min-w-[420px]',
+          )}
+        >
+          {t('search.submit')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function HeroSearchWidget() {
   const t = useT();
   const router = useRouter();
