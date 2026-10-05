@@ -37,7 +37,7 @@ export default function HeroSection({ content }: { content: HeroContent | null }
             unoptimized
           />
         )}
-        <h1 className="absolute left-1/2 top-[22px] z-[3] -translate-x-1/2 whitespace-nowrap text-center text-[28px] font-extrabold tracking-[-0.4px] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.25)] max-lg:top-5 max-lg:text-[22px] max-sm:top-4 max-sm:text-lg">
+        <h1 className="absolute left-1/2 top-[22px] z-[3] -translate-x-1/2 whitespace-nowrap text-center text-[33.9px] font-extrabold tracking-[-0.4px] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.25)] max-lg:top-5 max-lg:text-[26.6px] max-sm:top-4 max-sm:text-[21.8px]">
           {content.headline}
         </h1>
         <p className="absolute left-1/2 top-[58px] z-[3] -translate-x-1/2 whitespace-nowrap text-center text-[15px] leading-snug text-white/95 [text-shadow:0_1px_8px_rgba(0,0,0,0.3)] max-lg:top-[52px] max-lg:max-w-[600px] max-lg:whitespace-normal max-lg:px-5 max-lg:text-[13px] max-sm:top-11 max-sm:max-w-[320px] max-sm:text-xs">

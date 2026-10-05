@@ -1,8 +1,29 @@
  
 import { type NextRequest, NextResponse } from 'next/server';
 import { readVisitorCountry, VISITOR_COUNTRY_COOKIE } from '@/lib/visitor-country';
+import { getMobileRedirectTarget } from '../mobile/redirect';
+import { getDesktopRedirectTarget } from '../desktop/redirect';
 
 export async function middleware(request: NextRequest) {
+  const url = request.nextUrl.clone();
+
+  // Device-based routing between the two code folders:
+  // - mobile devices  -> React Native app store links (mobile/ folder)
+  // - desktop browsers -> Next.js web app (desktop/ folder rules)
+  // Guarded by MOBILE_REDIRECT_ENABLED so the web app keeps
+  // working on mobile during development. Env vars are inlined
+  // at build time, so changing them requires a rebuild.
+  if (process.env.MOBILE_REDIRECT_ENABLED === 'true') {
+    const mobileTarget = getMobileRedirectTarget(request.headers.get('user-agent'));
+    if (mobileTarget) {
+      return NextResponse.redirect(mobileTarget, 302);
+    }
+    const desktopTarget = getDesktopRedirectTarget(url.pathname);
+    if (desktopTarget) {
+      return NextResponse.redirect(new URL(desktopTarget, request.url), 301);
+    }
+  }
+
   const response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -10,7 +31,6 @@ export async function middleware(request: NextRequest) {
   });
 
   // Check for referral code in query params
-  const url = request.nextUrl.clone();
   const refCode = url.searchParams.get('ref');
 
   if (refCode) {

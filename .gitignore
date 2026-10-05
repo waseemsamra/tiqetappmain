@@ -7,9 +7,13 @@
 
 # Dependencies
 /node_modules
+/mobile/node_modules
 /.pnp
 .pnp.js
 .pnp.cjs
+
+# Expo
+/.expo
 
 # Testing
 /coverage
