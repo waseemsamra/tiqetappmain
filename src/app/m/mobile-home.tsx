@@ -66,7 +66,7 @@ export default function MobileHome() {
         <div className="w-8" />
         <div className="flex flex-col items-center gap-0.5">
           <span className="text-[20px] font-extrabold leading-none tracking-[-0.5px] text-[#1A2B49]">
-            tiqet
+            AAFare
           </span>
           <div className="flex gap-[3px]">
             {LOGO_DOTS.map((color) => (
