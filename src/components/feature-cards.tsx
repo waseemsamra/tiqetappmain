@@ -27,7 +27,10 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: React.ElementTy
     </div>
 );
 
-export default function FeatureCards({ hideFirst = false }: { hideFirst?: boolean } = {}) {
+export default function FeatureCards({
+    hideFirst = false,
+    panel = false,
+}: { hideFirst?: boolean; panel?: boolean } = {}) {
     const t = useT();
     const features = [
         {
@@ -50,8 +53,10 @@ export default function FeatureCards({ hideFirst = false }: { hideFirst?: boolea
     const visibleFeatures = hideFirst ? features.slice(1) : features;
 
     return (
-        <div className="bg-background">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className={panel
+            ? 'mx-3.5 mt-5 rounded-2xl bg-white py-6 shadow-[0_2px_12px_rgba(15,23,42,0.06)]'
+            : 'bg-background'}>
+            <div className={panel ? 'px-4' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'}>
                 {/* Mobile carousel - visible on small screens */}
                 <div className="md:hidden">
                     <Carousel opts={CAROUSEL_OPTS} className="w-full">

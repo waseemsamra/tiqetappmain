@@ -64,6 +64,8 @@ interface AttractionListingSectionProps {
     /** Render a native momentum scroller instead of the embla carousel
      *  (smooth touch dragging, like the mobile gift-pack row). */
     nativeScroll?: boolean;
+    /** Wrap the section in a rounded white panel (mobile home). */
+    panel?: boolean;
 }
 
 export default function AttractionListingSection({
@@ -79,6 +81,7 @@ export default function AttractionListingSection({
     tabs,
     cityImages,
     nativeScroll = false,
+    panel = false,
 } : AttractionListingSectionProps) {
     const cities = useMemo(() => {
         if (tabs && tabType === 'city') {
@@ -276,7 +279,9 @@ export default function AttractionListingSection({
     };
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12">
+        <div className={panel
+            ? 'mx-3.5 my-5 rounded-2xl bg-white px-4 py-7 shadow-[0_2px_12px_rgba(15,23,42,0.06)]'
+            : 'px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-12'}>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-left mb-4 md:mb-0">
                     {title}

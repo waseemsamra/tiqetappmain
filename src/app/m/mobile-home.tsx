@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   Building,
   Calendar,
-  Car,
   CarTaxiFront,
   ChevronRight,
   Compass,
@@ -13,7 +12,6 @@ import {
   Menu,
   Plane,
   Search,
-  Smartphone,
   Star,
   Tag,
   Ticket,
@@ -22,8 +20,6 @@ import {
 } from 'lucide-react';
 import { LanguageProvider, useT } from '@/components/language-provider';
 import AttractionListingSection from '@/app/attraction-listing';
-import FeatureCards from '@/components/feature-cards';
-import HelpCenterSection from '@/components/help-center-section';
 import type { Excursion } from '@/types';
 import type { HomePageData } from '@/lib/home-data';
 
@@ -61,12 +57,6 @@ const BOTTOM_NAV = [
 ] as const;
 
 type NavKey = (typeof BOTTOM_NAV)[number]['key'];
-
-const EXPLORE_ITEMS = [
-  { icon: Smartphone, label: 'eSIM' },
-  { icon: CarTaxiFront, label: 'Airport Transfer' },
-  { icon: Car, label: 'Car Rental' },
-];
 
 const TARGET_CITIES = [
   'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam',
@@ -109,7 +99,6 @@ function DesktopSections({
     <>
       {/* HeroSection is skipped on mobile — the teal
           tab/search hero above is the mobile hero. */}
-      <FeatureCards hideFirst />
       <AttractionListingSection
         title={featuredTitle}
         excursions={featuredExcursions}
@@ -119,6 +108,7 @@ function DesktopSections({
         tabs={featuredCities}
         cityImages={cityImages}
         nativeScroll
+        panel
       />
       <AttractionListingSection
         title={t('home.bestPlacesWorldwide')}
@@ -128,6 +118,7 @@ function DesktopSections({
         tabs={TARGET_CITIES}
         cityImages={cityImages}
         nativeScroll
+        panel
       />
       <AttractionListingSection
         title={t('home.topThingsInCity', { city: topCityName })}
@@ -136,6 +127,7 @@ function DesktopSections({
         showViewAllButton={false}
         showTabs={false}
         nativeScroll
+        panel
       />
       <AttractionListingSection
         title={t('home.mostPopular')}
@@ -145,9 +137,9 @@ function DesktopSections({
         showTabs={false}
         tabType="city"
         nativeScroll
+        panel
       />
       {/* PopularPlacesSection is hidden on mobile. */}
-      <HelpCenterSection />
     </>
   );
 }
@@ -190,7 +182,7 @@ export default function MobileHome({
   }, [allExcursions]);
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-[#F4F6FA] pb-24">
       {/* Splash screen — logo centred, fades out on load */}
       {splashVisible && (
         <div
@@ -304,7 +296,7 @@ export default function MobileHome({
       </section>
 
       {/* Welcome gift pack — separate panel below the hero */}
-      <section className="px-3.5 pt-8 pb-2">
+      <section className="px-3.5 pt-8">
         <div className="rounded-2xl bg-[#0E8FB0] px-4 py-5">
           <div className="mb-4 flex items-center gap-2.5">
             <h2 className="text-[22px] font-extrabold leading-tight text-white">
@@ -361,34 +353,6 @@ export default function MobileHome({
           homePageData={homePageData}
         />
       </LanguageProvider>
-
-      {/* Explore more */}
-      <section className="bg-[#0E8FB0] px-3.5 pb-10 pt-4">
-        <h3 className="mb-3.5 text-center text-[15px] font-semibold text-white">
-          Explore more
-        </h3>
-        <div className="grid grid-cols-3 gap-2">
-          {EXPLORE_ITEMS.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.label}
-                className="flex flex-col items-center gap-2 rounded-[10px] bg-black/25 px-1.5 py-3.5 transition-colors hover:bg-black/35"
-              >
-                <Icon className="h-[22px] w-[22px] text-white" />
-                <span className="text-center text-xs font-semibold leading-tight text-white">
-                  {item.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="mt-6 text-center">
-          <a href="/?desktop=1" className="text-xs font-semibold text-white/80 underline">
-            View desktop site
-          </a>
-        </div>
-      </section>
 
       {/* Fixed bottom coupon bar — sits above the nav */}
       {couponVisible && (

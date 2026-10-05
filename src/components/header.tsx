@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { UserCircle, Ticket, HelpCircle, Globe } from 'lucide-react';
+import { UserCircle, HelpCircle, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { languageShortLabel } from '@/lib/preferences';
 import { SettingsModal } from './settings-modal';
@@ -17,9 +17,14 @@ export default function Header() {
       <header className="fixed top-0 left-0 w-full z-50 bg-background shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex h-14 items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary">
-              <Ticket className="h-7 w-7" />
-              <span className="text-2xl font-bold">AAFare</span>
+            <Link href="/" aria-label="AAFare" className="flex items-center gap-2">
+              <img src="/aafare-logo.png" alt="AAFare" className="h-10 w-auto" />
+              <span className="flex flex-col justify-center leading-none">
+                <span className="text-lg font-bold text-primary">AAFare</span>
+                <span className="text-[9px] font-semibold uppercase tracking-[0.5px] text-muted-foreground">
+                  International
+                </span>
+              </span>
             </Link>
 
             <div className="flex items-center gap-1 sm:gap-3">
