@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Building,
   CarTaxiFront,
@@ -16,7 +17,6 @@ import {
 import { LanguageProvider, useT } from '@/components/language-provider';
 import { ActivitiesSearchForm } from '@/components/hero-search-widget';
 import { StaysSearchBar } from '@/components/stays-search-bar';
-import { TransfersSearchForm } from '@/components/transfers-search-form';
 import { FlightsSearchWidget } from '@/components/flights-search-widget';
 import { AGODA_DESTINATIONS } from '@/lib/agoda-catalog';
 import AttractionListingSection from '@/app/attraction-listing';
@@ -163,6 +163,7 @@ export default function MobileHome({
   language,
   isLoggedIn = false,
 }: MobileHomeProps) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>('activities');
   const [activeNav, setActiveNav] = useState<NavKey>('discover');
   const [splashVisible, setSplashVisible] = useState(true);
@@ -223,7 +224,14 @@ export default function MobileHome({
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                onClick={() => {
+                  // Transfers gets its own full page, same as desktop.
+                  if (tab.key === 'transfers') {
+                    router.push('/transfers');
+                    return;
+                  }
+                  setActiveTab(tab.key);
+                }}
                 className={`flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-[10px] px-1.5 py-3.5 text-center transition-colors ${
                   active
                     ? 'bg-white text-[#5392F9] shadow-[0_4px_12px_rgba(0,0,0,0.1)]'
@@ -259,8 +267,6 @@ export default function MobileHome({
           )}
 
           {activeTab === 'flights' && <FlightsSearchWidget />}
-
-          {activeTab === 'transfers' && <TransfersSearchForm />}
         </div>
       </section>
 
