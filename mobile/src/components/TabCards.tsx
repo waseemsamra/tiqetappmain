@@ -11,7 +11,7 @@ interface TabCardsProps {
 }
 
 const TABS: { key: HomeTab; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: 'hotels', label: 'Hotels', icon: 'hotel' },
+  { key: 'hotels', label: 'Hotels', icon: 'bed' },
   { key: 'flightHotel', label: 'Flight + Hotel', icon: 'airplane' },
   { key: 'flights', label: 'Flights', icon: 'airplane-outline' },
   { key: 'activities', label: 'Activities', icon: 'ticket' },
