@@ -8,8 +8,9 @@
  * Activities is the live search (ranked suggest
  * endpoint). Stays shows the mockup's stays panel
  * (overnight / day-use pills, property field, date
- * pair, guests) and submits to /stays. Flights is
- * hosted by Travelpayouts on their own subdomain;
+ * pair, guests) and submits to /stays. Flights embeds the
+ * Travelpayouts white-label form, which submits to
+ * flights.aafare.com with the filled parameters;
  * Transfers routes to its page; Packages is the only
  * presentational shell left, marked "Soon".
  */
@@ -43,11 +44,9 @@ import { useT } from '@/components/language-provider';
 import { cn } from '@/lib/utils';
 import { AGODA_DESTINATIONS } from '@/lib/agoda-catalog';
 import { StaysDestinationField } from '@/components/stays-destination-field';
+import { FlightsSearchWidget } from '@/components/flights-search-widget';
 
 type TabId = 'activities' | 'stays' | 'flights' | 'packages' | 'transfers';
-
-// Flight search is owned by Travelpayouts and only renders on their host.
-const FLIGHTS_SEARCH_URL = 'https://flights.aafare.com/';
 
 const TABS: Array<{ id: TabId; icon: typeof Ticket; enabled: boolean; comingSoon?: boolean }> = [
   { id: 'activities', icon: Ticket, enabled: true },
@@ -849,14 +848,7 @@ export function HeroSearchWidget() {
     setIsOpen(false);
     reset();
 
-    if (id === 'activities' || id === 'stays') return;
-
-    // Flight search is hosted by Travelpayouts on their own
-    // subdomain, so go there directly.
-    if (id === 'flights') {
-      window.location.href = FLIGHTS_SEARCH_URL;
-      return;
-    }
+    if (id === 'activities' || id === 'stays' || id === 'flights') return;
 
     // Everything else needs the full page width, so it gets
     // its own page with the site header.
@@ -1291,7 +1283,7 @@ export function HeroSearchWidget() {
             {/* Add a flight */}
             <button
               type="button"
-              onClick={() => window.location.href = FLIGHTS_SEARCH_URL}
+              onClick={() => selectTab('flights')}
               className="mt-2 inline-flex items-center gap-2 pb-1 text-sm font-semibold text-[#3B6EFF] transition-colors hover:text-[#2A5FE0]"
             >
               <Plus className="h-3 w-3 font-black" aria-hidden />
@@ -1308,6 +1300,13 @@ export function HeroSearchWidget() {
                 {t('search.submit')}
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ===== Flights: the Travelpayouts white-label form ===== */}
+        {activeTab === 'flights' && (
+          <div role="tabpanel">
+            <FlightsSearchWidget />
           </div>
         )}
       </div>

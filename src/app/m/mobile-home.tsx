@@ -10,7 +10,6 @@ import {
   Hotel,
   Menu,
   Plane,
-  Search,
   Ticket,
   User,
 } from 'lucide-react';
@@ -18,6 +17,7 @@ import { LanguageProvider, useT } from '@/components/language-provider';
 import { ActivitiesSearchForm } from '@/components/hero-search-widget';
 import { StaysSearchBar } from '@/components/stays-search-bar';
 import { TransfersSearchForm } from '@/components/transfers-search-form';
+import { FlightsSearchWidget } from '@/components/flights-search-widget';
 import { AGODA_DESTINATIONS } from '@/lib/agoda-catalog';
 import AttractionListingSection from '@/app/attraction-listing';
 import Footer from '@/components/footer';
@@ -258,17 +258,7 @@ export default function MobileHome({
             />
           )}
 
-          {activeTab === 'flights' && (
-            <a
-              href="https://flights.aafare.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#5392F9] py-4 text-base font-bold uppercase tracking-[0.6px] text-white shadow-[0_4px_12px_rgba(83,146,249,0.3)] transition-colors hover:bg-[#3B78E0]"
-            >
-              <Search className="h-[18px] w-[18px]" />
-              Search Flights
-            </a>
-          )}
+          {activeTab === 'flights' && <FlightsSearchWidget />}
 
           {activeTab === 'transfers' && <TransfersSearchForm />}
         </div>
