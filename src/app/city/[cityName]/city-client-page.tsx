@@ -188,25 +188,25 @@ export default function CityClientPage({
                 </Carousel>
             </section>
             
-             <section>
-                 <h2 className="text-3xl font-bold mb-8">Experiences in {cityName} recommended for</h2>
-                 {/* Interest tabs */}
-                 <div className="mb-8 flex flex-wrap gap-2">
-                     {RECOMMENDED_TABS.map((tab) => (
-                         <button
-                             key={tab.id}
-                             type="button"
-                             onClick={() => setRecommendedTab(tab.id)}
-                             className={`rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
-                                 recommendedTab === tab.id
-                                     ? 'bg-primary text-primary-foreground'
-                                     : 'bg-[#F0F0F0] text-[#1A202C] hover:bg-[#E2E8F0]'
-                             }`}
-                         >
-                             {tab.label}
-                         </button>
-                     ))}
-                 </div>
+<section>
+                  <h2 className="text-3xl font-bold mb-8">Experiences in {cityName} recommended for</h2>
+                  {/* Interest tabs - horizontal scroller on mobile */}
+                  <div className="mb-8 flex gap-2 overflow-x-auto pb-1 scrollbar-hide md:flex-wrap md:overflow-visible md:pb-0">
+                      {RECOMMENDED_TABS.map((tab) => (
+                          <button
+                              key={tab.id}
+                              type="button"
+                              onClick={() => setRecommendedTab(tab.id)}
+                              className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors ${
+                                  recommendedTab === tab.id
+                                      ? 'bg-primary text-primary-foreground'
+                                      : 'bg-[#F0F0F0] text-[#1A202C] hover:bg-[#E2E8F0]'
+                              }`}
+                          >
+                              {tab.label}
+                          </button>
+                      ))}
+                  </div>
                  {recommendedExcursions.length > 0 && (
                      <Carousel opts={CAROUSEL_OPTS} className="w-full">
                          <CarouselContent className="-ml-4">

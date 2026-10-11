@@ -52,7 +52,7 @@ const KNOWN_CITY_IDS: Record<string, string> = {
   'brentwood bay': '263090', 'whistler': '87924', 'kamloops': '62382',
   'niagara-on-the-lake': '982', 'gananoque': '269628', 'edmonton': '62366',
   'scott': '271125', 'cochrane': '62349', 'lake louise': '137177', 'golden': '136649',
-  'gatineau': '62372', 'squamish': '301', 'madrid': '60400',
+  'gatineau': '62372', 'squamish': '301', 'madrid': '60400', 'singapore': '78125',
 };
 
 /**

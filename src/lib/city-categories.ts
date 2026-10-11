@@ -830,41 +830,117 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
             }
         ],
         "interests": []
+    },
+    "cairo": {
+        "categories": [
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 7
+            },
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 3
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/846cf3f31667442abd16cbb4cf556065.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 4
+            },
+            {
+                "name": "Museums",
+                "slug": "museums",
+                "typeId": "2968",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/f1c8eb790e5e4cbf93bb1a1cde0fa7bf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 4
+            },
+            {
+                "name": "Food & Drinks",
+                "slug": "food-drinks",
+                "typeId": "1034",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/0a45bc1fdf9d448c9613475edf9758f0.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            },
+            {
+                "name": "Shows & Theatres",
+                "slug": "shows-theatres",
+                "typeId": "2596",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/635b16ff5dd94f379fdce0f8e5ec0aa7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "interests": []
+    },
+    "luxor": {
+        "categories": [
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 4
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/846cf3f31667442abd16cbb4cf556065.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            },
+            {
+                "name": "Aviation Activities",
+                "slug": "aviation-activities",
+                "typeId": "1037",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/b0a9a7eeeae44fb4a2fb5a8495944ddf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "interests": []
+    },
+    "faiyum": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "interests": []
     }
 };
 
 export const COUNTRY_CATEGORIES: Record<string, DestinationCategories> = {
     "peru": {
-        "categories": [
-            {
-                "name": "Attractions",
-                "slug": "attractions",
-                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
-            },
-            {
-                "name": "City Tours",
-                "slug": "city-tours",
-                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
-            },
-            {
-                "name": "Public Transport",
-                "slug": "public-transport",
-                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cb857cc602fc487a85ff93088fda2aee.JPG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
-            },
-            {
-                "name": "Museums",
-                "slug": "museums",
-                "image": "https://aws-tiqets-cdn.imgix.net/images/content/f1c8eb790e5e4cbf93bb1a1cde0fa7bf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
-            },
-            {
-                "name": "Transfers",
-                "slug": "transfers",
-                "image": "https://aws-tiqets-cdn.imgix.net/images/content/8376d89036e6404ea380ad9afffd6f23.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
-            }
-        ],
-        "interests": []
-    },
-    "mexico": {
         "categories": [
             {
                 "name": "Attractions",

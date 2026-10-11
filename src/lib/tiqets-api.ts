@@ -422,7 +422,7 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     }
     return [];
   } else {
-    const prioritizedCities = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'London'];
+    const prioritizedCities = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Barcelona', 'Rome', 'Paris', 'New York', 'Amsterdam', 'London', 'Singapore'];
     const cityPromises = prioritizedCities.map(async (city) => {
       const cityId = KNOWN_CITY_IDS[city.toLowerCase()];
       if (!cityId) return [];
@@ -460,7 +460,7 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     }
 
     if (allExcursions.length > 0) {
-      return allExcursions.slice(0, 100);
+      return allExcursions;
     }
 
     return [];
@@ -509,10 +509,18 @@ export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursi
   }
 
   // The city_id filter is leaky: the API also returns
-  // products from nearby emirates/cities. Keep only
-  // products that actually belong to this city.
+  // products from nearby emirates/cities. Keep products
+  // that either have no city_id, match the target city,
+  // or belong to a nearby city that we also manage (so
+  // cross-city day trips still appear on the origin's
+  // category pages).
+  const nearbyCityIds = new Set([
+    cityId,
+    '744',  // Faiyum (for Cairo day trips)
+    // Add more as needed
+  ]);
   const cityProducts = allProducts.filter(
-    (p) => !p.city_id || String(p.city_id) === String(cityId),
+    (p) => !p.city_id || nearbyCityIds.has(String(p.city_id)),
   );
 
   const transformed = await Promise.all(

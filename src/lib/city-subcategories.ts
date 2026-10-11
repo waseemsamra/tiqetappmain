@@ -1079,5 +1079,163 @@ export const CITY_SUBCATEGORIES: Record<string, Record<string, SubcategoryItem[]
                 "count": 3
             }
         ]
+    },
+    "cairo": {
+        "historical-archaeological-sites": [
+            {
+                "name": "Monuments",
+                "slug": "monuments",
+                "typeId": "707",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 4
+            },
+            {
+                "name": "Historical Sites",
+                "slug": "historical-sites",
+                "typeId": "708",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/8b7c100e08f14c4b84ddb4d48074d21c.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 3
+            }
+        ],
+        "attractions": [
+            {
+                "name": "Landmarks",
+                "slug": "landmarks",
+                "typeId": "711",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            },
+            {
+                "name": "Observation Decks",
+                "slug": "observation-decks",
+                "typeId": "712",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/015cad4ce1c948cb81fe8314b947ec19.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "cruises-boat-tours": [
+            {
+                "name": "Dinner Cruises",
+                "slug": "dinner-cruises",
+                "typeId": "1185",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/846cf3f31667442abd16cbb4cf556065.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 3
+            },
+            {
+                "name": "Cocktail Cruises",
+                "slug": "cocktail-cruises",
+                "typeId": "1189",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc72fcba73fa46eb8e9d4af506524759.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            },
+            {
+                "name": "Sightseeing Cruises",
+                "slug": "sightseeing-cruises",
+                "typeId": "1187",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/769b5e8f14cc49e1b7e86ec3cfe64e2c.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "museums": [
+            {
+                "name": "History Museums",
+                "slug": "history-museums",
+                "typeId": "702",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/f1c8eb790e5e4cbf93bb1a1cde0fa7bf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            }
+        ],
+        "city-tours": [
+            {
+                "name": "Private Tours",
+                "slug": "private-tours",
+                "typeId": "1273",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 4
+            }
+        ],
+        "food-drinks": [
+            {
+                "name": "Dinner & Shows",
+                "slug": "dinner-shows",
+                "typeId": "1185",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/0a45bc1fdf9d448c9613475edf9758f0.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            }
+        ],
+        "trips-excursions": [
+            {
+                "name": "Day Trips",
+                "slug": "day-trips",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            }
+        ],
+        "shows-theatres": [
+            {
+                "name": "Theatre & Shows",
+                "slug": "theatre-shows",
+                "typeId": "2596",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/635b16ff5dd94f379fdce0f8e5ec0aa7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ]
+    },
+    "luxor": {
+        "historical-archaeological-sites": [
+            {
+                "name": "Monuments",
+                "slug": "monuments",
+                "typeId": "707",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            },
+            {
+                "name": "Historical Sites",
+                "slug": "historical-sites",
+                "typeId": "708",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/8b7c100e08f14c4b84ddb4d48074d21c.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 2
+            }
+        ],
+        "cruises-boat-tours": [
+            {
+                "name": "Sightseeing Cruises",
+                "slug": "sightseeing-cruises",
+                "typeId": "1187",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/846cf3f31667442abd16cbb4cf556065.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "aviation-activities": [
+            {
+                "name": "Hot Air Balloon",
+                "slug": "hot-air-balloon",
+                "typeId": "1037",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/b0a9a7eeeae44fb4a2fb5a8495944ddf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "trips-excursions": [
+            {
+                "name": "Day Trips",
+                "slug": "day-trips",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ]
+    },
+    "faiyum": {
+        "attractions": [
+            {
+                "name": "Adventure Parks",
+                "slug": "adventure-parks",
+                "typeId": "722",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ]
     }
 };
