@@ -200,8 +200,6 @@ async function defaultRemoteCorpus() {
   );
   const cityExperiencesRes = await Promise.all(cityExperiencesPromises);
 
-  console.log('[search-index] cityExperiencesRes:', cityExperiencesRes.map((r: any) => r?.experiences?.length || 0));
-
   const countries: Country[] = countriesRes
     .filter(Boolean)
     .flatMap((d: any) => d.countries || [])

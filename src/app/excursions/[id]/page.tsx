@@ -176,7 +176,7 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
 
   // If the ID resolves to a product/variant (not an experience with product_ids),
   // redirect to the variant detail page
-  if (excursion && !Array.isArray(excursion.product_ids) && excursion.id !== params.id) {
+  if (excursion && (!Array.isArray(excursion.product_ids) || excursion.product_ids.length === 0)) {
     // This is a product/variant, not an experience - redirect
     return (
       <meta http-equiv="refresh" content={`0;url=/variants/${params.id}`} />
