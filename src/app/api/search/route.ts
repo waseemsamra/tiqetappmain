@@ -107,7 +107,7 @@ async function fetchCityMatches(cityName: string, queryText: string): Promise<an
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const query = (searchParams.get('query') || '').trim();
+    const query = (searchParams.get('q') || searchParams.get('query') || '').trim();
     const city = (searchParams.get('city') || '').trim();
     const city_id = (searchParams.get('city_id') || '').trim();
     const country = (searchParams.get('country') || '').trim();

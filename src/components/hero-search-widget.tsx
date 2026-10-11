@@ -461,15 +461,31 @@ export function ActivitiesSearchForm({
 
   const submitSearch = () => {
     const text = query.trim();
-    // A category chip alone (no typed text) still searches: the
-    // chip's label becomes the query, e.g. the Museums chip
-    // searches for "Museums".
     const categoryLabel =
       category !== 'all' ? t(`search.category.${category}`).trim() : '';
-    if (!text && !categoryLabel) return;
+    const searchText = text || categoryLabel;
+    if (!searchText) return;
     setIsOpen(false);
     setPaxOpen(false);
-    const params = new URLSearchParams({ query: text || categoryLabel });
+
+    // Check if search text matches a country or city exactly (case-insensitive)
+    const matchedCountry = results.countries.find(
+      (c) => c.name.toLowerCase() === searchText.toLowerCase()
+    );
+    const matchedCity = results.cities.find(
+      (c) => c.name.toLowerCase() === searchText.toLowerCase()
+    );
+
+    if (matchedCountry) {
+      router.push(`/country/${encodeURIComponent(matchedCountry.name)}`);
+      return;
+    }
+    if (matchedCity) {
+      router.push(`/city/${encodeURIComponent(matchedCity.name)}`);
+      return;
+    }
+
+    const params = new URLSearchParams({ query: searchText });
     if (whereValue.trim()) params.set('city', whereValue.trim());
     if (whenValue) params.set('date', whenValue);
     params.set('adults', String(actAdults));
@@ -774,15 +790,31 @@ export function HeroSearchWidget() {
 
   const submitSearch = () => {
     const text = query.trim();
-    // A category chip alone (no typed text) still searches: the
-    // chip's label becomes the query, e.g. the Museums chip
-    // searches for "Museums".
     const categoryLabel =
       category !== 'all' ? t(`search.category.${category}`).trim() : '';
-    if (!text && !categoryLabel) return;
+    const searchText = text || categoryLabel;
+    if (!searchText) return;
     setIsOpen(false);
     setPaxOpen(false);
-    const params = new URLSearchParams({ query: text || categoryLabel });
+
+    // Check if search text matches a country or city exactly (case-insensitive)
+    const matchedCountry = results.countries.find(
+      (c) => c.name.toLowerCase() === searchText.toLowerCase()
+    );
+    const matchedCity = results.cities.find(
+      (c) => c.name.toLowerCase() === searchText.toLowerCase()
+    );
+
+    if (matchedCountry) {
+      router.push(`/country/${encodeURIComponent(matchedCountry.name)}`);
+      return;
+    }
+    if (matchedCity) {
+      router.push(`/city/${encodeURIComponent(matchedCity.name)}`);
+      return;
+    }
+
+    const params = new URLSearchParams({ query: searchText });
     if (whereValue.trim()) params.set('city', whereValue.trim());
     if (whenValue) params.set('date', whenValue);
     params.set('adults', String(actAdults));

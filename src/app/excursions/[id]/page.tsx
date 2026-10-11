@@ -174,6 +174,15 @@ export default async function ExcursionDetailPage({ params }: { params: { id: st
   let excursion = await getExperienceByIdFromCache(params.id);
   if (!excursion) excursion = await getExcursionById(params.id);
 
+  // If the ID resolves to a product/variant (not an experience with product_ids),
+  // redirect to the variant detail page
+  if (excursion && !Array.isArray(excursion.product_ids) && excursion.id !== params.id) {
+    // This is a product/variant, not an experience - redirect
+    return (
+      <meta http-equiv="refresh" content={`0;url=/variants/${params.id}`} />
+    );
+  }
+
   if (!excursion) {
     const experiences = await loadCache<any>(EXPERIENCES_CACHE_FILE);
     const parent = (experiences || []).find((e: any) =>

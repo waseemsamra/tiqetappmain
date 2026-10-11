@@ -171,31 +171,55 @@ async function defaultRemoteCorpus() {
     ...(key ? { Authorization: `Token ${key}` } : {}),
   };
 
-  // `/countries` rejects a page_size above 100, and `/cities` requires a
-  // `country_id`, so neither can be fetched bare.
-  const [countriesRes, experiencesRes] = await Promise.all([
-    fetch(`${API_BASE}/countries?page_size=100&page=1`, { headers })
+  // Fetch all countries (245 total, so 3 pages of 100)
+  const countryPages = [1, 2, 3];
+  const countryPromises = countryPages.map((p) =>
+    fetch(`${API_BASE}/countries?page_size=100&page=${p}`, { headers })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null),
-    // The first pages carry the most-bookable inventory, which is what a
-    // suggestion should surface; the tail is rarely typed.
-    Promise.all(
-      [1, 2, 3, 4].map((p) =>
-        fetch(`${API_BASE}/experiences?page_size=100&page=${p}`, { headers })
-          .then((r) => (r.ok ? r.json() : null))
-          .catch(() => null),
-      ),
-    ),
-  ]);
+  );
+  const countriesRes = await Promise.all(countryPromises);
 
-  const countries: Country[] = (countriesRes?.countries || []).map((c: any) => ({
-    id: String(c.id ?? ''),
-    name: c.name || '',
-  }));
+  // The first pages carry the most-bookable inventory, which is what a
+  // suggestion should surface; the tail is rarely typed.
+  const experiencesRes = await Promise.all(
+    [1, 2, 3, 4].map((p) =>
+      fetch(`${API_BASE}/experiences?page_size=100&page=${p}`, { headers })
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null),
+    ),
+  );
+
+  // Also fetch experiences for prioritized cities that may not appear in the
+  // global first pages (e.g. Singapore, Cairo, etc.)
+  const prioritizedCityIds = ['78125', '65792', '65786', '744', '60005', '66746', '66342', '71631', '75061', '67458'];
+  const cityExperiencesPromises = prioritizedCityIds.map((cityId) =>
+    fetch(`${API_BASE}/experiences?city_id=${cityId}&page_size=100&page=1`, { headers })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null),
+  );
+  const cityExperiencesRes = await Promise.all(cityExperiencesPromises);
+
+  console.log('[search-index] cityExperiencesRes:', cityExperiencesRes.map((r: any) => r?.experiences?.length || 0));
+
+  const countries: Country[] = countriesRes
+    .filter(Boolean)
+    .flatMap((d: any) => d.countries || [])
+    .map((c: any) => ({
+      id: String(c.id ?? ''),
+      name: c.name || '',
+    }));
 
   const raw = experiencesRes
     .filter(Boolean)
     .flatMap((d: any) => d.experiences || d.products || d.items || []);
+
+  // Add experiences from prioritized cities
+  for (const cityRes of cityExperiencesRes) {
+    if (cityRes && cityRes.experiences) {
+      raw.push(...cityRes.experiences);
+    }
+  }
 
   // Reuse the shared transform so hits match the shape every other surface uses.
   const { transformTiqetsProduct } = await import('@/lib/tiqets-api');
