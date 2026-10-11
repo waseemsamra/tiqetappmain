@@ -20,8 +20,6 @@ import { WishlistButton } from '@/components/wishlist-button';
 import { AttractionCard } from '@/components/attraction-card';
 import { AllExperiences } from '@/components/country/all-experiences';
 import { COUNTRY_HERO_IMAGES } from '@/lib/hero-images';
-import { CategoryShowcase } from '@/components/city/category-showcase';
-import type { DestinationCategories } from '@/lib/city-categories';
 
 type User = { id: string; email?: string } | null;
 
@@ -34,7 +32,6 @@ interface CountryClientPageProps {
     allExcursionTypes: ExcursionType[];
     countryDetails: Country;
     cities: City[];
-    categories?: DestinationCategories;
     user: User | null;
 }
 
@@ -141,9 +138,6 @@ export default function CountryClientPage({
                         </p>
                     </div>
                 </header>
-
-                {/* Category showcase — real per-country categories */}
-                <CategoryShowcase cityName={countryName} data={categories} />
 
                 {/* Best Places to Visit - Cities with excursion counts */}
                 <CitiesSection 

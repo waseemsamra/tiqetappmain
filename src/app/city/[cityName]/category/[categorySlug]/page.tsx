@@ -1,8 +1,9 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { fetchTiqetsCityProducts } from '@/lib/tiqets-api';
 import { CITY_CATEGORIES } from '@/lib/city-categories';
 import { COUNTRY_CITIES } from '@/lib/agoda-catalog';
 import { CITY_SUBCATEGORIES } from '@/lib/city-subcategories';
+import { COUNTRY_DATA } from '@/app/country/[countryName]/page';
 import {
   CATEGORY_TYPE_IDS,
   categoryName,
@@ -25,6 +26,12 @@ export default async function CategoryPage({
   const typeId = CATEGORY_TYPE_IDS[slug];
   const cityKey = cityName.toLowerCase();
   const cityData = CITY_CATEGORIES[cityKey];
+  const countryInfo = COUNTRY_DATA[cityName];
+
+  // If the "city" is actually a country (has country data but no city category data), redirect to country page
+  if (countryInfo && !cityData) {
+    return redirect(`/${cityName}`);
+  }
 
   if (!typeId || !cityData) {
     return notFound();

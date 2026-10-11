@@ -8,7 +8,7 @@ import { COUNTRY_CATEGORIES } from '@/lib/city-categories';
 
 export const revalidate = 3600;
 
-const COUNTRY_DATA: Record<string, { id: string; name: string }> = {
+export const COUNTRY_DATA: Record<string, { id: string; name: string }> = {
     // Americas
     'Peru': { id: '50174', name: 'Peru' },
     'Aruba': { id: '50013', name: 'Aruba' },
