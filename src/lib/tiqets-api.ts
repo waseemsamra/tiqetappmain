@@ -264,6 +264,35 @@ export async function getAvailableCities(): Promise<any[]> {
   return [];
 }
 
+export async function fetchCityImages(cityNames: string[]): Promise<Record<string, string>> {
+  if (!isTiqetsAvailable) return {};
+  
+  const cityImages: Record<string, string> = {};
+  
+  for (const cityName of cityNames) {
+    try {
+      const cityId = KNOWN_CITY_IDS[cityName.toLowerCase()];
+      if (!cityId) continue;
+      
+      const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=1`, { method: 'GET', headers });
+      if (response.ok) {
+        const data = await response.json();
+        const products = data.products || data.experiences || data.items || [];
+        if (products.length > 0) {
+          const images = pickTiqetsImageUrls(products[0].images);
+          if (images.length > 0) {
+            cityImages[cityName] = images[0];
+          }
+        }
+      }
+    } catch (e) {
+      console.error(`Failed to fetch image for ${cityName}:`, e);
+    }
+  }
+  
+  return cityImages;
+}
+
 export async function fetchTiqetsTags(): Promise<TiqetsTag[]> {
   try {
     const response = await fetch(`${TIQETS_API_BASE}/tags?page_size=200`, { method: 'GET', headers });

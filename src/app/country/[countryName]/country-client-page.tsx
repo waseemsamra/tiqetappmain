@@ -32,6 +32,7 @@ interface CountryClientPageProps {
     allExcursionTypes: ExcursionType[];
     countryDetails: Country;
     cities: City[];
+    cityImages?: Record<string, string>;
     user: User | null;
 }
 
@@ -40,7 +41,7 @@ export default function CountryClientPage({
     allExcursionTypes,
     countryDetails,
     cities,
-    categories,
+    cityImages = {},
     user
 }: CountryClientPageProps) {
     const [wishlistIds, setWishlistIds] = useState(new Set<string>());
@@ -143,6 +144,7 @@ export default function CountryClientPage({
                 <CitiesSection 
                     countryName={countryName} 
                     cities={citiesWithCounts}
+                    cityImages={cityImages}
                 />
 
                 {/* Top 10 Experiences - Carousel */}

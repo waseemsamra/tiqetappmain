@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import CountryClientPage from './country-client-page';
 import type { Country, Excursion } from '@/types';
 import { COUNTRY_CATEGORIES } from '@/lib/city-categories';
+import { fetchCityImages } from '@/lib/tiqets-api';
 
 export const revalidate = 3600;
 
@@ -211,6 +212,10 @@ export default async function CountryPage({ params }: { params: { countryName: s
         country_code: ''
     }));
     
+    // Fetch city images for the cities we have
+    const cityNames = cities.map(c => c.name);
+    const cityImages = await fetchCityImages(cityNames);
+
     const countryDetails = countryInfo || {
         id: 'unknown',
         name: countryName,
@@ -222,6 +227,7 @@ export default async function CountryPage({ params }: { params: { countryName: s
             allExcursionTypes={[]}
             countryDetails={countryDetails}
             cities={cities}
+            cityImages={cityImages}
             categories={COUNTRY_CATEGORIES[countryName.toLowerCase()]}
             user={null}
         />
