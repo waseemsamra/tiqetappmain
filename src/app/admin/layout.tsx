@@ -1,9 +1,10 @@
 
 
 import Link from "next/link";
-import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid, Package, LogOut } from "lucide-react";
+import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { LogoutButton } from './logout-button';
 
 export default async function AdminLayout({
   children,
@@ -143,12 +144,7 @@ export default async function AdminLayout({
             </nav>
           </div>
           <div className="mt-auto p-4 border-t">
-            <form action="/api/admin/auth" method="DELETE">
-              <Button variant="ghost" className="w-full justify-start gap-2" type="submit">
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
-            </form>
+            <LogoutButton />
           </div>
         </div>
       </div>
