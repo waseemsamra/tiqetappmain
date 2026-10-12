@@ -324,39 +324,58 @@ export async function fetchCityImages(cityNames: string[]): Promise<Record<strin
     }
   }
   
+  // For cities still missing, try CITY_TO_COUNTRY_ID fallback
+  const stillMissingCities = cityNames.filter(c => !cityIdMap[c]);
+  for (const cityName of stillMissingCities) {
+    const countryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()];
+    if (countryId) {
+      cityIdMap[cityName] = `country:${countryId}`;
+    }
+  }
+  
   for (const cityName of cityNames) {
     try {
       const cityId = cityIdMap[cityName];
       if (!cityId) continue;
       
-      // Fetch more products to get better image selection
-      const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
+      // Check if using country fallback
+      const isCountryFallback = cityId.startsWith('country:');
+      const actualCityId = isCountryFallback ? cityId.replace('country:', '') : cityId;
+      
+      // Fetch from experiences endpoint for country fallback, products for regular cities
+      const endpoint = isCountryFallback ? 'experiences' : 'products';
+      const response = await fetch(`${TIQETS_API_BASE}/${endpoint}?${isCountryFallback ? 'country_id' : 'city_id'}=${actualCityId}&page_size=5`, { method: 'GET', headers });
       if (response.ok) {
         const data = await response.json();
         const products = data.products || data.experiences || data.items || [];
         
-        // Collect all images from all products and pick the best one
-        let bestImage: string | null = null;
-        let bestScore = 0;
-        
-        for (const product of products) {
-          const images = pickTiqetsImageUrls(product.images);
-          for (const img of images) {
-            // Score based on URL indicators of high quality
-            let score = 1;
-            if (img.includes('extra_large') || img.includes('w=1920') || img.includes('w=2000') || img.includes('w=2560')) score += 10;
-            else if (img.includes('large') || img.includes('w=1200') || img.includes('w=1600')) score += 5;
-            else if (img.includes('medium') || img.includes('w=800') || img.includes('w=1000')) score += 2;
-            
-            if (score > bestScore) {
-              bestScore = score;
-              bestImage = img;
-            }
-          }
+        // For country fallback, filter by city name
+        let filteredProducts = products;
+        if (isCountryFallback) {
+          const cityNameLower = cityName.toLowerCase()
+            .replace(/\([^)]*\)/g, '')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          filteredProducts = products.filter((p: any) => {
+            const expCity = (p.address?.city_name || p.city_name || '').toLowerCase()
+              .replace(/\([^)]*\)/g, '')
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+            return expCity === cityNameLower;
+          });
         }
         
-        if (bestImage) {
-          cityImages[cityName] = bestImage;
+        // Use first product's first image
+        for (const product of filteredProducts) {
+          const images = pickTiqetsImageUrls(product.images);
+          if (images.length > 0) {
+            cityImages[cityName] = images[0];
+            break;
+          }
         }
       }
     } catch (e) {
