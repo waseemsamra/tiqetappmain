@@ -4,6 +4,7 @@ import { CITY_CATEGORIES } from '@/lib/city-categories';
 import { COUNTRY_CITIES } from '@/lib/agoda-catalog';
 import { CITY_SUBCATEGORIES } from '@/lib/city-subcategories';
 import { COUNTRY_DATA } from '@/app/country/[countryName]/page';
+import { CITY_TO_COUNTRY_ID } from '@/lib/tiqets-api';
 import {
   CATEGORY_TYPE_IDS,
   categoryName,
@@ -26,12 +27,15 @@ export default async function CategoryPage({
   const typeId = CATEGORY_TYPE_IDS[slug];
   const cityKey = cityName.toLowerCase();
   const cityData = CITY_CATEGORIES[cityKey];
-  const countryInfo = COUNTRY_DATA[cityName];
-
-  // If the "city" is actually a country (has country data but no city category data), redirect to country page
-  if (countryInfo && !cityData) {
-    return redirect(`/${cityName}`);
-  }
+  
+  // Get country_id for this city from static map or auto-discovery cache
+  const normalizedCityName = cityName.toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const countryId = CITY_TO_COUNTRY_ID[normalizedCityName];
 
   if (!typeId || !cityData) {
     return notFound();
@@ -43,7 +47,7 @@ export default async function CategoryPage({
   // the type id every product carries in its tag_ids.
   // The raw /products listing keeps variant products,
   // which is how Tiqets counts its own category pages.
-  const cityProducts: Excursion[] = await fetchTiqetsCityProducts(cityName);
+  const cityProducts: Excursion[] = await fetchTiqetsCityProducts(cityName, countryId);
 
   const products = cityProducts.filter((ex) =>
     (ex.tag_ids || []).includes(typeId),

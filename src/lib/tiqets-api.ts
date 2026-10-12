@@ -747,7 +747,18 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
     }
     if (!cityId) {
       // Try to find country_id for this city and fetch experiences by country, then filter by city
-      const countryId = CITY_TO_COUNTRY_ID[cityNameLower];
+      let countryId = CITY_TO_COUNTRY_ID[cityNameLower];
+      
+      // If not in static map, check auto-discovery cache
+      if (!countryId && autoCityToCountryCache[cityNameLower]) {
+        countryId = autoCityToCountryCache[cityNameLower];
+      }
+      
+      // If still no country, and we have a country_id param, use that
+      if (!countryId && params.country_id) {
+        countryId = params.country_id;
+      }
+      
       if (countryId) {
         try {
           const allExperiences: any[] = [];
@@ -958,7 +969,7 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
  * category pages. Filter the result by tag_ids for a
  * category page.
  */
-export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursion[]> {
+export async function fetchTiqetsCityProducts(cityName: string, countryId?: string): Promise<Excursion[]> {
   if (!isTiqetsAvailable) {
     return [];
   }
@@ -970,11 +981,14 @@ export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursi
     .replace(/\s+/g, ' ')
     .trim();
   
-  // Check if this city uses country fallback
-  const countryId = CITY_TO_COUNTRY_ID[cityNameLower];
-  if (countryId) {
+  // Check if this city uses country fallback (static, auto-discovered, or passed countryId)
+  let cityCountryId = countryId || CITY_TO_COUNTRY_ID[cityNameLower];
+  if (!cityCountryId && autoCityToCountryCache[cityNameLower]) {
+    cityCountryId = autoCityToCountryCache[cityNameLower];
+  }
+  if (cityCountryId) {
     // Fetch from experiences endpoint with country_id and filter by city
-    return await fetchCityProductsByCountry(countryId, cityNameLower);
+    return await fetchCityProductsByCountry(cityCountryId, cityNameLower);
   }
 
   let cityId = KNOWN_CITY_IDS[cityNameLower];
