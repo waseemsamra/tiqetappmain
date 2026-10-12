@@ -214,7 +214,7 @@ export default async function CountryPage({ params }: { params: { countryName: s
     
     // Fetch city images for the cities we have
     const cityNames = cities.map(c => c.name);
-    const cityImages = await fetchCityImages(cityNames);
+    const cityImages = await fetchCityImages(cityNames, countryInfo?.id);
 
     const countryDetails = countryInfo || {
         id: 'unknown',

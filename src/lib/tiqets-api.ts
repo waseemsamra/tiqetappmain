@@ -318,6 +318,123 @@ export const CITY_TO_COUNTRY_ID: Record<string, string> = {
     // Add more as needed
 };
 
+// Cache for auto-discovered city -> country mappings
+let autoCityToCountryCache: Record<string, string> = {};
+
+/**
+ * Auto-discover cities for a country by fetching experiences
+ * and extracting unique city names. Returns normalized city name -> country_id mapping.
+ */
+export async function discoverCitiesForCountry(countryId: string): Promise<Record<string, string>> {
+  const cacheKey = `country:${countryId}`;
+  if (autoCityToCountryCache[cacheKey]) {
+    // Return cached mapping for this country
+    const result: Record<string, string> = {};
+    for (const [cityName, cid] of Object.entries(autoCityToCountryCache)) {
+      if (cid === countryId) {
+        result[cityName] = countryId;
+      }
+    }
+    return result;
+  }
+
+  const mapping: Record<string, string> = {};
+  
+  try {
+    // Fetch all experiences for this country
+    let allExperiences: any[] = [];
+    for (let page = 1; page <= 10; page++) {
+      const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100&page=${page}`), { method: 'GET', headers });
+      if (!response.ok) break;
+      const data = await response.json();
+      const experiences = data.experiences || data.products || data.items || [];
+      allExperiences.push(...experiences);
+      if (experiences.length < 100) break;
+    }
+
+    // Extract unique city names
+    const cityNames = new Set<string>();
+    for (const exp of allExperiences) {
+      const city = exp.address?.city_name || exp.city_name || '';
+      if (city) {
+        const normalized = city.toLowerCase()
+          .replace(/\([^)]*\)/g, '')
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        if (normalized) {
+          cityNames.add(normalized);
+        }
+      }
+    }
+
+    // Build mapping
+    for (const cityName of cityNames) {
+      mapping[cityName] = countryId;
+      // Also cache in global autoCityToCountryCache
+      autoCityToCountryCache[cityName] = countryId;
+    }
+
+    console.log(`Auto-discovered ${Object.keys(mapping).length} cities for country ${countryId}`);
+  } catch (e) {
+    console.error(`Failed to discover cities for country ${countryId}:`, e);
+  }
+
+  return mapping;
+}
+
+/**
+ * Get country_id for a city, with auto-discovery fallback
+ */
+export async function getCountryIdForCity(cityName: string): Promise<string | null> {
+  const normalized = cityName.toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // Check static mapping first
+  if (CITY_TO_COUNTRY_ID[normalized]) {
+    return CITY_TO_COUNTRY_ID[normalized];
+  }
+  
+  // Check auto-discovered cache
+  if (autoCityToCountryCache[normalized]) {
+    return autoCityToCountryCache[normalized];
+  }
+  
+  // If we don't know the country, we can't auto-discover without a country context
+  return null;
+}
+
+/**
+ * Get country_id for a city given a country context (for auto-discovery)
+ */
+export async function getCountryIdForCityInCountry(cityName: string, countryId: string): Promise<string | null> {
+  const normalized = cityName.toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // Check static mapping first
+  if (CITY_TO_COUNTRY_ID[normalized]) {
+    return CITY_TO_COUNTRY_ID[normalized];
+  }
+  
+  // Check auto-discovered cache
+  if (autoCityToCountryCache[normalized]) {
+    return autoCityToCountryCache[normalized];
+  }
+  
+  // Auto-discover cities for this country
+  const discovered = await discoverCitiesForCountry(countryId);
+  return discovered[normalized] || null;
+}
+
 // Get all available cities from API
 let cachedCities: any[] = [];
 export async function getAvailableCities(): Promise<any[]> {
@@ -341,11 +458,11 @@ export async function getAvailableCities(): Promise<any[]> {
  * Strategy:
  * 1. Try known city_id via products endpoint
  * 2. Try city_id from API lookup via products endpoint
- * 3. Try CITY_TO_COUNTRY_ID fallback via experiences endpoint with city filtering
- * 4. Try CITY_TO_COUNTRY_ID fallback via products endpoint with city filtering
+ * 3. Try country fallback via experiences endpoint with city filtering (using provided countryId or auto-discovery)
+ * 4. Try country fallback via products endpoint with city filtering
  * 5. If still no image, try any experience from the country that matches city
  */
-export async function fetchCityImages(cityNames: string[]): Promise<Record<string, string>> {
+export async function fetchCityImages(cityNames: string[], countryId?: string): Promise<Record<string, string>> {
   if (!isTiqetsAvailable) return {};
   
   const cityImages: Record<string, string> = {};
@@ -377,12 +494,35 @@ export async function fetchCityImages(cityNames: string[]): Promise<Record<strin
     }
   }
   
-  // For cities still missing, try CITY_TO_COUNTRY_ID fallback
+  // For cities still missing, try static CITY_TO_COUNTRY_ID fallback
   const stillMissingCities = cityNames.filter(c => !cityIdMap[c]);
   for (const cityName of stillMissingCities) {
-    const countryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()];
-    if (countryId) {
-      cityIdMap[cityName] = `country:${countryId}`;
+    const staticCountryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()];
+    if (staticCountryId) {
+      cityIdMap[cityName] = `country:${staticCountryId}`;
+    }
+  }
+  
+  // If we have a countryId, auto-discover any remaining cities
+  if (countryId) {
+    const autoMissingCities = cityNames.filter(c => !cityIdMap[c]);
+    if (autoMissingCities.length > 0) {
+      try {
+        const discovered = await discoverCitiesForCountry(countryId);
+        for (const cityName of autoMissingCities) {
+          const normalized = cityName.toLowerCase()
+            .replace(/\([^)]*\)/g, '')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (discovered[normalized]) {
+            cityIdMap[cityName] = `country:${discovered[normalized]}`;
+          }
+        }
+      } catch (e) {
+        console.error('Failed to auto-discover cities:', e);
+      }
     }
   }
   
