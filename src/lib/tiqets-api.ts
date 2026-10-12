@@ -244,6 +244,16 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
     'aracaju': '61575',
     'natal': '61577',
     'cabo frio': '61579',
+    'melbourne': '260755',
+    'sydney': '260749',
+    'brisbane': '260750',
+    'perth': '260752',
+    'adelaide': '260753',
+    'gold coast': '260751',
+    'cairns': '260754',
+    'canberra': '260756',
+    'darwin': '260757',
+    'hobart': '260758',
 };
 
 // Get all available cities from API
@@ -269,20 +279,66 @@ export async function fetchCityImages(cityNames: string[]): Promise<Record<strin
   
   const cityImages: Record<string, string> = {};
   
+  // Build city ID lookup with API fallback
+  const cityIdMap: Record<string, string> = {};
+  for (const cityName of cityNames) {
+    const knownId = KNOWN_CITY_IDS[cityName.toLowerCase()];
+    if (knownId) {
+      cityIdMap[cityName] = knownId;
+    }
+  }
+  
+  // Fetch missing city IDs from API
+  const missingCities = cityNames.filter(c => !cityIdMap[c]);
+  if (missingCities.length > 0) {
+    try {
+      const availableCities = await getAvailableCities();
+      for (const cityName of missingCities) {
+        const match = availableCities.find((c: any) => 
+          (c.name || '').toLowerCase() === cityName.toLowerCase()
+        );
+        if (match && match.id) {
+          cityIdMap[cityName] = String(match.id);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch missing city IDs:', e);
+    }
+  }
+  
   for (const cityName of cityNames) {
     try {
-      const cityId = KNOWN_CITY_IDS[cityName.toLowerCase()];
+      const cityId = cityIdMap[cityName];
       if (!cityId) continue;
       
-      const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=1`, { method: 'GET', headers });
+      // Fetch more products to get better image selection
+      const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=10`, { method: 'GET', headers });
       if (response.ok) {
         const data = await response.json();
         const products = data.products || data.experiences || data.items || [];
-        if (products.length > 0) {
-          const images = pickTiqetsImageUrls(products[0].images);
-          if (images.length > 0) {
-            cityImages[cityName] = images[0];
+        
+        // Collect all images from all products and pick the best one
+        let bestImage: string | null = null;
+        let bestScore = 0;
+        
+        for (const product of products) {
+          const images = pickTiqetsImageUrls(product.images);
+          for (const img of images) {
+            // Score based on URL indicators of high quality
+            let score = 1;
+            if (img.includes('extra_large') || img.includes('w=1920') || img.includes('w=2000') || img.includes('w=2560')) score += 10;
+            else if (img.includes('large') || img.includes('w=1200') || img.includes('w=1600')) score += 5;
+            else if (img.includes('medium') || img.includes('w=800') || img.includes('w=1000')) score += 2;
+            
+            if (score > bestScore) {
+              bestScore = score;
+              bestImage = img;
+            }
           }
+        }
+        
+        if (bestImage) {
+          cityImages[cityName] = bestImage;
         }
       }
     } catch (e) {
@@ -350,11 +406,30 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
   const allExcursions: Excursion[] = [];
 
   if (params.city_name) {
-    const cityNameLower = params.city_name.toLowerCase();
+    // Normalize city name: remove parentheticals (CA), (US), etc., remove accents, replace hyphens/spaces
+    const cityNameLower = params.city_name.toLowerCase()
+      .replace(/\([^)]*\)/g, '')  // Remove (CA), (US), etc.
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // Remove accents
+      .replace(/[^a-z0-9]+/g, ' ')  // Replace non-alphanumeric with space
+      .replace(/\s+/g, ' ')  // Collapse multiple spaces
+      .trim();
     let cityId = KNOWN_CITY_IDS[cityNameLower];
     if (!cityId) {
+      // Also try with hyphens instead of spaces
+      const hyphenated = cityNameLower.replace(/\s+/g, '-');
+      cityId = KNOWN_CITY_IDS[hyphenated];
+    }
+    if (!cityId) {
       const cities = await getAvailableCities();
-      const match = (cities || []).find((c: any) => (c.name || '').toLowerCase() === cityNameLower);
+      const match = (cities || []).find((c: any) => {
+        const apiName = (c.name || '').toLowerCase()
+          .replace(/\([^)]*\)/g, '')
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        return apiName === cityNameLower;
+      });
       if (!match || !match.id) {
         return [];
       }

@@ -55,11 +55,27 @@ export async function searchExcursionsAction(
         
         const allExcursions = await TiqetsApi.fetchTiqetsProducts(params);
         
+        // Normalize city for comparison: remove parentheticals (CA), (US), remove accents, replace hyphens with spaces
+        const normalizedCity = city ? city.toLowerCase()
+          .replace(/\([^)]*\)/g, '')  // Remove (CA), (US), etc.
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // Remove accents
+          .replace(/[^a-z0-9]+/g, ' ')  // Replace non-alphanumeric with space
+          .replace(/\s+/g, ' ')  // Collapse multiple spaces
+          .trim() : '';
+        
         return allExcursions
             .filter(ex => {
                 if (query && !ex.name.toLowerCase().includes(query.toLowerCase())) return false;
                 // Double-check city filter since API may not handle it correctly
-                if (city && !(ex.city || '').toLowerCase().includes(city.toLowerCase())) return false;
+                if (normalizedCity) {
+                  const exCity = (ex.city || '').toLowerCase()
+                    .replace(/\([^)]*\)/g, '')
+                    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                  if (!exCity.includes(normalizedCity)) return false;
+                }
                 if (country && !(ex.country || '').toLowerCase().includes(country.toLowerCase())) return false;
                 return true;
             })
