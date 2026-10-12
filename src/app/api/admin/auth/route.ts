@@ -6,6 +6,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email, password, redirect } = body;
 
+    // Create response first so we can set cookies on it
+    const response = NextResponse.json({ success: true, redirect: redirect || '/admin' });
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -16,7 +19,7 @@ export async function POST(request: NextRequest) {
           },
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value, options }) =>
-              request.cookies.set(name, value, options)
+              response.cookies.set(name, value, options)
             );
           },
         },
@@ -35,11 +38,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Return success - cookies are set automatically by Supabase client
-    return NextResponse.json({ 
-      success: true, 
-      redirect: redirect || '/admin' 
-    });
+    // Return success - cookies are already set on response via setAll callback
+    return response;
   } catch {
     return NextResponse.json(
       { success: false, error: 'Authentication failed' },
@@ -49,6 +49,9 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  // Create response first so we can set cookies on it
+  const response = NextResponse.json({ success: true });
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -59,7 +62,7 @@ export async function DELETE(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           );
         },
       },
@@ -67,5 +70,5 @@ export async function DELETE(request: NextRequest) {
   );
 
   await supabase.auth.signOut();
-  return NextResponse.json({ success: true });
+  return response;
 }
