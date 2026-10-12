@@ -46,12 +46,13 @@ export async function getTopRatedExcursions(): Promise<Excursion[]> {
 
 
 export async function searchExcursionsAction(
-    { query, city, country, types }: { query?: string, city?: string, country?: string, types?: string[] }
+    { query, city, country, types, countryId }: { query?: string, city?: string, country?: string, types?: string[], countryId?: string }
 ): Promise<Excursion[]> {
     try {
         const params: Record<string, string> = {};
         if (city) params.city_name = city;
         if (country) params.country_name = country;
+        if (countryId) params.country_id = countryId;
         
         const allExcursions = await TiqetsApi.fetchTiqetsProducts(params);
         

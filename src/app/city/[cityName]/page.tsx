@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import CityClientPage from './city-client-page';
 import { CITY_CATEGORIES } from '@/lib/city-categories';
 import { Suspense } from 'react';
+import { CITY_TO_COUNTRY_ID } from '@/lib/tiqets-api';
 
 export const revalidate = 3600;
 
@@ -13,9 +14,12 @@ export default async function CityPage({ params }: { params: { cityName: string 
     const { data: { user } } = await supabase.auth.getUser();
 
     const cityName = decodeURIComponent(params.cityName);
+    // Normalize slug to match CITY_TO_COUNTRY_ID keys (e.g., "mexico-city" -> "mexico city")
+    const normalizedCityName = cityName.toLowerCase().replace(/-/g, ' ');
+    const countryId = CITY_TO_COUNTRY_ID[normalizedCityName];
 
     const [cityExcursions, allExcursionTypes] = await Promise.all([
-        searchExcursionsAction({ city: cityName }),
+        searchExcursionsAction({ city: cityName, countryId }),
         getExcursionTypes()
     ]);
     

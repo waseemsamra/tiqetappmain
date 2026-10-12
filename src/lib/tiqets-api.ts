@@ -177,6 +177,19 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
     'aguas calientes': '261863',
     'london': '67458',
     'mexico city': '67461',
+    'cancún': '67459',
+    'cancun': '67459',
+    'playa del carmen': '67460',
+    'tulum': '67462',
+    'guadalajara': '67463',
+    'puerto vallarta': '67464',
+    'cabo san lucas': '67465',
+    'cozumel': '67466',
+    'veracruz': '67467',
+    'puebla': '67468',
+    'oaxaca': '67469',
+    'san miguel de cozumel': '67470',
+    'isla mujeres': '67471',
     'buenos aires': '60189',
     'ushuaia': '60210',
     'salta': '60240',
@@ -249,6 +262,34 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
 // Cities not in Tiqets cities API but have experiences via country_id
 // Maps normalized city name -> country_id
 export const CITY_TO_COUNTRY_ID: Record<string, string> = {
+    // Mexico
+    'mexico city': '50157',
+    'cancún': '50157',
+    'cancun': '50157',
+    'playa del carmen': '50157',
+    'tulum': '50157',
+    'guadalajara': '50157',
+    'san juan teotihuacán': '50157',
+    'san juan teotihuacan': '50157',
+    'akumal': '50157',
+    'puerto morelos': '50157',
+    'nuevo vallarta': '50157',
+    'uxmal': '50157',
+    'veracruz': '50157',
+    'puebla': '50157',
+    'cabo san lucas': '50157',
+    'isla mujeres': '50157',
+    'san miguel de cozumel': '50157',
+    'tequila': '50157',
+    'coba': '50157',
+    'oaxaca': '50157',
+    'cardonal': '50157',
+    'tula de allende': '50157',
+    'puerto vallarta': '50157',
+    'cozumel': '50157',
+    'chichén itzá': '50157',
+    'chichen itza': '50157',
+    
     // Australia
     'melbourne': '50012',
     'sydney': '50012',
@@ -897,6 +938,77 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
         })
       );
       return transformedWithImages.filter((x): x is NonNullable<typeof x> => x !== null);
+    }
+
+    // Fallback: city_id query returned no results, try country_id approach
+    let countryId = CITY_TO_COUNTRY_ID[cityNameLower];
+    if (!countryId && autoCityToCountryCache[cityNameLower]) {
+      countryId = autoCityToCountryCache[cityNameLower];
+    }
+    if (!countryId && params.country_id) {
+      countryId = params.country_id;
+    }
+    
+    if (countryId) {
+      try {
+        const allExperiences: any[] = [];
+        for (let page = 1; page <= 5; page++) {
+          const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100&page=${page}`), { method: 'GET', headers });
+          if (!response.ok) break;
+          const data = await response.json();
+          const experiences = data.experiences || data.products || data.items || [];
+          allExperiences.push(...experiences);
+          if (experiences.length < 100) break;
+        }
+
+        const filteredExperiences = allExperiences.filter((exp: any) => {
+          const expCity = (exp.address?.city_name || exp.city_name || '').toLowerCase()
+            .replace(/\([^)]*\)/g, '')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+          return expCity === cityNameLower;
+        });
+        
+        if (filteredExperiences.length > 0) {
+          const childProductIds = new Set<string>();
+          for (const p of filteredExperiences) {
+            if (Array.isArray(p.product_ids)) {
+              for (const pid of p.product_ids) {
+                childProductIds.add(String(pid));
+              }
+            }
+          }
+
+          const transformedWithImages = await Promise.all(
+            filteredExperiences.map(async (p: any) => {
+              const idStr = String(p.id);
+              if (childProductIds.has(idStr) && (!Array.isArray(p.product_ids) || p.product_ids.length === 0)) {
+                return null;
+              }
+
+              let images: string[] = [];
+              if (Array.isArray(p.images)) {
+                images = pickTiqetsImageUrls(p.images);
+              }
+              if (images.length === 0 && p.venue?.id) {
+                try {
+                  const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
+                  if (venueResp.ok) {
+                    const venueData = await venueResp.json();
+                    images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
+                  }
+                } catch (e) {}
+              }
+              return { ...transformTiqetsProduct(p), images };
+            })
+          );
+          return transformedWithImages.filter((x): x is NonNullable<typeof x> => x !== null);
+        }
+      } catch (e) {
+        console.error(`Failed to fetch experiences by country_id fallback for ${cityNameLower}:`, e);
+      }
     }
     return [];
   }
