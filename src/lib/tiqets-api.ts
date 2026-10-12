@@ -176,20 +176,20 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
     'arequipa': '75334',
     'aguas calientes': '261863',
     'london': '67458',
-    'mexico city': '67461',
-    'cancún': '67459',
-    'cancun': '67459',
-    'playa del carmen': '67460',
-    'tulum': '67462',
-    'guadalajara': '67463',
-    'puerto vallarta': '67464',
-    'cabo san lucas': '67465',
-    'cozumel': '67466',
-    'veracruz': '67467',
-    'puebla': '67468',
-    'oaxaca': '67469',
-    'san miguel de cozumel': '67470',
-    'isla mujeres': '67471',
+    'mexico city': '74040',
+    'cancún': '24',
+    'cancun': '24',
+    'playa del carmen': '73927',
+    'tulum': '109113',
+    'guadalajara': '74270',
+    'puerto vallarta': '74201',
+    'cabo san lucas': '74179',
+    'cozumel': '370',
+    'veracruz': '73840',
+    'puebla': '270092',
+    'oaxaca': '73944',
+    'san miguel de cozumel': '74018',
+    'isla mujeres': '109534',
     'buenos aires': '60189',
     'ushuaia': '60210',
     'salta': '60240',
@@ -257,6 +257,8 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
     'aracaju': '61575',
     'natal': '61577',
     'cabo frio': '61579',
+    'sydney': '60400',
+    'melbourne': '60426',
 };
 
 // Cities not in Tiqets cities API but have experiences via country_id
@@ -1093,79 +1095,83 @@ export async function fetchTiqetsCityProducts(cityName: string, countryId?: stri
     .replace(/\s+/g, ' ')
     .trim();
   
-  // Check if this city uses country fallback (static, auto-discovered, or passed countryId)
+  // Try city_id first when we have a known mapping - this returns more complete product list with variants
+  let cityId = KNOWN_CITY_IDS[cityNameLower];
+  if (!cityId) {
+    const cities = await getAvailableCities();
+    const match = (cities || []).find((c: any) => (c.name || '').toLowerCase() === cityNameLower);
+    if (match && match.id) {
+      cityId = String(match.id);
+    }
+  }
+  
+  if (cityId) {
+    const allProducts: any[] = [];
+    for (let page = 1; page <= 10; page++) {
+      try {
+        const response = await fetch(withPreferences(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`), { method: 'GET', headers });
+        if (!response.ok) break;
+        const data = await response.json();
+        const items = data.products || data.experiences || data.items || [];
+        allProducts.push(...items);
+        if (items.length < 100) break;
+      } catch (e) {
+        break;
+      }
+    }
+
+    if (allProducts.length > 0) {
+      // The city_id filter is leaky: the API also returns
+      // products from nearby emirates/cities. Keep products
+      // that either have no city_id, match the target city,
+      // or belong to a nearby city that we also manage (so
+      // cross-city day trips still appear on the origin's
+      // category pages).
+      const nearbyCityIds = new Set([
+        cityId,
+        '744',  // Faiyum (for Cairo day trips)
+        // Add more as needed
+      ]);
+      const cityProducts = allProducts.filter(
+        (p) => !p.city_id || nearbyCityIds.has(String(p.city_id)),
+      );
+
+      const transformed = await Promise.all(
+        cityProducts.map(async (p: any) => {
+          let images: string[] = [];
+          if (Array.isArray(p.images)) {
+            images = pickTiqetsImageUrls(p.images);
+          }
+          if (images.length === 0 && p.venue?.id) {
+            try {
+              const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
+              if (venueResp.ok) {
+                const venueData = await venueResp.json();
+                images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
+              }
+            } catch (e) {}
+          }
+          return { ...transformTiqetsProduct(p), images };
+        }),
+      );
+
+      return transformed;
+    }
+  }
+
+  // Fall back to country_id query for cities without city_id
   let cityCountryId = countryId || CITY_TO_COUNTRY_ID[cityNameLower];
   if (!cityCountryId && autoCityToCountryCache[cityNameLower]) {
     cityCountryId = autoCityToCountryCache[cityNameLower];
   }
   if (cityCountryId) {
-    // Fetch from experiences endpoint with country_id and filter by city
-    return await fetchCityProductsByCountry(cityCountryId, cityNameLower);
-  }
-
-  let cityId = KNOWN_CITY_IDS[cityNameLower];
-  if (!cityId) {
-    const cities = await getAvailableCities();
-    const match = (cities || []).find((c: any) => (c.name || '').toLowerCase() === cityNameLower);
-    if (!match || !match.id) {
-      return [];
-    }
-    cityId = String(match.id);
-  }
-
-  const allProducts: any[] = [];
-  for (let page = 1; page <= 10; page++) {
-    try {
-      const response = await fetch(withPreferences(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=100&page=${page}`), { method: 'GET', headers });
-      if (!response.ok) break;
-      const data = await response.json();
-      const items = data.products || data.experiences || data.items || [];
-      allProducts.push(...items);
-      if (items.length < 100) break;
-    } catch (e) {
-      break;
+    const countryProducts = await fetchCityProductsByCountry(cityCountryId, cityNameLower);
+    if (countryProducts.length > 0) {
+      return countryProducts;
     }
   }
 
-  if (allProducts.length === 0) {
-    return [];
-  }
-
-  // The city_id filter is leaky: the API also returns
-  // products from nearby emirates/cities. Keep products
-  // that either have no city_id, match the target city,
-  // or belong to a nearby city that we also manage (so
-  // cross-city day trips still appear on the origin's
-  // category pages).
-  const nearbyCityIds = new Set([
-    cityId,
-    '744',  // Faiyum (for Cairo day trips)
-    // Add more as needed
-  ]);
-  const cityProducts = allProducts.filter(
-    (p) => !p.city_id || nearbyCityIds.has(String(p.city_id)),
-  );
-
-  const transformed = await Promise.all(
-    cityProducts.map(async (p: any) => {
-      let images: string[] = [];
-      if (Array.isArray(p.images)) {
-        images = pickTiqetsImageUrls(p.images);
-      }
-      if (images.length === 0 && p.venue?.id) {
-        try {
-          const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
-          if (venueResp.ok) {
-            const venueData = await venueResp.json();
-            images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
-          }
-        } catch (e) {}
-      }
-      return { ...transformTiqetsProduct(p), images };
-    }),
-  );
-
-  return transformed;
+  return [];
 }
 
 /**
@@ -1258,6 +1264,159 @@ async function fetchCityProductsByCountry(countryId: string, cityNameLower: stri
   );
 
   return transformed.filter((x): x is NonNullable<typeof x> => x !== null);
+}
+
+/**
+ * Fetch all tag types from Tiqets API for category display names
+ * https://api.tiqets.com/v2/tag_types
+ */
+export async function fetchTiqetsTagTypes(): Promise<Record<string, string>> {
+  if (!isTiqetsAvailable) {
+    return {};
+  }
+
+  try {
+    const response = await fetch(withPreferences(`${TIQETS_API_BASE}/tag_types`), { method: 'GET', headers });
+    if (!response.ok) return {};
+    const data = await response.json();
+    const tagTypes = data.tag_types || data.tags || data.items || [];
+    const map: Record<string, string> = {};
+    tagTypes.forEach((tag: any) => {
+      if (tag.id && tag.name) {
+        map[String(tag.id)] = tag.name;
+      }
+    });
+    return map;
+  } catch (e) {
+    console.warn('Failed to fetch tag types:', e);
+    return {};
+  }
+}
+
+/**
+ * Fetch all tags from Tiqets API for detailed tag display names
+ * https://api.tiqets.com/v2/tags
+ */
+export async function fetchTiqetsTagNames(): Promise<Record<string, string>> {
+  if (!isTiqetsAvailable) {
+    return {};
+  }
+
+  try {
+    const response = await fetch(withPreferences(`${TIQETS_API_BASE}/tags`), { method: 'GET', headers });
+    if (!response.ok) return {};
+    const data = await response.json();
+    const tags = data.tags || data.items || [];
+    const map: Record<string, string> = {};
+    tags.forEach((tag: any) => {
+      if (tag.id && tag.name) {
+        map[String(tag.id)] = tag.name;
+      }
+    });
+    return map;
+  } catch (e) {
+    console.warn('Failed to fetch tags:', e);
+    return {};
+  }
+}
+
+/**
+ * Fetch tags filtered by type_id (for subcategories)
+ * e.g., type_id "2968" returns "Art Museums", "History Museums", etc.
+ */
+export async function fetchTiqetsTagsByTypeId(typeId: string): Promise<Array<{ id: string; name: string; slug: string }>> {
+  if (!isTiqetsAvailable) {
+    return [];
+  }
+
+  try {
+    // Fetch all tags (max 500 to get full list)
+    const response = await fetch(withPreferences(`${TIQETS_API_BASE}/tags?page_size=500`), { method: 'GET', headers });
+    if (!response.ok) return [];
+    const data = await response.json();
+    const tags = data.tags || data.items || [];
+    
+    // Filter by type_id
+    const filteredTags = tags.filter((tag: any) => String(tag.type_id) === typeId);
+    
+    return filteredTags.map((tag: any) => ({
+      id: String(tag.id ?? ''),
+      name: tag.name || '',
+      slug: tag.name ? tag.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
+    }));
+  } catch (e) {
+    console.warn('Failed to fetch tags by type_id:', e);
+    return [];
+  }
+}
+
+/**
+ * Fetch combined tag names from both tag_types and tags endpoints
+ * Returns a map of tag_id -> display name
+ */
+export async function fetchTiqetsAllTagNames(): Promise<Record<string, string>> {
+  const [tagTypes, tags] = await Promise.all([
+    fetchTiqetsTagTypes(),
+    fetchTiqetsTagNames()
+  ]);
+  // Merge: tagTypes take precedence for category types, tags for individual tags
+  return { ...tags, ...tagTypes };
+}
+
+import { CATEGORY_TYPE_IDS } from '@/lib/category-pages';
+import { CATEGORY_IMAGES } from '@/lib/category-images';
+
+/**
+ * Fetch categories for a city dynamically from Tiqets API.
+ * Derives categories from the tag_ids of the city's excursions.
+ */
+export async function fetchTiqetsCityCategories(cityName: string, countryId?: string): Promise<DestinationCategories> {
+  const excursions = await fetchTiqetsCityProducts(cityName, countryId);
+  
+  // Collect all tag_ids from excursions
+  const tagIdCounts: Record<string, number> = {};
+  excursions.forEach(ex => {
+    if (Array.isArray(ex.tag_ids)) {
+      ex.tag_ids.forEach(tid => {
+        tagIdCounts[tid] = (tagIdCounts[tid] || 0) + 1;
+      });
+    }
+  });
+
+  // Fetch tag types for display names
+  const tagNames = await fetchTiqetsAllTagNames();
+
+  // Map tag_ids to category slugs using CATEGORY_TYPE_IDS reverse mapping
+  const TYPE_ID_TO_SLUG: Record<string, string> = Object.fromEntries(
+    Object.entries(CATEGORY_TYPE_IDS).map(([slug, id]) => [id, slug])
+  );
+
+  // Build categories from tag_ids that have a known mapping
+  const categories = Object.entries(tagIdCounts)
+    .filter(([tagId]) => TYPE_ID_TO_SLUG[tagId])
+    .map(([tagId, count]) => {
+      const slug = TYPE_ID_TO_SLUG[tagId];
+      // Get display name from tag names API (tag_types or tags), fallback to slug
+      const displayName = tagNames[tagId] || slug
+        .split('-')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+      // Get image from CATEGORY_IMAGES (keyed by lowercase display name)
+      const image = CATEGORY_IMAGES[displayName.toLowerCase()] || 
+                    CATEGORY_IMAGES[slug] || 
+                    'https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150';
+      
+      return {
+        name: displayName,
+        slug,
+        typeId: tagId,
+        image,
+        count,
+      };
+    })
+    .sort((a, b) => b.count - a.count);
+
+  return { categories, interests: [] };
 }
 
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {

@@ -1,17 +1,17 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { fetchTiqetsCityProducts } from '@/lib/tiqets-api';
-import { CITY_CATEGORIES } from '@/lib/city-categories';
+import { fetchTiqetsTagsByTypeId } from '@/lib/tiqets-api';
 import { COUNTRY_CITIES } from '@/lib/agoda-catalog';
-import { CITY_SUBCATEGORIES } from '@/lib/city-subcategories';
-import { COUNTRY_DATA } from '@/app/country/[countryName]/page';
 import { CITY_TO_COUNTRY_ID } from '@/lib/tiqets-api';
 import {
   CATEGORY_TYPE_IDS,
+  SUBCATEGORY_TAG_TYPE_IDS,
   categoryName,
   categorySlug,
   categorySlugByTypeId,
 } from '@/lib/category-pages';
 import { imageUrlFor } from '@/lib/tiqets-image';
+import { CATEGORY_IMAGES } from '@/lib/category-images';
 import CategoryPageClient from './category-page-client';
 import type { Excursion } from '@/types';
 
@@ -25,8 +25,6 @@ export default async function CategoryPage({
   const cityName = decodeURIComponent(params.cityName);
   const slug = decodeURIComponent(params.categorySlug);
   const typeId = CATEGORY_TYPE_IDS[slug];
-  const cityKey = cityName.toLowerCase();
-  const cityData = CITY_CATEGORIES[cityKey];
   
   // Get country_id for this city from static map or auto-discovery cache
   const normalizedCityName = cityName.toLowerCase()
@@ -37,7 +35,7 @@ export default async function CategoryPage({
     .trim();
   const countryId = CITY_TO_COUNTRY_ID[normalizedCityName];
 
-  if (!typeId || !cityData) {
+  if (!typeId) {
     return notFound();
   }
 
@@ -67,47 +65,65 @@ export default async function CategoryPage({
     }
   }
 
-  const topLevelNames = [...cityData.categories, ...cityData.interests];
-  const isTopLevel = topLevelNames.some((c) => categorySlug(c.name) === slug);
+  // Subcategories (pills) from API - fetch tags with this category's type_id
+  // Map product category type_id to tag subcategory type_id
+  const tagTypeId = SUBCATEGORY_TAG_TYPE_IDS[typeId] || typeId;
+  const subTags = await fetchTiqetsTagsByTypeId(tagTypeId);
 
-  // Subcategory pills Tiqets shows for this city+category
-  // (extracted from tiqets.com — the set differs per city).
-  const subcategories = CITY_SUBCATEGORIES[cityKey]?.[slug] || [];
+  // Build subcategory counts from products
+  // Products have tag_ids that include the subcategory tag ids
+  const subCategoryCounts = new Map<string, number>();
+  for (const ex of products) {
+    for (const tag of ex.tag_ids || []) {
+      // Check if this tag_id is a subcategory tag (exists in subTags)
+      const subTag = subTags.find(st => st.id === String(tag));
+      if (subTag) {
+        subCategoryCounts.set(subTag.name, (subCategoryCounts.get(subTag.name) || 0) + 1);
+      }
+    }
+  }
 
-  const related = topLevelNames
-    .filter((c) => categorySlug(c.name) !== slug)
-    .map((c) => ({
-      name: c.name,
-      image: c.image,
-      slug: categorySlug(c.name),
-      count: counts.get(categorySlug(c.name)) || 0,
+  // Deduplicate subTags by name (API may return duplicates)
+  const uniqueSubTags = new Map<string, typeof subTags[0]>();
+  for (const tag of subTags) {
+    if (!uniqueSubTags.has(tag.name) || (tag.id && !uniqueSubTags.get(tag.name)?.id)) {
+      uniqueSubTags.set(tag.name, tag);
+    }
+  }
+  const deduplicatedSubTags = Array.from(uniqueSubTags.values());
+
+  const pills = deduplicatedSubTags
+    .map((tag) => ({
+      name: tag.name,
+      image: CATEGORY_IMAGES[tag.name.toLowerCase()] || '',
+      slug: tag.slug,
+      count: subCategoryCounts.get(tag.name) || 0,
     }))
+    .filter(p => p.count > 0) // Only show pills with experiences
+    .slice(0, 10);
+
+  // Related categories from API data
+  const related = Array.from(counts.entries())
+    .filter(([tagSlug]) => tagSlug !== slug)
+    .map(([tagSlug, count]) => {
+      const name = categoryName(tagSlug);
+      const image = CATEGORY_IMAGES[name.toLowerCase()] || 
+                    CATEGORY_IMAGES[tagSlug] || 
+                    '';
+      return {
+        name,
+        image,
+        slug: tagSlug,
+        count,
+      };
+    })
     .filter((c) => c.count > 0)
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
 
-  // Pills row: real subcategories when tiqets has them,
-  // otherwise the sibling categories of a top-level page.
-  const pills =
-    subcategories.length > 0
-      ? subcategories
-      : isTopLevel
-        ? related.slice(0, 6)
-        : [];
-
-  // City-specific picture for this exact category (either
-  // its own tile or its pill on a parent category page).
-  const subcategoryImage = Object.values(CITY_SUBCATEGORIES[cityKey] || {})
-    .flat()
-    .find((s) => s.slug === slug)?.image;
-
-  // The hero spans the full page width, so ask the CDN
-  // for a large rendition — pill pictures are extracted
-  // as tiny thumbnails and would blur when upscaled.
+  // Hero image from first product in category
   const heroImage = imageUrlFor(
-    subcategoryImage ||
-      topLevelNames.find((c) => categorySlug(c.name) === slug)?.image ||
-      products[0]?.images?.[0] ||
-      '',
+    products[0]?.images?.[0] || '',
     'hero',
   );
 

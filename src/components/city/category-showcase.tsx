@@ -81,9 +81,13 @@ export function CategoryShowcase({
   const [modalOpen, setModalOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const { categories, interests } = data ?? DEFAULT_CATEGORIES;
-  const rowCategories = categories.slice(0, 6);
+  /** Deduplicate by name (case-insensitive) in case of bad data. */
+  const uniqCategories = Array.from(
+    new Map(categories.map((c) => [c.name.toLowerCase(), c])).values()
+  );
+  const rowCategories = uniqCategories.slice(0, 6);
   /** Tiqets' own modal lists every category alphabetically. */
-  const modalCategories = [...categories].sort((a, b) =>
+  const modalCategories = [...uniqCategories].sort((a, b) =>
     a.name.localeCompare(b.name),
   );
   const modalInterests = [...interests].sort((a, b) =>

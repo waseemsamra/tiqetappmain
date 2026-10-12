@@ -12,6 +12,7 @@ export type CategoryItem = {
   slug: string;
   image: string;
   count?: number;
+  typeId?: string;
 };
 
 export type DestinationCategories = {
@@ -932,6 +933,157 @@ export const CITY_CATEGORIES: Record<string, DestinationCategories> = {
                 "slug": "attractions",
                 "typeId": "2966",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "interests": []
+    },
+    "mexico-city": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 57
+            },
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 25
+            },
+            {
+                "name": "Museums",
+                "slug": "museums",
+                "typeId": "2968",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/f1c8eb790e5e4cbf93bb1a1cde0fa7bf.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 30
+            },
+            {
+                "name": "Food & Drinks",
+                "slug": "food-drinks",
+                "typeId": "1034",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/0a45bc1fdf9d448c9613475edf9758f0.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 12
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 20
+            }
+        ],
+        "interests": []
+    },
+    "cancun": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 35
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 22
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 28
+            }
+        ],
+        "interests": []
+    },
+    "playa-del-carmen": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 28
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 12
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 20
+            }
+        ],
+        "interests": []
+    },
+    "chichén-itzá": {
+        "categories": [
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 1
+            }
+        ],
+        "interests": []
+    },
+    "chichen-itza": {
+        "categories": [
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
                 "count": 1
             }
         ],
@@ -2906,6 +3058,166 @@ export const COUNTRY_CATEGORIES: Record<string, DestinationCategories> = {
                 "name": "Transfers",
                 "slug": "transfers",
                 "image": "https://aws-tiqets-cdn.imgix.net/images/content/8376d89036e6404ea380ad9afffd6f23.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150"
+            }
+        ],
+        "interests": []
+    },
+    "cancún": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 35
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 22
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 28
+            }
+        ],
+        "interests": []
+    },
+    "playa del carmen": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 28
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 12
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 20
+            }
+        ],
+        "interests": []
+    },
+    "tulum": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 22
+            },
+            {
+                "name": "Historical & Archaeological Sites",
+                "slug": "historical-archaeological-sites",
+                "typeId": "2967",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/224a182d2c0142e38b9c353efed25a85.jpg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 12
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 16
+            }
+        ],
+        "interests": []
+    },
+    "playa-del-carmen": {
+        "categories": [
+            {
+                "name": "Attractions",
+                "slug": "attractions",
+                "typeId": "2966",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 28
+            },
+            {
+                "name": "Cruises & Boat Tours",
+                "slug": "cruises-boat-tours",
+                "typeId": "1035",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/2785ff95bacf4f44a294dc4b01eff695.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 18
+            },
+            {
+                "name": "Nature & Wildlife",
+                "slug": "nature-wildlife",
+                "typeId": "2745",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 12
+            },
+            {
+                "name": "City Tours",
+                "slug": "city-tours",
+                "typeId": "1040",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/cc0d930eb5ad4c529f77ef2bd22bb352.png?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 15
+            },
+            {
+                "name": "Trips & Excursions",
+                "slug": "trips-excursions",
+                "typeId": "1042",
+                "image": "https://aws-tiqets-cdn.imgix.net/images/content/aa40cf84f36e44d1a9b962c668200ea7.jpeg?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150",
+                "count": 20
             }
         ],
         "interests": []

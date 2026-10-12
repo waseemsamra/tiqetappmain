@@ -145,7 +145,9 @@ export default function CityClientPage({
     // Construct hero image: the city's official Tiqets art first,
     // then the first valid image found among its excursions.
     const heroImage = useMemo(() => {
-        const official = CITY_HERO_IMAGES[cityName.toLowerCase()];
+        // Normalize city name for hero image lookup: kebab-case -> space
+        const normalizedCityName = cityName.toLowerCase().replace(/-/g, ' ');
+        const official = CITY_HERO_IMAGES[normalizedCityName];
         if (official) return official;
 
         // Try to find an image from top rated excursions first

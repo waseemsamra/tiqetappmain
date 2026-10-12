@@ -107,10 +107,12 @@ export function BookingWidget({ excursion }: { excursion: Excursion }) {
                            <CardTitle>{excursion.name}</CardTitle>
                            <CardDescription>Show more info <Info className="inline h-3 w-3" /></CardDescription>
                        </div>
-                         {excursion.images?.[0] && excursion.images?.[0].length > 0 && (
-                             <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" unoptimized />
-                         )}
-                        <Calendar
+{excursion.images?.[0] && excursion.images?.[0].length > 0 && (
+                              <Image src={excursion.images[0]} alt={excursion.name} width={80} height={60} className="rounded-lg object-cover" data-ai-hint="attraction" unoptimized />
+                          )}
+                        </CardHeader>
+                        <CardContent>
+                          <Calendar
                             mode="single"
                             selected={selectedDate}
                             onSelect={setSelectedDate}

@@ -34,9 +34,13 @@ export function CategoryChips({
   /** Extra tile rendered after the chips (e.g. "More categories"). */
   extra?: ReactNode;
 }) {
+  /** Deduplicate by slug or name to prevent duplicate chips. */
+  const uniqItems = Array.from(
+    new Map(items.map((c) => [c.slug || c.name.toLowerCase(), c])).values()
+  );
   return (
     <div className="flex snap-x snap-proximity gap-3 overflow-x-auto pb-4 min-[481px]:grid min-[481px]:grid-cols-2 min-[481px]:gap-4 min-[481px]:overflow-visible min-[769px]:grid-cols-3 min-[1101px]:grid-cols-7 min-[1101px]:gap-5">
-      {items.map((cat) => (
+      {uniqItems.map((cat) => (
         <Link
           key={cat.slug || cat.name}
           href={

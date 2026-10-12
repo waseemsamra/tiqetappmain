@@ -3,9 +3,9 @@ import { searchExcursionsAction, getExcursionTypes } from '@/app/actions';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import CityClientPage from './city-client-page';
-import { CITY_CATEGORIES } from '@/lib/city-categories';
-import { Suspense } from 'react';
 import { CITY_TO_COUNTRY_ID } from '@/lib/tiqets-api';
+import { fetchTiqetsCityCategories } from '@/lib/tiqets-api';
+import { Suspense } from 'react';
 
 export const revalidate = 3600;
 
@@ -18,9 +18,10 @@ export default async function CityPage({ params }: { params: { cityName: string 
     const normalizedCityName = cityName.toLowerCase().replace(/-/g, ' ');
     const countryId = CITY_TO_COUNTRY_ID[normalizedCityName];
 
-    const [cityExcursions, allExcursionTypes] = await Promise.all([
+    const [cityExcursions, allExcursionTypes, categories] = await Promise.all([
         searchExcursionsAction({ city: cityName, countryId }),
-        getExcursionTypes()
+        getExcursionTypes(),
+        fetchTiqetsCityCategories(cityName, countryId)
     ]);
     
     if (cityExcursions.length === 0) {
@@ -40,7 +41,7 @@ export default async function CityPage({ params }: { params: { cityName: string 
             allExcursionTypes={allExcursionTypes}
             cityName={cityName}
             countryName={countryName}
-            categories={CITY_CATEGORIES[cityName.toLowerCase()]}
+            categories={categories}
             user={user}
         />
     );

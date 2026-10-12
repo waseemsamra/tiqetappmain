@@ -76,6 +76,13 @@ export const CATEGORY_TYPE_IDS: Record<string, string> = {
   'zoos': '723',
 };
 
+/** Product category type_id -> Tag subcategory type_id for fetching subcategory pills. */
+export const SUBCATEGORY_TAG_TYPE_IDS: Record<string, string> = {
+  '2966': '139', // Attractions -> Attractions subcategories
+  '2967': '138', // Historical & Archaeological Sites -> History & Culture subcategories
+  '2968': '137', // Museums -> Museums subcategories
+};
+
 /** Category display name -> URL slug. */
 const NAME_TO_SLUG: Record<string, string> = {
   'attractions': 'attractions',
