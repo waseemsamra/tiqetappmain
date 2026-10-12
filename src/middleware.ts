@@ -28,14 +28,14 @@ export async function middleware(request: NextRequest) {
 
   // Admin authentication check
   const isAdminPath = url.pathname.startsWith('/admin');
-  const isAdminLogin = url.pathname === '/admin/login';
+  const isAdminLogin = url.pathname === '/admin-login';
   const isAdminApi = url.pathname.startsWith('/api/admin');
   
   if (isAdminPath && !isAdminLogin && !isAdminApi) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || user.email !== 'waseemsamra@gmail.com') {
       const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = '/admin/login';
+      loginUrl.pathname = '/admin-login';
       loginUrl.searchParams.set('redirect', request.nextUrl.pathname);
       return NextResponse.redirect(loginUrl);
     }
