@@ -281,6 +281,7 @@ export const CITY_TO_COUNTRY_ID: Record<string, string> = {
     'cowes': '50012',
     'currumbin': '50012',
     'deepdene': '50012',
+    'deepdene western australia': '50012',
     'dwellingup': '50012',
     'forest grove': '50012',
     'golden point': '50012',
@@ -311,6 +312,9 @@ export const CITY_TO_COUNTRY_ID: Record<string, string> = {
     'yanchep': '50012',
     'yandina': '50012',
     'yulara': '50012',
+    'anna bay': '50012',
+    'augusta': '50012',
+    'birregurra': '50012',
     // Add more as needed
 };
 
