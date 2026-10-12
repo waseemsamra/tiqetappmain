@@ -674,7 +674,20 @@ export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursi
     return [];
   }
 
-  const cityNameLower = cityName.toLowerCase();
+  const cityNameLower = cityName.toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // Check if this city uses country fallback
+  const countryId = CITY_TO_COUNTRY_ID[cityNameLower];
+  if (countryId) {
+    // Fetch from experiences endpoint with country_id and filter by city
+    return await fetchCityProductsByCountry(countryId, cityNameLower);
+  }
+
   let cityId = KNOWN_CITY_IDS[cityNameLower];
   if (!cityId) {
     const cities = await getAvailableCities();
@@ -738,6 +751,98 @@ export async function fetchTiqetsCityProducts(cityName: string): Promise<Excursi
   );
 
   return transformed;
+}
+
+/**
+ * Fetch city products for cities that don't have city_id in Tiqets API
+ * Uses country_id + city name filtering
+ */
+async function fetchCityProductsByCountry(countryId: string, cityNameLower: string): Promise<Excursion[]> {
+  const allProducts: any[] = [];
+  
+  // Fetch experiences from country
+  for (let page = 1; page <= 10; page++) {
+    try {
+      const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100&page=${page}`), { method: 'GET', headers });
+      if (!response.ok) break;
+      const data = await response.json();
+      const items = data.experiences || data.products || data.items || [];
+      allProducts.push(...items);
+      if (items.length < 100) break;
+    } catch (e) {
+      break;
+    }
+  }
+  
+  // Also fetch products endpoint
+  for (let page = 1; page <= 10; page++) {
+    try {
+      const response = await fetch(withPreferences(`${TIQETS_API_BASE}/products?country_id=${countryId}&page_size=100&page=${page}`), { method: 'GET', headers });
+      if (!response.ok) break;
+      const data = await response.json();
+      const items = data.products || data.experiences || data.items || [];
+      allProducts.push(...items);
+      if (items.length < 100) break;
+    } catch (e) {
+      break;
+    }
+  }
+
+  if (allProducts.length === 0) {
+    return [];
+  }
+
+  // Filter by city name
+  const cityProducts = allProducts.filter((p: any) => {
+    const expCity = (p.address?.city_name || p.city_name || '').toLowerCase()
+      .replace(/\([^)]*\)/g, '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return expCity === cityNameLower;
+  });
+
+  if (cityProducts.length === 0) {
+    return [];
+  }
+
+  // Build a set of child product IDs so we can filter out variants from the flat list.
+  const childProductIds = new Set<string>();
+  for (const p of cityProducts) {
+    if (Array.isArray(p.product_ids)) {
+      for (const pid of p.product_ids) {
+        childProductIds.add(String(pid));
+      }
+    }
+  }
+
+  const transformed = await Promise.all(
+    cityProducts.map(async (p: any) => {
+      const idStr = String(p.id);
+      // Skip child products/variants; only show parent/vistable experiences
+      if (childProductIds.has(idStr) && (!Array.isArray(p.product_ids) || p.product_ids.length === 0)) {
+        return null;
+      }
+
+      let images: string[] = [];
+      if (Array.isArray(p.images)) {
+        images = pickTiqetsImageUrls(p.images);
+      }
+      if (images.length === 0 && p.venue?.id) {
+        try {
+          const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
+          if (venueResp.ok) {
+            const venueData = await venueResp.json();
+            images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
+          }
+        } catch (e) {}
+      }
+      return { ...transformTiqetsProduct(p), images };
+    })
+  );
+
+  return transformed.filter((x): x is NonNullable<typeof x> => x !== null);
 }
 
 export async function fetchTiqetsProductVariants(productIds: string[]): Promise<any[]> {
