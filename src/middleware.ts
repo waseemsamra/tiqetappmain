@@ -8,30 +8,30 @@ import { getDesktopRedirectTarget } from '../desktop/redirect';
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
 
-  // Create Supabase client for auth check
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  // Admin authentication check
+  // Admin authentication check - only create Supabase client for admin routes
   const isAdminPath = url.pathname.startsWith('/admin');
   const isAdminLogin = url.pathname === '/admin-login';
   const isAdminApi = url.pathname.startsWith('/api/admin');
   
   if (isAdminPath && !isAdminLogin && !isAdminApi) {
+    // Only create Supabase client for admin routes
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              request.cookies.set(name, value, options)
+            );
+          },
+        },
+      }
+    );
+    
     const { data: { user } } = await supabase.auth.getUser();
     if (!user || user.email !== 'waseemsamra@gmail.com') {
       const loginUrl = request.nextUrl.clone();
