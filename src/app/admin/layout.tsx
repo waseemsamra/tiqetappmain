@@ -1,7 +1,7 @@
 
 
 import Link from "next/link";
-import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid, Package } from "lucide-react";
+import { List, Plane, Tag as TagIcon, Map, Presentation, Ticket, LayoutDashboard, Users, UserCog, Briefcase, CreditCard, Settings, TrendingUp, WalletCards, SlidersHorizontal, LayoutGrid, Package, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -31,18 +31,18 @@ export default async function AdminLayout({
                  <LayoutGrid className="h-4 w-4" />
                  Admin Dashboard
               </Link>
-               {/* Excursions & Types Group */}
-               <div className="my-2">
-                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Content</p>
-                  <Link
-                    href="/admin/excursion-types"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <TagIcon className="h-4 w-4" />
-                    Excursion Types
-                  </Link>
-                  </div>
-              
+                {/* Excursions & Types Group */}
+                <div className="my-2">
+                  <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Content</p>
+                   <Link
+                     href="/admin/excursion-types"
+                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                   >
+                     <TagIcon className="h-4 w-4" />
+                     Excursion Types
+                   </Link>
+                   </div>
+               
               {/* User Management Group */}
               <div className="my-2">
                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">User Management</p>
@@ -73,66 +73,64 @@ export default async function AdminLayout({
                <div className="my-2">
                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Business</p>
                  <Link
-                  href="#"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary opacity-50 cursor-not-allowed"
-                >
-                  <WalletCards className="h-4 w-4" />
-                  Commission Runs
-                </Link>
+                   href="#"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary opacity-50 cursor-not-allowed"
+                 >
+                   <WalletCards className="h-4 w-4" />
+                   Commission Runs
+                 </Link>
                  <Link
-                  href="/admin/payments"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <CreditCard className="h-4 w-4" />
-                  Payment Providers
-                </Link>
-              </div>
-
-                    <div className="my-2">
-                     <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
-                     <Link
-                       href="/admin/cms"
-                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                     >
-                       <Presentation className="h-4 w-4" />
-                       CMS Home
-                     </Link>
-                     
-                   </div>
-
-                   {/* Locations Group */}
-                   <div className="my-2">
-                     <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Locations</p>
-                     <Link
-                       href="/admin/locations"
-                       className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                     >
-                       <Map className="h-4 w-4" />
-                       Countries & Cities
-                     </Link>
-                   </div>
-
-                   
-
-
-                   {/* Settings Group */}
-               <div className="my-2">
-                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
-                   <Link
-                    href="/admin/settings/variants"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Variants
-                  </Link>
-                   <Link
-                    href="/admin/settings/google"
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  >
-                    <TrendingUp className="h-4 w-4" />
-                    Google Settings
-                  </Link>
+                   href="/admin/payments"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <CreditCard className="h-4 w-4" />
+                   Payment Providers
+                 </Link>
                </div>
+
+                     <div className="my-2">
+                      <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">CMS</p>
+                      <Link
+                        href="/admin/cms"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                      >
+                        <Presentation className="h-4 w-4" />
+                        CMS Home
+                      </Link>
+                      
+                    </div>
+
+                    {/* Locations Group */}
+                    <div className="my-2">
+                      <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Locations</p>
+                      <Link
+                        href="/admin/locations"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                      >
+                        <Map className="h-4 w-4" />
+                        Countries & Cities
+                      </Link>
+                    </div>
+
+                    
+                    {/* Settings Group */}
+                <div className="my-2">
+                  <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Settings</p>
+                    <Link
+                     href="/admin/settings/variants"
+                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                   >
+                     <SlidersHorizontal className="h-4 w-4" />
+                     Variants
+                   </Link>
+                    <Link
+                     href="/admin/settings/google"
+                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                   >
+                     <TrendingUp className="h-4 w-4" />
+                     Google Settings
+                   </Link>
+                </div>
 
 
               <Link
@@ -145,9 +143,12 @@ export default async function AdminLayout({
             </nav>
           </div>
           <div className="mt-auto p-4 border-t">
-            <Button variant="ghost" className="w-full justify-start" type="button">
-              Exit Admin
-            </Button>
+            <form action="/api/admin/auth" method="DELETE">
+              <Button variant="ghost" className="w-full justify-start gap-2" type="submit">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </form>
           </div>
         </div>
       </div>
