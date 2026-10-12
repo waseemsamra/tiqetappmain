@@ -244,16 +244,34 @@ export const KNOWN_CITY_IDS: Record<string, string> = {
     'aracaju': '61575',
     'natal': '61577',
     'cabo frio': '61579',
-    'melbourne': '260755',
-    'sydney': '260749',
-    'brisbane': '260750',
-    'perth': '260752',
-    'adelaide': '260753',
-    'gold coast': '260751',
-    'cairns': '260754',
-    'canberra': '260756',
-    'darwin': '260757',
-    'hobart': '260758',
+};
+
+// Cities not in Tiqets cities API but have experiences via country_id
+// Maps normalized city name -> country_id
+export const CITY_TO_COUNTRY_ID: Record<string, string> = {
+    // Australia
+    'melbourne': '50012',
+    'sydney': '50012',
+    'brisbane': '50012',
+    'perth': '50012',
+    'adelaide': '50012',
+    'gold coast': '50012',
+    'cairns': '50012',
+    'canberra': '50012',
+    'darwin': '50012',
+    'hobart': '50012',
+    'southport': '50012',
+    'helensburgh': '50012',
+    'nowra': '50012',
+    'st ives': '50012',
+    'west pennant hills': '50012',
+    'abbottsbury': '50012',
+    'mooloolaba': '50012',
+    'coffs harbour': '50012',
+    'doonside': '50012',
+    'belgrave': '50012',
+    'warrnambool': '50012',
+    // Add more as needed
 };
 
 // Get all available cities from API
@@ -420,20 +438,34 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
       cityId = KNOWN_CITY_IDS[hyphenated];
     }
     if (!cityId) {
-      const cities = await getAvailableCities();
-      const match = (cities || []).find((c: any) => {
-        const apiName = (c.name || '').toLowerCase()
-          .replace(/\([^)]*\)/g, '')
-          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9]+/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
-        return apiName === cityNameLower;
-      });
-      if (!match || !match.id) {
-        return [];
+      // Try to find country_id for this city and fetch experiences by country, then filter by city
+      const countryId = CITY_TO_COUNTRY_ID[cityNameLower];
+      if (countryId) {
+        try {
+          const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=200`), { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const experiences = data.experiences || data.products || data.items || [];
+            // Filter by city name
+            const filteredExperiences = experiences.filter((exp: any) => {
+              const expCity = (exp.address?.city_name || exp.city_name || '').toLowerCase()
+                .replace(/\([^)]*\)/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              return expCity === cityNameLower;
+            });
+            if (filteredExperiences.length > 0) {
+              const transformed = filteredExperiences.map(transformTiqetsProduct);
+              return transformed;
+            }
+          }
+        } catch (e) {
+          console.error(`Failed to fetch experiences by country_id for ${cityNameLower}:`, e);
+        }
       }
-      cityId = String(match.id);
+      return [];
     }
 
     const allActivities: any[] = [];
