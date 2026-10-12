@@ -271,6 +271,46 @@ export const CITY_TO_COUNTRY_ID: Record<string, string> = {
     'doonside': '50012',
     'belgrave': '50012',
     'warrnambool': '50012',
+    'airlie beach': '50012',
+    'ballarat': '50012',
+    'broadbeach': '50012',
+    'bunbury': '50012',
+    'busselton': '50012',
+    'cessnock': '50012',
+    'coomera': '50012',
+    'cowes': '50012',
+    'currumbin': '50012',
+    'deepdene': '50012',
+    'dwellingup': '50012',
+    'forest grove': '50012',
+    'golden point': '50012',
+    'gympie': '50012',
+    'katoomba': '50012',
+    'knights hill': '50012',
+    'main beach': '50012',
+    'maleny': '50012',
+    'margaret river': '50012',
+    'maroochydore': '50012',
+    'nicholls': '50012',
+    'olinda': '50012',
+    'oxenford': '50012',
+    'pearcedale': '50012',
+    'port stephens': '50012',
+    'quindalup': '50012',
+    'rockhampton': '50012',
+    'somersby': '50012',
+    'south brisbane': '50012',
+    'surfers paradise': '50012',
+    'tamborine mountain': '50012',
+    'wandin east': '50012',
+    'wangetti': '50012',
+    'weeaproinah': '50012',
+    'woombye': '50012',
+    'wyong creek': '50012',
+    'yallingup': '50012',
+    'yanchep': '50012',
+    'yandina': '50012',
+    'yulara': '50012',
     // Add more as needed
 };
 
@@ -292,12 +332,21 @@ export async function getAvailableCities(): Promise<any[]> {
   return [];
 }
 
+/**
+ * Get city images with guaranteed fallback.
+ * Strategy:
+ * 1. Try known city_id via products endpoint
+ * 2. Try city_id from API lookup via products endpoint
+ * 3. Try CITY_TO_COUNTRY_ID fallback via experiences endpoint with city filtering
+ * 4. Try CITY_TO_COUNTRY_ID fallback via products endpoint with city filtering
+ * 5. If still no image, try any experience from the country that matches city
+ */
 export async function fetchCityImages(cityNames: string[]): Promise<Record<string, string>> {
   if (!isTiqetsAvailable) return {};
   
   const cityImages: Record<string, string> = {};
   
-  // Build city ID lookup with API fallback
+  // Build city ID lookup with all fallback strategies
   const cityIdMap: Record<string, string> = {};
   for (const cityName of cityNames) {
     const knownId = KNOWN_CITY_IDS[cityName.toLowerCase()];
@@ -333,53 +382,149 @@ export async function fetchCityImages(cityNames: string[]): Promise<Record<strin
     }
   }
   
+  // Normalized city names for matching
+  const normalizedCityNames: Record<string, string> = {};
   for (const cityName of cityNames) {
-    try {
-      const cityId = cityIdMap[cityName];
-      if (!cityId) continue;
-      
-      // Check if using country fallback
-      const isCountryFallback = cityId.startsWith('country:');
-      const actualCityId = isCountryFallback ? cityId.replace('country:', '') : cityId;
-      
-      // Fetch from experiences endpoint for country fallback, products for regular cities
-      const endpoint = isCountryFallback ? 'experiences' : 'products';
-      const response = await fetch(`${TIQETS_API_BASE}/${endpoint}?${isCountryFallback ? 'country_id' : 'city_id'}=${actualCityId}&page_size=5`, { method: 'GET', headers });
-      if (response.ok) {
-        const data = await response.json();
-        const products = data.products || data.experiences || data.items || [];
-        
-        // For country fallback, filter by city name
-        let filteredProducts = products;
-        if (isCountryFallback) {
-          const cityNameLower = cityName.toLowerCase()
-            .replace(/\([^)]*\)/g, '')
-            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9]+/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-          filteredProducts = products.filter((p: any) => {
-            const expCity = (p.address?.city_name || p.city_name || '').toLowerCase()
-              .replace(/\([^)]*\)/g, '')
-              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-              .replace(/[^a-z0-9]+/g, ' ')
-              .replace(/\s+/g, ' ')
-              .trim();
-            return expCity === cityNameLower;
-          });
-        }
-        
-        // Use first product's first image
-        for (const product of filteredProducts) {
-          const images = pickTiqetsImageUrls(product.images);
-          if (images.length > 0) {
-            cityImages[cityName] = images[0];
-            break;
+    normalizedCityNames[cityName] = cityName.toLowerCase()
+      .replace(/\([^)]*\)/g, '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  
+  // Try multiple strategies for each city until we get an image
+  for (const cityName of cityNames) {
+    let imageFound = false;
+    
+    // Strategy 1: Direct city_id from products endpoint
+    const cityId = cityIdMap[cityName];
+    if (cityId && !cityId.startsWith('country:')) {
+      try {
+        const response = await fetch(`${TIQETS_API_BASE}/products?city_id=${cityId}&page_size=5`, { method: 'GET', headers });
+        if (response.ok) {
+          const data = await response.json();
+          const products = data.products || data.experiences || data.items || [];
+          for (const product of products) {
+            const images = pickTiqetsImageUrls(product.images);
+            if (images.length > 0) {
+              cityImages[cityName] = images[0];
+              imageFound = true;
+              break;
+            }
           }
         }
+      } catch (e) {
+        // Continue to next strategy
       }
-    } catch (e) {
-      console.error(`Failed to fetch image for ${cityName}:`, e);
+    }
+    
+    // Strategy 2: Country fallback via experiences endpoint
+    if (!imageFound) {
+      const countryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()] || 
+        (cityId && cityId.startsWith('country:') ? cityId.replace('country:', '') : null);
+      if (countryId) {
+        try {
+          const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=50`, { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const products = data.experiences || data.products || data.items || [];
+            const cityNameLower = normalizedCityNames[cityName];
+            
+            // Filter by city name
+            const filtered = products.filter((p: any) => {
+              const expCity = (p.address?.city_name || p.city_name || '').toLowerCase()
+                .replace(/\([^)]*\)/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              return expCity === cityNameLower;
+            });
+            
+            for (const product of filtered) {
+              const images = pickTiqetsImageUrls(product.images);
+              if (images.length > 0) {
+                cityImages[cityName] = images[0];
+                imageFound = true;
+                break;
+              }
+            }
+          }
+        } catch (e) {
+          // Continue to next strategy
+        }
+      }
+    }
+    
+    // Strategy 3: Country fallback via products endpoint
+    if (!imageFound) {
+      const countryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()];
+      if (countryId) {
+        try {
+          const response = await fetch(`${TIQETS_API_BASE}/products?country_id=${countryId}&page_size=50`, { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const products = data.products || data.experiences || data.items || [];
+            const cityNameLower = normalizedCityNames[cityName];
+            
+            const filtered = products.filter((p: any) => {
+              const expCity = (p.address?.city_name || p.city_name || '').toLowerCase()
+                .replace(/\([^)]*\)/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              return expCity === cityNameLower;
+            });
+            
+            for (const product of filtered) {
+              const images = pickTiqetsImageUrls(product.images);
+              if (images.length > 0) {
+                cityImages[cityName] = images[0];
+                imageFound = true;
+                break;
+              }
+            }
+          }
+        } catch (e) {
+          // Continue
+        }
+      }
+    }
+    
+    // Strategy 4: Last resort - fetch all experiences for country and find any matching city
+    if (!imageFound) {
+      const countryId = CITY_TO_COUNTRY_ID[cityName.toLowerCase()];
+      if (countryId) {
+        try {
+          const response = await fetch(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100`, { method: 'GET', headers });
+          if (response.ok) {
+            const data = await response.json();
+            const products = data.experiences || data.products || data.items || [];
+            const cityNameLower = normalizedCityNames[cityName];
+            
+            for (const product of products) {
+              const expCity = (product.address?.city_name || product.city_name || '').toLowerCase()
+                .replace(/\([^)]*\)/g, '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              if (expCity === cityNameLower) {
+                const images = pickTiqetsImageUrls(product.images);
+                if (images.length > 0) {
+                  cityImages[cityName] = images[0];
+                  imageFound = true;
+                  break;
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.error(`All strategies failed for ${cityName}:`, e);
+        }
+      }
     }
   }
   
