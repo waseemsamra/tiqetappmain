@@ -442,24 +442,64 @@ export async function fetchTiqetsProducts(params: Record<string, string> = {}): 
       const countryId = CITY_TO_COUNTRY_ID[cityNameLower];
       if (countryId) {
         try {
-          const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=200`), { method: 'GET', headers });
-          if (response.ok) {
+          const allExperiences: any[] = [];
+          // Fetch all pages of experiences for this country
+          for (let page = 1; page <= 5; page++) {
+            const response = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page_size=100&page=${page}`), { method: 'GET', headers });
+            if (!response.ok) break;
             const data = await response.json();
             const experiences = data.experiences || data.products || data.items || [];
-            // Filter by city name
-            const filteredExperiences = experiences.filter((exp: any) => {
-              const expCity = (exp.address?.city_name || exp.city_name || '').toLowerCase()
-                .replace(/\([^)]*\)/g, '')
-                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^a-z0-9]+/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-              return expCity === cityNameLower;
-            });
-            if (filteredExperiences.length > 0) {
-              const transformed = filteredExperiences.map(transformTiqetsProduct);
-              return transformed;
+            allExperiences.push(...experiences);
+            if (experiences.length < 100) break;
+          }
+
+          // Filter by city name
+          const filteredExperiences = allExperiences.filter((exp: any) => {
+            const expCity = (exp.address?.city_name || exp.city_name || '').toLowerCase()
+              .replace(/\([^)]*\)/g, '')
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+            return expCity === cityNameLower;
+          });
+          
+          if (filteredExperiences.length > 0) {
+            // Build a set of child product IDs so we can filter out variants from the flat list.
+            const childProductIds = new Set<string>();
+            for (const p of filteredExperiences) {
+              if (Array.isArray(p.product_ids)) {
+                for (const pid of p.product_ids) {
+                  childProductIds.add(String(pid));
+                }
+              }
             }
+
+            const transformedWithImages = await Promise.all(
+              filteredExperiences.map(async (p: any) => {
+                const idStr = String(p.id);
+                // Skip child products/variants; only show parent/vistable experiences
+                if (childProductIds.has(idStr) && (!Array.isArray(p.product_ids) || p.product_ids.length === 0)) {
+                  return null;
+                }
+
+                let images: string[] = [];
+                if (Array.isArray(p.images)) {
+                  images = pickTiqetsImageUrls(p.images);
+                }
+                if (images.length === 0 && p.venue?.id) {
+                  try {
+                    const venueResp = await fetch(withPreferences(`${TIQETS_API_BASE}/experiences/${p.venue.id}`), { method: 'GET', headers });
+                    if (venueResp.ok) {
+                      const venueData = await venueResp.json();
+                      images = pickTiqetsImageUrls(venueData.experience?.images || venueData.images);
+                    }
+                  } catch (e) {}
+                }
+                return { ...transformTiqetsProduct(p), images };
+              })
+            );
+            return transformedWithImages.filter((x): x is NonNullable<typeof x> => x !== null);
           }
         } catch (e) {
           console.error(`Failed to fetch experiences by country_id for ${cityNameLower}:`, e);
