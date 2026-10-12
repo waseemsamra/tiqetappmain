@@ -24,7 +24,7 @@ import { getWishlistIdsAction } from '@/app/actions';
 import { WishlistButton } from '@/components/wishlist-button';
 import { useTiqetsTags } from '@/hooks/use-tiqets-tags';
 import { CITY_HERO_IMAGES } from '@/lib/hero-images';
-import type { DestinationCategories } from '@/lib/city-categories';
+import type { DestinationCategories, CategoryItem } from '@/lib/city-categories';
 
 type User = { id: string; email?: string } | null;
 
@@ -75,6 +75,32 @@ export default function CityClientPage({
     const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
     const { tags, loading: tagsLoading } = useTiqetsTags();
     
+    // Filter categories to only show those with actual excursions
+    const filteredCategories = useMemo((): DestinationCategories | undefined => {
+        if (!categories) return undefined;
+        
+        // Collect all tag IDs from excursions
+        const excursionTagIds = new Set<string>();
+        initialExcursions.forEach(ex => {
+            if (Array.isArray(ex.tag_ids)) {
+                ex.tag_ids.forEach(tid => excursionTagIds.add(tid));
+            }
+        });
+        
+        // Filter categories that have matching typeId in excursions
+        const filteredCats = categories.categories.filter(cat => 
+            excursionTagIds.has(cat.typeId)
+        );
+        
+        // Also filter interests (they don't have typeId, so keep all or filter by tag_id)
+        // For now keep all interests since they don't have typeId
+        
+        return {
+            categories: filteredCats,
+            interests: categories.interests
+        };
+    }, [categories, initialExcursions]);
+
     useEffect(() => {
         if (user) {
             getWishlistIdsAction().then(ids => setWishlistIds(new Set(ids)));
@@ -168,7 +194,7 @@ export default function CityClientPage({
               </header>
 
             <section>
-              <CategoryShowcase cityName={cityName} data={categories} />
+              <CategoryShowcase cityName={cityName} data={filteredCategories} />
             </section>
             
             <section>

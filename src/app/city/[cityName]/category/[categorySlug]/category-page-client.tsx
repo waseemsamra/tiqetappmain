@@ -122,7 +122,7 @@ export default function CategoryPageClient({
       {topPicks.length > 0 && (
         <section className="mb-13">
           <h2 className="mb-5 text-xl font-bold tracking-[-0.4px] text-[#1A202C] sm:text-2xl">
-            Top 10 {category}
+            Top {topPicks.length} {category}
           </h2>
           <Carousel opts={CAROUSEL_OPTS} className="w-full">
             <CarouselContent className="-ml-4">

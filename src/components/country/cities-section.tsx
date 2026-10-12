@@ -14,6 +14,15 @@ interface CitiesSectionProps {
     cityImages?: Record<string, string>;
 }
 
+// Normalize city name for clean URLs: remove parentheticals, replace spaces with hyphens
+function cityUrlSlug(name: string): string {
+    return name.toLowerCase()
+        .replace(/\([^)]*\)/g, '')  // Remove (CA), (US), etc.
+        .replace(/[^a-z0-9]+/g, '-')  // Replace non-alphanumeric with hyphen
+        .replace(/-+/g, '-')  // Collapse multiple hyphens
+        .replace(/^-|-$/g, '');  // Trim leading/trailing hyphens
+}
+
 export function CitiesSection({ countryName, cities, cityImages = {} }: CitiesSectionProps) {
     if (!cities || cities.length === 0) {
         return null;
@@ -33,7 +42,7 @@ export function CitiesSection({ countryName, cities, cityImages = {} }: CitiesSe
                         return (
                             <Link
                                 key={city.name}
-                                href={`/city/${encodeURIComponent(city.name)}`}
+                                href={`/city/${cityUrlSlug(city.name)}`}
                                 className="flex-none snap-center flex flex-col w-[200px] md:w-[240px] lg:w-[280px]"
                                 style={{ scrollSnapAlign: 'center' }}
                             >

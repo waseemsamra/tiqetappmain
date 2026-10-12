@@ -147,10 +147,10 @@ export default function CountryClientPage({
                     cityImages={cityImages}
                 />
 
-                {/* Top 10 Experiences - Carousel */}
+                {/* Top Experiences - Carousel */}
                 {topExcursions.length > 0 && (
                     <section>
-                        <h2 className="text-2xl md:text-3xl font-bold mb-6">Top 10 Experiences in {countryName}</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold mb-6">Top {topExcursions.length} Experiences in {countryName}</h2>
                         <Carousel opts={CAROUSEL_OPTS} className="w-full">
                             <CarouselContent className="-ml-4">
                                 {topExcursions.map((excursion, index) => (

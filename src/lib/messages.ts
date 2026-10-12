@@ -23,7 +23,7 @@ const en: Messages = {
   'home.bestPlacesIn': 'Best places to visit in {country}',
   'home.bestPlacesUae': 'Best places to visit in United Arab Emirates',
   'home.bestPlacesWorldwide': 'Best places to visit worldwide',
-  'home.topThingsInCity': 'Top 10 things to do in {city}',
+  'home.topThingsInCity': 'Top things to do in {city}',
   'home.mostPopular': 'Most popular things to do',
   'home.discoverPopular': 'Discover our most popular places to visit',
   'home.tabTopThings': 'Top Things to Do',
