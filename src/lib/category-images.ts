@@ -27,5 +27,11 @@ export const CATEGORY_IMAGES: Record<string, string> = {
     "sport fanatics": "https://aws-tiqets-cdn.imgix.net/images/content/7ab005638e1f4596a0c149076d8b38cf.jpg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
     "nightlife seekers": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
     "art museums": "https://aws-tiqets-cdn.imgix.net/images/content/aa2d8d4eabf145e589669ee216a819b1.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
-    "history museums": "https://aws-tiqets-cdn.imgix.net/images/content/ca55ddde569e4f3c830b55abf873e683.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200"
+    "history museums": "https://aws-tiqets-cdn.imgix.net/images/content/ca55ddde569e4f3c830b55abf873e683.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "ferris wheels": "https://aws-tiqets-cdn.imgix.net/images/content/4e74cb3bed9e4226b50254dbf5b8542b.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "aquariums": "https://aws-tiqets-cdn.imgix.net/images/content/edeb07fa094e4d548f9f3101d2e4fe43.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "observation decks": "https://aws-tiqets-cdn.imgix.net/images/content/eeb2c5810b3e4a4b8c4f8c8b8b8b8b8b.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "theme parks": "https://aws-tiqets-cdn.imgix.net/images/content/4e74cb3bed9e4226b50254dbf5b8542b.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "zoos": "https://aws-tiqets-cdn.imgix.net/images/content/edeb07fa094e4d548f9f3101d2e4fe43.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "water parks": "https://aws-tiqets-cdn.imgix.net/images/content/bbdd91ef3bde477c8f325bd6b6f03f4b.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200"
 };

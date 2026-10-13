@@ -74,12 +74,18 @@ export default async function CategoryPage({
   // Build subcategory counts from products
   // Products have tag_ids that include the subcategory tag ids
   const subCategoryCounts = new Map<string, number>();
+  // Also track first image per subcategory
+  const subCategoryFirstImage: Record<string, string> = {};
   for (const ex of products) {
     for (const tag of ex.tag_ids || []) {
       // Check if this tag_id is a subcategory tag (exists in subTags)
       const subTag = subTags.find(st => st.id === String(tag));
       if (subTag) {
         subCategoryCounts.set(subTag.name, (subCategoryCounts.get(subTag.name) || 0) + 1);
+        // Store first image for this subcategory
+        if (!subCategoryFirstImage[subTag.name] && ex.images?.[0]) {
+          subCategoryFirstImage[subTag.name] = ex.images[0];
+        }
       }
     }
   }
@@ -102,7 +108,8 @@ export default async function CategoryPage({
   const pills = filteredSubTags
     .map((tag) => ({
       name: tag.name,
-      image: CATEGORY_IMAGES[tag.name.toLowerCase()] || '',
+      // Use city-specific hero image from first product in this subcategory
+      image: subCategoryFirstImage[tag.name] || CATEGORY_IMAGES[tag.name.toLowerCase()] || '',
       slug: tag.slug,
       count: subCategoryCounts.get(tag.name) || 0,
     }))
@@ -110,12 +117,29 @@ export default async function CategoryPage({
     .slice(0, 10);
 
   // Related categories from API data - only main categories
+  // Also track first image per related category
+  const tagSlugFirstImage: Record<string, string> = {};
+  cityProducts.forEach(ex => {
+    if (Array.isArray(ex.tag_ids)) {
+      ex.tag_ids.forEach(tid => {
+        const tagSlug = categorySlugByTypeId(tid);
+        if (tagSlug && MAIN_CATEGORY_SLUGS.includes(tagSlug) && tagSlug !== slug) {
+          if (!tagSlugFirstImage[tagSlug] && ex.images?.[0]) {
+            tagSlugFirstImage[tagSlug] = ex.images[0];
+          }
+        }
+      });
+    }
+  });
+
   const mainCategorySlugs = new Set(MAIN_CATEGORY_SLUGS);
   const related = Array.from(counts.entries())
     .filter(([tagSlug]) => tagSlug !== slug && mainCategorySlugs.has(tagSlug))
     .map(([tagSlug, count]) => {
       const name = categoryName(tagSlug);
-      const image = CATEGORY_IMAGES[name.toLowerCase()] || 
+      // Use city-specific hero image from first product in this category
+      const image = tagSlugFirstImage[tagSlug] || 
+                    CATEGORY_IMAGES[name.toLowerCase()] || 
                     CATEGORY_IMAGES[tagSlug] || 
                     '';
       return {
