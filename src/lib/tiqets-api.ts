@@ -1376,10 +1376,16 @@ export async function fetchTiqetsCityCategories(cityName: string, countryId?: st
   
   // Collect all tag_ids from excursions
   const tagIdCounts: Record<string, number> = {};
+  // Also track first image per category type_id
+  const tagIdFirstImage: Record<string, string> = {};
   excursions.forEach(ex => {
     if (Array.isArray(ex.tag_ids)) {
       ex.tag_ids.forEach(tid => {
         tagIdCounts[tid] = (tagIdCounts[tid] || 0) + 1;
+        // Store first image for this category
+        if (!tagIdFirstImage[tid] && ex.images?.[0]) {
+          tagIdFirstImage[tid] = ex.images[0];
+        }
       });
     }
   });
@@ -1405,8 +1411,10 @@ export async function fetchTiqetsCityCategories(cityName: string, countryId?: st
         .split('-')
         .map(w => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ');
-      // Get image from CATEGORY_IMAGES (keyed by lowercase display name)
-      const image = CATEGORY_IMAGES[displayName.toLowerCase()] || 
+      // Use city-specific hero image from first product in this category
+      // Fall back to generic CATEGORY_IMAGES if no city-specific image
+      const image = tagIdFirstImage[tagId] || 
+                    CATEGORY_IMAGES[displayName.toLowerCase()] || 
                     CATEGORY_IMAGES[slug] || 
                     'https://aws-tiqets-cdn.imgix.net/images/content/89e308fba4dc46d481cbb5c841cacd1f.PNG?auto=format%2Ccompress&fit=crop&h=100&q=40&w=150';
       
