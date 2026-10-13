@@ -1363,12 +1363,13 @@ export async function fetchTiqetsAllTagNames(): Promise<Record<string, string>> 
   return { ...tags, ...tagTypes };
 }
 
-import { CATEGORY_TYPE_IDS } from '@/lib/category-pages';
+import { CATEGORY_TYPE_IDS, MAIN_CATEGORY_SLUGS } from '@/lib/category-pages';
 import { CATEGORY_IMAGES } from '@/lib/category-images';
 
 /**
  * Fetch categories for a city dynamically from Tiqets API.
  * Derives categories from the tag_ids of the city's excursions.
+ * Only returns main categories (not subcategories).
  */
 export async function fetchTiqetsCityCategories(cityName: string, countryId?: string): Promise<DestinationCategories> {
   const excursions = await fetchTiqetsCityProducts(cityName, countryId);
@@ -1391,9 +1392,12 @@ export async function fetchTiqetsCityCategories(cityName: string, countryId?: st
     Object.entries(CATEGORY_TYPE_IDS).map(([slug, id]) => [id, slug])
   );
 
-  // Build categories from tag_ids that have a known mapping
+  // Main category type_ids (parent categories only)
+  const MAIN_CATEGORY_TYPE_IDS = MAIN_CATEGORY_SLUGS.map(slug => CATEGORY_TYPE_IDS[slug]);
+
+  // Build categories from tag_ids that have a known mapping AND are main categories
   const categories = Object.entries(tagIdCounts)
-    .filter(([tagId]) => TYPE_ID_TO_SLUG[tagId])
+    .filter(([tagId]) => TYPE_ID_TO_SLUG[tagId] && MAIN_CATEGORY_TYPE_IDS.includes(tagId))
     .map(([tagId, count]) => {
       const slug = TYPE_ID_TO_SLUG[tagId];
       // Get display name from tag names API (tag_types or tags), fallback to slug

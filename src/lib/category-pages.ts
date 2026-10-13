@@ -76,6 +76,29 @@ export const CATEGORY_TYPE_IDS: Record<string, string> = {
   'zoos': '723',
 };
 
+/** Main category slugs (parent categories) for city page category showcase.
+ * Excludes subcategories like art-museums, history-museums, adventure-parks, etc. */
+export const MAIN_CATEGORY_SLUGS: string[] = [
+  'attractions',
+  'food-drinks',
+  'city-tours',
+  'cruises-boat-tours',
+  'nature-wildlife',
+  'museums',
+  'aviation-activities',
+  'city-cards-passes',
+  'games-entertainment',
+  'historical-archaeological-sites',
+  'shows-theatres',
+  'transfers',
+  'travel-services',
+  'trips-excursions',
+  'water-activities',
+  'adventure-activities',
+  'concerts-live-music',
+  'culture-heritage',
+];
+
 /** Product category type_id -> Tag subcategory type_id for fetching subcategory pills. */
 export const SUBCATEGORY_TAG_TYPE_IDS: Record<string, string> = {
   '2966': '139', // Attractions -> Attractions subcategories

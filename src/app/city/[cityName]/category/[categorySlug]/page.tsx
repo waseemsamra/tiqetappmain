@@ -6,6 +6,7 @@ import { CITY_TO_COUNTRY_ID } from '@/lib/tiqets-api';
 import {
   CATEGORY_TYPE_IDS,
   SUBCATEGORY_TAG_TYPE_IDS,
+  MAIN_CATEGORY_SLUGS,
   categoryName,
   categorySlug,
   categorySlugByTypeId,
@@ -83,16 +84,22 @@ export default async function CategoryPage({
     }
   }
 
-  // Deduplicate subTags by name (API may return duplicates)
+  // Deduplicate subTags by name (API may return duplicates with different IDs)
   const uniqueSubTags = new Map<string, typeof subTags[0]>();
   for (const tag of subTags) {
-    if (!uniqueSubTags.has(tag.name) || (tag.id && !uniqueSubTags.get(tag.name)?.id)) {
+    if (!uniqueSubTags.has(tag.name)) {
       uniqueSubTags.set(tag.name, tag);
     }
   }
   const deduplicatedSubTags = Array.from(uniqueSubTags.values());
 
-  const pills = deduplicatedSubTags
+  // For Museums category, only show Art Museums and History Museums
+  const allowedMuseumSubcategories = new Set(['Art Museums', 'History Museums']);
+  const filteredSubTags = (slug === 'museums')
+    ? deduplicatedSubTags.filter(tag => allowedMuseumSubcategories.has(tag.name))
+    : deduplicatedSubTags;
+
+  const pills = filteredSubTags
     .map((tag) => ({
       name: tag.name,
       image: CATEGORY_IMAGES[tag.name.toLowerCase()] || '',
@@ -102,9 +109,10 @@ export default async function CategoryPage({
     .filter(p => p.count > 0) // Only show pills with experiences
     .slice(0, 10);
 
-  // Related categories from API data
+  // Related categories from API data - only main categories
+  const mainCategorySlugs = new Set(MAIN_CATEGORY_SLUGS);
   const related = Array.from(counts.entries())
-    .filter(([tagSlug]) => tagSlug !== slug)
+    .filter(([tagSlug]) => tagSlug !== slug && mainCategorySlugs.has(tagSlug))
     .map(([tagSlug, count]) => {
       const name = categoryName(tagSlug);
       const image = CATEGORY_IMAGES[name.toLowerCase()] || 

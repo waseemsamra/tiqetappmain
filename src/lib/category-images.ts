@@ -25,5 +25,7 @@ export const CATEGORY_IMAGES: Record<string, string> = {
     "architecture admirers": "https://aws-tiqets-cdn.imgix.net/images/content/f358175515ed4f94b0c71c1943c0f7f6.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
     "nature lovers": "https://aws-tiqets-cdn.imgix.net/images/content/e8e6088ba9854ec9b0683128e84cb57c.jpg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
     "sport fanatics": "https://aws-tiqets-cdn.imgix.net/images/content/7ab005638e1f4596a0c149076d8b38cf.jpg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
-    "nightlife seekers": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200"
+    "nightlife seekers": "https://aws-tiqets-cdn.imgix.net/images/content/3ec8f672e5834b09a6c75c0e886f48cd.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "art museums": "https://aws-tiqets-cdn.imgix.net/images/content/aa2d8d4eabf145e589669ee216a819b1.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200",
+    "history museums": "https://aws-tiqets-cdn.imgix.net/images/content/ca55ddde569e4f3c830b55abf873e683.jpeg?auto=format%2Ccompress&dpr=2&fit=crop&h=360&q=30&w=1200"
 };
