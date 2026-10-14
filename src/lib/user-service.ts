@@ -37,7 +37,7 @@ export async function getActiveUsersCount(): Promise<number> {
   return 0;
 }
 
-export async function getUsers({ page, perPage, search }: { page: number; perPage: number; search: string }): Promise<{ users: any[]; totalCount: number }> {
+export async function getUsers({ page, perPage, search, role }: { page: number; perPage: number; search: string; role?: string }): Promise<{ users: any[]; totalCount: number }> {
   // In API-only mode, we return mock data with roles
   const allUsers = [
     {
@@ -87,13 +87,19 @@ export async function getUsers({ page, perPage, search }: { page: number; perPag
     }
   ];
 
+  // Filter by role if provided
+  let filteredByRole = allUsers;
+  if (role) {
+    filteredByRole = allUsers.filter(user => user.role === role);
+  }
+
   // Filter by search term if provided
   const filteredUsers = search 
-    ? allUsers.filter(user => 
+    ? filteredByRole.filter(user => 
         user.email.toLowerCase().includes(search.toLowerCase()) || 
         user.full_name.toLowerCase().includes(search.toLowerCase())
       )
-    : allUsers;
+    : filteredByRole;
 
   // Apply pagination
   const start = (page - 1) * perPage;

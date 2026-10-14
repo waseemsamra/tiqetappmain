@@ -1,4 +1,3 @@
-
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { readVisitorCountry, VISITOR_COUNTRY_COOKIE } from '@/lib/visitor-country';
@@ -12,7 +11,7 @@ export async function middleware(request: NextRequest) {
   const isAdminPath = url.pathname.startsWith('/admin');
   const isAdminLogin = url.pathname === '/admin-login';
   const isAdminApi = url.pathname.startsWith('/api/admin');
-  
+
   if (isAdminPath && !isAdminLogin && !isAdminApi) {
     // Only create Supabase client for admin routes
     const supabase = createServerClient(
@@ -31,9 +30,9 @@ export async function middleware(request: NextRequest) {
         },
       }
     );
-    
+
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user || user.email !== 'waseemsamra@gmail.com') {
+    if (!user || user.user_metadata?.role !== 'admin') {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = '/admin-login';
       loginUrl.searchParams.set('redirect', request.nextUrl.pathname);

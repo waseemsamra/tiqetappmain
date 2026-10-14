@@ -103,23 +103,8 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Fetch user role from auth.users table
-    const { data: authUser, error: userError } = await supabase
-      .from('auth.users')
-      .select('raw_user_meta_data')
-      .eq('id', data.user.id)
-      .single();
-    
-    if (userError || !authUser) {
-      // Record failed attempt for unable to fetch user meta
-      recordFailedAttempt(ip);
-      return NextResponse.json(
-        { success: false, error: 'Invalid email or password' },
-        { status: 401 }
-      );
-    }
-    
-    const role = authUser.raw_user_meta_data?.role as string | undefined;
+    // Fetch user role from user_metadata
+    const role = data.user.user_metadata?.role as string | undefined;
     if (role !== 'admin') {
       // Record failed attempt for non-admin user
       recordFailedAttempt(ip);
