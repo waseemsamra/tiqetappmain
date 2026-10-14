@@ -61,7 +61,6 @@ function LockUnlockMenuItem({ user }: { user: UserForAdmin }) {
             });
         }
     }
-    setIsAlertOpen(false);
     
     if (isLocked) {
         return (
