@@ -28,7 +28,7 @@ import { formatDistanceToNow } from 'date-fns';
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { lockUserAction, unlockUserAction } from "@/app/actions";
+import { lockUserAction, unlockUserAction } from "@/app/actions/user-actions";
 
 
 function LockUnlockMenuItem({ user }: { user: UserForAdmin }) {
@@ -39,7 +39,7 @@ function LockUnlockMenuItem({ user }: { user: UserForAdmin }) {
     
     const isLocked = user.status === 'Locked';
     const isPending = isLocking || isUnlocking;
-
+    
     const handleAction = () => {
         if (isLocked) {
             startUnlockTransition(async () => {
@@ -60,50 +60,50 @@ function LockUnlockMenuItem({ user }: { user: UserForAdmin }) {
                 }
             });
         }
-        setIsAlertOpen(false);
     }
+    setIsAlertOpen(false);
     
     if (isLocked) {
         return (
              <DropdownMenuItem onClick={handleAction} disabled={isUnlocking}>
                 <Unlock className="mr-2 h-4 w-4" />
                 {isUnlocking ? 'Unlocking...' : 'Unlock User'}
-            </DropdownMenuItem>
+             </DropdownMenuItem>
         );
     }
-
+    
     return (
        <>
-            <DropdownMenuItem
-                onSelect={(e) => e.preventDefault()}
-                onClick={() => setIsAlertOpen(true)}
-                disabled={isLocking}
-                className="text-destructive focus:bg-destructive/10"
-            >
-                <Lock className="mr-2 h-4 w-4" />
-                {isLocking ? 'Locking...' : 'Lock User'}
-            </DropdownMenuItem>
-            <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure you want to lock this user?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Locking a user will prevent them from logging in. They will not be able to access their account until they are unlocked.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                            disabled={isPending}
-                            onClick={handleAction}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                            {isLocking ? 'Locking...' : 'Lock User'}
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-        </>
+             <DropdownMenuItem
+                 onSelect={(e) => e.preventDefault()}
+                 onClick={() => setIsAlertOpen(true)}
+                 disabled={isLocking}
+                 className="text-destructive focus:bg-destructive/10"
+             >
+                 <Lock className="mr-2 h-4 w-4" />
+                 {isLocking ? 'Locking...' : 'Lock User'}
+             </DropdownMenuItem>
+             <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+                 <AlertDialogContent>
+                     <AlertDialogHeader>
+                         <AlertDialogTitle>Are you sure you want to lock this user?</AlertDialogTitle>
+                         <AlertDialogDescription>
+                             Locking a user will prevent them from logging in. They will not be able to access their account until they are unlocked.
+                         </AlertDialogDescription>
+                     </AlertDialogHeader>
+                     <AlertDialogFooter>
+                         <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+                         <AlertDialogAction
+                             disabled={isPending}
+                             onClick={handleAction}
+                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                         >
+                             {isLocking ? 'Locking...' : 'Lock User'}
+                         </AlertDialogAction>
+                     </AlertDialogFooter>
+                 </AlertDialogContent>
+             </AlertDialog>
+       </>
     );
 }
 
@@ -132,30 +132,46 @@ export const columns: ColumnDef<UserForAdmin>[] = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => {
-        const role = row.getValue("role") as string;
-        const variant = role === 'admin' ? 'destructive' : 'secondary';
-        return <Badge variant={variant} className="capitalize">{role || 'User'}</Badge>;
+      const role = row.getValue("role") as string;
+      const variant = role === 'admin' ? 'destructive' : 'secondary';
+      return <Badge variant={variant} className="capitalize">{role || 'User'}</Badge>;
+    },
+  },
+  {
+    accessorKey: "groups",
+    header: "Groups",
+    cell: ({ row }) => {
+      const groups = row.getValue("groups") as string[] || [];
+      return (
+        <div className="flex flex-wrap gap-1">
+          {groups.map((group, index) => (
+            <Badge key={index} variant="secondary" className="mr-1 mb-1">
+              {group}
+            </Badge>
+          ))}
+        </div>
+      );
     },
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-        const status = row.getValue("status") as string;
-        const variant = status === 'Active' ? 'default' : 'destructive';
-        return <Badge variant={variant}>{status}</Badge>;
-    }
+      const status = row.getValue("status") as string;
+      const variant = status === 'Active' ? 'default' : 'destructive';
+      return <Badge variant={variant}>{status}</Badge>;
+    },
   },
   {
     accessorKey: "last_sign_in_at",
     header: "Last Signed In",
     cell: ({ row }) => {
-        const lastSignIn = row.getValue("last_sign_in_at") as string | null;
-        if (!lastSignIn) {
-            return <span className="text-muted-foreground">Never</span>;
-        }
-        return <span>{formatDistanceToNow(new Date(lastSignIn), { addSuffix: true })}</span>;
-    }
+      const lastSignIn = row.getValue("last_sign_in_at") as string | null;
+      if (!lastSignIn) {
+        return <span className="text-muted-foreground">Never</span>;
+      }
+      return <span>{formatDistanceToNow(new Date(lastSignIn), { addSuffix: true })}</span>;
+    },
   },
   {
     id: "actions",
@@ -173,13 +189,13 @@ export const columns: ColumnDef<UserForAdmin>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem asChild>
-                <Link href={`/admin/users/edit/${user.id}`}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit User
-                </Link>
+              <Link href={`/admin/users/edit/${user.id}`}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit User
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-             <LockUnlockMenuItem user={user} />
+            <LockUnlockMenuItem user={user} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

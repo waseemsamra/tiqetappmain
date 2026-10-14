@@ -190,15 +190,28 @@ async function defaultRemoteCorpus() {
     ),
   );
 
-  // Also fetch experiences for prioritized cities that may not appear in the
+  // Also fetch experiences and products for prioritized cities that may not appear in the
   // global first pages (e.g. Singapore, Cairo, etc.)
-  const prioritizedCityIds = ['78125', '65792', '65786', '744', '60005', '66746', '66342', '71631', '75061', '67458'];
+  const prioritizedCityIds = [
+    '78125', '65792', '65786', '744', '60005', '66746', '66342', '71631', '75061', '67458',
+    '74040', '24', '73927', '109113', '76271', '76270', '76272', '76273', '76274', '76275',
+    '76276', '76277', '76278', '76279',
+    '60400', '60426', // Sydney, Melbourne
+  ];
   const cityExperiencesPromises = prioritizedCityIds.map((cityId) =>
     fetch(`${API_BASE}/experiences?city_id=${cityId}&page_size=100&page=1`, { headers })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null),
   );
-  const cityExperiencesRes = await Promise.all(cityExperiencesPromises);
+  const cityProductsPromises = prioritizedCityIds.map((cityId) =>
+    fetch(`${API_BASE}/products?city_id=${cityId}&page_size=100&page=1`, { headers })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null),
+  );
+  const [cityExperiencesRes, cityProductsRes] = await Promise.all([
+    Promise.all(cityExperiencesPromises),
+    Promise.all(cityProductsPromises),
+  ]);
 
   const countries: Country[] = countriesRes
     .filter(Boolean)
@@ -212,10 +225,15 @@ async function defaultRemoteCorpus() {
     .filter(Boolean)
     .flatMap((d: any) => d.experiences || d.products || d.items || []);
 
-  // Add experiences from prioritized cities
+  // Add experiences and products from prioritized cities
   for (const cityRes of cityExperiencesRes) {
     if (cityRes && cityRes.experiences) {
       raw.push(...cityRes.experiences);
+    }
+  }
+  for (const cityRes of cityProductsRes) {
+    if (cityRes && cityRes.products) {
+      raw.push(...cityRes.products);
     }
   }
 

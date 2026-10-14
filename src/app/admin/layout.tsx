@@ -44,31 +44,38 @@ export default async function AdminLayout({
                    </Link>
                    </div>
                
-              {/* User Management Group */}
-              <div className="my-2">
-                <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">User Management</p>
-                <Link
-                  href="/admin/users"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <Users className="h-4 w-4" />
-                  All Users
-                </Link>
-                <Link
-                  href="/admin/users/agents"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <UserCog className="h-4 w-4" />
-                  Agents
-                </Link>
-                <Link
-                  href="/admin/users/partners"
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                >
-                  <Briefcase className="h-4 w-4" />
-                  Partners
-                </Link>
-              </div>
+               {/* User Management Group */}
+               <div className="my-2">
+                 <p className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">User Management</p>
+                 <Link
+                   href="/admin/users"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Users className="h-4 w-4" />
+                   All Users
+                 </Link>
+                 <Link
+                   href="/admin/users/agents"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <UserCog className="h-4 w-4" />
+                   Agents
+                 </Link>
+                 <Link
+                   href="/admin/users/partners"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <Briefcase className="h-4 w-4" />
+                   Partners
+                 </Link>
+                 <Link
+                   href="/admin/groups"
+                   className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                 >
+                   <TagIcon className="h-4 w-4" />
+                   Groups
+                 </Link>
+               </div>
               
               {/* Business Management Group */}
                <div className="my-2">

@@ -13,16 +13,16 @@ async function UsersContent({ searchParams }: { searchParams: { page?: string, s
 
   const { users, totalCount } = await getUsers({ page, perPage: USERS_PER_PAGE, search });
 
-  return (
-    <UsersClientPage 
-      initialUsers={users}
-      title="User Management"
-      description="View and manage all registered users."
-      totalCount={totalCount}
-      page={page}
-      perPage={perPage}
-    />
-  );
+    return (
+      <UsersClientPage 
+        initialUsers={users}
+        title="User Management"
+        description="View and manage all registered users."
+        totalCount={totalCount}
+        page={page}
+        perPage={USERS_PER_PAGE}
+      />
+    );
 }
 
 
