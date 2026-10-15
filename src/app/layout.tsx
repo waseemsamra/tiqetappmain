@@ -32,9 +32,13 @@ export default async function RootLayout({
   // mobile page) can render without the desktop header/footer.
   const pathname = (await headers()).get('x-pathname') ?? '';
   const isMobilePage = pathname === '/m' || pathname.startsWith('/m/');
+  const isDashboardPage = pathname.startsWith('/dashboard') || pathname.startsWith('/admin') || pathname.startsWith('/agent-dashboard') || pathname.startsWith('/partner-dashboard');
 
   return (
     <html lang={language} className="h-full">
+      <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+      </head>
       <body className={`${inter.variable} font-sans flex flex-col h-full antialiased bg-background`}>
         <PreferencesProvider
           initialPreferences={{
@@ -42,9 +46,9 @@ export default async function RootLayout({
             currency: getDisplayCurrency(),
           }}
         >
-          {!isMobilePage && <Header />}
-          <main className={`flex-grow ${isMobilePage ? '' : 'pt-14'}`}>{children}</main>
-          {!isMobilePage && <Footer />}
+          {!isMobilePage && !isDashboardPage && <Header />}
+          <main className={`flex-grow ${isMobilePage ? '' : isDashboardPage ? '' : 'pt-14'}`}>{children}</main>
+          {!isMobilePage && !isDashboardPage && <Footer />}
         </PreferencesProvider>
         <Toaster />
         <RouteLoadingBar />

@@ -1,12 +1,10 @@
-// Stub for API-only mode - Supabase disabled
-export const createClient = () => ({
-  auth: {
-    getUser: async () => ({ data: { user: null } }),
-  },
-});
+import { createBrowserClient as createSupabaseBrowserClient } from '@supabase/ssr'
 
-export const createBrowserClient = () => ({
-  auth: {
-    getUser: async () => ({ data: { user: null } }),
-  },
-});
+export const createClient = () => {
+  return createSupabaseBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
+
+export const createBrowserClient = createClient

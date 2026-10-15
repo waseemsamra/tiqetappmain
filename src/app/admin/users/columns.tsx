@@ -2,7 +2,7 @@
 'use client';
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Edit, Trash2, Lock, Unlock } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Edit, Trash2, Lock, Unlock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -193,6 +193,14 @@ export const columns: ColumnDef<UserForAdmin>[] = [
                 Edit User
               </Link>
             </DropdownMenuItem>
+            {user.role === 'customer' && (
+              <DropdownMenuItem asChild>
+                <Link href={`/admin/users/${user.id}/dashboard`}>
+                  <User className="mr-2 h-4 w-4" />
+                  Customer Dashboard
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <LockUnlockMenuItem user={user} />
           </DropdownMenuContent>

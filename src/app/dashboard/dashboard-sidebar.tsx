@@ -2,15 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  LayoutDashboard,
-  User,
-  Ticket,
-  Heart,
-  BrainCircuit,
-  LogOut,
-  Wallet,
-} from 'lucide-react';
+import { LayoutDashboard, User, Ticket, Heart, BrainCircuit, LogOut, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { logout } from '@/app/auth/actions';
 
@@ -27,10 +19,10 @@ export default function DashboardSidebar({ userRole }: { userRole: string }) {
     <aside className="hidden border-r bg-muted/40 md:block">
         <div className="flex h-full max-h-screen flex-col">
             <div className="flex h-20 items-center border-b px-6">
-                 <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
-                    <Ticket className="h-6 w-6" />
-                    <span className="text-xl">RoamReady</span>
-                </Link>
+              <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
+                    <img src="/aafare-logo.png" alt="AAFare" className="h-10 w-auto" />
+                    <span className="text-xl font-bold">AAFare</span>
+                  </Link>
             </div>
             <div className="flex-1 p-2 overflow-y-auto">
                 <nav className="flex flex-col gap-1 text-sm font-medium">

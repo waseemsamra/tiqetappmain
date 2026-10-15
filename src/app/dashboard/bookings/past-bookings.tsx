@@ -24,29 +24,39 @@ export default function PastBookings({ bookings }: { bookings: Booking[] }) {
     <div className="space-y-6">
       {bookings.map(booking => (
         <Card key={booking.id} className="overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-3">
-             <div className="relative h-48 md:h-full">
-                 {booking.activity.images?.[0] && booking.activity.images?.[0].length > 0 ? (
-                    <Image src={imageUrlFor(booking.activity.images?.[0], 'card')} alt={booking.activity.name} fill className="object-cover" unoptimized />
-                ) : (
+           <div className="grid grid-cols-1 md:grid-cols-[150px_1fr]">
+              <div className="relative h-24 md:h-48">
+                  {booking.activity.images?.[0] && booking.activity.images?.[0].length > 0 ? (
+                     <Image src={imageUrlFor(booking.activity.images?.[0], 'card')} alt={booking.activity.name} fill className="object-cover" unoptimized />
+                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-sm">No image</div>
-                )}
-            </div>
-            <div className="md:col-span-2">
+                 )}
+              </div>
+            <div className="md:col-span-1">
               <CardHeader>
                 <CardTitle>{booking.activity.name}</CardTitle>
                 <CardDescription>
-                  <div className="flex items-center gap-2 text-sm mt-1">
+                  <span className="flex items-center gap-2 text-sm mt-1">
                     <Calendar className="h-4 w-4" />
                     <span>
                       Booked on: {new Date(booking.booking_date).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
                     </span>
-                  </div>
+                  </span>
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Badge variant="secondary">Completed</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{booking.booking_type || 'EXCURSIONS'}</Badge>
+                  <Badge variant={booking.status === 'completed' ? 'default' : 'outline'}>
+                    {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                  </Badge>
+                </div>
                 <p className="text-muted-foreground mt-2 line-clamp-2">{booking.activity.description}</p>
+                {(booking.miles_earned || booking.loyalty_points) && (
+                  <p className="text-xs text-[#58c0e8] mt-1">
+                    {booking.miles_earned && `${booking.miles_earned} miles`} {booking.loyalty_points && `• ${booking.loyalty_points} pts`}
+                  </p>
+                )}
               </CardContent>
               <CardFooter className="gap-2">
                 <Button asChild variant="outline">

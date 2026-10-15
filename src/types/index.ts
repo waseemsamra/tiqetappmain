@@ -119,6 +119,9 @@ export type Booking = {
    guest_name?: string;
    guest_email?: string;
    booking_date?: string;
+   booking_type?: 'EXCURSIONS' | 'HOTELS' | 'FLIGHTS' | 'TRANSFERS' | 'PACKAGES';
+   miles_earned?: number;
+   loyalty_points?: number;
 };
 
 export type FormState = {

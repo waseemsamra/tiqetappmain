@@ -118,9 +118,10 @@ export async function getUserById(id: string): Promise<any> {
     { id: '2', email: 'agent@example.com', full_name: 'John Agent', role: 'agent', status: 'Active', last_sign_in_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), groups: ['agents'] },
     { id: '3', email: 'partner@example.com', full_name: 'Jane Partner', role: 'partner', status: 'Active', last_sign_in_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), groups: ['partners'] },
     { id: '4', email: 'staff@example.com', full_name: 'Bob Staff', role: 'staff', status: 'Active', last_sign_in_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), groups: ['staff'] },
-    { id: '5', email: 'customer@example.com', full_name: 'Alice Customer', role: 'customer', status: 'Active', last_sign_in_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), groups: ['customers'] }
+    { id: '5', email: 'customer@example.com', full_name: 'Alice Customer', role: 'customer', status: 'Active', last_sign_in_at: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(), groups: ['customers'], passport_number: 'P12345678', passport_expiry: '2028-06-15', date_of_birth: '1990-03-22', loyalty_tier: 'silver', loyalty_points: 1500, miles_points: 2500, wallet_balance: 75.50 },
+    { id: '6', email: 'alice@example.com', full_name: 'Alice Wonder', role: 'customer', status: 'Active', last_sign_in_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), groups: ['customers'], passport_number: 'P87654321', passport_expiry: '2029-01-10', date_of_birth: '1985-07-14', loyalty_tier: 'gold', loyalty_points: 3200, miles_points: 1800, wallet_balance: 150.00 },
   ];
-  
+
   return mockUsers.find(user => user.id === id) || null;
 }
 

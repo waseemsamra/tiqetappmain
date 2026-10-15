@@ -20,6 +20,7 @@ import { getWishlistItems, getUpcomingBookingsForUser, getAgentStats, getAgentRe
 import { format } from 'date-fns';
 import type { Excursion, Booking, Referral } from '@/types';
 import { LoyaltyHub } from './loyalty-hub';
+import TraveloDashboard from './travelo-dashboard';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { getLoyaltyTier } from '@/lib/loyalty';
@@ -267,5 +268,5 @@ export default async function DashboardPage() {
     return <AgentDashboardView user={user} userName={userName} />;
   }
   
-  return <CustomerDashboardView user={user} userName={userName} />;
+  return <TraveloDashboard user={user} userName={userName} />;
 }

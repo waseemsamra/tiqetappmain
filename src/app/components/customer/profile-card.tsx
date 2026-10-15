@@ -1,4 +1,4 @@
-import { Image } from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface CustomerProfileProps {
@@ -50,7 +50,7 @@ export default function CustomerProfile({ user }: CustomerProfileProps) {
           <h2 className="text-xl font-bold text-gray-800">{user.full_name}</h2>
           <p className="text-gray-600">{user.email}</p>
           <div className="flex items-center space-x-2 mt-2">
-            <span className={`px-2 py-1 rounded-full text-xs font-medium bg-${tierColor}/20 text-${tierColor}`}>
+            <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${tierColor}33`, color: tierColor }}>
               {user.loyalty_tier.toUpperCase()}
             </span>
             <span className="text-gray-500">|</span>
@@ -61,7 +61,7 @@ export default function CustomerProfile({ user }: CustomerProfileProps) {
 
       <div className="mt-6 grid grid-cols-2 gap-4">
         <div className="space-y-4">
-          <h3 className="text-font-semibold text-gray-700">Travel Details</h3>
+          <h3 className="font-semibold text-gray-700">Travel Details</h3>
           <div className="text-sm text-gray-600 space-y-2">
             <div className="flex justify-between">
               <span>Passport Number:</span>
@@ -78,7 +78,7 @@ export default function CustomerProfile({ user }: CustomerProfileProps) {
           </div>
         </div>
         <div className="space-y-4">
-          <h3 className="text-font-semibold text-gray-700">Loyalty & Wallet</h3>
+          <h3 className="font-semibold text-gray-700">Loyalty & Wallet</h3>
           <div className="text-sm text-gray-600 space-y-2">
             <div className="flex justify-between">
               <span>Loyalty Points:</span>
@@ -97,7 +97,7 @@ export default function CustomerProfile({ user }: CustomerProfileProps) {
       </div>
 
       <div className="mt-6 pt-4 border-t border-gray-200">
-        <h3 className="text-font-semibold text-gray-700 mb-4">Activity Summary</h3>
+        <h3 className="font-semibold text-gray-700 mb-4">Activity Summary</h3>
         <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
           <div className="text-center">
             <p className="text-xs font-medium">Trips Booked</p>
