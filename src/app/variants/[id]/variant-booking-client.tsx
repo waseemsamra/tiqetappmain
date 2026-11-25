@@ -10,6 +10,11 @@ export function VariantBookingClient({ productId }: { productId: string }) {
   const initBooking = useCallback(() => {
     if (typeof window === 'undefined') return;
 
+    const apiKey = process.env.NEXT_PUBLIC_TIQETS_API_KEY;
+    if (apiKey && !(window as any).TIQETS_API_KEY) {
+      (window as any).TIQETS_API_KEY = apiKey;
+    }
+
     if ((window as any).__TIQETS_LOADER_REINIT) {
       (window as any).__TIQETS_LOADER_REINIT();
     }
