@@ -8,6 +8,7 @@ import {
   isSupportedCurrency,
   isSupportedLanguage,
 } from '@/lib/preferences';
+import { fetchWithTimeout } from '@/lib/fetch-timeout';
 
 const TIQETS_API_BASE = 'https://api.tiqets.com/v2';
 const TIQETS_API_KEY = process.env.TIQETS_API_KEY;
@@ -1822,9 +1823,10 @@ export async function fetchTiqetsExperienceImages(
   experienceId: string | number,
 ): Promise<string[]> {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${TIQETS_API_BASE}/experiences/${experienceId}`,
-      { method: 'GET', headers },
+      { method: 'GET', headers, timeoutMs: 5000 },
+      { ok: false, json: async () => ({}) } as Response,
     );
     if (!response.ok) return [];
 

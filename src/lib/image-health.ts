@@ -10,6 +10,8 @@
  * memoised per URL, so it costs nothing on repeat renders.
  */
 
+import { fetchWithTimeout } from '@/lib/fetch-timeout';
+
 const HEALTH_TTL_MS = 60 * 60 * 1000;
 const healthCache = new Map<string, { at: number; ok: boolean }>();
 
@@ -22,7 +24,11 @@ async function probeAll(urls: string[]): Promise<void> {
     while (cursor < urls.length) {
       const url = urls[cursor++];
       try {
-        const response = await fetch(url, { method: 'HEAD' });
+        const response = await fetchWithTimeout(
+          url,
+          { method: 'HEAD', timeoutMs: 5000 },
+          { ok: false } as Response,
+        );
         healthCache.set(url, { at: now, ok: response.ok });
       } catch {
         // Treat an unreachable CDN as unusable so a broken URL is skipped, but
@@ -63,6 +69,7 @@ export async function firstAvailableImage(
 export async function cityCoverImages(
   excursions: Array<{ city?: string; images?: string[] }>,
 ): Promise<Map<string, string>> {
+  if (process.env.NODE_ENV === 'development') return new Map();
   // Candidates are pooled per city rather than taken from the first matching
   // experience: every image of one experience can be delisted while the city's
   // other experiences still have working ones.
@@ -102,6 +109,7 @@ export async function repairDeadImages<T extends { id: string; images?: string[]
   fetchLiveImages: (id: string) => Promise<string[]>,
   maxCandidates = 4,
 ): Promise<T[]> {
+  if (process.env.NODE_ENV === 'development') return excursions;
   // Probe the candidates of every row first, so an API call is only spent on
   // experiences whose images really are gone.
   await Promise.all(excursions.map((e) => firstAvailableImage(e.images, maxCandidates)));

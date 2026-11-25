@@ -8,6 +8,8 @@
  * cached for an hour; the fallback table keeps builds working offline.
  */
 
+import { fetchWithTimeout } from './fetch-timeout';
+
 const RATES_ENDPOINT = 'https://open.er-api.com/v6/latest/USD';
 const REVALIDATE_SECONDS = 3600;
 
@@ -50,7 +52,11 @@ export async function getUsdRates(): Promise<Record<string, number>> {
 
   inFlight = (async () => {
     try {
-      const res = await fetch(RATES_ENDPOINT, { next: { revalidate: REVALIDATE_SECONDS } });
+      const res = await fetchWithTimeout(
+        RATES_ENDPOINT,
+        { next: { revalidate: REVALIDATE_SECONDS }, timeoutMs: 5000 },
+        { ok: false, json: async () => ({ result: 'error', rates: {} }) } as Response,
+      );
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if (data?.result !== 'success' || !data?.rates || typeof data.rates !== 'object') {

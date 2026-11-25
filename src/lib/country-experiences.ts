@@ -1,5 +1,6 @@
 import { pickTiqetsImageUrls } from '@/lib/tiqets-image';
 import { withPreferences } from '@/lib/tiqets-api';
+import { fetchWithTimeout } from '@/lib/fetch-timeout';
 import type { Excursion } from '@/types';
 
 const TIQETS_API_BASE = 'https://api.tiqets.com/v2';
@@ -151,9 +152,10 @@ export async function fetchCountryExcursions(countryName: string): Promise<Excur
   try {
     const all: any[] = [];
     for (let page = 1; page <= MAX_PAGES; page++) {
-      const response = await fetch(
+      const response = await fetchWithTimeout(
         withPreferences(`${TIQETS_API_BASE}/experiences?country_id=${countryId}&page=${page}&page_size=${PAGE_SIZE}`),
-        { method: 'GET', headers },
+        { method: 'GET', headers, timeoutMs: 5000 },
+        { ok: false, json: async () => ({ experiences: [], pagination: {} }) } as Response,
       );
       if (!response.ok) break;
 
