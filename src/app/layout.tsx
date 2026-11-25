@@ -38,6 +38,14 @@ export default async function RootLayout({
     <html lang={language} className="h-full">
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        {process.env.NEXT_PUBLIC_TIQETS_API_KEY && (
+          <script
+            id="tiqets-api-key"
+            dangerouslySetInnerHTML={{
+              __html: `window.TIQETS_API_KEY = '${process.env.NEXT_PUBLIC_TIQETS_API_KEY}';`,
+            }}
+          />
+        )}
       </head>
       <body className={`${inter.variable} font-sans flex flex-col h-full antialiased bg-background`}>
         <PreferencesProvider

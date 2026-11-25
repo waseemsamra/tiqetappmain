@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 
 export function VariantBookingClient({ productId }: { productId: string }) {
   const triggerId = `tiqets-trigger-${productId}`;
   const containerId = `tiqets-booking-container-${productId}`;
-  const [, setScriptLoaded] = useState(false);
+  const initTried = useRef(false);
 
-  const initBooking = useCallback(() => {
+  const initBooking = useCallback((retries = 3) => {
     if (typeof window === 'undefined') return;
 
     const apiKey = process.env.NEXT_PUBLIC_TIQETS_API_KEY;
@@ -19,23 +19,41 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       (window as any).__TIQETS_LOADER_REINIT();
     }
 
-    if ((window as any).TiqetsBookingEngine) {
-      try {
-        (window as any).TiqetsBookingEngine.init({
-          container: `#${containerId}`,
-          trigger: `#${triggerId}`,
-          productId,
-          partner: 'time_travel_tourism_dubai',
-          currency: 'USD',
-        });
-      } catch {
-        // Direct init is a fallback; the loader handles the widget.
+    const engine = (window as any).TiqetsBookingEngine;
+    if (!engine) {
+      if (retries > 0) {
+        setTimeout(() => initBooking(retries - 1), 200);
+      }
+      return;
+    }
+
+    const trigger = document.getElementById(triggerId);
+    const container = document.getElementById(containerId);
+    if (!trigger || !container) {
+      if (retries > 0) {
+        setTimeout(() => initBooking(retries - 1), 200);
+      }
+      return;
+    }
+
+    try {
+      engine.init({
+        container: `#${containerId}`,
+        trigger: `#${triggerId}`,
+        productId,
+        partner: 'time_travel_tourism_dubai',
+        currency: 'USD',
+      });
+      initTried.current = true;
+    } catch {
+      if (retries > 0) {
+        setTimeout(() => initBooking(retries - 1), 200);
       }
     }
   }, [productId, triggerId, containerId]);
 
   const handleClick = useCallback(() => {
-    initBooking();
+    initBooking(5);
   }, [initBooking]);
 
   useEffect(() => {
@@ -52,8 +70,7 @@ export function VariantBookingClient({ productId }: { productId: string }) {
       script.src = `https://tiqets-cdn.s3.amazonaws.com/booking_engine/loader/10716.js`;
       script.async = true;
       script.onload = () => {
-        setScriptLoaded(true);
-        setTimeout(initBooking, 100);
+        setTimeout(() => initBooking(3), 100);
       };
       script.onerror = () => {
         // Booking engine unavailable; the button stays inert.
@@ -62,12 +79,7 @@ export function VariantBookingClient({ productId }: { productId: string }) {
     };
 
     if (script) {
-      // The engine script is already on the page — the desktop
-      // instance mounted first (SSR renders it) and bound its
-      // widget to elements that were removed when the viewport
-      // switched. Re-bind to this instance's container/trigger
-      // so the very first button click opens the checkout modal.
-      setTimeout(initBooking, 50);
+      setTimeout(() => initBooking(3), 50);
     } else {
       loadScript();
     }
